@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Tasklabe.App.Controls.GanttView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Tasklabe.App.Controls"
+    xmlns:win2d="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    IsTabStop="True"
+    UseSystemFocusVisuals="False"
+    AutomationProperties.Name="ガントチャート">
+
+    <UserControl.Resources>
+        <Style x:Key="HeaderText" BasedOn="{StaticResource Text.Caption}" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+            <Setter Property="Margin" Value="8,0,8,6" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid RowSpacing="{StaticResource Space.S}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+    <!-- 依存関係による日程の調整のプレビュー（UI デザイン設計書 3.3.5 節） -->
+    <InfoBar
+        x:Name="PreviewBar"
+        Title="日程の調整を確認"
+        IsClosable="False"
+        IsOpen="False"
+        Severity="Informational"
+        AutomationProperties.Name="日程の調整のプレビュー">
+        <InfoBar.Content>
+            <StackPanel Margin="0,0,0,12" Orientation="Horizontal" Spacing="{StaticResource Space.S}">
+                <Button
+                    x:Name="ConfirmPreviewButton"
+                    Click="OnConfirmPreview"
+                    Content="確定"
+                    Style="{StaticResource AccentButtonStyle}"
+                    ToolTipService.ToolTip="プレビューの予定を保存します"
+                    AutomationProperties.Name="日程の調整を確定" />
+                <Button
+                    Click="OnCancelPreview"
+                    Content="キャンセル"
+                    ToolTipService.ToolTip="何も保存せず元に戻します (Esc)"
+                    AutomationProperties.Name="日程の調整をキャンセル" />
+            </StackPanel>
+        </InfoBar.Content>
+    </InfoBar>
+
+    <Grid
+        x:Name="Root"
+        Grid.Row="1"
+        Background="{ThemeResource LayerFillColorDefaultBrush}"
+        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+        BorderThickness="1"
+        CornerRadius="{StaticResource Radius.Card}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="LeftColumn" Width="420" MinWidth="200" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="56" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- 左: WBS の列見出し -->
+        <Grid
+            x:Name="LeftHeader"
+            BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+            BorderThickness="0,0,0,1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition x:Name="AssigneeHeaderColumn" Width="88" />
+                <ColumnDefinition x:Name="EstimateHeaderColumn" Width="56" />
+                <ColumnDefinition x:Name="ProgressHeaderColumn" Width="52" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Style="{StaticResource HeaderText}" Text="タスク" />
+            <TextBlock Grid.Column="1" Style="{StaticResource HeaderText}" Text="担当" />
+            <TextBlock Grid.Column="2" HorizontalAlignment="Right" Style="{StaticResource HeaderText}" Text="工数" />
+            <TextBlock Grid.Column="3" HorizontalAlignment="Right" Style="{StaticResource HeaderText}" Text="進捗" />
+        </Grid>
+
+        <!-- 左: WBS の行（表示範囲の行だけを並べる） -->
+        <Canvas
+            x:Name="RowsHost"
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Background="Transparent"
+            DoubleTapped="OnRowsDoubleTapped"
+            PointerPressed="OnRowsPointerPressed"
+            RightTapped="OnRowsRightTapped"
+            SizeChanged="OnViewportSizeChanged" />
+
+        <!-- 左右の境界（ドラッグで幅を変える） -->
+        <controls:GanttSplitter
+            x:Name="Splitter"
+            Grid.RowSpan="3"
+            Grid.Column="1"
+            Width="5"
+            Background="Transparent"
+            BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+            BorderThickness="1,0,0,0"
+            ManipulationDelta="OnSplitterManipulationDelta"
+            ManipulationMode="TranslateX"
+            AutomationProperties.Name="列の幅" />
+
+        <!-- 右: タイムライン（見出しと本体） -->
+        <win2d:CanvasSwapChainPanel
+            x:Name="Chart"
+            Grid.RowSpan="2"
+            Grid.Column="2"
+            SizeChanged="OnViewportSizeChanged" />
+        <Border
+            x:Name="ChartInput"
+            Grid.RowSpan="2"
+            Grid.Column="2"
+            Background="Transparent"
+            DoubleTapped="OnChartDoubleTapped"
+            PointerCanceled="OnChartPointerCanceled"
+            PointerExited="OnChartPointerExited"
+            PointerMoved="OnChartPointerMoved"
+            PointerPressed="OnChartPointerPressed"
+            PointerReleased="OnChartPointerReleased"
+            RightTapped="OnChartRightTapped" />
+
+        <!-- 今日が表示範囲の外にあるときに出す「今日へ」（UI デザイン設計書 3.3.4 節） -->
+        <Button
+            x:Name="TodayJump"
+            Grid.Row="1"
+            Grid.Column="2"
+            Margin="12"
+            Padding="12,6"
+            VerticalAlignment="Bottom"
+            Click="OnTodayJump"
+            controls:Pill.IsEnabled="True"
+            Visibility="Collapsed"
+            AutomationProperties.Name="今日へ戻る">
+            <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.S}">
+                <FontIcon x:Name="TodayJumpLeft" FontSize="12" Glyph="&#xE72B;" />
+                <TextBlock Text="今日へ" />
+                <FontIcon x:Name="TodayJumpRight" FontSize="12" Glyph="&#xE72A;" />
+            </StackPanel>
+        </Button>
+
+        <!-- ホバー時の詳細 -->
+        <Canvas Grid.RowSpan="2" Grid.Column="2" IsHitTestVisible="False">
+            <Border
+                x:Name="HoverCard"
+                MaxWidth="320"
+                Padding="12,8"
+                Background="{ThemeResource AcrylicInAppFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource SurfaceStrokeColorFlyoutBrush}"
+                BorderThickness="1"
+                CornerRadius="{StaticResource Radius.Overlay}"
+                Visibility="Collapsed">
+                <StackPanel Spacing="2">
+                    <TextBlock x:Name="HoverTitle" Style="{StaticResource Text.BodyStrong}" TextTrimming="CharacterEllipsis" />
+                    <TextBlock x:Name="HoverDetail" Style="{StaticResource Text.Caption}" TextWrapping="Wrap" />
+                    <TextBlock x:Name="HoverDelay" Foreground="{ThemeResource Viz.Delay}" Style="{StaticResource Text.Caption}" />
+                </StackPanel>
+            </Border>
+        </Canvas>
+
+        <ScrollBar
+            x:Name="VBar"
+            Grid.Row="1"
+            Grid.Column="3"
+            IndicatorMode="MouseIndicator"
+            Orientation="Vertical"
+            ValueChanged="OnVerticalScroll" />
+        <ScrollBar
+            x:Name="HBar"
+            Grid.Row="2"
+            Grid.Column="2"
+            IndicatorMode="MouseIndicator"
+            Orientation="Horizontal"
+            ValueChanged="OnHorizontalScroll" />
+
+        <!-- 描画に用いる色（テーマに追従させるため、テーマリソースから読み取る） -->
+        <StackPanel x:Name="Palette" Visibility="Collapsed">
+            <Border Tag="Progress" Background="{ThemeResource Viz.Progress}" />
+            <Border Tag="ProgressRemain" Background="{ThemeResource Viz.ProgressRemain}" />
+            <Border Tag="Delay" Background="{ThemeResource Viz.Delay}" />
+            <Border Tag="Today" Background="{ThemeResource Viz.Today}" />
+            <Border Tag="Holiday" Background="{ThemeResource Viz.Holiday}" />
+            <Border Tag="Grid" Background="{ThemeResource Viz.Grid}" />
+            <Border Tag="Plan" Background="{ThemeResource Viz.Plan}" />
+            <Border Tag="Done" Background="{ThemeResource Viz.Done}" />
+            <Border Tag="Milestone" Background="{ThemeResource Viz.Milestone}" />
+            <Border Tag="Accent" Background="{ThemeResource Brand.Accent}" />
+            <Border Tag="Text" Background="{ThemeResource TextFillColorPrimaryBrush}" />
+            <Border Tag="TextSecondary" Background="{ThemeResource TextFillColorSecondaryBrush}" />
+            <Border Tag="TextTertiary" Background="{ThemeResource TextFillColorTertiaryBrush}" />
+            <Border Tag="Divider" Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+            <Border Tag="Selection" Background="{ThemeResource SubtleFillColorSecondaryBrush}" />
+            <Border Tag="Hover" Background="{ThemeResource SubtleFillColorTertiaryBrush}" />
+            <Border Tag="OnAccent" Background="{ThemeResource TextOnAccentFillColorPrimaryBrush}" />
+            <Border Tag="SurfaceBase" Background="{ThemeResource SolidBackgroundFillColorBaseBrush}" />
+            <Border Tag="SurfaceLayer" Background="{ThemeResource LayerFillColorDefaultBrush}" />
+        </StackPanel>
+    </Grid>
+    </Grid>
+</UserControl>

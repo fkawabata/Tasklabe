@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    期日の表示（UI デザイン設計書 2.3 節）。期日を過ぎた日付は、色（Viz.Delay）だけに頼らず警告のアイコンを添える。
+    色は VisualState の ThemeResource で切り替え、アプリ内のテーマの切り替えにも追従させる。
+-->
+<UserControl
+    x:Class="Tasklabe.App.Controls.DueDateText"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    IsTabStop="False">
+    <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.XS}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Normal" />
+                <VisualState x:Name="Overdue">
+                    <VisualState.Setters>
+                        <Setter Target="Label.Foreground" Value="{ThemeResource Viz.Delay}" />
+                        <Setter Target="Icon.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <FontIcon
+            x:Name="Icon"
+            VerticalAlignment="Center"
+            FontSize="12"
+            Foreground="{ThemeResource Viz.Delay}"
+            Glyph="&#xE7BA;"
+            Visibility="Collapsed" />
+        <TextBlock x:Name="Label" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+    </StackPanel>
+</UserControl>

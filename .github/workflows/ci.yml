@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+
+      - name: Build
+        run: dotnet build Tasklabe.slnx -c Release
+
+      - name: Test
+        shell: pwsh
+        run: |
+          foreach ($t in Get-ChildItem tests -Filter *.Tests.csproj -Recurse) {
+            dotnet test $t.FullName -c Release --no-build
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }

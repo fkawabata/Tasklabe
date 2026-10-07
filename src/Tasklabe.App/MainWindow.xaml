@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Tasklabe.App.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Tasklabe.App.Controls"
+    xmlns:vm="using:Tasklabe.App.ViewModels"
+    Title="Tasklabe">
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+
+    <!-- キー操作はキーの割り当て（設定で変えられる）に従って、一覧より先に OnRootPreviewKeyDown で受ける（コードで付ける） -->
+    <Grid x:Name="RootGrid" KeyDown="OnRootKeyDown">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- 拡張タイトルバー: 検索・コマンドと同期状態を置く -->
+        <TitleBar
+            x:Name="AppTitleBar"
+            Title="Tasklabe"
+            IsBackButtonVisible="True"
+            IsBackButtonEnabled="{x:Bind ContentFrame.CanGoBack, Mode=OneWay}"
+            IsPaneToggleButtonVisible="True"
+            BackRequested="OnTitleBarBackRequested"
+            PaneToggleRequested="OnTitleBarPaneToggleRequested">
+            <TitleBar.IconSource>
+                <FontIconSource Glyph="&#xE9D5;" Foreground="{ThemeResource Brand.Accent}" />
+            </TitleBar.IconSource>
+            <TitleBar.RightHeader>
+                <!--
+                    同期状態。押すと即時に同期する（F5 と同じ）。
+                    送信できない変更などの続いている問題があるときはチップの形になり、押すと詳細と操作を開く（UX 規約 UX-31）
+                -->
+                <Button
+                    x:Name="SyncButton"
+                    Margin="0,0,8,0"
+                    Padding="10,4"
+                    VerticalAlignment="Center"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    controls:Pill.IsEnabled="True"
+                    Click="OnSyncButtonClick"
+                    ToolTipService.ToolTip="{x:Bind ViewModel.SyncStatusDetail, Mode=OneWay}"
+                    AutomationProperties.Name="{x:Bind ViewModel.SyncStatusText, Mode=OneWay}">
+                    <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.XS}">
+                        <FontIcon x:Name="SyncIcon" FontSize="14" Glyph="{x:Bind ViewModel.SyncStatusGlyph, Mode=OneWay}" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Style="{StaticResource Text.Caption}"
+                            Text="{x:Bind ViewModel.SyncStatusText, Mode=OneWay}" />
+                    </StackPanel>
+                </Button>
+            </TitleBar.RightHeader>
+        </TitleBar>
+
+        <NavigationView
+            x:Name="NavView"
+            Grid.Row="1"
+            IsBackButtonVisible="Collapsed"
+            IsPaneToggleButtonVisible="False"
+            IsSettingsVisible="True"
+            CompactModeThresholdWidth="641"
+            ExpandedModeThresholdWidth="1008"
+            OpenPaneLength="240"
+            PaneDisplayMode="Auto"
+            DisplayModeChanged="OnNavDisplayModeChanged"
+            ItemInvoked="OnNavItemInvoked"
+            PaneClosed="OnNavPaneChanged"
+            PaneOpened="OnNavPaneChanged"
+            SelectionChanged="OnNavSelectionChanged">
+            <NavigationView.MenuItems>
+                <NavigationViewItem x:Name="MyTasksItem" Content="マイタスク" Tag="my">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE73A;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+
+                <NavigationViewItemSeparator />
+            </NavigationView.MenuItems>
+
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem Content="新しいプロジェクト" Tag="project:new" SelectsOnInvoked="False">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE710;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.FooterMenuItems>
+
+            <Grid x:Name="ContentHost">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Frame x:Name="ContentFrame" Grid.Row="1" Navigated="OnFrameNavigated" />
+            </Grid>
+        </NavigationView>
+
+        <!-- ナビゲーションの幅を変えるつまみと、プロジェクトを並べ替えるときの落とす位置の線（UI デザイン設計書 3.1 節） -->
+        <controls:PaneSizer
+            x:Name="NavSizer"
+            Grid.Row="1"
+            HorizontalAlignment="Left"
+            Visibility="Collapsed" />
+        <Canvas x:Name="NavOverlay" Grid.Row="1" IsHitTestVisible="False">
+            <Rectangle
+                x:Name="NavDropLine"
+                Height="2"
+                Fill="{ThemeResource AccentFillColorDefaultBrush}"
+                Opacity="0"
+                RadiusX="1"
+                RadiusY="1" />
+        </Canvas>
+
+        <!--
+            詳細パネル（UX 規約 UX-10）。右端から出てくる引き出しで、幕で下の画面を暗くし、開いているあいだは下を操作させない。
+            面はタイトルバーの下から出す（上端はタイトルバーの高さに合わせてコードで置く）
+        -->
+        <controls:Drawer x:Name="DetailDrawer" Grid.RowSpan="2">
+            <controls:TaskDetailPane x:Name="DetailPane" />
+        </controls:Drawer>
+
+        <!--
+            下端の知らせ（UX 規約 UX-26）。画面の外へ影響が及ぶ変更には「元に戻す」を添える。
+            詳細パネルで変えたことも元に戻せるよう、詳細パネルの幕より上に置く
+        -->
+        <InfoBar
+            x:Name="Toast"
+            Grid.Row="1"
+            MaxWidth="640"
+            Margin="24,0,24,24"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            IsClosable="True"
+            IsOpen="{x:Bind ViewModel.IsToastOpen, Mode=TwoWay}"
+            Title="{x:Bind ViewModel.ToastTitle, Mode=OneWay}"
+            Message="{x:Bind ViewModel.ToastMessage, Mode=OneWay}"
+            Severity="{x:Bind ViewModel.ToastSeverity, Mode=OneWay}"
+            AutomationProperties.LiveSetting="Polite">
+            <InfoBar.ActionButton>
+                <Button
+                    Command="{x:Bind ViewModel.RunToastActionCommand}"
+                    Content="{x:Bind ViewModel.ToastActionText, Mode=OneWay}"
+                    Visibility="{x:Bind ViewModel.HasToastAction, Mode=OneWay}" />
+            </InfoBar.ActionButton>
+        </InfoBar>
+
+        <!-- 未サインイン時はサインイン画面を表示する -->
+        <ContentControl
+            x:Name="SignInHost"
+            Grid.Row="1"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
+            Visibility="Collapsed" />
+    </Grid>
+</Window>

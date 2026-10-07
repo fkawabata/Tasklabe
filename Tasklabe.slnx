@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Tasklabe.Animation/Tasklabe.Animation.csproj" />
+    <Project Path="src/Tasklabe.App/Tasklabe.App.csproj" />
+    <Project Path="src/Tasklabe.Core/Tasklabe.Core.csproj" />
+    <Project Path="src/Tasklabe.Data/Tasklabe.Data.csproj" />
+    <Project Path="src/Tasklabe.GitHub/Tasklabe.GitHub.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Tasklabe.Animation.Tests/Tasklabe.Animation.Tests.csproj" />
+    <Project Path="tests/Tasklabe.Core.Tests/Tasklabe.Core.Tests.csproj" />
+    <Project Path="tests/Tasklabe.Data.Tests/Tasklabe.Data.Tests.csproj" />
+    <Project Path="tests/Tasklabe.GitHub.Tests/Tasklabe.GitHub.Tests.csproj" />
+  </Folder>
+</Solution>

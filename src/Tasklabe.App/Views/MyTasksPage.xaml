@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Tasklabe.App.Views.MyTasksPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Tasklabe.App.Controls"
+    KeyboardAcceleratorPlacementMode="Hidden">
+
+    <Page.KeyboardAccelerators>
+        <KeyboardAccelerator Key="Number1" Modifiers="Control" Invoked="OnSelectList" />
+        <KeyboardAccelerator Key="Number2" Modifiers="Control" Invoked="OnSelectKanban" />
+    </Page.KeyboardAccelerators>
+
+    <Grid Padding="{StaticResource Padding.Page}" RowSpacing="{StaticResource Space.M}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- 見出し: 日付、残工数、追加 -->
+        <Grid ColumnSpacing="{StaticResource Space.M}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                AutomationProperties.HeadingLevel="Level1"
+                Style="{StaticResource Text.Title}"
+                Text="マイタスク" />
+            <TextBlock
+                Grid.Column="1"
+                Margin="0,0,0,3"
+                VerticalAlignment="Bottom"
+                Style="{StaticResource Text.Caption}"
+                Text="{x:Bind ViewModel.DateText, Mode=OneWay}" />
+            <TextBlock
+                Grid.Column="2"
+                Margin="0,0,0,3"
+                VerticalAlignment="Bottom"
+                Style="{StaticResource Text.Caption}"
+                Text="{x:Bind ViewModel.SummaryText, Mode=OneWay}" />
+            <!-- 追加（UI デザイン設計書 3.5.1 節）。N キーと同じダイアログを開く -->
+            <Button
+                x:Name="AddButton"
+                Grid.Column="3"
+                VerticalAlignment="Center"
+                Click="OnAddTask"
+                Style="{StaticResource AccentButtonStyle}"
+                AutomationProperties.Name="タスクを追加">
+                <FontIcon FontSize="14" Glyph="&#xE710;" />
+            </Button>
+        </Grid>
+
+        <!-- ビュー切り替えと、右端の並び順・グループ（UI デザイン設計書 4.4 節） -->
+        <StackPanel
+            x:Name="ViewTools"
+            Grid.Row="1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Orientation="Horizontal"
+            Spacing="{StaticResource Space.S}" />
+        <SelectorBar x:Name="ViewSelector" Grid.Row="1" HorizontalAlignment="Left" controls:TabIndicator.Slides="True" SelectionChanged="OnViewSelectionChanged">
+            <SelectorBarItem x:Name="ListItem" Text="リスト" Tag="list" IsSelected="True">
+                <SelectorBarItem.Icon>
+                    <FontIcon Glyph="&#xE8FD;" />
+                </SelectorBarItem.Icon>
+            </SelectorBarItem>
+            <SelectorBarItem x:Name="KanbanItem" Text="カンバン" Tag="kanban">
+                <SelectorBarItem.Icon>
+                    <FontIcon Glyph="&#xF0E2;" />
+                </SelectorBarItem.Icon>
+            </SelectorBarItem>
+        </SelectorBar>
+
+        <!-- 効いている絞り込みの条件（UX 規約 UX-24） -->
+        <controls:FilterBar x:Name="Filters" Grid.Row="2" />
+
+        <controls:TaskListView x:Name="TaskList" Grid.Row="3" />
+        <controls:KanbanView x:Name="Kanban" Grid.Row="3" Visibility="Collapsed" />
+
+        <!-- 空の状態 -->
+        <controls:EmptyState
+            x:Name="Empty"
+            Grid.Row="3"
+            ActionInvoked="OnEmptyAction"
+            ActionText="タスクを追加"
+            Glyph="&#xE73A;"
+            Visibility="{x:Bind ViewModel.IsEmpty, Mode=OneWay}" />
+    </Grid>
+</Page>

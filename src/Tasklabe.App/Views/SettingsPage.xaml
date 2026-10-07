@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Tasklabe.App.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Tasklabe.App.Controls">
+
+    <ScrollViewer x:Name="Scroller" SizeChanged="OnScrollerSizeChanged">
+        <StackPanel x:Name="RootPanel" Padding="{StaticResource Padding.Page}" HorizontalAlignment="Center" Spacing="{StaticResource Space.S}">
+            <TextBlock
+                AutomationProperties.HeadingLevel="Level1"
+                Style="{StaticResource Text.Title}"
+                Text="設定" />
+
+            <!-- 全般（アプリ全体）と、個人・チームのプロジェクトの既定（UI デザイン設計書 3.6 節） -->
+            <SelectorBar x:Name="Tabs" Margin="0,0,0,8" controls:TabIndicator.Slides="True" SelectionChanged="OnTabChanged">
+                <SelectorBarItem x:Name="GeneralTab" IsSelected="True" Tag="general" Text="全般">
+                    <SelectorBarItem.Icon>
+                        <FontIcon Glyph="&#xE713;" />
+                    </SelectorBarItem.Icon>
+                </SelectorBarItem>
+                <SelectorBarItem x:Name="PersonalTab" Tag="personal" Text="個人プロジェクトの既定">
+                    <SelectorBarItem.Icon>
+                        <FontIcon Glyph="&#xE77B;" />
+                    </SelectorBarItem.Icon>
+                </SelectorBarItem>
+                <SelectorBarItem x:Name="TeamTab" Tag="team" Text="チームプロジェクトの既定">
+                    <SelectorBarItem.Icon>
+                        <FontIcon Glyph="&#xE716;" />
+                    </SelectorBarItem.Icon>
+                </SelectorBarItem>
+            </SelectorBar>
+
+            <!-- プロジェクトの既定 -->
+            <StackPanel x:Name="DefaultsPanel" Spacing="{StaticResource Space.S}" Visibility="Collapsed">
+                <TextBlock
+                    x:Name="DefaultsIntro"
+                    Style="{StaticResource Text.Caption}"
+                    TextWrapping="Wrap" />
+                <controls:SettingsEditor x:Name="DefaultsEditor" />
+
+                <TextBlock
+                    Margin="0,24,0,0"
+                    AutomationProperties.HeadingLevel="Level2"
+                    Style="{StaticResource Text.BodyStrong}"
+                    Text="プロジェクトごとの設定" />
+                <TextBlock
+                    Style="{StaticResource Text.Caption}"
+                    Text="プロジェクトの設定で、この既定を上書きできます。プロジェクト画面の「…」からも開けます。"
+                    TextWrapping="Wrap" />
+                <StackPanel x:Name="ProjectLinks" Spacing="{StaticResource Space.XS}" />
+            </StackPanel>
+
+            <StackPanel x:Name="GeneralPanel" Spacing="{StaticResource Space.S}">
+            <TextBlock
+                AutomationProperties.HeadingLevel="Level2"
+                Style="{StaticResource Text.BodyStrong}"
+                Text="外観" />
+
+            <Border
+                Padding="16,12"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="{StaticResource Radius.Card}">
+                <Grid ColumnSpacing="{StaticResource Space.L}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <FontIcon VerticalAlignment="Center" Glyph="&#xE790;" />
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Style="{StaticResource Text.Body}" Text="テーマ" />
+                        <TextBlock Style="{StaticResource Text.Caption}" Text="ハイコントラストは Windows の設定に従います" />
+                    </StackPanel>
+                    <!-- 候補はピッカーで選ぶ（UX 規約 UX-02） -->
+                    <ContentControl
+                        x:Name="ThemeHost"
+                        Grid.Column="2"
+                        MinWidth="200"
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Stretch" />
+                </Grid>
+            </Border>
+
+            <!-- 操作のヒント（要件 F-SET-07） -->
+            <Border
+                Padding="16,12"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="{StaticResource Radius.Card}">
+                <Grid ColumnSpacing="{StaticResource Space.L}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <FontIcon VerticalAlignment="Center" Glyph="&#xE82F;" />
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Style="{StaticResource Text.Body}" Text="操作のヒントを表示する" />
+                        <TextBlock Style="{StaticResource Text.Caption}" Text="ダイアログや詳細パネルの下端に、使えるキーを書いておきます" />
+                    </StackPanel>
+                    <ToggleSwitch
+                        x:Name="HintsSwitch"
+                        Grid.Column="2"
+                        MinWidth="0"
+                        VerticalAlignment="Center"
+                        Toggled="OnHintsToggled"
+                        AutomationProperties.Name="操作のヒントを表示する" />
+                </Grid>
+            </Border>
+
+            <!-- カンバン（めったに変えない表示のしかたは、ビューではなくここに置く。UX 規約 UX-23） -->
+            <TextBlock
+                Margin="0,16,0,0"
+                AutomationProperties.HeadingLevel="Level2"
+                Style="{StaticResource Text.BodyStrong}"
+                Text="カンバン" />
+            <Border
+                Padding="16,12"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="{StaticResource Radius.Card}">
+                <Grid ColumnSpacing="{StaticResource Space.L}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <FontIcon VerticalAlignment="Center" Glyph="&#xF0E2;" />
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Style="{StaticResource Text.Body}" Text="空の列を表示する" />
+                        <TextBlock Style="{StaticResource Text.Caption}" Text="オフにすると、カードが 1 枚もない列を隠します。すべてのカンバンに効きます" />
+                    </StackPanel>
+                    <ToggleSwitch
+                        x:Name="EmptyColumnsSwitch"
+                        Grid.Column="2"
+                        MinWidth="0"
+                        VerticalAlignment="Center"
+                        Toggled="OnEmptyColumnsToggled"
+                        AutomationProperties.Name="空の列を表示する" />
+                </Grid>
+            </Border>
+
+            <!-- 番号（要件 F-SET-06）。カンバンはいつも出すため、ほかの画面だけを選ぶ -->
+            <TextBlock
+                Margin="0,16,0,0"
+                AutomationProperties.HeadingLevel="Level2"
+                Style="{StaticResource Text.BodyStrong}"
+                Text="番号を表示する" />
+            <Border
+                Padding="16,4"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="{StaticResource Radius.Card}">
+                <StackPanel>
+                    <Grid Padding="0,8" ColumnSpacing="{StaticResource Space.L}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon VerticalAlignment="Center" Glyph="&#xE8FD;" />
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource Text.Body}" Text="計画の表" />
+                        <ToggleSwitch
+                            x:Name="NumberInPlanSwitch"
+                            Grid.Column="2"
+                            MinWidth="0"
+                            VerticalAlignment="Center"
+                            Toggled="OnNumberToggled"
+                            AutomationProperties.Name="計画の表に番号を表示する" />
+                    </Grid>
+                    <Grid Padding="0,8" ColumnSpacing="{StaticResource Space.L}"
+                        BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+                        BorderThickness="0,1,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon VerticalAlignment="Center" Glyph="&#xE9D2;" />
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource Text.Body}" Text="ガントチャート" />
+                        <ToggleSwitch
+                            x:Name="NumberInGanttSwitch"
+                            Grid.Column="2"
+                            MinWidth="0"
+                            VerticalAlignment="Center"
+                            Toggled="OnNumberToggled"
+                            AutomationProperties.Name="ガントチャートに番号を表示する" />
+                    </Grid>
+                    <Grid Padding="0,8" ColumnSpacing="{StaticResource Space.L}"
+                        BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+                        BorderThickness="0,1,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon VerticalAlignment="Center" Glyph="&#xE7C1;" />
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource Text.Body}" Text="課題の一覧" />
+                        <ToggleSwitch
+                            x:Name="NumberInIssuesSwitch"
+                            Grid.Column="2"
+                            MinWidth="0"
+                            VerticalAlignment="Center"
+                            Toggled="OnNumberToggled"
+                            AutomationProperties.Name="課題の一覧に番号を表示する" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- キーボード（要件 F-KEY-04） -->
+            <Grid Margin="0,16,0,0">
+                <TextBlock
+                    AutomationProperties.HeadingLevel="Level2"
+                    Style="{StaticResource Text.BodyStrong}"
+                    Text="キーボード" />
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Spacing="{StaticResource Space.S}">
+                    <Button Click="OnShowShortcuts" Content="一覧を見る" />
+                    <Button Click="OnResetAllShortcuts" Content="すべて既定に戻す…" />
+                </StackPanel>
+            </Grid>
+            <TextBlock
+                Style="{StaticResource Text.Caption}"
+                Text="よく使う操作のキーを変えられます。修飾キーのない 1 文字は、文字を入力していないときに働きます。"
+                TextWrapping="Wrap" />
+            <StackPanel x:Name="ShortcutSections" Spacing="{StaticResource Space.S}" />
+
+            <TextBlock
+                Margin="0,16,0,0"
+                AutomationProperties.HeadingLevel="Level2"
+                Style="{StaticResource Text.BodyStrong}"
+                Text="アカウント" />
+
+            <Border
+                Padding="16,12"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="{StaticResource Radius.Card}">
+                <Grid ColumnSpacing="{StaticResource Space.L}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <FontIcon VerticalAlignment="Center" Glyph="&#xE77B;" />
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock x:Name="AccountText" Style="{StaticResource Text.Body}" />
+                        <TextBlock x:Name="RepositoryText" Style="{StaticResource Text.Caption}" />
+                    </StackPanel>
+                    <Button
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        Click="OnSignOutClick"
+                        Content="サインアウト…" />
+                </Grid>
+            </Border>
+
+            <Border
+                Padding="16,12"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="{StaticResource Radius.Card}">
+                <Grid ColumnSpacing="{StaticResource Space.L}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <FontIcon VerticalAlignment="Center" Glyph="&#xE716;" />
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Style="{StaticResource Text.Body}" Text="Organization へのアクセス" />
+                        <TextBlock
+                            x:Name="OrganizationsText"
+                            Style="{StaticResource Text.Caption}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                    <HyperlinkButton
+                        x:Name="OrganizationAccessLink"
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        Content="GitHub で確認する" />
+                </Grid>
+            </Border>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

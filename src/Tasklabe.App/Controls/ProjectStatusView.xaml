@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Tasklabe.App.Controls.ProjectStatusView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Tasklabe.App.Controls">
+
+    <UserControl.Resources>
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Padding" Value="{StaticResource Padding.Card}" />
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="{StaticResource Radius.Card}" />
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <StackPanel Spacing="{StaticResource Space.L}">
+            <!-- 主要指標 -->
+            <Grid ColumnSpacing="{StaticResource Space.M}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Border Style="{StaticResource Card}">
+                    <StackPanel Spacing="{StaticResource Space.XS}">
+                        <TextBlock Style="{StaticResource Text.Caption}" Text="進捗" />
+                        <TextBlock x:Name="ProgressMetric" Style="{StaticResource Text.Metric}" />
+                        <TextBlock x:Name="ProgressCaption" Style="{StaticResource Text.Caption}" />
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource Card}">
+                    <StackPanel Spacing="{StaticResource Space.XS}">
+                        <TextBlock Style="{StaticResource Text.Caption}" Text="予定比" />
+                        <TextBlock x:Name="ScheduleMetric" Style="{StaticResource Text.Metric}" />
+                        <TextBlock x:Name="ScheduleCaption" Style="{StaticResource Text.Caption}" />
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource Card}">
+                    <StackPanel Spacing="{StaticResource Space.XS}">
+                        <TextBlock Style="{StaticResource Text.Caption}" Text="遅延タスク" />
+                        <TextBlock x:Name="DelayedMetric" Style="{StaticResource Text.Metric}" />
+                        <TextBlock x:Name="DelayedCaption" Style="{StaticResource Text.Caption}" />
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="3" Style="{StaticResource Card}">
+                    <StackPanel Spacing="{StaticResource Space.XS}">
+                        <TextBlock Style="{StaticResource Text.Caption}" Text="残工数" />
+                        <TextBlock x:Name="RemainingMetric" Style="{StaticResource Text.Metric}" />
+                        <TextBlock x:Name="RemainingCaption" Style="{StaticResource Text.Caption}" />
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="4" Style="{StaticResource Card}">
+                    <StackPanel Spacing="{StaticResource Space.XS}">
+                        <TextBlock Style="{StaticResource Text.Caption}" Text="課題" />
+                        <TextBlock x:Name="IssueMetric" Style="{StaticResource Text.Metric}" />
+                        <TextBlock x:Name="IssueCaption" Style="{StaticResource Text.Caption}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- マイルストーン（期限）ごとの進み具合（要件 F-MS-04） -->
+            <Border x:Name="MilestoneCard" Style="{StaticResource Card}" Visibility="Collapsed">
+                <StackPanel Spacing="{StaticResource Space.S}">
+                    <TextBlock
+                        AutomationProperties.HeadingLevel="Level2"
+                        Style="{StaticResource Text.Subtitle}"
+                        Text="マイルストーン" />
+                    <StackPanel x:Name="MilestoneRows" Spacing="{StaticResource Space.S}" />
+                </StackPanel>
+            </Border>
+
+            <!-- 注意が必要なタスク -->
+            <Border Style="{StaticResource Card}">
+                <StackPanel Spacing="{StaticResource Space.S}">
+                    <TextBlock
+                        AutomationProperties.HeadingLevel="Level2"
+                        Style="{StaticResource Text.Subtitle}"
+                        Text="注意が必要なタスク" />
+                    <SelectorBar x:Name="AttentionSelector" controls:TabIndicator.Slides="True" SelectionChanged="OnAttentionTabChanged">
+                        <SelectorBarItem x:Name="DelayedTab" Text="遅延" IsSelected="True" />
+                        <SelectorBarItem x:Name="SoonTab" Text="期日が近い" />
+                        <SelectorBarItem x:Name="UnestimatedTab" Text="未見積り" />
+                    </SelectorBar>
+                    <StackPanel x:Name="AttentionRows" Spacing="2" />
+                    <TextBlock x:Name="AttentionEmpty" Style="{StaticResource Text.Caption}" Text="該当するタスクはありません。" />
+                </StackPanel>
+            </Border>
+
+            <!-- 担当者別の負荷 -->
+            <Border Style="{StaticResource Card}">
+                <StackPanel Spacing="{StaticResource Space.S}">
+                    <Grid>
+                        <TextBlock
+                            AutomationProperties.HeadingLevel="Level2"
+                            Style="{StaticResource Text.Subtitle}"
+                            Text="担当者別の負荷（今後 2 週間）" />
+                        <TextBlock
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Style="{StaticResource Text.Caption}"
+                            x:Name="CapacityText" />
+                    </Grid>
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" HorizontalScrollMode="Auto" VerticalScrollMode="Disabled">
+                        <Grid x:Name="WorkloadGrid" ColumnSpacing="2" RowSpacing="2" />
+                    </ScrollViewer>
+                    <TextBlock
+                        x:Name="WorkloadEmpty"
+                        Style="{StaticResource Text.Caption}"
+                        Text="割り当てられた残作業がありません。"
+                        Visibility="Collapsed" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

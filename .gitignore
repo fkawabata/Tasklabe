@@ -1,0 +1,31 @@
+# Build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+ARM64/
+AppPackages/
+BundleArtifacts/
+*.appx
+*.msix
+*.msixbundle
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.rsuser
+*.userprefs
+TestResults/
+
+# Secrets / certificates
+*.pfx
+*.snk
+
+# Local only
+.claude/
+docs/
+*.drawio
+*.drawio.bkp

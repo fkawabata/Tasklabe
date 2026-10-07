@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Tasklabe.App.Views.ProjectPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Tasklabe.App.Controls"
+    KeyboardAcceleratorPlacementMode="Hidden">
+
+    <Page.KeyboardAccelerators>
+        <KeyboardAccelerator Key="Number1" Modifiers="Control" Invoked="OnSelectView1" />
+        <KeyboardAccelerator Key="Number2" Modifiers="Control" Invoked="OnSelectView2" />
+        <KeyboardAccelerator Key="Number3" Modifiers="Control" Invoked="OnSelectView3" />
+        <KeyboardAccelerator Key="Number4" Modifiers="Control" Invoked="OnSelectView4" />
+        <KeyboardAccelerator Key="Number5" Modifiers="Control" Invoked="OnSelectView5" />
+    </Page.KeyboardAccelerators>
+
+    <Grid Padding="{StaticResource Padding.Page}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- 見出し: プロジェクト名、種別、進捗の要約、設定 -->
+        <Grid Margin="0,0,0,12" ColumnSpacing="{StaticResource Space.M}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MinWidth="0" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                AutomationProperties.HeadingLevel="Level1"
+                Style="{StaticResource Text.Title}"
+                Text="{x:Bind ViewModel.Title, Mode=OneWay}" />
+            <Border
+                Grid.Column="1"
+                Padding="8,2"
+                VerticalAlignment="Center"
+                Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                CornerRadius="{StaticResource Radius.Control}">
+                <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.XS}">
+                    <FontIcon x:Name="KindIcon" FontSize="12" />
+                    <TextBlock x:Name="KindText" Style="{StaticResource Text.Caption}" />
+                </StackPanel>
+            </Border>
+            <TextBlock
+                Grid.Column="2"
+                VerticalAlignment="Center"
+                Style="{StaticResource Text.Caption}"
+                Text="{x:Bind ViewModel.SummaryText, Mode=OneWay}"
+                TextTrimming="CharacterEllipsis"
+                ToolTipService.ToolTip="{x:Bind ViewModel.SummaryText, Mode=OneWay}" />
+            <!--
+                続いている状態の知らせ（UX 規約 UX-31）。権限の不足（要件 F-PRJ-06）と、依存関係の食い違い（要件 F-DEP-04）。
+                見出しの行に置き、押すと詳細と操作を開く
+            -->
+            <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="{StaticResource Space.S}">
+                <controls:StatusChip x:Name="AccessChip" />
+                <controls:StatusChip x:Name="ConflictChip" />
+            </StackPanel>
+            <!--
+                絞り込み（UX 規約 UX-24）。F キーと同じピッカーを開く。効いている条件はビューの上にチップで示す。
+                ピッカーのボタンと同じ形にし、押すとボタンがそのまま候補の面に育つ。選んだ条件はボタンの文字にならない（続けて値を選ぶ）
+            -->
+            <Button
+                x:Name="FilterButton"
+                Grid.Column="4"
+                MinHeight="32"
+                Padding="10,5,8,6"
+                controls:PickerTrigger.IsTrigger="True"
+                controls:PickerTrigger.ShowsChoice="False"
+                Click="OnFilterClick"
+                Style="{StaticResource MorphSelect.Trigger}"
+                AutomationProperties.Name="絞り込む">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <FontIcon VerticalAlignment="Center" FontSize="14" Glyph="&#xE71C;" />
+                    <TextBlock VerticalAlignment="Center" Text="絞り込み" />
+                    <FontIcon
+                        Margin="2,0,0,0"
+                        VerticalAlignment="Center"
+                        FontSize="10"
+                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                        Glyph="&#xE70D;" />
+                </StackPanel>
+            </Button>
+            <!-- 追加（UI デザイン設計書 3.5.1 節）。N キーと同じダイアログを開く -->
+            <Button
+                x:Name="AddButton"
+                Grid.Column="5"
+                Click="OnAddTask"
+                Style="{StaticResource AccentButtonStyle}"
+                AutomationProperties.Name="タスクを追加">
+                <FontIcon FontSize="14" Glyph="&#xE710;" />
+            </Button>
+            <!-- プロジェクトの操作。押したボタンから育つメニュー（MorphMenu）を開く -->
+            <Button
+                Grid.Column="6"
+                Click="OnProjectMenu"
+                ToolTipService.ToolTip="プロジェクトの操作"
+                AutomationProperties.Name="プロジェクトの操作">
+                <FontIcon FontSize="14" Glyph="&#xE712;" />
+            </Button>
+        </Grid>
+
+        <!-- ビュー切り替え -->
+        <SelectorBar
+            x:Name="ViewSelector"
+            Grid.Row="1"
+            Margin="0,0,0,12"
+            controls:TabIndicator.Slides="True"
+            SelectionChanged="OnViewSelectionChanged">
+            <SelectorBarItem x:Name="ListItem" Text="計画" Tag="list" IsSelected="True">
+                <SelectorBarItem.Icon>
+                    <FontIcon Glyph="&#xE8FD;" />
+                </SelectorBarItem.Icon>
+            </SelectorBarItem>
+            <SelectorBarItem x:Name="GanttItem" Text="ガント" Tag="gantt">
+                <SelectorBarItem.Icon>
+                    <FontIcon Glyph="&#xE9D9;" />
+                </SelectorBarItem.Icon>
+            </SelectorBarItem>
+            <SelectorBarItem x:Name="IssuesItem" Text="課題" Tag="issues">
+                <SelectorBarItem.Icon>
+                    <FontIcon Glyph="&#xE7C1;" />
+                </SelectorBarItem.Icon>
+            </SelectorBarItem>
+            <SelectorBarItem x:Name="KanbanItem" Text="カンバン" Tag="kanban">
+                <SelectorBarItem.Icon>
+                    <FontIcon Glyph="&#xF0E2;" />
+                </SelectorBarItem.Icon>
+            </SelectorBarItem>
+            <SelectorBarItem x:Name="StatusItem" Text="状況" Tag="status">
+                <SelectorBarItem.Icon>
+                    <FontIcon Glyph="&#xE9D2;" />
+                </SelectorBarItem.Icon>
+            </SelectorBarItem>
+        </SelectorBar>
+
+        <StackPanel Grid.Row="2">
+        <!-- 効いている絞り込みの条件（UX 規約 UX-24） -->
+        <controls:FilterBar x:Name="Filters" />
+        </StackPanel>
+
+        <!-- 計画をまとめて入力（要件 F-UI-WBS-05、UI デザイン設計書 3.4.6 節） -->
+        <StackPanel
+            x:Name="PlanTools"
+            Grid.Row="1"
+            Margin="0,0,0,12"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Orientation="Horizontal"
+            Visibility="Collapsed">
+            <Button x:Name="BulkPlanButton" Click="OnBulkPlan" AutomationProperties.Name="計画をまとめて入力">
+                <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.S}">
+                    <FontIcon FontSize="14" Glyph="&#xE8A5;" />
+                    <TextBlock Text="まとめて入力" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <!-- カンバンの並び順とグループ（UI デザイン設計書 4.4 節） -->
+        <StackPanel
+            x:Name="KanbanTools"
+            Grid.Row="1"
+            Margin="0,0,0,12"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Orientation="Horizontal"
+            Spacing="{StaticResource Space.S}"
+            Visibility="Collapsed" />
+
+        <!-- ガントの表示設定 -->
+        <StackPanel
+            x:Name="GanttTools"
+            Grid.Row="1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Orientation="Horizontal"
+            Spacing="{StaticResource Space.S}"
+            Visibility="Collapsed">
+            <!-- 閲覧モード（ドラッグで表示する場所を動かす）と編集モード（ドラッグでバーを動かす）の切り替え -->
+            <ToggleButton
+                x:Name="GanttEditToggle"
+                Click="OnGanttEditToggled"
+                AutomationProperties.Name="編集モード">
+                <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.S}">
+                    <FontIcon FontSize="14" Glyph="&#xE70F;" />
+                    <TextBlock Text="編集" />
+                </StackPanel>
+            </ToggleButton>
+            <Button x:Name="GanttTodayButton" Click="OnGanttToday" Content="今日" />
+            <!-- 表示の単位（日・週・月）。並べた切り替えにして、いまの単位がいつも見えるようにする -->
+            <ContentControl x:Name="GanttScaleHost" Margin="4,0,0,0" />
+            <!-- イナズマ線（要件 F-UI-GT-03）。オンのときは塗りで示す -->
+            <ToggleButton
+                x:Name="InazumaToggle"
+                Click="OnInazumaToggled"
+                IsChecked="True"
+                ToolTipService.ToolTip="イナズマ線"
+                AutomationProperties.Name="イナズマ線を表示">
+                <FontIcon FontSize="14" Glyph="&#xE945;" />
+            </ToggleButton>
+            <!-- 共有ビュー（要件 F-UI-GT-10） -->
+            <Button
+                Click="OnGanttShare"
+                ToolTipService.ToolTip="計画を他の人に説明するためのビューを大きく開きます。画像や Mermaid の図としても書き出せます"
+                AutomationProperties.Name="共有ビューを開く">
+                <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.S}">
+                    <FontIcon FontSize="14" Glyph="&#xE72D;" />
+                    <TextBlock Text="共有" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <!-- リスト -->
+        <Grid x:Name="ListPanel" Grid.Row="3">
+            <controls:WbsView x:Name="Wbs" />
+            <controls:EmptyState
+                x:Name="PlanEmpty"
+                ActionInvoked="OnEmptyAction"
+                ActionText="タスクを追加"
+                Glyph="&#xE8FD;"
+                Visibility="Collapsed" />
+        </Grid>
+
+        <!-- 課題 -->
+        <Grid x:Name="IssuesPanel" Grid.Row="3" Visibility="Collapsed">
+            <controls:TaskListView x:Name="IssueList" ShowsIssues="True" />
+            <controls:EmptyState
+                x:Name="IssuesEmpty"
+                ActionInvoked="OnEmptyAction"
+                ActionText="課題を追加"
+                Glyph="&#xE7C1;"
+                Message="GitHub でこのプロジェクトに追加した Issue や、ここで追加した課題が並びます。計画へ入れるときは「計画に移す」を使います。"
+                Title="課題はありません"
+                Visibility="Collapsed" />
+        </Grid>
+
+        <!-- カンバン -->
+        <controls:KanbanView x:Name="Kanban" Grid.Row="3" Visibility="Collapsed" />
+
+        <!-- ガント -->
+        <controls:GanttView x:Name="Gantt" Grid.Row="3" Visibility="Collapsed" />
+
+        <!-- 状況 -->
+        <controls:ProjectStatusView x:Name="Status" Grid.Row="3" Visibility="Collapsed" />
+
+        <!-- 空の状態（カンバン・ガント） -->
+        <controls:EmptyState
+            x:Name="OtherViewEmptyText"
+            Grid.Row="3"
+            ActionInvoked="OnEmptyAction"
+            ActionText="タスクを追加"
+            Glyph="&#xE9D5;"
+            Title="タスクはまだありません"
+            Visibility="Collapsed" />
+    </Grid>
+</Page>
