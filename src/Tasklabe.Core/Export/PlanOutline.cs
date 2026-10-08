@@ -162,36 +162,43 @@ public static class PlanOutline
             max = max is { } x && x >= end ? x : end;
         }
 
-        // プロジェクトのマイルストーンは期限の目印で、どの区切りにも属さないため、区切るときは末尾の区切りにまとめる。
+        // 担当者ごとの区切りは、担当者の名前の順に並べる（未割り当ては末尾）
+        if (options.Sections == OutlineSections.Assignee)
+        {
+            sections = [.. sections.OrderBy(s => s.Name == Unassigned).ThenBy(s => s.Name, StringComparer.CurrentCulture)];
+        }
+
+        // プロジェクトのマイルストーンは期限の目印で、どの区切りにも属さないため、期日の順に先頭へまとめる。
         // 期限は区切りとして示すだけで、過ぎても遅れの色にはしない
         if (options.Milestones)
         {
-            foreach (var m in milestones ?? [])
+            var marks = new List<OutlineItem>();
+            foreach (var m in (milestones ?? []).Where(m => m.Due is not null).OrderBy(m => m.Due))
             {
-                if (m.Due is not { } due || (from is { } f2 && due < f2) || (to is { } t2 && due > t2))
+                var due = m.Due!.Value;
+                if ((from is { } f2 && due < f2) || (to is { } t2 && due > t2))
                 {
                     continue;
                 }
 
-                var sectionName = options.Sections == OutlineSections.None ? "" : MilestoneSection;
-                var list = sections.FirstOrDefault(s => s.Name == sectionName).Items;
-                if (list is null)
-                {
-                    list = [];
-                    sections.Add((sectionName, list));
-                }
-
-                list.Add(new OutlineItem(string.IsNullOrWhiteSpace(m.Title) ? "（無題）" : m.Title.Trim(), due, due, true,
+                marks.Add(new OutlineItem(string.IsNullOrWhiteSpace(m.Title) ? "（無題）" : m.Title.Trim(), due, due, true,
                     options.StatusColors && m.IsClosed, false, false));
                 min = min is { } m1 && m1 <= due ? m1 : due;
                 max = max is { } x1 && x1 >= due ? x1 : due;
             }
-        }
 
-        // 担当者ごとの区切りは、担当者の名前の順に並べる（未割り当ては末尾）
-        var ordered = options.Sections == OutlineSections.Assignee
-            ? sections.OrderBy(s => s.Name == MilestoneSection ? 2 : s.Name == Unassigned ? 1 : 0).ThenBy(s => s.Name, StringComparer.CurrentCulture).ToList()
-            : sections;
+            if (marks.Count > 0)
+            {
+                if (options.Sections == OutlineSections.None && sections.Count > 0)
+                {
+                    sections[0].Items.InsertRange(0, marks);
+                }
+                else
+                {
+                    sections.Insert(0, (options.Sections == OutlineSections.None ? "" : MilestoneSection, marks));
+                }
+            }
+        }
 
         var holidays = new HashSet<DateOnly>();
         if (options.Holidays && min is { } a && max is { } b)
@@ -207,7 +214,7 @@ public static class PlanOutline
 
         return new GanttOutline(
             options.Title.Trim(),
-            [.. ordered.Select(s => new OutlineSection(s.Name, s.Items))],
+            [.. sections.Select(s => new OutlineSection(s.Name, s.Items))],
             unscheduled,
             min is { } s0 && max is { } e0 ? (s0, e0) : null,
             holidays,
