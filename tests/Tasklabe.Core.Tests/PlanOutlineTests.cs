@@ -108,6 +108,20 @@ public class PlanOutlineTests
     }
 
     [Fact]
+    public void Milestones_come_first_in_every_grouping()
+    {
+        foreach (var sections in new[] { OutlineSections.TopLevel, OutlineSections.Assignee, OutlineSections.None })
+        {
+            var outline = Outline(new OutlineOptions { Sections = sections }, Plan);
+
+            Assert.True(outline.Sections[0].Items[0].Milestone);
+        }
+
+        var code = Build(new OutlineOptions(), Plan);
+        Assert.True(code.IndexOf("section マイルストーン", StringComparison.Ordinal) < code.IndexOf("section 設計", StringComparison.Ordinal));
+    }
+
+    [Fact]
     public void Sections_can_follow_assignees()
     {
         var code = Build(new OutlineOptions { Sections = OutlineSections.Assignee },
@@ -144,7 +158,7 @@ public class PlanOutlineTests
         // 共有ビューは Mermaid の記法の制約を受けないため、名前をそのまま持つ
         var outline = Outline(new OutlineOptions(), T("x", start: D(9, 18), target: D(9, 24), title: "API: 認証"));
 
-        Assert.Equal("API: 認証", outline.Sections[0].Items[0].Name);
+        Assert.Contains(outline.Sections.SelectMany(s => s.Items), i => i.Name == "API: 認証");
         Assert.Contains(D(9, 22), outline.Holidays);
         Assert.Contains(D(9, 19), outline.Holidays);
         Assert.DoesNotContain(D(9, 24), outline.Holidays);
