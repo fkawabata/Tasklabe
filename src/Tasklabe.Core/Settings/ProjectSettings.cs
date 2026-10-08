@@ -175,9 +175,15 @@ public sealed record ProjectSettings
     /// <summary>タスクの番号のキー（要件 F-TSK-14）。既定を持たない、プロジェクトだけの値。null ならまだ決めていない。</summary>
     public string? Key { get; init; }
 
+    /// <summary>
+    /// 計画のタスクを階層番号（例: TLB_1_2）で呼ぶときの、あらかじめ用意する段の数（1〜<see cref="ProjectKey.MaxOutlineLevels"/>）。
+    /// null なら Issue の番号の通し番号（例: TLB-123）で呼ぶ。キーと同じく既定を持たない、プロジェクトだけの値。
+    /// </summary>
+    public int? OutlineLevels { get; init; }
+
     public static ProjectSettings None { get; } = new();
 
-    public bool IsEmpty => EffortUnit is null && HoursPerDay is null && Calendar is null && NewTaskKind is null && Key is null;
+    public bool IsEmpty => EffortUnit is null && HoursPerDay is null && Calendar is null && NewTaskKind is null && Key is null && OutlineLevels is null;
 
     /// <summary>既定に重ねた値。</summary>
     public ResolvedSettings Over(DefaultSettings defaults)
@@ -235,6 +241,11 @@ public sealed record ProjectSettings
             node["key"] = key;
         }
 
+        if (s.OutlineLevels is { } levels)
+        {
+            node["outlineLevels"] = levels;
+        }
+
         return node;
     }
 
@@ -267,6 +278,9 @@ public sealed record ProjectSettings
             Calendar = Text(node["calendar"]) is { Length: > 0 } calendar ? WorkCalendarRules.Parse(calendar) : null,
             NewTaskKind = Text(node["newTaskKind"]) switch { "issue" => TaskKind.Issue, "task" => TaskKind.Task, _ => null },
             Key = ProjectKey.Normalize(Text(node["key"])) is var key && ProjectKey.IsValid(key) ? key : null,
+            OutlineLevels = node["outlineLevels"] is JsonValue o && o.TryGetValue<int>(out var levels) && levels is >= 1 and <= ProjectKey.MaxOutlineLevels
+                ? levels
+                : null,
         };
     }
 }

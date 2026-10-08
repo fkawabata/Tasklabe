@@ -55,7 +55,7 @@ internal static class CommandPalette
                     "task.plan" => team,
                     "task.predecessor" => team && target.Task.IsPlanned && !target.IsMultiple,
                     "task.openInBrowser" or "task.copyUrl" => target.Task.Url is not null && !target.IsMultiple,
-                    "task.copyKey" => target.Tasks.Any(t => t.Number > 0),
+                    "task.copyKey" => target.Tasks.Any(TaskKeys.Has),
                     "task.branch" => !target.IsMultiple && !target.Task.IsLocal,
                     "task.detail" or "task.rename" => !target.IsMultiple,
                     "task.addChild" => !target.IsMultiple && TaskShortcuts.CanHaveChildren(target.Task),
@@ -109,8 +109,8 @@ internal static class CommandPalette
         foreach (var t in (await services.Store.GetTasksAsync()).Where(t => !t.IsDone).OrderByDescending(t => t.UpdatedAt).Take(500))
         {
             var where = byProject.TryGetValue(t.ProjectId, out var p) ? p.Title : ProjectDisplay.DefaultPersonalName;
-            entries.Add(new Entry("task:" + t.ItemId, new PickerOption(t.Number > 0 ? $"{TaskKeys.Of(t)} {t.Title}" : t.Title, where,
-                StatusVisuals.Glyph(t.Category), GlyphBrushKey: StatusVisuals.BrushKey(t.Category), Group: "タスク", OnlyWhenSearching: true), () =>
+            entries.Add(new Entry("task:" + t.ItemId, new PickerOption(TaskKeys.Has(t) ? $"{TaskKeys.Of(t)} {t.Title}" : t.Title, where,
+                StatusVisuals.Glyph(t.Category), GlyphBrushKey: StatusVisuals.BrushKey(t.Category), Group: "タスク", OnlyWhenSearching: true, Keywords: TaskKeys.IssueKeyOf(t)), () =>
             {
                 App.Current.Shell?.SelectTask(t);
                 return Task.CompletedTask;

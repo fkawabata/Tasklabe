@@ -91,6 +91,72 @@ public sealed class WorkspaceService(GitHubApi api, SqliteTaskStore store, TimeP
         repositoryNameWithOwner is null ? null : await api.EnsureAutolinkAsync(repositoryNameWithOwner, key, ct).ConfigureAwait(false);
 
     /// <summary>
+    /// リポジトリの自動リンクで、このリポジトリの Issue 以外へつなぐキー（番号のキーにすると重なるもの）。
+    /// リポジトリがない、または管理者でなく一覧を読めないときは空とする。
+    /// </summary>
+    public async Task<IReadOnlyList<string>> ForeignAutolinkKeysAsync(string? repositoryNameWithOwner, CancellationToken ct = default) =>
+        repositoryNameWithOwner is null ? [] : await api.GetForeignAutolinkKeysAsync(repositoryNameWithOwner, ct).ConfigureAwait(false) ?? [];
+
+    private readonly HashSet<string> _keyAttempts = new(StringComparer.Ordinal);
+
+    /// <summary>
+    /// キーをまだ保存していないプロジェクトに、提案したキーを保存して固定する（要件 F-TSK-15）。
+    /// 保存できたプロジェクトでは自動リンクにも登録する。Project を編集する権限がないなど保存できないプロジェクトは、
+    /// このアプリの起動中は試し直さない。保存したプロジェクトがあれば true を返す。
+    /// </summary>
+    public async Task<bool> FixMissingKeysAsync(CancellationToken ct = default)
+    {
+        var projects = await store.GetProjectsAsync(ct).ConfigureAwait(false);
+        var keys = ProjectKey.Resolve(projects).ToDictionary(StringComparer.Ordinal);
+        bool saved = false;
+        foreach (var p in projects.Where(p => p.Kind != ProjectKind.Inbox && ProjectKey.SavedKey(p) is null).OrderBy(p => p.Id, StringComparer.Ordinal))
+        {
+            lock (_keyAttempts)
+            {
+                if (!_keyAttempts.Add(p.Id))
+                {
+                    continue;
+                }
+            }
+
+            try
+            {
+                var key = keys[p.Id];
+                var linked = await ForeignAutolinkKeysAsync(p.RepositoryNameWithOwner, ct).ConfigureAwait(false);
+                if (linked.Contains(key, StringComparer.Ordinal))
+                {
+                    key = ProjectKey.Suggest(p.Title, p.RepositoryNameWithOwner, keys.Where(k => k.Key != p.Id).Select(k => k.Value).Concat(linked));
+                }
+
+                var fixedKey = await api.SaveKeyIfMissingAsync(p.Id, key, ct).ConfigureAwait(false);
+                keys[p.Id] = fixedKey;
+                await RefreshAsync(p.Id, ct).ConfigureAwait(false);
+                saved = true;
+                if (fixedKey == key)
+                {
+                    await RegisterKeyAsync(p.RepositoryNameWithOwner, key, ct).ConfigureAwait(false);
+                }
+            }
+            catch (Exception ex) when (ex is GitHubAuthenticationException or GitHubUnavailableException || ct.IsCancellationRequested)
+            {
+                // つながらないときは、次に読み直したときに試し直す
+                lock (_keyAttempts)
+                {
+                    _keyAttempts.Remove(p.Id);
+                }
+
+                break;
+            }
+            catch (GitHubException)
+            {
+                // 編集する権限がないプロジェクトは、編集できる人が開いたときに固定する
+            }
+        }
+
+        return saved;
+    }
+
+    /// <summary>
     /// 作ったプロジェクトのキーを自動リンクに登録する。登録できなくてもプロジェクトは使えるため、作成は失敗させない
     /// （プロジェクトの設定から登録し直せる）。
     /// </summary>
