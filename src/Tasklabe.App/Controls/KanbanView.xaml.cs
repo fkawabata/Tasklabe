@@ -439,6 +439,7 @@ public sealed partial class KanbanView : UserControl
             panel.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             panel.Children.Add(ColumnHeader(column, cards, source));
             var list = CreateList(column, i, source, KanbanLaneKey.All.Key, [.. cards.Select(t => Card(t, source, today))]);
+            ScrollViewer.SetVerticalScrollMode(list, ScrollMode.Disabled);
             Grid.SetRow(list, 1);
             panel.Children.Add(list);
             columns.Children.Add(panel);
@@ -533,23 +534,68 @@ public sealed partial class KanbanView : UserControl
         {
             Content = lanes,
             VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+            VerticalScrollMode = ScrollMode.Disabled,
             HorizontalScrollMode = ScrollMode.Disabled,
             HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
             Padding = new Thickness(0, 0, 0, 8),
         };
         Grid.SetRow(vertical, 1);
         body.Children.Add(vertical);
-        return HorizontalScroller(body);
+        return HorizontalScroller(body, vertical);
     }
 
-    private static ScrollViewer HorizontalScroller(UIElement content) => new()
+    /// <summary>
+    /// 列を横に並べる入れ物。ホイールは縦に、Shift + ホイールとタッチパッドの横の操作は横に動かす（ガントチャートと同じ）。
+    /// ScrollViewer はホイールを入力のイベントより下で受けて動かし、処理済みにしても止められないため、
+    /// 中の ScrollViewer はどれも手で動かせないようにして（スクロールバーは使える）、ホイールはすべてここで動かす。
+    /// </summary>
+    /// <param name="vertical">全体を縦に動かす入れ物（区切る表示）。列の見出しの上でホイールを回したときにも動かす。</param>
+    private static ScrollViewer HorizontalScroller(UIElement content, ScrollViewer? vertical = null)
     {
-        Content = content,
-        HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
-        HorizontalScrollMode = ScrollMode.Enabled,
-        VerticalScrollBarVisibility = ScrollBarVisibility.Disabled,
-        VerticalScrollMode = ScrollMode.Disabled,
-    };
+        var scroller = new ScrollViewer
+        {
+            Content = content,
+            HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
+            HorizontalScrollMode = ScrollMode.Disabled,
+            VerticalScrollBarVisibility = ScrollBarVisibility.Disabled,
+            VerticalScrollMode = ScrollMode.Disabled,
+        };
+        scroller.AddHandler(PointerWheelChangedEvent, new PointerEventHandler((_, e) =>
+        {
+            var properties = e.GetCurrentPoint(scroller).Properties;
+            int delta = properties.MouseWheelDelta;
+            if (properties.IsHorizontalMouseWheel)
+            {
+                scroller.ChangeView(scroller.HorizontalOffset + delta, null, null);
+            }
+            else if (e.KeyModifiers.HasFlag(VirtualKeyModifiers.Shift))
+            {
+                scroller.ChangeView(scroller.HorizontalOffset - delta, null, null);
+            }
+            else if ((VerticalScrollerAt(e.OriginalSource as DependencyObject, scroller) ?? vertical) is { } target)
+            {
+                // ポインターの下で縦に動かせる入れ物（区切らない表示では列、区切る表示では全体）を動かす
+                target.ChangeView(null, target.VerticalOffset - delta, null);
+            }
+
+            e.Handled = true;
+        }), true);
+        return scroller;
+    }
+
+    /// <summary>要素から外側（<paramref name="outer"/> の手前）へたどり、縦に動かせる最初の ScrollViewer を返す。</summary>
+    private static ScrollViewer? VerticalScrollerAt(DependencyObject? element, ScrollViewer outer)
+    {
+        for (var node = element; node is not null && node != outer; node = VisualTreeHelper.GetParent(node))
+        {
+            if (node is ScrollViewer { ScrollableHeight: > 0 } viewer)
+            {
+                return viewer;
+            }
+        }
+
+        return null;
+    }
 
     private static Grid ColumnPanel() => new()
     {
