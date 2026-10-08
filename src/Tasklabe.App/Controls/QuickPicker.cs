@@ -22,6 +22,7 @@ namespace Tasklabe.App.Controls;
 /// <param name="OnlyWhenSearching">絞り込みの文字を入れたときだけ出す（コマンドパレットのタスクなど、数の多い候補）。</param>
 /// <param name="Avatar">人の候補（担当者）のログイン名。名前の前に丸いアバターを置く。</param>
 /// <param name="ToolTip">選択肢の意味（区分の説明など）。行には出さず、ツールチップで添える。</param>
+/// <param name="Keywords">行には出さず、絞り込みにだけ使う言葉（タスクの別の形の番号など）。</param>
 public sealed record PickerOption(
     string Label,
     string? Detail = null,
@@ -32,7 +33,8 @@ public sealed record PickerOption(
     string? Group = null,
     bool OnlyWhenSearching = false,
     string? Avatar = null,
-    string? ToolTip = null);
+    string? ToolTip = null,
+    string? Keywords = null);
 
 /// <summary>ピッカーの結果。選択肢を選んだら <see cref="Index"/>、入力欄で決めたら <see cref="Text"/>。</summary>
 public readonly record struct PickResult(int Index, string? Text);
@@ -518,7 +520,8 @@ public sealed class QuickPicker
     private static bool Matches(PickerOption option, string query) =>
         option.Label.Contains(query, StringComparison.OrdinalIgnoreCase)
         || (option.Detail?.Contains(query, StringComparison.OrdinalIgnoreCase) ?? false)
-        || (option.Group?.Contains(query, StringComparison.OrdinalIgnoreCase) ?? false);
+        || (option.Group?.Contains(query, StringComparison.OrdinalIgnoreCase) ?? false)
+        || (option.Keywords?.Contains(query, StringComparison.OrdinalIgnoreCase) ?? false);
 
     private Button CreateItem(int index, int number)
     {

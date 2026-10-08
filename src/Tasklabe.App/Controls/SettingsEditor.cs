@@ -218,11 +218,11 @@ public sealed partial class SettingsEditor : UserControl
 
     private static Style Res(string key) => AppResources.Style(key);
 
-    // ================================================================ 番号のキー（要件 F-TSK-14〜16、F-SET-05）
+    // ================================================================ 番号（要件 F-TSK-14〜16、F-SET-05）
 
     /// <summary>
-    /// タスクの番号のキー。既定を持たないプロジェクトだけの値のため、上書きのスイッチは持たない。
-    /// まだ決めていないプロジェクトでは、名前から提案したキーを見せ、「決める」で保存させる。
+    /// タスクの番号のキーと振り方。どちらも既定を持たないプロジェクトだけの値のため、上書きのスイッチは持たない。
+    /// キーを保存していないプロジェクトでは、名前から提案したキーを見せ、「決める」で保存させる。未分類のキーは変えられない。
     /// </summary>
     private void AddKeySection()
     {
@@ -231,17 +231,19 @@ public sealed partial class SettingsEditor : UserControl
         AutomationProperties.SetHeadingLevel(heading, Microsoft.UI.Xaml.Automation.Peers.AutomationHeadingLevel.Level2);
         header.Children.Add(heading);
         _root.Children.Add(header);
+
+        var project = _project!;
+        bool inbox = project.Kind == ProjectKind.Inbox;
+        var saved = inbox ? ProjectKey.InboxKey : ProjectKey.SavedKey(project with { Settings = _overrides });
+        var current = saved ?? _keys.GetValueOrDefault(project.Id) ?? ProjectKey.Fallback;
         _root.Children.Add(new TextBlock
         {
-            Text = "タスクを「キー-番号」（例: TLB-123）で呼びます。課題を計画へ移しても番号は変わりません。"
-                + "キーを決めると GitHub のリポジトリの自動リンクにも登録し、コミットやコメントに書いた番号が Issue へのリンクになります。",
+            Text = $"キーは GitHub のリポジトリの自動リンクにも登録し、コミットやコメントに書いた {ProjectKey.Format(current, 123)} が Issue へのリンクになります。",
             Style = Res("Text.Caption"),
             TextWrapping = TextWrapping.Wrap,
         });
 
-        var saved = _overrides.Key;
-        var current = saved ?? _keys.GetValueOrDefault(_project!.Id) ?? ProjectKey.Fallback;
-        bool enabled = _canEdit && !_busy;
+        bool enabled = _canEdit && !_busy && !inbox;
         var box = new TextBox
         {
             Text = current,
@@ -254,23 +256,36 @@ public sealed partial class SettingsEditor : UserControl
         var decide = new Button { Content = "決める", IsEnabled = enabled, Style = Res("AccentButtonStyle"), Visibility = saved is null ? Visibility.Visible : Visibility.Collapsed };
         AutomationProperties.SetName(decide, "このキーに決める");
 
-        void Commit()
+        async void Commit()
         {
             var key = ProjectKey.Normalize(box.Text);
-            if (key == saved)
+            if (key == saved || _busy)
             {
                 return;
             }
 
-            var others = _keys.Where(k => k.Key != _project!.Id).Select(k => k.Value);
-            if (ProjectKey.Problem(key, others) is { } problem)
+            var others = _keys.Where(k => k.Key != project.Id).Select(k => k.Value);
+            var problem = ProjectKey.Problem(key, others);
+            if (problem is null)
+            {
+                // 自動リンクで別の行き先に使われているキーは、番号がその行き先へのリンクになってしまうため使わない
+                try
+                {
+                    problem = ProjectKey.Problem(key, others, await App.Current.Services.Workspace.ForeignAutolinkKeysAsync(project.RepositoryNameWithOwner));
+                }
+                catch (Exception ex) when (ex is GitHubException or HttpRequestException)
+                {
+                }
+            }
+
+            if (problem is not null)
             {
                 ShowNotice(InfoBarSeverity.Warning, "キーを変更できません", problem);
                 box.Text = current;
                 return;
             }
 
-            _ = SaveKeyAsync(key);
+            await SaveKeyAsync(key);
         }
 
         box.KeyDown += (_, e) =>
@@ -290,11 +305,72 @@ public sealed partial class SettingsEditor : UserControl
         _root.Children.Add(Row(
             "",
             "キー",
-            saved is null
-                ? "名前から提案したキーです。決めると、プロジェクトの名前を変えても番号が変わらず、メンバーとも同じ番号になります。"
-                : $"このプロジェクトのタスクは {ProjectKey.Format(saved, 123)} のように呼びます。キーを変えても、前のキーの自動リンクは残ります。",
+            inbox ? $"未分類のタスクは {Example(current)} のように呼びます。"
+                : saved is null ? "名前から提案したキーです。決めると、プロジェクトの名前を変えても番号が変わらず、メンバーとも同じ番号になります。"
+                : $"このプロジェクトのタスクは {Example(saved)} のように呼びます。キーを変えても、前のキーの自動リンクは残ります。",
             control));
+
+        AddNumberingRows(current);
     }
+
+    /// <summary>
+    /// 番号の振り方。通し番号は Issue の番号、階層番号は計画の中の位置とする。階層番号では、あらかじめ用意する段の数を選ぶ。
+    /// 段に満たないタスクは後ろを 0 で埋め（TLB_1_0_0）、段より深いタスクは段を足す（TLB_1_1_1_1）。
+    /// </summary>
+    private void AddNumberingRows(string key)
+    {
+        bool enabled = _canEdit && !_busy;
+        var levels = _overrides.OutlineLevels;
+        var plan = _team ? "計画のタスク" : "タスク";
+
+        var kinds = PickerButton.ForChoices("番号の振り方", ["通し番号", "階層番号"], levels is null ? 0 : 1, i =>
+        {
+            int? next = i == 0 ? null : levels ?? 1;
+            if (next != levels)
+            {
+                Update(d => d, o => o with { OutlineLevels = next });
+            }
+        });
+        kinds.MinWidth = 160;
+        kinds.HorizontalAlignment = HorizontalAlignment.Right;
+        kinds.IsEnabled = enabled;
+        _root.Children.Add(Row(
+            "",
+            "振り方",
+            levels is null
+                ? $"Issue の番号を使います（{ProjectKey.Format(key, 123)}）。" + (_team ? "課題を計画へ移しても変わりません。" : "")
+                : $"{plan}を、計画の中の位置で呼びます（{ProjectKey.FormatOutline(key, [1, 2], 1)}）。並べ替えると番号も変わります。"
+                    + (_team ? $"課題は {ProjectKey.Format(key, 123)} のように呼びます。" : ""),
+            kinds));
+
+        if (levels is not { } current)
+        {
+            return;
+        }
+
+        var counts = Enumerable.Range(1, ProjectKey.MaxOutlineLevels).ToArray();
+        var depth = PickerButton.ForChoices("あらかじめ用意する段", [.. counts.Select(n => $"{n} 段（{ProjectKey.FormatOutline(key, [1], n)}）")], current - 1, i =>
+        {
+            if (counts[i] != current)
+            {
+                Update(d => d, o => o with { OutlineLevels = counts[i] });
+            }
+        });
+        depth.MinWidth = 160;
+        depth.HorizontalAlignment = HorizontalAlignment.Right;
+        depth.IsEnabled = enabled;
+        _root.Children.Add(Row(
+            "",
+            "あらかじめ用意する段",
+            $"段に満たないタスクは後ろを 0 で埋めます（{ProjectKey.FormatOutline(key, [1, 2], current)}）。"
+                + $"それより深いタスクは段を足します（{ProjectKey.FormatOutline(key, [.. Enumerable.Repeat(1, current + 1)], current)}）。",
+            depth));
+    }
+
+    /// <summary>いまの振り方での、番号の例。</summary>
+    private string Example(string key) => _overrides.OutlineLevels is { } levels && _project?.Kind != ProjectKind.Inbox
+        ? ProjectKey.FormatOutline(key, [1, 2], levels)
+        : ProjectKey.Format(key, 123);
 
     /// <summary>キーを GitHub の Project に保存し、リポジトリの自動リンクに登録する。</summary>
     private async Task SaveKeyAsync(string key)

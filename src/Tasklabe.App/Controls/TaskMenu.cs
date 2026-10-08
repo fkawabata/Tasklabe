@@ -68,7 +68,7 @@ internal static class TaskMenu
         menu.Add(Item("作業するリポジトリ…", "\uE8B7", "task.repository", target));
         menu.Add(Item("ブランチを作る・選ぶ…", "\uE8D4", "task.branch", target, enabled: !many && !task.IsLocal));
         menu.Add(Item("GitHub で開く", "\uE774", "task.openInBrowser", target, enabled: !many && task.Url is not null));
-        menu.Add(Item(many || task.Number <= 0 ? "番号をコピー" : $"{TaskKeys.Of(task)} をコピー", "\uE8C8", "task.copyKey", target, enabled: tasks.Any(t => t.Number > 0)));
+        menu.Add(Item(many || !TaskKeys.Has(task) ? "番号をコピー" : $"{TaskKeys.Of(task)} をコピー", "\uE8C8", "task.copyKey", target, enabled: tasks.Any(TaskKeys.Has)));
         menu.Add(Item("Issue の URL をコピー", "\uE8C8", "task.copyUrl", target, enabled: !many && task.Url is not null));
 
         // 画面に固有の操作

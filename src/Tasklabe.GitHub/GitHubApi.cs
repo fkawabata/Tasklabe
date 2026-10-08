@@ -305,6 +305,25 @@ public sealed partial class GitHubApi
         await MutateAsync(Queries.UpdateProjectReadme, new JsonObject { ["id"] = projectId, ["readme"] = readme }, ct).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// 番号のキーがまだ保存されていなければ保存する（要件 F-TSK-15）。保存の直前に README を読み直し、
+    /// ほかのメンバーが先に保存していればそのキーに従う。保存してあるキー（自分が保存したものを含む）を返す。
+    /// </summary>
+    public async Task<string> SaveKeyIfMissingAsync(string projectId, string key, CancellationToken ct = default)
+    {
+        var data = await _client.SendAsync(Queries.ProjectReadme, new JsonObject { ["id"] = projectId },
+            GitHubJsonContext.Default.GraphQLResponseProjectNodeData, ct).ConfigureAwait(false);
+        var current = ProjectReadme.Read(data.Node?.Readme);
+        if (current.Key is { } saved && saved != ProjectKey.InboxKey)
+        {
+            return saved;
+        }
+
+        var readme = ProjectReadme.Write(data.Node?.Readme, current with { Key = key });
+        await MutateAsync(Queries.UpdateProjectReadme, new JsonObject { ["id"] = projectId, ["readme"] = readme }, ct).ConfigureAwait(false);
+        return key;
+    }
+
     /// <summary>不足しているフィールドを追加し、Status にカテゴリの記号を、Kind に「課題」の選択肢を補う。</summary>
     /// <param name="initialStatuses">Status の選択肢をこの並びに置き換える。作ったばかりの Project にだけ使う。</param>
     public async Task EnsureSchemaAsync(string projectId, CancellationToken ct = default, IReadOnlyList<StatusTemplate>? initialStatuses = null)

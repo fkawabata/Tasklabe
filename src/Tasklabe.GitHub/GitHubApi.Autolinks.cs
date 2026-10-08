@@ -47,4 +47,45 @@ public sealed partial class GitHubApi
             _ => throw new GitHubHttpException(response.StatusCode, $"GitHub がエラーを返しました（{(int)response.StatusCode}）。"),
         };
     }
+
+    /// <summary>
+    /// リポジトリの自動リンクのうち、このリポジトリの Issue 以外へつなぐキー（key_prefix が「キー-」のもの）。
+    /// 一覧を読むにはリポジトリの管理者の権限が要るため、読めないときは null を返す。
+    /// </summary>
+    public async Task<IReadOnlyList<string>?> GetForeignAutolinkKeysAsync(string nameWithOwner, CancellationToken ct = default)
+    {
+        var (owner, name) = Split(nameWithOwner);
+        using var response = await SendRestAsync(HttpMethod.Get, $"repos/{owner}/{name}/autolinks", null, ct).ConfigureAwait(false);
+        if (response.StatusCode is HttpStatusCode.Forbidden or HttpStatusCode.NotFound)
+        {
+            return null;
+        }
+
+        if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            throw new GitHubAuthenticationException("GitHub の認証が無効になりました（401）。");
+        }
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new GitHubHttpException(response.StatusCode, $"GitHub がエラーを返しました（{(int)response.StatusCode}）。");
+        }
+
+        var own = $"https://{_host.Name}/{owner}/{name}/issues/<num>";
+        var keys = new List<string>();
+        if (JsonNode.Parse(await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false)) is JsonArray links)
+        {
+            foreach (var link in links.OfType<JsonObject>())
+            {
+                var prefix = link["key_prefix"]?.GetValue<string>();
+                var url = link["url_template"]?.GetValue<string>();
+                if (prefix is { Length: > 1 } && prefix.EndsWith('-') && !string.Equals(url, own, StringComparison.OrdinalIgnoreCase))
+                {
+                    keys.Add(prefix[..^1].ToUpperInvariant());
+                }
+            }
+        }
+
+        return keys;
+    }
 }

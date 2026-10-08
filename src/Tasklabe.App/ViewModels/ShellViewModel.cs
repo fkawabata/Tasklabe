@@ -230,7 +230,12 @@ public sealed partial class ShellViewModel : ObservableObject
     public async Task ReloadAsync()
     {
         var projects = await _services.Store.GetProjectsAsync();
-        TaskKeys.Update(projects);
+        TaskKeys.Update(projects, await _services.Store.GetTasksAsync());
+        if (projects.Any(p => p.Kind != ProjectKind.Inbox && ProjectKey.SavedKey(p) is null))
+        {
+            _ = FixMissingKeysAsync();
+        }
+
         var items = Core.Settings.ProjectOrder.Apply(
             projects.Where(p => p.Kind != ProjectKind.Inbox && !p.Closed).Select(ProjectNavItem.From),
             i => i.Id,
@@ -251,6 +256,34 @@ public sealed partial class ShellViewModel : ObservableObject
         }
 
         DataChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    private bool _fixingKeys;
+
+    /// <summary>キーを保存していないプロジェクトに、提案したキーを保存して固定する（要件 F-TSK-15）。固定できたら読み直す。</summary>
+    private async Task FixMissingKeysAsync()
+    {
+        if (_fixingKeys)
+        {
+            return;
+        }
+
+        _fixingKeys = true;
+        try
+        {
+            if (await Task.Run(() => _services.Workspace.FixMissingKeysAsync()))
+            {
+                await ReloadAsync();
+            }
+        }
+        catch (Exception ex) when (ex is Tasklabe.GitHub.GitHubException or HttpRequestException or OperationCanceledException)
+        {
+            // 固定できなくても、提案したキーで番号は表示できる
+        }
+        finally
+        {
+            _fixingKeys = false;
+        }
     }
 
     /// <summary>表示の設定が変わったときなど、開いている画面に描き直しを促す。</summary>

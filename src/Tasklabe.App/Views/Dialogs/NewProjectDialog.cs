@@ -237,11 +237,19 @@ public static partial class NewProjectDialog
                 var title = name.Text.Trim();
                 var setup = Setup(team, source);
 
-                // 番号のキーは、名前から提案したものを、ほかのプロジェクトと重ならないように決めて保存する（要件 F-TSK-15）
-                var repository = team
-                    ? (repositories[repoIndex].Tag as OrganizationRepository)?.NameWithOwner ?? (IsNewRepository() ? repoName.Text.Trim() : null)
-                    : services.PersonalRepository?.NameWithOwner;
-                var taken = ProjectKey.Resolve(await services.Store.GetProjectsAsync()).Values;
+                // 番号のキーは、名前から提案したものを、ほかのプロジェクトや既存のリポジトリの自動リンクと重ならないように決めて保存する（要件 F-TSK-15）
+                var existing = team ? (repositories[repoIndex].Tag as OrganizationRepository)?.NameWithOwner : services.PersonalRepository?.NameWithOwner;
+                var repository = existing ?? (team && IsNewRepository() ? repoName.Text.Trim() : null);
+                IEnumerable<string> taken = ProjectKey.Resolve(await services.Store.GetProjectsAsync()).Values;
+                try
+                {
+                    taken = taken.Concat(await services.Workspace.ForeignAutolinkKeysAsync(existing));
+                }
+                catch (GitHubException)
+                {
+                    // 自動リンクを確かめられなくても、プロジェクトは作れる
+                }
+
                 setup = setup with { Settings = setup.Settings with { Key = ProjectKey.Suggest(title, repository, taken) } };
                 created = team
                     ? await services.Workspace.CreateTeamProjectAsync(
