@@ -33,6 +33,7 @@ public sealed partial class MainWindow : Window
     /// <summary>ナビへ動的に足した項目（プロジェクトと「チーム」の見出し）。</summary>
     private readonly List<NavigationViewItemBase> _projectItems = [];
     private bool _isDialogOpen;
+    private readonly TaskCompletionSource _shellShown = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
     public MainWindow(AppServices services)
     {
@@ -126,6 +127,9 @@ public sealed partial class MainWindow : Window
 
     public ShellViewModel ViewModel { get; }
 
+    /// <summary>サインインの後の画面（マイタスク）を表示し終えた。</summary>
+    internal Task ShellShown => _shellShown.Task;
+
     /// <summary>いま表示している画面。</summary>
     internal object? CurrentPage => ContentFrame.Content;
 
@@ -180,6 +184,7 @@ public sealed partial class MainWindow : Window
         }
 
         NavView.SelectedItem = MyTasksItem;
+        _shellShown.TrySetResult();
         LogStartupTime();
         _syncTimer.Start();
         await _services.Sync.RefreshCountsAsync();
@@ -625,11 +630,7 @@ public sealed partial class MainWindow : Window
     /// </summary>
     internal async Task AddTaskAsync(NewTaskContext? context = null)
     {
-        var projects = (await _services.Store.GetProjectsAsync())
-            .Where(p => !p.Closed)
-            .OrderBy(p => p.Kind == ProjectKind.Inbox ? 0 : p.IsTeam ? 2 : 1)
-            .ThenBy(p => p.Title, StringComparer.CurrentCulture)
-            .ToList();
+        var projects = await NewTaskDialog.ProjectsAsync();
         if (projects.Count == 0)
         {
             return;

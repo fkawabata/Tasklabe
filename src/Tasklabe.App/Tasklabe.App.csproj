@@ -16,6 +16,8 @@
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
     <!-- パッケージ化しないアプリでも、publish の出力に Tasklabe.pri（XAML を含む）を入れるため -->
     <EnableMsixTooling>true</EnableMsixTooling>
+    <!-- 起動の入口は Program.cs に置く（同じ場所の Tasklabe を 1 つだけ動かすため） -->
+    <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
     <DefaultLanguage>ja-JP</DefaultLanguage>
     <SatelliteResourceLanguages>ja</SatelliteResourceLanguages>
   </PropertyGroup>

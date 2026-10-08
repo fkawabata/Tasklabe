@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Tasklabe に Windows のパッケージ ID を与える、外部ロケーション付きのパッケージ（技術設計書 2.3 節）。
+    exe はこのパッケージに入れず、登録するときに置き場所を外部ロケーションとして指す。
+    ID があると、Copilot キーの割り当て先に Tasklabe を選べる（要件 F-UI-MY-08）。
+-->
+<Package
+    xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+    xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+    xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+    xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
+    xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+    IgnorableNamespaces="uap uap3 uap10 rescap">
+
+    <!-- Name と Publisher は app.manifest の msix 要素と、署名の証明書の Subject にそろえる -->
+    <Identity Name="Tasklabe" Publisher="CN=Tasklabe" Version="0.1.0.0" ProcessorArchitecture="neutral" />
+
+    <Properties>
+        <DisplayName>Tasklabe</DisplayName>
+        <PublisherDisplayName>Tasklabe</PublisherDisplayName>
+        <Logo>Assets\StoreLogo.png</Logo>
+        <uap10:AllowExternalContent>true</uap10:AllowExternalContent>
+    </Properties>
+
+    <Resources>
+        <Resource Language="ja-JP" />
+    </Resources>
+
+    <Dependencies>
+        <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26100.0" />
+    </Dependencies>
+
+    <Capabilities>
+        <rescap:Capability Name="runFullTrust" />
+    </Capabilities>
+
+    <Applications>
+        <Application Id="Tasklabe" Executable="Tasklabe.exe" uap10:TrustLevel="mediumIL" uap10:RuntimeBehavior="win32App">
+            <!-- AppListEntry="none" にすると、Copilot キーの割り当て先の候補にも出なくなるため、スタートメニューに出す -->
+            <uap:VisualElements
+                BackgroundColor="transparent"
+                Description="GitHub Projects のタスクと計画を扱うアプリ"
+                DisplayName="Tasklabe"
+                Square150x150Logo="Assets\Square150x150Logo.png"
+                Square44x44Logo="Assets\Square44x44Logo.png" />
+            <Extensions>
+                <!-- Copilot キーは、この URI で Tasklabe を起動する（App.xaml.cs） -->
+                <uap:Extension Category="windows.protocol">
+                    <uap:Protocol Name="tasklabe-copilot">
+                        <uap:DisplayName>Tasklabe</uap:DisplayName>
+                    </uap:Protocol>
+                </uap:Extension>
+                <!-- 押したときはタスクの追加、長押ししたときは本体を開く。動いているあいだは、MessageWParam を添えたメッセージで知らせる（Services/CopilotKey.cs） -->
+                <uap3:Extension Category="windows.appExtension">
+                    <uap3:AppExtension
+                        Name="com.microsoft.windows.copilotkeyprovider"
+                        Id="Tasklabe"
+                        Description="押すとタスクを追加、長押しで Tasklabe を開きます"
+                        DisplayName="Tasklabe"
+                        PublicFolder="Public">
+                        <uap3:Properties>
+                            <SingleTap MessageWParam="0">tasklabe-copilot://?state=Tap</SingleTap>
+                            <PressAndHoldStart MessageWParam="1">tasklabe-copilot://?state=Down</PressAndHoldStart>
+                            <PressAndHoldStop MessageWParam="2">tasklabe-copilot://?state=Up</PressAndHoldStop>
+                        </uap3:Properties>
+                    </uap3:AppExtension>
+                </uap3:Extension>
+            </Extensions>
+        </Application>
+    </Applications>
+</Package>

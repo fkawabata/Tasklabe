@@ -38,7 +38,7 @@ public static class ThemeResources
             return ["HighContrast"];
         }
 
-        var root = App.Current.MainWindow?.Content as FrameworkElement;
+        var root = App.Current.ThemeRoot;
         bool dark = root is not null
             ? root.ActualTheme == ElementTheme.Dark
             : Application.Current.RequestedTheme == ApplicationTheme.Dark;
