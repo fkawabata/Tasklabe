@@ -31,6 +31,8 @@
 
   <ItemGroup>
     <Content Include="Assets\**" CopyToOutputDirectory="PreserveNewest" />
+    <!-- 外部ロケーション付きのパッケージでは、スタートメニューとタスクバーはロゴを exe の置き場所から引く（Package/AppxManifest.xml） -->
+    <Content Include="Package\Assets\*.png" Link="Assets\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
