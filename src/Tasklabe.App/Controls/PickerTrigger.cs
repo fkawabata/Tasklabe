@@ -54,6 +54,25 @@ public static partial class PickerTrigger
     public static readonly DependencyProperty IsCompactProperty = DependencyProperty.RegisterAttached(
         "IsCompact", typeof(bool), typeof(PickerTrigger), new PropertyMetadata(false));
 
+    /// <summary>
+    /// ピッカーを起点の左下の角から右へ開く（既定は「⌄」の側を留めて左へ開く）。左に候補の列を持つピッカー（日付）を、
+    /// 押したボタンの真下に候補が並ぶように開くときに付ける。右へ収まらなければ、既定と同じく右下の角から開く。
+    /// </summary>
+    public static readonly DependencyProperty OpensFromStartProperty = DependencyProperty.RegisterAttached(
+        "OpensFromStart", typeof(bool), typeof(PickerTrigger), new PropertyMetadata(false));
+
+    public static bool GetOpensFromStart(FrameworkElement element)
+    {
+        ArgumentNullException.ThrowIfNull(element);
+        return (bool)element.GetValue(OpensFromStartProperty);
+    }
+
+    public static void SetOpensFromStart(FrameworkElement element, bool value)
+    {
+        ArgumentNullException.ThrowIfNull(element);
+        element.SetValue(OpensFromStartProperty, value);
+    }
+
     public static bool GetIsTrigger(FrameworkElement element)
     {
         ArgumentNullException.ThrowIfNull(element);

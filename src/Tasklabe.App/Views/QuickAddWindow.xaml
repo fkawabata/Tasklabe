@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- タスクの追加だけのウィンドウ: Copilot キーを押したときに開く（要件 F-UI-MY-08、UI デザイン設計書 3.5.2 節） -->
+<!--
+    Copilot キーからの追加: 透明なウィンドウに浮かべた板（要件 F-UI-MY-08、UI デザイン設計書 3.5.2 節）。
+    板の面と影は Composition の図形で描く。ピッカーは板の外へはみ出して開く（QuickAddWindow.xaml.cs）。
+-->
 <Window
     x:Class="Tasklabe.App.Views.QuickAddWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -7,58 +10,108 @@
     xmlns:controls="using:Tasklabe.App.Controls">
 
     <Window.SystemBackdrop>
-        <MicaBackdrop />
+        <controls:TransparentBackdrop />
     </Window.SystemBackdrop>
 
     <Grid x:Name="Root">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-
-        <!-- タイトルバー（つかんで動かせる） -->
-        <StackPanel
-            x:Name="TitleArea"
-            Padding="16,0,0,0"
-            Orientation="Horizontal"
-            Spacing="{StaticResource Space.S}">
-            <Image
-                Width="16"
-                Height="16"
-                VerticalAlignment="Center"
-                Source="ms-appx:///Assets/Tasklabe.ico" />
-            <TextBlock VerticalAlignment="Center" Style="{StaticResource Text.Caption}" Text="タスクを追加" />
-        </StackPanel>
-
-        <controls:NewTaskComposer x:Name="Composer" Grid.Row="1" Margin="24,8,24,0" VerticalAlignment="Top" />
-
-        <!-- 追加とキャンセル -->
         <Grid
-            Grid.Row="2"
-            Padding="24,16"
-            Background="{ThemeResource LayerOnMicaBaseAltFillColorDefaultBrush}"
-            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-            BorderThickness="0,1,0,0"
-            ColumnSpacing="{StaticResource Space.S}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <Button
-                x:Name="AddButton"
-                Grid.Column="1"
-                MinWidth="96"
-                Click="OnAdd"
-                Content="追加"
-                IsEnabled="False"
-                Style="{StaticResource AccentButtonStyle}" />
-            <Button
-                Grid.Column="2"
-                MinWidth="96"
-                Click="OnCancel"
-                Content="キャンセル" />
+            x:Name="Panel"
+            Width="560"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top">
+            <!-- 板の面と影（コードで描く）。余白をつかむと板を動かせる -->
+            <Grid x:Name="SurfaceHost" Background="Transparent" />
+
+            <!-- タスク名・説明・属性ボタン -->
+            <controls:NewTaskComposer
+                x:Name="Composer"
+                Margin="20,18,20,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top" />
+
+            <!-- 下端の帯: キーの案内と、詳細・追加のボタン。説明の行数で板の高さが変わると、一緒に動く -->
+            <Grid
+                x:Name="Footer"
+                Height="46"
+                VerticalAlignment="Top"
+                Background="Transparent">
+                <Border
+                    x:Name="FooterRule"
+                    Height="1"
+                    Margin="1,0"
+                    VerticalAlignment="Top"
+                    Background="{ThemeResource Morph.Stroke}" />
+                <Grid x:Name="FooterNormal" Padding="20,0,20,0" ColumnSpacing="{StaticResource Space.S}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        x:Name="HintText"
+                        VerticalAlignment="Center"
+                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                        Style="{StaticResource Text.Caption}"
+                        TextTrimming="CharacterEllipsis" />
+                    <Button
+                        x:Name="DetailButton"
+                        Grid.Column="1"
+                        Click="OnDetail"
+                        AutomationProperties.Name="詳細を入力">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <FontIcon FontSize="12" Glyph="&#xE8A7;" />
+                            <TextBlock Text="詳細" />
+                        </StackPanel>
+                    </Button>
+                    <!-- 「追加」のすぐ後ろに、確定のキーを小さなキーの形で添える（Enter では追加しないため。中身はコードで作る） -->
+                    <Button
+                        x:Name="AddButton"
+                        Grid.Column="2"
+                        Padding="14,5,10,6"
+                        Click="OnAdd"
+                        IsEnabled="False"
+                        Style="{StaticResource AccentButtonStyle}"
+                        AutomationProperties.Name="追加">
+                        <Grid>
+                            <ContentControl x:Name="AddLabel" IsTabStop="False" />
+                            <FontIcon
+                                x:Name="AddedMark"
+                                HorizontalAlignment="Center"
+                                FontSize="14"
+                                Glyph="&#xE73E;"
+                                Visibility="Collapsed" />
+                        </Grid>
+                    </Button>
+                </Grid>
+
+                <!-- 入力があるのに閉じようとしたときの確かめ（ダイアログを重ねない） -->
+                <Grid
+                    x:Name="FooterConfirm"
+                    Margin="1,1,1,1"
+                    Padding="19,0,19,0"
+                    Background="{ThemeResource SystemFillColorCautionBackgroundBrush}"
+                    ColumnSpacing="{StaticResource Space.S}"
+                    CornerRadius="0,0,11,11"
+                    Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="入力中のタスクを破棄しますか？" />
+                    <Button
+                        x:Name="DiscardButton"
+                        Grid.Column="1"
+                        Click="OnDiscard"
+                        Content="破棄" />
+                    <Button
+                        x:Name="ContinueButton"
+                        Grid.Column="2"
+                        Click="OnContinue"
+                        Content="続ける"
+                        Style="{StaticResource AccentButtonStyle}" />
+                </Grid>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

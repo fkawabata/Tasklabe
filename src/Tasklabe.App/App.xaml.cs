@@ -163,7 +163,7 @@ public partial class App : Application
     {
         if (_quickAdd is { } open)
         {
-            open.Activate();
+            open.Toggle();
             return;
         }
 

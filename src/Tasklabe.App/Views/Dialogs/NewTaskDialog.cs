@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Tasklabe.App.Controls;
+using Tasklabe.App.Services;
 using Tasklabe.Core.Domain;
 
 namespace Tasklabe.App.Views.Dialogs;
@@ -36,9 +37,11 @@ public static class NewTaskDialog
         {
             XamlRoot = root,
             Content = composer,
+            // Enter では追加しない（急いでいるときの誤った確定を防ぐ）。既定のボタンは置かず、確定のキーをボタンに添える（開いたときに差し替える）
             PrimaryButtonText = "追加",
+            PrimaryButtonStyle = AppResources.Style("AccentButtonStyle"),
             CloseButtonText = "キャンセル",
-            DefaultButton = ContentDialogButton.Primary,
+            DefaultButton = ContentDialogButton.None,
             IsPrimaryButtonEnabled = false,
         };
 
@@ -60,7 +63,15 @@ public static class NewTaskDialog
             toDetail = true;
             dialog.Hide();
         };
-        dialog.Opened += (_, _) => composer.FocusTitle();
+        dialog.Opened += (_, _) =>
+        {
+            if (VisualTree.Descendants<Button>(dialog).FirstOrDefault(b => b.Name == "PrimaryButton") is { } primary)
+            {
+                primary.Content = KeyCaps.Content("追加", "composer.submit");
+            }
+
+            composer.FocusTitle();
+        };
 
         composer.Load(projects, context);
 

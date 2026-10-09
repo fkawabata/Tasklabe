@@ -173,6 +173,15 @@ internal sealed class MorphPopup
         xamlRoot.Changed += OnXamlRootChanged;
     }
 
+    /// <summary>
+    /// 面を置いた（開いたとき、大きさが変わったとき）。送り手は面を置いたウィンドウの <see cref="XamlRoot"/>、値は面の位置と大きさ。
+    /// 面の下に余地を作るウィンドウ（Copilot キーからの追加の板）が、面に合わせて伸びるのに使う。
+    /// </summary>
+    public static event EventHandler<Rect>? Placed;
+
+    /// <summary>面が閉じ始めた。送り手は面を置いたウィンドウの <see cref="XamlRoot"/>。</summary>
+    public static event EventHandler? Closing;
+
     /// <summary>外を押した、Esc を押した、ウィンドウの大きさが変わった。使う側は <see cref="Close"/> を呼ぶ。</summary>
     public event EventHandler? Dismissed;
 
@@ -244,6 +253,7 @@ internal sealed class MorphPopup
         var size = _content.DesiredSize;
         _origin = Origin(size);
         Place(size);
+        Placed?.Invoke(_anchor.XamlRoot, new Rect(_panel.Margin.Left, _panel.Margin.Top, size.Width, size.Height));
         IsUpward = _panel.Margin.Top < _origin.Top && Math.Abs(_panel.Margin.Top + size.Height - _origin.Bottom) < 0.5;
         if (IsUpward)
         {
@@ -315,6 +325,7 @@ internal sealed class MorphPopup
 
                 var previous = new Vector2((float)e.PreviousSize.Width, (float)e.PreviousSize.Height);
                 Motion.SpringTo(_geometry, "Size", resized, Motion.Grow.ForDistance(Vector2.Abs(resized - previous).Length()));
+                Placed?.Invoke(_anchor.XamlRoot, new Rect(_panel.Margin.Left, _panel.Margin.Top, e.NewSize.Width, e.NewSize.Height));
             }
         };
         _root.Loaded += (_, _) => _root.DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, Grow);
@@ -335,6 +346,7 @@ internal sealed class MorphPopup
         }
 
         _closing = true;
+        Closing?.Invoke(_anchor.XamlRoot, EventArgs.Empty);
         if (focusNow)
         {
             RestoreFocus(keyboard);
@@ -499,7 +511,7 @@ internal sealed class MorphPopup
     private void Place(Size size)
     {
         _panel.Margin = new Thickness(
-            Pin(_origin.Left, _origin.Right, size.Width, _anchor.XamlRoot.Size.Width, preferEnd: Trigger?.Chevron is not null),
+            Pin(_origin.Left, _origin.Right, size.Width, _anchor.XamlRoot.Size.Width, preferEnd: Trigger is { Chevron: not null } t && !PickerTrigger.GetOpensFromStart(t.Element)),
             Pin(_origin.Top, _origin.Bottom, size.Height, _anchor.XamlRoot.Size.Height, preferEnd: false), 0, 0);
     }
 
@@ -627,6 +639,7 @@ internal sealed class MorphPopup
         // 開く前の測り方では、テンプレートが当たる前の入力欄などが小さく測られる。並べ終えた大きさで置き直す
         var laidOut = new Size(_panel.ActualWidth, _panel.ActualHeight);
         Place(laidOut);
+        Placed?.Invoke(_anchor.XamlRoot, new Rect(_panel.Margin.Left, _panel.Margin.Top, laidOut.Width, laidOut.Height));
         _panel.UpdateLayout();
         SetToOrigin(_geometry);
         if (_surfaceFill is not null)
