@@ -154,7 +154,17 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             Orientation="Horizontal"
+            Spacing="{StaticResource Space.S}"
             Visibility="Collapsed">
+            <!-- 親タスクを上端に残す（要件 F-UI-WBS-06）。オンのときは塗りで示す -->
+            <ToggleButton
+                x:Name="PlanStickyToggle"
+                Click="OnPlanStickyToggled"
+                IsChecked="True"
+                ToolTipService.ToolTip="親タスクを上端に残す"
+                AutomationProperties.Name="親タスクを上端に残す">
+                <FontIcon FontSize="14" Glyph="&#xE718;" />
+            </ToggleButton>
             <Button x:Name="BulkPlanButton" Click="OnBulkPlan" AutomationProperties.Name="計画をまとめて入力">
                 <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.S}">
                     <FontIcon FontSize="14" Glyph="&#xE8A5;" />
@@ -204,6 +214,15 @@
                 ToolTipService.ToolTip="イナズマ線"
                 AutomationProperties.Name="イナズマ線を表示">
                 <FontIcon FontSize="14" Glyph="&#xE945;" />
+            </ToggleButton>
+            <!-- 親タスクを上端に残す（要件 F-UI-GT-11）。オンのときは塗りで示す -->
+            <ToggleButton
+                x:Name="GanttStickyToggle"
+                Click="OnGanttStickyToggled"
+                IsChecked="True"
+                ToolTipService.ToolTip="親タスクを上端に残す"
+                AutomationProperties.Name="親タスクを上端に残す">
+                <FontIcon FontSize="14" Glyph="&#xE718;" />
             </ToggleButton>
             <!-- 共有ビュー（要件 F-UI-GT-10） -->
             <Button

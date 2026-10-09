@@ -164,7 +164,8 @@ public sealed partial class GanttView
 
     private (DragMode Mode, int Row)? HitTest(Point position)
     {
-        if (position.Y < HeaderHeight)
+        // 上端に残している親の行は、押すと本来の位置へ戻すだけにし、バーはつかませない
+        if (position.Y < HeaderHeight || IsOnSticky(position.Y - HeaderHeight))
         {
             return null;
         }
@@ -248,6 +249,13 @@ public sealed partial class GanttView
         }
 
         int index = position.Y >= HeaderHeight ? RowAt(position.Y - HeaderHeight) : -1;
+        if (index >= 0 && IsOnSticky(position.Y - HeaderHeight))
+        {
+            // 上端に残している親の行を押したら、その行を本来の位置へ戻して選ぶ。戻した後の位置で、別の行のドラッグや画面の移動を始めない
+            SelectSticky(index);
+            return;
+        }
+
         if (index >= 0)
         {
             Select(index);
@@ -315,7 +323,7 @@ public sealed partial class GanttView
                 drag.NewEnd = Max(drag.OriginalStart, day);
                 break;
             case DragMode.Link:
-                int target = position.Y >= HeaderHeight ? RowAt(position.Y - HeaderHeight) : -1;
+                int target = position.Y >= HeaderHeight && !IsOnSticky(position.Y - HeaderHeight) ? RowAt(position.Y - HeaderHeight) : -1;
                 drag.LinkTargetItemId = target >= 0 && !_rows[target].IsMilestone && _rows[target].Key != drag.ItemId
                     ? _rows[target].Key
                     : null;
@@ -496,6 +504,12 @@ public sealed partial class GanttView
     private void OnChartDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
     {
         var position = e.GetPosition(ChartInput);
+        if (StickyDoubleTapped() is { } sticky)
+        {
+            OpenDetail(sticky);
+            return;
+        }
+
         int index = position.Y >= HeaderHeight ? RowAt(position.Y - HeaderHeight) : -1;
         if (index >= 0)
         {
@@ -518,7 +532,7 @@ public sealed partial class GanttView
         int index = position.Y >= HeaderHeight ? RowAt(position.Y - HeaderHeight) : -1;
         if (index >= 0)
         {
-            Select(index);
+            SelectForMenu(index, position.Y - HeaderHeight);
             ShowContextMenu(_rows[index], ChartInput, position);
             e.Handled = true;
         }

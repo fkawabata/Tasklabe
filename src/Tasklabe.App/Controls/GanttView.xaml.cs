@@ -87,6 +87,8 @@ public sealed partial class GanttView : UserControl
     {
         InitializeComponent();
         KeyDown += OnKeyDown;
+        Canvas.SetZIndex(_stickyDivider, 200);
+        RowsHost.Children.Add(_stickyDivider);
 
         // 狭いときは、チャートより先に左の表を縮める（担当・工数・進捗の列から隠れる。UX 規約 UX-25）
         SizeChanged += (_, e) =>
@@ -250,10 +252,38 @@ public sealed partial class GanttView : UserControl
         }
 
         _rows = GanttModel.Build(nodes, Today, _previewTree ?? _tree, _milestones);
+        _depths = [.. _rows.Select(r => r.Node?.Depth ?? 0)];
         _hasInazuma = _rows.Any(r => r.Inazuma is not null);
     }
 
     private bool _hasInazuma;
+
+    /// <summary>行ごとの階層の深さ（上端に残す親を求めるのに使う）。</summary>
+    private int[] _depths = [];
+
+    /// <summary>縦にスクロールしたとき、上端に残している親の行（UI デザイン設計書 3.3.1 節）。</summary>
+    private IReadOnlyList<StickyRow> _sticky = [];
+
+    /// <summary>縦にスクロールしても、親の行を上端に残すか（ツールバーで切り替える）。</summary>
+    public bool StickyParents
+    {
+        get;
+        set
+        {
+            field = value;
+            LayoutRows(rebind: false);
+            RequestRender();
+        }
+    } = true;
+
+    /// <summary>上端に残す行の上限。表示範囲の半分までとし、残りで配下の行を読めるようにする。</summary>
+    private int MaxSticky => StickyParents ? Math.Max((int)(BodyHeight / RowHeight / 2), 0) : 0;
+
+    private void UpdateSticky() => _sticky = StickyRows.Compute(_depths, _scrollY, RowHeight, MaxSticky);
+
+    /// <summary>行の見えている上端（チャートの座標）。上端に残している行は、残している位置。</summary>
+    private float DisplayTop(int index) =>
+        StickyRows.TopOf(_sticky, index) is { } top ? (float)(HeaderHeight + top) : RowTop(index);
 
     private int SelectedIndex => _selectedItemId is null ? -1 : _rows.FirstOrDefault(r => r.Key == _selectedItemId)?.Index ?? -1;
 
@@ -342,7 +372,7 @@ public sealed partial class GanttView : UserControl
 
         _sideColumns = columns;
         _sideColumnsProject = _project;
-        foreach (var presenter in _presenters)
+        foreach (var presenter in _presenters.Concat(_stickyPresenters.Select(p => p.Presenter)))
         {
             presenter.SetColumnWidths(columns);
         }
@@ -356,6 +386,7 @@ public sealed partial class GanttView : UserControl
     {
         double height = RowsHost.ActualHeight;
         RowsHost.Clip = new RectangleGeometry { Rect = new Rect(0, 0, RowsHost.ActualWidth, height) };
+        UpdateSticky();
 
         int first = (int)Math.Floor(_scrollY / RowHeight);
         int count = height <= 0 ? 0 : (int)Math.Ceiling(height / RowHeight) + 1;
@@ -391,12 +422,120 @@ public sealed partial class GanttView : UserControl
                 presenter.SetSelected(row.Index == selected);
             }
         }
+
+        LayoutStickyRows(rebind, selected);
     }
 
+    /// <summary>上端に残す行。外側の親を手前に重ね、配下の終わりで押し上げられた内側の親は外側の下へ隠れていく。</summary>
+    private readonly List<(Grid Host, GanttRowPresenter Presenter)> _stickyPresenters = [];
+
+    /// <summary>上端に残した行の下の区切り。</summary>
+    private readonly Border _stickyDivider = new() { Height = 1, IsHitTestVisible = false };
+
+    /// <summary>上端に残した行の下地。下の行が透けないよう、チャートと同じ不透明な色で塗る。</summary>
+    private readonly SolidColorBrush _stickyFill = new();
+
+    private void LayoutStickyRows(bool rebind, int selected)
+    {
+        if (rebind || _stickyPresenters.Count == 0)
+        {
+            _stickyFill.Color = ReadPalette().Surface;
+            _stickyDivider.Background = ThemeResources.Brush("DividerStrokeColorDefaultBrush");
+        }
+
+        while (_stickyPresenters.Count < _sticky.Count)
+        {
+            var presenter = new GanttRowPresenter();
+            presenter.SetColumnWidths(_sideColumns);
+            var host = new Grid { Background = _stickyFill, Children = { presenter } };
+            _stickyPresenters.Add((host, presenter));
+            RowsHost.Children.Add(host);
+        }
+
+        for (int k = 0; k < _stickyPresenters.Count; k++)
+        {
+            var (host, presenter) = _stickyPresenters[k];
+            if (k >= _sticky.Count)
+            {
+                host.Visibility = Visibility.Collapsed;
+                continue;
+            }
+
+            var row = _rows[_sticky[k].Index];
+            host.Visibility = Visibility.Visible;
+            host.Width = RowsHost.ActualWidth;
+            Canvas.SetTop(host, _sticky[k].Top);
+            Canvas.SetZIndex(host, 100 - k);
+            if (rebind || presenter.Row != row)
+            {
+                presenter.Bind(row, !_collapsed.Contains(row.Key), row.Index == selected);
+            }
+            else
+            {
+                presenter.SetSelected(row.Index == selected);
+            }
+        }
+
+        double covered = StickyRows.Covered(_sticky, RowHeight);
+        _stickyDivider.Visibility = covered > 0 ? Visibility.Visible : Visibility.Collapsed;
+        _stickyDivider.Width = RowsHost.ActualWidth;
+        Canvas.SetTop(_stickyDivider, covered - 1);
+    }
+
+    /// <summary>本体の上端からの位置にある行。上端に残している行を先に見る。</summary>
     private int RowAt(double bodyY)
+    {
+        if (StickyRows.At(_sticky, bodyY, RowHeight) is { } sticky)
+        {
+            return sticky;
+        }
+
+        return NaturalRowAt(bodyY);
+    }
+
+    /// <summary>本体の上端からの位置にある、本来の位置の行（上端に残している行に覆われていても、その下の行）。</summary>
+    private int NaturalRowAt(double bodyY)
     {
         int index = (int)Math.Floor((bodyY + _scrollY) / RowHeight);
         return index >= 0 && index < _rows.Count ? index : -1;
+    }
+
+    private bool IsOnSticky(double bodyY) => StickyRows.At(_sticky, bodyY, RowHeight) is not null;
+
+    /// <summary>上端に残している行を押した（押すと本来の位置へ戻すため、続けて押した 2 回目は別の行に当たる）。</summary>
+    private (string Key, long At)? _stickyPress;
+
+    /// <summary>上端に残している行を押して本来の位置へ戻し、選ぶ。</summary>
+    private void SelectSticky(int index)
+    {
+        _stickyPress = (_rows[index].Key, Environment.TickCount64);
+        Select(index);
+    }
+
+    /// <summary>ダブルクリックの 1 回目で上端に残している行を押していれば、その行（2 回目の位置の行ではなく）。</summary>
+    private GanttRow? StickyDoubleTapped()
+    {
+        if (_stickyPress is not { } press || Environment.TickCount64 - press.At > new Windows.UI.ViewManagement.UISettings().DoubleClickTime)
+        {
+            return null;
+        }
+
+        _stickyPress = null;
+        return _rows.FirstOrDefault(r => r.Key == press.Key);
+    }
+
+    /// <summary>右クリックした行を選ぶ。上端に残している行はその場で選び、メニューの位置がずれないようスクロールしない。</summary>
+    private void SelectForMenu(int index, double bodyY)
+    {
+        if (!IsOnSticky(bodyY))
+        {
+            Select(index);
+            return;
+        }
+
+        _selectedItemId = _rows[index].Key;
+        LayoutRows(rebind: false);
+        RequestRender();
     }
 
     private void OnRowsPointerPressed(object sender, PointerRoutedEventArgs e)
@@ -414,6 +553,10 @@ public sealed partial class GanttView : UserControl
         {
             ToggleExpanded(_rows[index]);
         }
+        else if (IsOnSticky(point.Position.Y))
+        {
+            SelectSticky(index);
+        }
         else
         {
             Select(index);
@@ -426,6 +569,12 @@ public sealed partial class GanttView : UserControl
     {
         // 開閉の矢印を続けて押したときは開閉だけにし、詳細は開かない（計画の表と同じ）
         var position = e.GetPosition(RowsHost);
+        if (StickyDoubleTapped() is { } sticky)
+        {
+            OpenDetail(sticky);
+            return;
+        }
+
         int index = RowAt(position.Y);
         if (index >= 0 && !IsOnExpander(index, position.X))
         {
@@ -443,7 +592,7 @@ public sealed partial class GanttView : UserControl
         int index = RowAt(position.Y);
         if (index >= 0)
         {
-            Select(index);
+            SelectForMenu(index, position.Y);
             ShowContextMenu(_rows[index], RowsHost, position);
             e.Handled = true;
         }
@@ -474,6 +623,12 @@ public sealed partial class GanttView : UserControl
         }
 
         ViewState.SetSet($"gantt-collapsed:{_project?.Id}", _collapsed);
+
+        // 上端に残している行を開閉したときは、その行が同じ位置に見えるようにスクロールする（配下が消えて別の行へ跳ばないように）
+        if (StickyRows.TopOf(_sticky, row.Index) is { } stickyTop)
+        {
+            _scrollY = row.Index * RowHeight - Math.Max(stickyTop, 0);
+        }
 
         _selectedItemId = row.Task.ItemId;
         Rebuild();
@@ -678,7 +833,7 @@ public sealed partial class GanttView : UserControl
 
     /// <summary>選んでいる行の、ピッカーを出す位置（この部品の座標）。</summary>
     public Point? SelectedRowPoint => SelectedIndex is >= 0 and var i
-        ? Chart.TransformToVisual(this).TransformPoint(new Point(24, RowCenter(i) + RowHeight / 2))
+        ? Chart.TransformToVisual(this).TransformPoint(new Point(24, DisplayTop(i) + RowHeight))
         : null;
 
     private async Task<bool> HandleShortcutAsync(Tasklabe.Core.Keyboard.KeyGesture gesture)
