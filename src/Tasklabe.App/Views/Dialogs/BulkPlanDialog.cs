@@ -76,7 +76,7 @@ public static class BulkPlanDialog
         var startMode = ViewState.Get(StartKey) == "blank" ? BulkStart.Blank : BulkStart.AfterPrevious;
 
         var placeButton = new PickerButton("置き場所") { MinWidth = 220 };
-        void ShowPlace() => placeButton.SetValue(parent?.Task.Title ?? "（最上位）", "");
+        void ShowPlace() => placeButton.SetValue(parent?.Task.Title ?? "（最上位）", "\uE8FD");
         placeButton.Pick = async b =>
         {
             if (await ValuePickers.ParentAsync(b, null, plan, parent?.Task.IssueId) is { } picked)
@@ -287,7 +287,7 @@ public static class BulkPlanDialog
                 // 名前のない行は作らないため、選んだ日程を薄く示すだけにする（名前を入れると使われる）。
                 // 名前のある行は、自動の値だけでできている日程を薄い斜体で示す（親タスクは、開始が自動で終了が未定のとき）
                 var (start, end) = info is null ? (row.Start, row.End) : (info.Start, info.End);
-                row.DatesButton.SetValue(milestone ? (end is { } due ? DateText.Short(due, today) : null) : DateText.Range(start, end), "",
+                row.DatesButton.SetValue(milestone ? (end is { } due ? DateText.Short(due, today) : null) : DateText.Range(start, end), "\uE787",
                     placeholder: milestone ? "期日を選ぶ…" : "予定を選ぶ…",
                     isAuto: info is not null && (milestone ? info.EndIsAuto : info is { StartIsAuto: true, End: null }),
                     isPending: info is null);

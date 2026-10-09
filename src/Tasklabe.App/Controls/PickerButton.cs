@@ -39,7 +39,7 @@ public sealed partial class PickerButton : Button, IPickerTrigger
         grid.Children.Add(_text);
         _chevron = new FontIcon
         {
-            Glyph = "",
+            Glyph = "\uE70D",
             FontSize = 10,
             Foreground = ThemeResources.Brush("TextFillColorTertiaryBrush"),
             VerticalAlignment = VerticalAlignment.Center,

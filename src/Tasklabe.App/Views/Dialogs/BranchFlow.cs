@@ -66,7 +66,7 @@ public static class BranchFlow
             .Select(b => b.Branch)
             .Concat((LinkedBranches.Cached(task.IssueId) ?? []).Where(b => string.Equals(b.RepositoryNameWithOwner, repository, StringComparison.OrdinalIgnoreCase)).Select(b => b.Name))
             .ToHashSet(StringComparer.Ordinal);
-        var options = new List<PickerOption> { new("新しいブランチを作る…", Glyph: "") };
+        var options = new List<PickerOption> { new("新しいブランチを作る…", Glyph: "\uE710") };
         options.AddRange(branches.Select(b => new PickerOption(b, chosen.Contains(b) ? "このタスクのブランチ" : null, Group: "既存のブランチ")));
 
         var picker = new QuickPicker($"{repository} のブランチ", options, filterable: branches.Count > 0, width: 400,

@@ -99,7 +99,7 @@ public sealed class StatusChip : Button
             var heading = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
             heading.Children.Add(new FontIcon
             {
-                Glyph = section.Severity == ChipSeverity.Critical ? "" : "",
+                Glyph = section.Severity == ChipSeverity.Critical ? "\uEA39" : "\uE7BA",
                 FontSize = 14,
                 Foreground = ThemeResources.Brush(section.Severity == ChipSeverity.Critical ? "SystemFillColorCriticalBrush" : "SystemFillColorCautionBrush"),
                 VerticalAlignment = VerticalAlignment.Center,

@@ -110,8 +110,8 @@ public sealed partial class SettingsEditor : UserControl
             IsProject ? nameof(ProjectSettings.EffortUnit) : null,
             _overrides.EffortUnit is not null || _overrides.HoursPerDay is not null,
             enabled => [
-                Row("", "表示の単位", null, EffortUnitBox(effort.EffortUnit, enabled)),
-                Row("", "1 日の稼働時間", "人日の換算と、状況の画面で担当者の負荷の上限に使います。", HoursPerDayBox(effort.HoursPerDay, enabled)),
+                Row("\uE916", "表示の単位", null, EffortUnitBox(effort.EffortUnit, enabled)),
+                Row("\uE787", "1 日の稼働時間", "人日の換算と、状況の画面で担当者の負荷の上限に使います。", HoursPerDayBox(effort.HoursPerDay, enabled)),
             ]);
 
         AddSection(
@@ -128,7 +128,7 @@ public sealed partial class SettingsEditor : UserControl
                 null,
                 IsProject ? nameof(ProjectSettings.NewTaskKind) : null,
                 _overrides.NewTaskKind is not null,
-                enabled => [Row("", "区分の既定", "N キーや ＋ で追加したタスクを、課題とタスクのどちらとして入れるか。", KindBox(effort.NewTaskKind, enabled))]);
+                enabled => [Row("\uE7C1", "区分の既定", "N キーや ＋ で追加したタスクを、課題とタスクのどちらとして入れるか。", KindBox(effort.NewTaskKind, enabled))]);
         }
 
         AddStatusSection();
@@ -303,7 +303,7 @@ public sealed partial class SettingsEditor : UserControl
         control.Children.Add(box);
         control.Children.Add(decide);
         _root.Children.Add(Row(
-            "",
+            "\uE8EC",
             "キー",
             inbox ? $"未分類のタスクは {Example(current)} のように呼びます。"
                 : saved is null ? "名前から提案したキーです。決めると、プロジェクトの名前を変えても番号が変わらず、メンバーとも同じ番号になります。"
@@ -335,7 +335,7 @@ public sealed partial class SettingsEditor : UserControl
         kinds.HorizontalAlignment = HorizontalAlignment.Right;
         kinds.IsEnabled = enabled;
         _root.Children.Add(Row(
-            "",
+            "\uE8FD",
             "振り方",
             levels is null
                 ? $"Issue の番号を使います（{ProjectKey.Format(key, 123)}）。" + (_team ? "課題を計画へ移しても変わりません。" : "")
@@ -360,7 +360,7 @@ public sealed partial class SettingsEditor : UserControl
         depth.HorizontalAlignment = HorizontalAlignment.Right;
         depth.IsEnabled = enabled;
         _root.Children.Add(Row(
-            "",
+            "\uE9D5",
             "あらかじめ用意する段",
             $"段に満たないタスクは後ろを 0 で埋めます（{ProjectKey.FormatOutline(key, [1, 2], current)}）。"
                 + $"それより深いタスクは段を足します（{ProjectKey.FormatOutline(key, [.. Enumerable.Repeat(1, current + 1)], current)}）。",
@@ -559,7 +559,7 @@ public sealed partial class SettingsEditor : UserControl
         {
             var chip = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
             chip.Children.Add(new TextBlock { Text = DateText.Long(date), VerticalAlignment = VerticalAlignment.Center });
-            var remove = SubtleIconButton("", $"{DateText.Long(date)} を独自の休日から外す");
+            var remove = SubtleIconButton("\uE711", $"{DateText.Long(date)} を独自の休日から外す");
             remove.IsEnabled = enabled;
             remove.Click += (_, _) =>
             {
@@ -619,7 +619,7 @@ public sealed partial class SettingsEditor : UserControl
         {
             Orientation = Orientation.Horizontal,
             Spacing = 8,
-            Children = { new FontIcon { Glyph = "", FontSize = 12 }, new TextBlock { Text = "ステータスを追加" } },
+            Children = { new FontIcon { Glyph = "\uE710", FontSize = 12 }, new TextBlock { Text = "ステータスを追加" } },
         };
         AutomationProperties.SetName(add, "ステータスを追加");
         add.Click += (_, _) =>
@@ -712,19 +712,19 @@ public sealed partial class SettingsEditor : UserControl
         Grid.SetColumn(usage, 3);
         grid.Children.Add(usage);
 
-        var up = SubtleIconButton("", $"{row.Name} を上へ");
+        var up = SubtleIconButton("\uE70E", $"{row.Name} を上へ");
         up.IsEnabled = enabled && index > 0;
         up.Click += (_, _) => ApplyStatuses(Swap(rows, index, index - 1));
         Grid.SetColumn(up, 4);
         grid.Children.Add(up);
 
-        var down = SubtleIconButton("", $"{row.Name} を下へ");
+        var down = SubtleIconButton("\uE70D", $"{row.Name} を下へ");
         down.IsEnabled = enabled && index < rows.Count - 1;
         down.Click += (_, _) => ApplyStatuses(Swap(rows, index, index + 1));
         Grid.SetColumn(down, 5);
         grid.Children.Add(down);
 
-        var remove = SubtleIconButton("", $"{row.Name} を外す");
+        var remove = SubtleIconButton("\uE74D", $"{row.Name} を外す");
         remove.IsEnabled = enabled && used == 0 && rows.Count > 1;
         if (used > 0)
         {

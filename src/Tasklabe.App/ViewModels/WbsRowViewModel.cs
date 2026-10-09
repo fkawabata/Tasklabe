@@ -44,7 +44,7 @@ public sealed partial class WbsRowViewModel(TaskNode node, bool isExpanded, Date
 
     public Thickness Indent => new(Node.Depth * 20, 0, 0, 0);
 
-    public string ChevronGlyph => IsExpanded ? "" : "";
+    public string ChevronGlyph => IsExpanded ? "\uE70D" : "\uE76C";
 
     public string Title => Task.Title;
 

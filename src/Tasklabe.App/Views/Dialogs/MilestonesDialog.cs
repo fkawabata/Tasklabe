@@ -53,7 +53,7 @@ public static class MilestonesDialog
                 DueValue = due,
             };
             AutomationProperties.SetName(row.Title, "マイルストーンの名前");
-            void ShowDue() => row.Due.SetValue(row.DueValue is { } d ? DateText.Short(d, today) : null, "", placeholder: "期日を選ぶ…");
+            void ShowDue() => row.Due.SetValue(row.DueValue is { } d ? DateText.Short(d, today) : null, "\uE787", placeholder: "期日を選ぶ…");
             row.Due.Pick = async b =>
             {
                 if (await ValuePickers.DateAsync(b, null, "期日", [row.DueValue]) is { } picked)
@@ -84,7 +84,7 @@ public static class MilestonesDialog
 
             Place(grid, count, 3);
 
-            var remove = new Button { Content = new FontIcon { Glyph = "", FontSize = 14 }, Style = AppResources.Style("SubtleButtonStyle") };
+            var remove = new Button { Content = new FontIcon { Glyph = "\uE74D", FontSize = 14 }, Style = AppResources.Style("SubtleButtonStyle") };
             AutomationProperties.SetName(remove, "このマイルストーンを消す");
             ToolTipService.SetToolTip(remove, "消す（タスクは残り、期日から次のマイルストーンに入ります）");
             remove.Click += (_, _) =>
@@ -92,7 +92,7 @@ public static class MilestonesDialog
                 row.Deleted = !row.Deleted;
                 grid.Opacity = row.Deleted ? 0.4 : 1;
                 row.Title.IsEnabled = row.Due.IsEnabled = !row.Deleted;
-                remove.Content = new FontIcon { Glyph = row.Deleted ? "" : "", FontSize = 14 };
+                remove.Content = new FontIcon { Glyph = row.Deleted ? "\uE7A7" : "\uE74D", FontSize = 14 };
                 AutomationProperties.SetName(remove, row.Deleted ? "消すのを取りやめる" : "このマイルストーンを消す");
             };
             Place(grid, remove, 4);
@@ -110,7 +110,7 @@ public static class MilestonesDialog
         var focusRow = newDue is { } nd ? AddRow(null, nd) : rows.FirstOrDefault(r => r.Source?.Id == focus);
 
         var addText = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
-        addText.Children.Add(new FontIcon { Glyph = "", FontSize = 12 });
+        addText.Children.Add(new FontIcon { Glyph = "\uE710", FontSize = 12 });
         addText.Children.Add(new TextBlock { Text = "マイルストーンを追加" });
         var add = new Button { Content = addText, Style = AppResources.Style("SubtleButtonStyle") };
         add.Click += (_, _) => AddRow(null, null).Title.Focus(FocusState.Keyboard);

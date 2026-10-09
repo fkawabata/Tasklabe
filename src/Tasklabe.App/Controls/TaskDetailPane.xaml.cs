@@ -65,7 +65,7 @@ public sealed partial class TaskDetailPane : UserControl
         UseSystemFocusVisuals = false;
 
         _openButton.Style = AppResources.Style("Drawer.Button");
-        _openButton.Content = new FontIcon { FontSize = 14, Glyph = "" };
+        _openButton.Content = new FontIcon { FontSize = 14, Glyph = "\uE8A7" };
         AutomationProperties.SetName(_openButton, "GitHub で開く");
         _openButton.Click += OnOpenInBrowser;
 
@@ -129,7 +129,7 @@ public sealed partial class TaskDetailPane : UserControl
         };
 
         var chainText = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
-        chainText.Children.Add(new FontIcon { FontSize = 12, Glyph = "" });
+        chainText.Children.Add(new FontIcon { FontSize = 12, Glyph = "\uE71B" });
         chainText.Children.Add(new TextBlock { Text = "配下を予定の順につなぐ…" });
         _chainChildren = new Button { Content = chainText, Style = AppResources.Style("SubtleButtonStyle"), Visibility = Visibility.Collapsed };
         ToolTipService.SetToolTip(_chainChildren, "予定期間が重なるタスクは並列とみなし、互いにはつなぎません");
@@ -142,7 +142,7 @@ public sealed partial class TaskDetailPane : UserControl
         };
 
         var addText = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
-        addText.Children.Add(new FontIcon { FontSize = 12, Glyph = "" });
+        addText.Children.Add(new FontIcon { FontSize = 12, Glyph = "\uE710" });
         addText.Children.Add(new TextBlock { Text = "先行タスクを追加…" });
         var addPredecessor = PickerTriggerButton(addText);
         ToolTipService.SetToolTip(addPredecessor, KeyHints.Tip("task.predecessor", "先行タスクを追加"));
@@ -370,9 +370,9 @@ public sealed partial class TaskDetailPane : UserControl
             _projectButton.IsEnabled = !task.IsLocal;
             _status.SetValue(task.StatusName ?? StatusVisuals.Name(task.Category), StatusVisuals.Glyph(task.Category), StatusVisuals.BrushKey(task.Category));
             _assigneeRow.Visibility = team ? Visibility.Visible : Visibility.Collapsed;
-            _assignee.SetValue(string.Join("、", task.Assignees.Select(a => "@" + a)), "");
-            _plan.SetValue(DateText.Range(task.Start, task.Target), "");
-            _estimate.SetValue(EffortText.Of(task.EstimateHours), "");
+            _assignee.SetValue(string.Join("、", task.Assignees.Select(a => "@" + a)), "\uE77B");
+            _plan.SetValue(DateText.Range(task.Start, task.Target), "\uE787");
+            _estimate.SetValue(EffortText.Of(task.EstimateHours), "\uE916");
             _kindRow.Visibility = team ? Visibility.Visible : Visibility.Collapsed;
             _kind.SetValue(KindVisuals.Name(task.Kind));
             KindVisuals.Apply(_kind.Icon, task.Kind);
@@ -381,16 +381,16 @@ public sealed partial class TaskDetailPane : UserControl
             _detailOnly.Visibility = Visibility.Visible;
             _progressRow.Visibility = Visibility.Visible;
             _actualRows.Visibility = Visibility.Visible;
-            _progress.SetValue($"{task.EffectiveProgress:0}%", "");
+            _progress.SetValue($"{task.EffectiveProgress:0}%", "\uE9D2");
             _progress.IsEnabled = !task.IsDone;
             ToolTipService.SetToolTip(_progress, task.IsDone ? "完了・中止したタスクの進捗率は 100 % に固定しています" : KeyHints.Tip("task.progress", "進捗率を変える"));
-            _actual.SetValue(DateText.Range(task.ActualStart, task.ActualEnd), "");
+            _actual.SetValue(DateText.Range(task.ActualStart, task.ActualEnd), "\uE787");
             ShowMilestone(task, project);
 
             // 計画への出し入れは、計画を持つチームプロジェクトでだけ意味を持つ
             PlanButton.Visibility = team ? Visibility.Visible : Visibility.Collapsed;
             PlanButtonText.Text = task.Kind == TaskKind.Issue ? "計画に移す…" : "課題へ戻す";
-            PlanButtonIcon.Glyph = task.Kind == TaskKind.Issue ? "" : "";
+            PlanButtonIcon.Glyph = task.Kind == TaskKind.Issue ? "\uE8DE" : "\uE7C1";
             AutomationProperties.SetName(PlanButton, PlanButtonText.Text);
             ToolTipService.SetToolTip(PlanButton, KeyHints.Tip("task.plan", PlanButtonText.Text.TrimEnd('…')));
             ToolTipService.SetToolTip(DeleteButton, KeyHints.Tip("task.delete", "削除"));
@@ -427,9 +427,9 @@ public sealed partial class TaskDetailPane : UserControl
 
     private static string ProjectGlyph(Project? project) => project?.Kind switch
     {
-        ProjectKind.Inbox => "",
-        ProjectKind.Team => "",
-        _ => "",
+        ProjectKind.Inbox => "\uE7C3",
+        ProjectKind.Team => "\uE716",
+        _ => "\uE77B",
     };
 
     private async Task PickAsync(PickerButton button, string actionId)
@@ -650,9 +650,9 @@ public sealed partial class TaskDetailPane : UserControl
         _projectButton.SetValue(project is null ? null : ProjectDisplay.Name(project), ProjectGlyph(project));
         _status.SetValue(status?.Name, StatusVisuals.Glyph(status?.Category ?? StatusCategory.Todo), StatusVisuals.BrushKey(status?.Category ?? StatusCategory.Todo));
         _assigneeRow.Visibility = team ? Visibility.Visible : Visibility.Collapsed;
-        _assignee.SetValue(string.Join("、", draft.Assignees.Select(a => "@" + a)), "");
-        _plan.SetValue(DateText.Range(draft.Start, draft.Target), "");
-        _estimate.SetValue(EffortText.Of(draft.EstimateHours), "");
+        _assignee.SetValue(string.Join("、", draft.Assignees.Select(a => "@" + a)), "\uE77B");
+        _plan.SetValue(DateText.Range(draft.Start, draft.Target), "\uE787");
+        _estimate.SetValue(EffortText.Of(draft.EstimateHours), "\uE916");
         _kindRow.Visibility = team ? Visibility.Visible : Visibility.Collapsed;
         _kind.SetValue(KindVisuals.Name(draft.Kind));
         KindVisuals.Apply(_kind.Icon, draft.Kind);
@@ -979,7 +979,7 @@ public sealed partial class TaskDetailPane : UserControl
 
             var remove = new Button
             {
-                Content = new FontIcon { Glyph = "", FontSize = 12 },
+                Content = new FontIcon { Glyph = "\uE711", FontSize = 12 },
                 Style = AppResources.Style("SubtleButtonStyle"),
                 Padding = new Thickness(6),
             };
@@ -1066,14 +1066,14 @@ public sealed partial class TaskDetailPane : UserControl
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
             var name = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
-            name.Children.Add(new FontIcon { Glyph = "", FontSize = 12 });
+            name.Children.Add(new FontIcon { Glyph = "\uE8B7", FontSize = 12 });
             name.Children.Add(new TextBlock { Text = repository, TextTrimming = TextTrimming.CharacterEllipsis });
             var link = new HyperlinkButton { Content = name, NavigateUri = new Uri($"https://{host}/{repository}"), Padding = new Thickness(4, 2, 4, 2) };
             AutomationProperties.SetName(link, $"{repository} を GitHub で開く");
             ToolTipService.SetToolTip(link, associated ? "GitHub で開く" : "ブランチだけがあるリポジトリです（作業するリポジトリには選んでいません）");
             grid.Children.Add(link);
 
-            var branch = new Button { Content = new FontIcon { Glyph = "", FontSize = 12 }, Style = subtle, Padding = new Thickness(6), IsEnabled = !task.IsLocal };
+            var branch = new Button { Content = new FontIcon { Glyph = "\uE8D4", FontSize = 12 }, Style = subtle, Padding = new Thickness(6), IsEnabled = !task.IsLocal };
             AutomationProperties.SetName(branch, $"{repository} のブランチを作る・選ぶ");
             ToolTipService.SetToolTip(branch, KeyHints.Tip("task.branch", "ブランチを作る・選ぶ"));
 
@@ -1091,7 +1091,7 @@ public sealed partial class TaskDetailPane : UserControl
 
             if (associated)
             {
-                var remove = new Button { Content = new FontIcon { Glyph = "", FontSize = 12 }, Style = subtle, Padding = new Thickness(6) };
+                var remove = new Button { Content = new FontIcon { Glyph = "\uE711", FontSize = 12 }, Style = subtle, Padding = new Thickness(6) };
                 AutomationProperties.SetName(remove, $"{repository} を作業するリポジトリから外す");
                 ToolTipService.SetToolTip(remove, "外す");
                 ToolTipService.SetPlacement(remove, Microsoft.UI.Xaml.Controls.Primitives.PlacementMode.Left);

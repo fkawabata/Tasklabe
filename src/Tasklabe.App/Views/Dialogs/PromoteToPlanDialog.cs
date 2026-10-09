@@ -45,10 +45,10 @@ public static class PromoteToPlanDialog
 
         void Refresh()
         {
-            parentButton.SetValue(parent?.Task.Title ?? "（最上位に置く）", "");
-            startButton.SetValue(start is { } s ? DateText.Short(s) : null, "");
-            targetButton.SetValue(target is { } t ? DateText.Short(t) : null, "");
-            estimateButton.SetValue(EffortText.Of(estimate), "");
+            parentButton.SetValue(parent?.Task.Title ?? "（最上位に置く）", "\uE8FD");
+            startButton.SetValue(start is { } s ? DateText.Short(s) : null, "\uE787");
+            targetButton.SetValue(target is { } t ? DateText.Short(t) : null, "\uE787");
+            estimateButton.SetValue(EffortText.Of(estimate), "\uE916");
 
             // 置き場所の直前（末尾）のタスクの後につなぐ（要件 F-DEP-09。既定はつながない）
             var previous = Previous();

@@ -34,7 +34,7 @@ public sealed partial class ProjectSettingsPage : Page
 
         _project = project;
         TitleText.Text = $"{ProjectDisplay.Name(project)} の設定";
-        KindIcon.Glyph = project.IsTeam ? "" : "";
+        KindIcon.Glyph = project.IsTeam ? "\uE716" : "\uE77B";
         KindText.Text = project.IsTeam ? "チーム" : "個人";
         IntroText.Text = project.IsTeam
             ? "このプロジェクトだけの設定です。GitHub の Project に保存し、メンバー全員で同じ設定を使います。ショートカットキーなどアプリ全体の設定は、左下の「設定」で変えます。"
@@ -58,7 +58,7 @@ public sealed partial class ProjectSettingsPage : Page
 
             if (!canEdit)
             {
-                AccessChip.Show("", "表示のみ", "表示のみ", new ChipSection(ChipSeverity.Caution, "表示のみ",
+                AccessChip.Show("\uE72E", "表示のみ", "表示のみ", new ChipSection(ChipSeverity.Caution, "表示のみ",
                     "この Project を編集する権限がないため、設定は表示だけです。変えたいときは、Project の管理者に依頼してください。", [], []));
             }
         }

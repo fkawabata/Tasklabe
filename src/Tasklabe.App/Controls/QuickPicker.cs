@@ -581,7 +581,7 @@ public sealed class QuickPicker
         {
             var check = option.IsMixed
                 ? (FrameworkElement)new TextBlock { Text = "—", Style = AppResources.Style("Text.Caption"), VerticalAlignment = VerticalAlignment.Center }
-                : new FontIcon { Glyph = "", FontSize = 12, VerticalAlignment = VerticalAlignment.Center, Foreground = ThemeResources.Brush("Brand.Accent") };
+                : new FontIcon { Glyph = "\uE73E", FontSize = 12, VerticalAlignment = VerticalAlignment.Center, Foreground = ThemeResources.Brush("Brand.Accent") };
             Grid.SetColumn(check, 4 + shift);
             grid.Children.Add(check);
         }
@@ -618,9 +618,9 @@ public sealed class QuickPicker
         {
             return _states[index] switch
             {
-                PickState.Checked => "",   // チェックの入った四角
-                PickState.Mixed => "",     // 一部だけの四角
-                _ => "",                   // 空の四角
+                PickState.Checked => "\uE73A",   // チェックの入った四角
+                PickState.Mixed => "\uE73C",     // 一部だけの四角
+                _ => "\uE739",                   // 空の四角
             };
         }
 

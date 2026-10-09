@@ -161,8 +161,8 @@ public sealed class DateRangePicker
         var rail = new Grid { Width = single ? 112 : RailWidth, Children = { _railMark, presetList } };
 
         // 暦。前後の月へのボタンを、月の見出しの両脇に重ねる
-        var prev = NavButton("", "前の月", -1);
-        var next = NavButton("", "次の月", 1);
+        var prev = NavButton("\uE76B", "前の月", -1);
+        var next = NavButton("\uE76C", "次の月", 1);
         next.HorizontalAlignment = HorizontalAlignment.Right;
         _viewport.Width = RangeMonth.Cell * 7 * _monthCount + MonthGap * (_monthCount - 1);
         var calendars = new Grid { Children = { _viewport, prev, next } };

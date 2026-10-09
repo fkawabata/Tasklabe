@@ -45,7 +45,7 @@ internal sealed partial class GanttRowPresenter : Grid
         };
         Pill.SetIsEnabled(_selectionPill, true);
 
-        _chevron = new FontIcon { FontSize = 12, Width = 16, Glyph = "" };
+        _chevron = new FontIcon { FontSize = 12, Width = 16, Glyph = "\uE70D" };
         var chevronHost = new Border
         {
             Width = 20,
@@ -114,7 +114,7 @@ internal sealed partial class GanttRowPresenter : Grid
 
         _titlePanel.Margin = new Thickness(TitleLeft(node.Depth), 0, 8, 0);
         _chevron.Visibility = node.HasChildren ? Visibility.Visible : Visibility.Collapsed;
-        _chevron.Glyph = expanded ? "" : "";
+        _chevron.Glyph = expanded ? "\uE70D" : "\uE76C";
 
         // 番号は設定で出すときだけ、タイトルの前に添える（要件 F-SET-06）
         _number.Text = App.Current.Services.CurrentSettings.ShowNumberInGantt ? TaskKeys.Of(node.Task) : "";
