@@ -325,6 +325,9 @@
             </ListView.ItemTemplate>
         </ListView>
 
+        <!-- 縦にスクロールしたとき、見えている行の親を上端に残す（UI デザイン設計書 3.4.4 節） -->
+        <Canvas x:Name="StickyLayer" Grid.Row="1" />
+
         <!-- タイトルの編集の入力欄と、ドラッグ中の落とし先の目印 -->
         <Canvas x:Name="EditorLayer" Grid.Row="1">
             <Border

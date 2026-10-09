@@ -88,6 +88,10 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
             } : null;
             Gantt.ShowInazuma = ViewState.Get($"gantt-inazuma:{project.Id}") != "0";
             InazumaToggle.IsChecked = Gantt.ShowInazuma;
+            Gantt.StickyParents = ViewState.Get($"gantt-sticky:{project.Id}") != "0";
+            GanttStickyToggle.IsChecked = Gantt.StickyParents;
+            Wbs.StickyParents = ViewState.Get($"wbs-sticky:{project.Id}") != "0";
+            PlanStickyToggle.IsChecked = Wbs.StickyParents;
             var scale = Enum.TryParse<GanttScale>(ViewState.Get($"gantt-scale:{project.Id}"), out var saved) ? saved : GanttScale.Day;
             Gantt.TimeScale = scale;
             _scaleButton.SelectedIndex = Array.FindIndex(Scales, s => s.Value == scale);
@@ -430,7 +434,8 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         Gantt.Visibility = tag == "gantt" ? Visibility.Visible : Visibility.Collapsed;
         Status.Visibility = tag == "status" ? Visibility.Visible : Visibility.Collapsed;
         GanttTools.Visibility = Gantt.Visibility;
-        PlanTools.Visibility = tag == "list" && ViewModel.Project?.IsTeam == true ? Visibility.Visible : Visibility.Collapsed;
+        PlanTools.Visibility = tag == "list" ? Visibility.Visible : Visibility.Collapsed;
+        BulkPlanButton.Visibility = ViewModel.Project?.IsTeam == true ? Visibility.Visible : Visibility.Collapsed;
         KanbanTools.Visibility = Kanban.Visibility;
         FilterButton.Visibility = ViewModel.Project?.IsTeam == true || tag == "kanban" ? Visibility.Visible : Visibility.Collapsed;
         RenderViews();
@@ -537,6 +542,24 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         if (_projectId is not null)
         {
             ViewState.Set($"gantt-inazuma:{_projectId}", Gantt.ShowInazuma ? null : "0");
+        }
+    }
+
+    private void OnGanttStickyToggled(object sender, RoutedEventArgs e)
+    {
+        Gantt.StickyParents = GanttStickyToggle.IsChecked == true;
+        if (_projectId is not null)
+        {
+            ViewState.Set($"gantt-sticky:{_projectId}", Gantt.StickyParents ? null : "0");
+        }
+    }
+
+    private void OnPlanStickyToggled(object sender, RoutedEventArgs e)
+    {
+        Wbs.StickyParents = PlanStickyToggle.IsChecked == true;
+        if (_projectId is not null)
+        {
+            ViewState.Set($"wbs-sticky:{_projectId}", Wbs.StickyParents ? null : "0");
         }
     }
 
