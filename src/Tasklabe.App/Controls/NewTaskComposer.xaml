@@ -17,12 +17,12 @@
         </Style>
     </UserControl.Resources>
 
-    <StackPanel Width="460" Spacing="{StaticResource Space.M}">
+    <StackPanel x:Name="Layout" Width="460" Spacing="{StaticResource Space.M}">
         <!-- 追加先 -->
         <StackPanel x:Name="ProjectHost" />
 
         <!-- タイトルと説明 -->
-        <StackPanel Spacing="{StaticResource Space.XS}">
+        <StackPanel x:Name="TextFields" Spacing="{StaticResource Space.XS}">
             <TextBox
                 x:Name="TitleBox"
                 FontSize="20"
@@ -43,7 +43,7 @@
         <StackPanel x:Name="Pills" Orientation="Horizontal" Spacing="{StaticResource Space.XS}" />
 
         <!-- 詳細パネルへ移るボタンと、キー操作の案内（UX-09、UX-17） -->
-        <Grid ColumnSpacing="{StaticResource Space.M}">
+        <Grid x:Name="FooterRow" ColumnSpacing="{StaticResource Space.M}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />

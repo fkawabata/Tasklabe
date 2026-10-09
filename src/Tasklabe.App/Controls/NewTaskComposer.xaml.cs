@@ -31,6 +31,11 @@ public sealed partial class NewTaskComposer : UserControl
             Pills.Children.Add(pill);
         }
 
+        // 属性ボタンが幅に収まらないときは、スクロールバーなしで左右に動かす
+        int index = Layout.Children.IndexOf(Pills);
+        Layout.Children.RemoveAt(index);
+        Layout.Children.Insert(index, HorizontalStrip.Wrap(Pills));
+
         TitleBox.TextChanged += (_, _) =>
         {
             Draft.Title = TitleBox.Text;
@@ -38,6 +43,16 @@ public sealed partial class NewTaskComposer : UserControl
             CanCreateChanged?.Invoke(this, EventArgs.Empty);
         };
         BodyBox.TextChanged += (_, _) => Draft.Body = BodyBox.Text;
+
+        // タスク名で Enter を押しても追加しない（急いでいるときの誤った確定を防ぐ）。説明の欄へ移る。追加は Ctrl + Enter など
+        TitleBox.KeyDown += (_, e) =>
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                e.Handled = true;
+                BodyBox.Focus(FocusState.Keyboard);
+            }
+        };
 
         _project.Pick = async b =>
         {
@@ -159,13 +174,31 @@ public sealed partial class NewTaskComposer : UserControl
 
     public void FocusTitle() => TitleBox.Focus(FocusState.Programmatic);
 
+    /// <summary>
+    /// 詰めた並び（Copilot キーからの追加の板。UI デザイン設計書 3.5.2 節）。追加先を属性ボタンの列の先頭へ移し、
+    /// 詳細のボタンと案内の行を外す（使う側が下端に置く）。
+    /// 日付のピッカーは左端から開き、「今日」「明日」などの候補を押したボタンの真下に並べる。
+    /// </summary>
+    public void UseCompactLayout(double width)
+    {
+        Layout.Width = width;
+        Layout.Spacing = 16;
+        TextFields.Spacing = 8;
+        ProjectHost.Children.Remove(_project);
+        Pills.Children.Insert(0, _project);
+        PickerTrigger.SetOpensFromStart(_due, true);
+        ProjectHost.Visibility = Visibility.Collapsed;
+        FooterRow.Visibility = Visibility.Collapsed;
+    }
+
     private static PickerButton Pill(string name)
     {
+        // 押しやすさを優先し、押せる大きさの最小（高さ 32）をとる
         var pill = new PickerButton(name)
         {
             HorizontalAlignment = HorizontalAlignment.Left,
-            Padding = new Thickness(10, 3, 8, 4),
-            MinHeight = 0,
+            Padding = new Thickness(12, 0, 10, 0),
+            MinHeight = 32,
             FontSize = 12,
         };
         Controls.Pill.SetIsEnabled(pill, true);

@@ -16,6 +16,8 @@
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
     <!-- パッケージ化しないアプリでも、publish の出力に Tasklabe.pri（XAML を含む）を入れるため -->
     <EnableMsixTooling>true</EnableMsixTooling>
+    <!-- 起動の入口は Program.cs に置く（同じ場所の Tasklabe を 1 つだけ動かすため） -->
+    <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
     <DefaultLanguage>ja-JP</DefaultLanguage>
     <SatelliteResourceLanguages>ja</SatelliteResourceLanguages>
   </PropertyGroup>
@@ -29,6 +31,8 @@
 
   <ItemGroup>
     <Content Include="Assets\**" CopyToOutputDirectory="PreserveNewest" />
+    <!-- 外部ロケーション付きのパッケージでは、スタートメニューとタスクバーはロゴを exe の置き場所から引く（Package/AppxManifest.xml） -->
+    <Content Include="Package\Assets\*.png" Link="Assets\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
