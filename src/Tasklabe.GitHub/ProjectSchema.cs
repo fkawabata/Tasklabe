@@ -30,6 +30,7 @@ internal static class ProjectSchema
         ]),
         new(F.Repositories, "TEXT"),
         new(F.Branches, "TEXT"),
+        new(F.GuestAssignees, "TEXT"),
     ];
 
     /// <summary>不足しているフィールド。</summary>

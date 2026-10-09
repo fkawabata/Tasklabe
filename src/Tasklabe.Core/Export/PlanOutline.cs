@@ -147,7 +147,7 @@ public static class PlanOutline
             var name = options.Sections switch
             {
                 OutlineSections.TopLevel => TopLevelName(row.Node!),
-                OutlineSections.Assignee => task.Assignees.Count == 0 ? Unassigned : string.Join("・", task.Assignees.Select(a => "@" + a)),
+                OutlineSections.Assignee => task.Assignees.Count == 0 ? Unassigned : string.Join("・", task.Assignees.Select(People.Display)),
                 _ => "",
             };
             var items = sections.FirstOrDefault(s => s.Name == name).Items;
@@ -243,7 +243,7 @@ public static class PlanOutline
         var name = string.IsNullOrWhiteSpace(task.Title) ? "（無題）" : task.Title.Trim();
         if (options.AssigneeInName && task.Assignees.Count > 0)
         {
-            name += " " + string.Join(" ", task.Assignees.Select(a => "@" + a));
+            name += " " + string.Join(" ", task.Assignees.Select(People.Display));
         }
 
         if (options.ProgressInName)

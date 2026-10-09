@@ -12,7 +12,8 @@ namespace Tasklabe.App.Controls;
 
 /// <summary>
 /// プロジェクトに関わる設定の編集欄（UI デザイン設計書 3.6 節）。全体の設定の「個人・チームのプロジェクトの既定」のタブと、
-/// プロジェクトの設定の画面で使う。項目は番号のキー（プロジェクトのみ）、工数、稼働日、新しいタスクの区分（チームのみ）、ステータス。
+/// プロジェクトの設定の画面で使う。項目は番号のキー（プロジェクトのみ）、GitHub を使わないメンバー（チームのプロジェクトのみ）、
+/// 工数、稼働日、新しいタスクの区分（チームのみ）、ステータス。
 /// 既定はこの PC に、プロジェクトの上書きは GitHub の Project に保存する。
 /// </summary>
 public sealed partial class SettingsEditor : UserControl
@@ -101,6 +102,11 @@ public sealed partial class SettingsEditor : UserControl
         if (IsProject)
         {
             AddKeySection();
+        }
+
+        if (IsProject && _team)
+        {
+            AddGuestSection();
         }
 
         var effort = Resolved;
@@ -427,6 +433,87 @@ public sealed partial class SettingsEditor : UserControl
             _busy = false;
             Render();
         }
+    }
+
+    // ================================================================ GitHub を使わないメンバー（要件 F-TSK-21）
+
+    /// <summary>
+    /// 担当者の候補に並べる、GitHub を使わないメンバーの名前。既定を持たないプロジェクトだけの値のため、上書きのスイッチは持たない。
+    /// </summary>
+    private void AddGuestSection()
+    {
+        var header = new Grid { Margin = new Thickness(0, 16, 0, 0) };
+        var heading = new TextBlock { Text = "GitHub を使わないメンバー", Style = Res("Text.BodyStrong") };
+        AutomationProperties.SetHeadingLevel(heading, Microsoft.UI.Xaml.Automation.Peers.AutomationHeadingLevel.Level2);
+        header.Children.Add(heading);
+        _root.Children.Add(header);
+        _root.Children.Add(new TextBlock
+        {
+            Text = "名前で担当者にできます。外しても、割り当て済みのタスクの担当者は残ります。",
+            Style = Res("Text.Caption"),
+            TextWrapping = TextWrapping.Wrap,
+        });
+
+        bool enabled = _canEdit && !_busy;
+        var guests = _overrides.Guests;
+        var editor = new StackPanel { Spacing = 4 };
+        foreach (var guest in guests)
+        {
+            var row = new Grid { ColumnSpacing = 8 };
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            row.Children.Add(Avatar.Create(People.Guest(guest)));
+            var name = new TextBlock { Text = guest, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis };
+            Grid.SetColumn(name, 1);
+            row.Children.Add(name);
+            var remove = SubtleIconButton("\uE711", $"{guest} をメンバーから外す");
+            remove.IsEnabled = enabled;
+            remove.Click += (_, _) => Update(d => d, o => o with
+            {
+                Guests = [.. o.Guests.Where(g => !string.Equals(g, guest, StringComparison.OrdinalIgnoreCase))],
+            });
+            Grid.SetColumn(remove, 2);
+            row.Children.Add(remove);
+            editor.Children.Add(row);
+        }
+
+        var box = new TextBox { PlaceholderText = "名前", MaxLength = People.MaxGuestNameLength, IsEnabled = enabled };
+        AutomationProperties.SetName(box, "GitHub を使わないメンバーの名前");
+        var add = new Button { Content = "追加", IsEnabled = false };
+        void Add()
+        {
+            var name = People.NormalizeGuestName(box.Text);
+            var problem = People.GuestNameProblem(name)
+                ?? (guests.Contains(name, StringComparer.OrdinalIgnoreCase) ? $"{name} は既にいます" : null);
+            if (problem is not null)
+            {
+                ShowNotice(InfoBarSeverity.Warning, "メンバーを追加できません", problem);
+                return;
+            }
+
+            Update(d => d, o => o with { Guests = [.. o.Guests, name] });
+        }
+
+        box.TextChanged += (_, _) => add.IsEnabled = enabled && box.Text.Trim().Length > 0;
+        box.KeyDown += (_, e) =>
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                e.Handled = true;
+                Add();
+            }
+        };
+        add.Click += (_, _) => Add();
+
+        var input = new Grid { ColumnSpacing = 8, Margin = new Thickness(0, guests.Count > 0 ? 8 : 0, 0, 0) };
+        input.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        input.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        input.Children.Add(box);
+        Grid.SetColumn(add, 1);
+        input.Children.Add(add);
+        editor.Children.Add(input);
+        _root.Children.Add(Card(editor));
     }
 
     // ================================================================ 工数・区分

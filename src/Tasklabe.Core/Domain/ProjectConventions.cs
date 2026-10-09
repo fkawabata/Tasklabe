@@ -27,6 +27,9 @@ public static class ProjectConventions
 
         /// <summary>作業するブランチ（owner/name:ブランチ名 を空白で区切ったテキスト。要件 F-TSK-19）。</summary>
         public const string Branches = "Branches";
+
+        /// <summary>GitHub を使わない担当者（名前をカンマで区切ったテキスト。<see cref="People"/>）。</summary>
+        public const string GuestAssignees = "Guest Assignees";
     }
 
     public static class ScheduleOptions

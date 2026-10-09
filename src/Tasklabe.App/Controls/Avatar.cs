@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using Tasklabe.Core.Domain;
 
 namespace Tasklabe.App.Controls;
 
@@ -23,12 +24,12 @@ internal static class Avatar
         Windows.UI.Color.FromArgb(255, 0x4F, 0x6B, 0xED),
     ];
 
-    /// <summary>頭文字（ログイン名の先頭の 1 文字）。</summary>
-    public static string Initial(string login) => login.Length > 0 ? login[..1].ToUpperInvariant() : "";
+    /// <summary>頭文字（ログイン名、または名前だけのメンバーの名前の先頭の 1 文字）。</summary>
+    public static string Initial(string login) => People.Name(login) is { Length: > 0 } name ? name[..1].ToUpperInvariant() : "";
 
     /// <summary>色。</summary>
     public static SolidColorBrush Brush(string login) =>
-        new(Palette[(int)((uint)login.ToUpperInvariant().Sum(c => c) % Palette.Length)]);
+        new(Palette[(int)((uint)People.Name(login).ToUpperInvariant().Sum(c => c) % Palette.Length)]);
 
     /// <summary>アバターの要素（カードと同じ 20 px の丸）。</summary>
     public static FrameworkElement Create(string login, double size = 20)

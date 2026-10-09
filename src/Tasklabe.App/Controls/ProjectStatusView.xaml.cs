@@ -164,7 +164,7 @@ public sealed partial class ProjectStatusView : UserControl
             var detail = new List<string>();
             if (item.Task.Assignees.Count > 0)
             {
-                detail.Add(string.Join("、", item.Task.Assignees.Select(a => "@" + a)));
+                detail.Add(string.Join("、", item.Task.Assignees.Select(People.Display)));
             }
 
             if (item.Task.Target is { } target)
@@ -239,7 +239,7 @@ public sealed partial class ProjectStatusView : UserControl
             var row = _view.Workload[r];
             WorkloadGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(28) });
 
-            var name = Text(row.Login.Length == 0 ? "担当者なし" : row.Login, "Text.Body");
+            var name = Text(row.Login.Length == 0 ? "担当者なし" : People.Name(row.Login), "Text.Body");
             name.VerticalAlignment = VerticalAlignment.Center;
             Add(WorkloadGrid, name, 0, r + 1);
 

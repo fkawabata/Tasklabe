@@ -273,7 +273,7 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         values.Add(("担当者なし", ""));
         values.AddRange(ViewModel.AssigneeCandidates
             .Where(l => !string.Equals(l, me, StringComparison.OrdinalIgnoreCase))
-            .Select(l => ("@" + l, (string?)l)));
+            .Select(l => (People.Display(l), (string?)l)));
         int current = values.FindIndex(v => v.Value == ViewModel.AssigneeFilter);
         if (await ValuePickers.ChoiceAsync(anchor, "担当者で絞り込む", [.. values.Select(v => v.Label)], current) is { } index)
         {
@@ -307,7 +307,7 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
     {
         "" => "担当者なし",
         var login when string.Equals(login, App.Current.Services.CurrentSettings.UserLogin, StringComparison.OrdinalIgnoreCase) => "担当: 自分",
-        var login => $"担当: @{login}",
+        var login => $"担当: {People.Display(login ?? "")}",
     };
 
     /// <summary>効いている条件をチップで示す。表示するものを減らさない設定（並び順・グループ）はチップにしない。</summary>

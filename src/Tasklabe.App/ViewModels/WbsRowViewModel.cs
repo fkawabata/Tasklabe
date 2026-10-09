@@ -88,7 +88,7 @@ public sealed partial class WbsRowViewModel(TaskNode node, bool isExpanded, Date
 
     // ---------------------------------------------------------------- 値
 
-    public string AssigneeText => string.Join(", ", Task.Assignees.Select(a => "@" + a));
+    public string AssigneeText => string.Join(", ", Task.Assignees.Select(People.Display));
 
     public string StartText => Format(Task.Start);
 

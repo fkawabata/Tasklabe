@@ -288,8 +288,21 @@ public sealed class SyncEngine(GitHubApi api, SqliteTaskStore store, TimeProvide
                 await api.SetIssueClosedAsync(issueId, close, notPlanned: e.NewValue == TaskValues.ClosedNotPlanned, ct: ct).ConfigureAwait(false);
                 break;
             case TaskField.Assignees:
-                var userIds = await ResolveUserIdsAsync(task, TaskValues.ParseLogins(e.NewValue), ct).ConfigureAwait(false);
-                await api.SetAssigneesAsync(issueId, userIds, ct).ConfigureAwait(false);
+                // GitHub の利用者は Issue の Assignees へ、名前だけのメンバーは Project のフィールドへ、変わったほうだけ送る
+                var oldAssignees = TaskValues.ParseLogins(e.OldValue);
+                var newAssignees = TaskValues.ParseLogins(e.NewValue);
+                var newLogins = People.Logins(newAssignees);
+                if (e.OldValue is null || TaskValues.Logins(People.Logins(oldAssignees)) != TaskValues.Logins(newLogins))
+                {
+                    var userIds = await ResolveUserIdsAsync(task, newLogins, ct).ConfigureAwait(false);
+                    await api.SetAssigneesAsync(issueId, userIds, ct).ConfigureAwait(false);
+                }
+
+                if (People.GuestNames(newAssignees) is var guests && guests != People.GuestNames(oldAssignees))
+                {
+                    await api.SetGuestAssigneesAsync(project, e.ItemId, guests, ct).ConfigureAwait(false);
+                }
+
                 break;
             case TaskField.Parent:
                 // 別のリポジトリへ移した Issue は作り直しているため、元の親子関係は既に切れている
@@ -389,6 +402,12 @@ public sealed class SyncEngine(GitHubApi api, SqliteTaskStore store, TimeProvide
                 {
                     await api.SetFieldAsync(target, newItemId, field, value, ct).ConfigureAwait(false);
                 }
+            }
+
+            // 名前だけのメンバーは Project のフィールドにいるため、Issue と一緒には移らない。チームのプロジェクトへ移すときだけ引き継ぐ
+            if (target.IsTeam && People.GuestNames(task.Assignees) is { } guests)
+            {
+                await api.SetGuestAssigneesAsync(target, newItemId, guests, ct).ConfigureAwait(false);
             }
         }
 

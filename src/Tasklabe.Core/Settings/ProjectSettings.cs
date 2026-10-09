@@ -181,9 +181,16 @@ public sealed record ProjectSettings
     /// </summary>
     public int? OutlineLevels { get; init; }
 
+    /// <summary>
+    /// GitHub を使わないメンバーの名前（チームのみ。<see cref="People"/>）。担当者の候補に並べる。
+    /// キーと同じく既定を持たない、プロジェクトだけの値。
+    /// </summary>
+    public IReadOnlyList<string> Guests { get; init; } = [];
+
     public static ProjectSettings None { get; } = new();
 
-    public bool IsEmpty => EffortUnit is null && HoursPerDay is null && Calendar is null && NewTaskKind is null && Key is null && OutlineLevels is null;
+    public bool IsEmpty => EffortUnit is null && HoursPerDay is null && Calendar is null && NewTaskKind is null && Key is null && OutlineLevels is null
+        && Guests.Count == 0;
 
     /// <summary>既定に重ねた値。</summary>
     public ResolvedSettings Over(DefaultSettings defaults)
@@ -246,6 +253,11 @@ public sealed record ProjectSettings
             node["outlineLevels"] = levels;
         }
 
+        if (s.Guests.Count > 0)
+        {
+            node["guests"] = new JsonArray([.. s.Guests.Select(g => (JsonNode?)g)]);
+        }
+
         return node;
     }
 
@@ -281,6 +293,10 @@ public sealed record ProjectSettings
             OutlineLevels = node["outlineLevels"] is JsonValue o && o.TryGetValue<int>(out var levels) && levels is >= 1 and <= ProjectKey.MaxOutlineLevels
                 ? levels
                 : null,
+            Guests = node["guests"] is JsonArray guests
+                ? [.. guests.Select(Text).OfType<string>().Select(People.NormalizeGuestName)
+                    .Where(g => People.GuestNameProblem(g) is null).Distinct(StringComparer.OrdinalIgnoreCase)]
+                : [],
         };
     }
 }

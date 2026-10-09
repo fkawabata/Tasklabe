@@ -370,7 +370,7 @@ public sealed partial class TaskDetailPane : UserControl
             _projectButton.IsEnabled = !task.IsLocal;
             _status.SetValue(task.StatusName ?? StatusVisuals.Name(task.Category), StatusVisuals.Glyph(task.Category), StatusVisuals.BrushKey(task.Category));
             _assigneeRow.Visibility = team ? Visibility.Visible : Visibility.Collapsed;
-            _assignee.SetValue(string.Join("、", task.Assignees.Select(a => "@" + a)), "\uE77B");
+            _assignee.SetValue(string.Join("、", task.Assignees.Select(People.Display)), "\uE77B");
             _plan.SetValue(DateText.Range(task.Start, task.Target), "\uE787");
             _estimate.SetValue(EffortText.Of(task.EstimateHours), "\uE916");
             _kindRow.Visibility = team ? Visibility.Visible : Visibility.Collapsed;
@@ -650,7 +650,7 @@ public sealed partial class TaskDetailPane : UserControl
         _projectButton.SetValue(project is null ? null : ProjectDisplay.Name(project), ProjectGlyph(project));
         _status.SetValue(status?.Name, StatusVisuals.Glyph(status?.Category ?? StatusCategory.Todo), StatusVisuals.BrushKey(status?.Category ?? StatusCategory.Todo));
         _assigneeRow.Visibility = team ? Visibility.Visible : Visibility.Collapsed;
-        _assignee.SetValue(string.Join("、", draft.Assignees.Select(a => "@" + a)), "\uE77B");
+        _assignee.SetValue(string.Join("、", draft.Assignees.Select(People.Display)), "\uE77B");
         _plan.SetValue(DateText.Range(draft.Start, draft.Target), "\uE787");
         _estimate.SetValue(EffortText.Of(draft.EstimateHours), "\uE916");
         _kindRow.Visibility = team ? Visibility.Visible : Visibility.Collapsed;
@@ -709,7 +709,7 @@ public sealed partial class TaskDetailPane : UserControl
 
                 break;
             case "task.assign" when project.IsTeam:
-                if (await ValuePickers.AssigneesAsync(button, null, [project.RepositoryNameWithOwner], [draft.Assignees]) is { } choice)
+                if (await ValuePickers.AssigneesAsync(button, null, [project], [draft.Assignees]) is { } choice)
                 {
                     var next = choice.ApplyTo(draft.Assignees);
                     draft.Assignees.Clear();

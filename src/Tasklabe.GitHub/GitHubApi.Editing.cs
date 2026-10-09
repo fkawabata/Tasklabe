@@ -147,8 +147,12 @@ public sealed partial class GitHubApi
         }, ct).ConfigureAwait(false);
     }
 
+    /// <summary>GitHub を使わない担当者（<see cref="People.GuestNames"/> の形）を設定する。値が null の場合は消去する。</summary>
+    public Task SetGuestAssigneesAsync(Project project, string itemId, string? names, CancellationToken ct = default) =>
+        SetAddedTextAsync(project, itemId, F.GuestAssignees, names, ct);
+
     /// <summary>
-    /// 後から足したテキストのフィールド（作業するリポジトリとブランチ。要件 F-TSK-18、19）を設定する。
+    /// 後から足したテキストのフィールド（作業するリポジトリとブランチ、GitHub を使わない担当者。要件 F-TSK-18、19）を設定する。
     /// Project になければ先に追加する。
     /// </summary>
     private async Task SetAddedTextAsync(Project project, string itemId, string name, string? value, CancellationToken ct)
@@ -233,7 +237,7 @@ public sealed partial class GitHubApi
     public async Task<string?> GetCurrentValueAsync(string itemId, TaskField field, CancellationToken ct = default)
     {
         var data = await _client.SendAsync(Queries.ItemCurrentValue,
-            new JsonObject { ["itemId"] = itemId, ["field"] = FieldName(field) ?? F.Status },
+            new JsonObject { ["itemId"] = itemId, ["field"] = field == TaskField.Assignees ? F.GuestAssignees : FieldName(field) ?? F.Status },
             GitHubJsonContext.Default.GraphQLResponseItemValueData, ct).ConfigureAwait(false);
         var node = data.Node ?? throw new GitHubGraphQLException("タスクが見つかりません。", ["NOT_FOUND"]);
         var v = node.FieldValueByName;
@@ -243,7 +247,8 @@ public sealed partial class GitHubApi
             TaskField.Title => node.Content?.Title,
             TaskField.Body => node.Content?.Body,
             TaskField.State => node.Content?.State == "CLOSED" ? TaskValues.Closed : TaskValues.Open,
-            TaskField.Assignees => TaskValues.Logins(node.Content?.Assignees?.Nodes?.Select(a => a.Login ?? "") ?? []),
+            TaskField.Assignees => TaskValues.Logins([.. node.Content?.Assignees?.Nodes?.Select(a => a.Login ?? "") ?? [],
+                .. People.ParseGuestNames(v?.Text)]),
             TaskField.Parent => node.Content?.Parent?.Id,
             TaskField.BlockedBy => TaskValues.IssueIds(node.Content?.BlockedBy?.Nodes?.Select(n => n.Id ?? "") ?? []),
             TaskField.Milestone => node.Content?.Milestone?.Id,
