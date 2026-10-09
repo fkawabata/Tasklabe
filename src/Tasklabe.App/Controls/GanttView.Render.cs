@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Tasklabe.Core.Calendar;
 using Tasklabe.Core.Gantt;
+using Tasklabe.Core.Wbs;
 using Windows.Foundation;
 using Windows.UI;
 
@@ -178,6 +179,7 @@ public sealed partial class GanttView
         int lastDay = (int)Math.Ceiling((_scrollX + width) / _dayWidth);
         var firstDate = _origin.AddDays(Math.Max(firstDay, 0));
         var lastDate = _origin.AddDays(Math.Min(lastDay, _dayCount));
+        UpdateSticky();
         int firstRow = Math.Max((int)Math.Floor(_scrollY / RowHeight), 0);
         int lastRow = Math.Min((int)Math.Ceiling((_scrollY + BodyHeight) / RowHeight), _rows.Count - 1);
         int selected = SelectedIndex;
@@ -209,6 +211,7 @@ public sealed partial class GanttView
             }
 
             DrawDragPreview(ds, c);
+            DrawStickyRows(ds, c, firstDate, lastDate, width, today);
         }
 
         DrawHeader(ds, c, firstDate, lastDate, width, today);
@@ -217,7 +220,6 @@ public sealed partial class GanttView
     private void DrawBackground(CanvasDrawingSession ds, ChartColors c, DateOnly first, DateOnly last, float height, int selected, int firstRow, int lastRow)
     {
         float top = (float)HeaderHeight;
-        float dayWidth = (float)_dayWidth;
 
         // マイルストーンの行は淡く塗り、計画の中の区切りとして見せる
         for (int i = firstRow; i <= lastRow; i++)
@@ -237,29 +239,83 @@ public sealed partial class GanttView
             ds.FillRectangle(0, RowTop(_hoverRow), (float)Chart.ActualWidth, (float)RowHeight, c.Hover);
         }
 
+        DrawDayColumns(ds, c, first, last, top, height);
+    }
+
+    /// <summary>休日の網掛けと、日・週・月の境界の線。</summary>
+    private void DrawDayColumns(CanvasDrawingSession ds, ChartColors c, DateOnly first, DateOnly last, float top, float bottom)
+    {
+        float dayWidth = (float)_dayWidth;
         for (var d = first; d <= last; d = d.AddDays(1))
         {
             float x = X(d);
             // 月表示では休日の網掛けが細かすぎて地模様になるため、週表示までにとどめる
             if (WorkCalendar.IsHoliday(d) && dayWidth >= 6)
             {
-                ds.FillRectangle(x, top, dayWidth, height - top, c.Holiday);
+                ds.FillRectangle(x, top, dayWidth, bottom - top, c.Holiday);
             }
 
             // 月の境界は常に、週の境界と日の境界は幅に余裕があるときだけ引く
             if (d.Day == 1)
             {
-                ds.DrawLine(x, top, x, height, c.Grid, 1);
+                ds.DrawLine(x, top, x, bottom, c.Grid, 1);
             }
             else if (d.DayOfWeek == DayOfWeek.Monday && dayWidth >= 6)
             {
-                ds.DrawLine(x, top, x, height, WithAlpha(c.Grid, 0.7), 1);
+                ds.DrawLine(x, top, x, bottom, WithAlpha(c.Grid, 0.7), 1);
             }
             else if (dayWidth >= 18)
             {
-                ds.DrawLine(x, top, x, height, WithAlpha(c.Grid, 0.35), 1);
+                ds.DrawLine(x, top, x, bottom, WithAlpha(c.Grid, 0.35), 1);
             }
         }
+    }
+
+    /// <summary>
+    /// 上端に残している親の行（UI デザイン設計書 3.3.1 節）。下の行が透けないよう下地から描き、行そのものはその位置へずらして描く。
+    /// 内側の親から描き、配下の終わりで押し上げられた行が外側の親の下へ隠れていくようにする。
+    /// </summary>
+    private void DrawStickyRows(CanvasDrawingSession ds, ChartColors c, DateOnly first, DateOnly last, float width, DateOnly today)
+    {
+        if (_sticky.Count == 0)
+        {
+            return;
+        }
+
+        var surface = c.Surface;
+        float todayX = X(today);
+        for (int k = _sticky.Count - 1; k >= 0; k--)
+        {
+            var row = _rows[_sticky[k].Index];
+            float top = (float)(HeaderHeight + _sticky[k].Top);
+            float bottom = top + (float)RowHeight;
+            ds.FillRectangle(0, top, width, (float)RowHeight, surface);
+            if (row.Index == _frameSelected)
+            {
+                ds.FillRectangle(0, top, width, (float)RowHeight, c.Selection);
+            }
+            else if (row.Index == _hoverRow && _drag is null)
+            {
+                ds.FillRectangle(0, top, width, (float)RowHeight, c.Hover);
+            }
+
+            DrawDayColumns(ds, c, first, last, top, bottom);
+
+            var transform = ds.Transform;
+            ds.Transform = Matrix3x2.CreateTranslation(0, top - RowTop(row.Index)) * transform;
+            DrawRow(ds, c, row);
+            ds.Transform = transform;
+
+            ds.DrawLine(todayX, top, todayX, bottom, c.Today, 2);
+            foreach (var s in _milestones)
+            {
+                float mx = MilestoneX(s.Milestone.Due!.Value);
+                ds.DrawLine(mx, top, mx, bottom, WithAlpha(c.Text, 0.55), 1.5f, _milestoneDash);
+            }
+        }
+
+        float covered = (float)(HeaderHeight + StickyRows.Covered(_sticky, RowHeight));
+        ds.DrawLine(0, covered - 0.5f, width, covered - 0.5f, c.Divider, 1);
     }
 
     private void DrawRow(CanvasDrawingSession ds, ChartColors c, GanttRow row)
@@ -789,7 +845,7 @@ public sealed partial class GanttView
         var bounds = layout.LayoutBounds;
         float lx = Math.Clamp(left, 4, Math.Max((float)Chart.ActualWidth - (float)bounds.Width - 16, 4));
         float ly = cy - BarHeight / 2 - 26;
-        if (ly < HeaderHeight + 2)
+        if (ly < HeaderHeight + StickyRows.Covered(_sticky, RowHeight) + 2)
         {
             ly = cy + BarHeight / 2 + 6;
         }

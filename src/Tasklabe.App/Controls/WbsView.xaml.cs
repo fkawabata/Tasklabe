@@ -59,6 +59,8 @@ public sealed partial class WbsView : UserControl
             _settleTimer.Stop();
             ApplyDeferredLoad();
         };
+
+        InitializeSticky();
     }
 
     /// <summary>置き換え後の ID をたどる。</summary>
@@ -282,6 +284,13 @@ public sealed partial class WbsView : UserControl
             current.ActiveColumn = _column;
         }
 
+        RefreshStickyStates();
+        if (count == 1 && _anchor is { } selectedRow)
+        {
+            // ListView がキーの操作で行を上端にそろえて止めると、上端に残した親に隠れる。止まった後で、隠れていれば見せる
+            DispatcherQueue.TryEnqueue(() => RevealIfCovered(selectedRow));
+        }
+
         // 詳細パネルを開いていれば選んだ行に追従させ、複数を選んだら閉じる（UX-07、UX-10）
         if (App.Current.Shell is { IsDetailOpen: true, IsCreating: false } shell)
         {
@@ -319,6 +328,12 @@ public sealed partial class WbsView : UserControl
     /// <summary>番号とタイトルのダブルクリックで詳細を開く（一覧・ガントと同じ。UI デザイン設計書 3.4.4 節）。</summary>
     private void OnTitleDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
     {
+        if (StickyDoubleTapped() is { } sticky)
+        {
+            App.Current.Shell?.SelectTask(sticky.Task);
+            return;
+        }
+
         if (sender is FrameworkElement { DataContext: WbsRowViewModel row })
         {
             App.Current.Shell?.SelectTask(row.Task);
@@ -351,7 +366,7 @@ public sealed partial class WbsView : UserControl
 
         _anchor = row;
         row.ActiveColumn = _column;
-        List.ScrollIntoView(row);
+        ScrollRowIntoView(row);
         if (focus)
         {
             DispatcherQueue.TryEnqueue(FocusCurrent);
@@ -434,6 +449,11 @@ public sealed partial class WbsView : UserControl
             }
         }
 
+        foreach (var host in _stickyHosts)
+        {
+            ApplyWidths(StickyTemplateRoot(host));
+        }
+
         if (Current is { } row && ColumnWidth(_column) == 0)
         {
             SetColumn(row, _column);
@@ -489,6 +509,11 @@ public sealed partial class WbsView : UserControl
         }
 
         ViewState.SetSet(CollapsedKey, _collapsed);
+
+        if (StickyRows.TopOf(_sticky, Rows.IndexOf(row)) is { } stickyTop)
+        {
+            KeepStickyPosition(row, stickyTop);
+        }
 
         if (_project is not null && _tree is not null)
         {
@@ -1095,7 +1120,7 @@ public sealed partial class WbsView : UserControl
 
     private FrameworkElement? FindCell(WbsRowViewModel row, int column)
     {
-        List.ScrollIntoView(row);
+        ScrollRowIntoView(row);
         List.UpdateLayout();
         return List.ContainerFromItem(row) is DependencyObject container
             ? VisualTree.Descendants<FrameworkElement>(container).FirstOrDefault(e => e.Tag is string tag && tag == column.ToString(CultureInfo.InvariantCulture))

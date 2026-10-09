@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
 using Tasklabe.Animation;
 using Tasklabe.App.Services;
+using Tasklabe.Core.Wbs;
 using Windows.System;
 
 namespace Tasklabe.App.Controls;
@@ -186,10 +187,11 @@ public sealed partial class GanttView
 
     private void ScrollRowIntoView(int index)
     {
+        // 上端に残している親に隠れないよう、親の分を空けて見せる。残している親そのものを選んだときは、本来の位置へ戻す
         double top = index * RowHeight;
-        if (top < _scrollY)
+        if (top < _scrollY + StickyRows.Covered(_sticky, RowHeight))
         {
-            ScrollTo(_scrollX, top);
+            ScrollTo(_scrollX, StickyRows.RevealTop(_depths, index, RowHeight, MaxSticky));
         }
         else if (top + RowHeight > _scrollY + BodyHeight)
         {
