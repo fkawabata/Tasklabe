@@ -36,7 +36,8 @@ public class ProjectMapperTests
                       { "__typename": "ProjectV2ItemFieldDateValue", "date": "2026-09-25", "field": { "name": "Target" } },
                       { "__typename": "ProjectV2ItemFieldNumberValue", "number": 16, "field": { "name": "Estimate" } },
                       { "__typename": "ProjectV2ItemFieldNumberValue", "number": 40, "field": { "name": "Progress" } },
-                      { "__typename": "ProjectV2ItemFieldSingleSelectValue", "optionId": "k2", "name": "Task", "field": { "name": "Kind" } }
+                      { "__typename": "ProjectV2ItemFieldSingleSelectValue", "optionId": "k2", "name": "Task", "field": { "name": "Kind" } },
+                      { "__typename": "ProjectV2ItemFieldTextValue", "text": "山田, Sato", "field": { "name": "Guest Assignees" } }
                     ] },
                     "content": { "__typename": "Issue", "id": "ISSUE_1", "number": 12, "title": "画面設計", "state": "OPEN",
                       "url": "https://github.com/me/tasklabe-personal/issues/12", "updatedAt": "2026-09-18T11:00:00Z",
@@ -97,7 +98,7 @@ public class ProjectMapperTests
         Assert.Equal(16, task.EstimateHours);
         Assert.Equal(40, task.ProgressPercent);
         Assert.Equal("ISSUE_0", task.ParentIssueId);
-        Assert.Equal(["me"], task.Assignees);
+        Assert.Equal(["me", People.Guest("山田"), People.Guest("Sato")], task.Assignees);
         Assert.Equal(DateTimeOffset.Parse("2026-09-18T11:00:00Z"), task.UpdatedAt);
     }
 
@@ -192,7 +193,7 @@ public class ProjectMapperTests
     {
         var missing = ProjectSchema.MissingFields(Parse()).Select(f => f.Name);
 
-        Assert.Equal(["Target", "Actual Start", "Actual End", "Estimate", "Progress", "Kind", "Schedule", "Repositories", "Branches"], missing);
+        Assert.Equal(["Target", "Actual Start", "Actual End", "Estimate", "Progress", "Kind", "Schedule", "Repositories", "Branches", "Guest Assignees"], missing);
     }
 
     [Fact]

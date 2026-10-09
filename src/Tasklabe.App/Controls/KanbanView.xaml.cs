@@ -85,7 +85,7 @@ public sealed class KanbanCard
 
     public bool HasMoreAssignees => Task.Assignees.Count > 1;
 
-    public string AssigneeText => string.Join(", ", Task.Assignees.Select(a => "@" + a));
+    public string AssigneeText => string.Join(", ", Task.Assignees.Select(People.Display));
 
     public string AssigneeTip => Controls.KeyHints.Tip("task.assign", HasAssignee ? $"担当: {AssigneeText}" : "担当者なし");
 
@@ -295,7 +295,7 @@ public sealed partial class KanbanView : UserControl
         // 自分の担当を先頭に置く
         bool mine = assignees.Count == 1 && string.Equals(assignees[0], login, StringComparison.OrdinalIgnoreCase);
         var key = string.Join(',', assignees).ToUpperInvariant();
-        return new KanbanLaneKey(key, string.Join(", ", assignees.Select(a => "@" + a)), mine ? 0 : 1);
+        return new KanbanLaneKey(key, string.Join(", ", assignees.Select(People.Display)), mine ? 0 : 1);
     }
 
     private void Show(Source source)

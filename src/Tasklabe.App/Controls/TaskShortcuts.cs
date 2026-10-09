@@ -231,7 +231,7 @@ public static class TaskShortcuts
                 }
 
                 var choice = await ValuePickers.AssigneesAsync(target.Anchor, target.Position,
-                    team.Select(t => projects[t.ProjectId].RepositoryNameWithOwner), [.. team.Select(t => t.Assignees)]);
+                    team.Select(t => projects[t.ProjectId]), [.. team.Select(t => t.Assignees)]);
                 if (choice is not null)
                 {
                     await TaskCommands.ApplyAsync([.. team.Select(t => (t, TaskRules.Set(t, TaskField.Assignees, TaskValues.Logins(choice.ApplyTo(t.Assignees)))))],

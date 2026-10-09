@@ -77,7 +77,7 @@ public sealed partial class NewTaskComposer : UserControl
         _assignee.Pick = async b =>
         {
             if (Draft.Project is { IsTeam: true } project
-                && await ValuePickers.AssigneesAsync(b, null, [project.RepositoryNameWithOwner], [Draft.Assignees]) is { } choice)
+                && await ValuePickers.AssigneesAsync(b, null, [project], [Draft.Assignees]) is { } choice)
             {
                 var next = choice.ApplyTo(Draft.Assignees);
                 Draft.Assignees.Clear();
@@ -220,8 +220,8 @@ public sealed partial class NewTaskComposer : UserControl
         _assignee.SetValue(draft.Assignees.Count switch
         {
             0 => null,
-            1 => "@" + draft.Assignees[0],
-            var n => $"@{draft.Assignees[0]} +{n - 1}",
+            1 => People.Display(draft.Assignees[0]),
+            var n => $"{People.Display(draft.Assignees[0])} +{n - 1}",
         }, "\uE77B", placeholder: "担当");
         _due.SetValue(draft.Target is { } due ? DateText.Short(due) : null, "\uE787", placeholder: "期日");
         _estimate.SetValue(EffortText.Of(draft.EstimateHours), "\uE916", placeholder: "工数");

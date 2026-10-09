@@ -35,6 +35,17 @@ public class ProjectSettingsTests
         Assert.Equal(calendar.ToString(), parsed.Calendar!.ToString());
     }
 
+    [Fact]
+    public void Guests_round_trip_and_unusable_names_are_dropped()
+    {
+        var settings = ProjectSettings.Parse("""{"guests":["山田 太郎","Sato","sato","@alice","a,b",""]}""");
+
+        Assert.Equal(["山田 太郎", "Sato"], settings.Guests);
+        Assert.Equal(["山田 太郎", "Sato"], ProjectSettings.Parse(settings.ToJson()).Guests);
+        Assert.False(settings.IsEmpty);
+        Assert.Empty(ProjectSettings.None.Guests);
+    }
+
     [Theory]
     [InlineData(null)]
     [InlineData("")]

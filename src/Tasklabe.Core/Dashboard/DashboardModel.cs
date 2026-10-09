@@ -143,7 +143,7 @@ public static class DashboardModel
 
                 // 担当を付け替えても行が入れ替わらないよう、負荷の大きさではなく名前の順に並べ、未割り当てを末尾に置く
                 .OrderBy(w => w.Login == Unassigned)
-                .ThenBy(w => w.Login, StringComparer.OrdinalIgnoreCase)]);
+                .ThenBy(w => People.Name(w.Login), StringComparer.OrdinalIgnoreCase)]);
     }
 
     /// <summary>注意が必要なタスクか。該当しなければ null。</summary>

@@ -130,34 +130,49 @@ internal static class ValuePickers
 
     // ---------------------------------------------------------------- 担当者
 
-    /// <param name="repositories">候補を取るリポジトリ（チームのプロジェクトのリポジトリ）。</param>
+    /// <summary>
+    /// 担当者を選ぶ（複数）。候補は、リポジトリに割り当てられる GitHub の利用者と、
+    /// プロジェクトの設定に加えた GitHub を使わないメンバー。
+    /// </summary>
+    /// <param name="projects">候補を取るチームのプロジェクト。</param>
     public static async Task<ToggleChoice?> AssigneesAsync(FrameworkElement anchor, Point? position,
-        IEnumerable<string?> repositories, IReadOnlyCollection<IReadOnlyList<string>> current)
+        IEnumerable<Project> projects, IReadOnlyCollection<IReadOnlyList<string>> current)
     {
         var services = App.Current.Services;
         var me = services.CurrentSettings.UserLogin;
         var users = new List<Assignee>();
-        foreach (var repo in repositories.OfType<string>().Distinct(StringComparer.OrdinalIgnoreCase))
+        var guests = new List<string>();
+        foreach (var project in projects.DistinctBy(p => p.Id))
         {
-            users.AddRange(await services.Store.GetAssignableUsersAsync(repo));
+            if (project.RepositoryNameWithOwner is { } repo)
+            {
+                users.AddRange(await services.Store.GetAssignableUsersAsync(repo));
+            }
+
+            guests.AddRange(project.Settings.Guests.Select(People.Guest));
         }
 
-        var logins = users.Select(u => u.Login)
+        // GitHub の利用者（自分を先頭）、名前だけのメンバーの順に並べる
+        var assignees = users.Select(u => u.Login)
             .Union(current.SelectMany(c => c), StringComparer.OrdinalIgnoreCase)
-            .OrderByDescending(l => string.Equals(l, me, StringComparison.OrdinalIgnoreCase))
-            .ThenBy(l => l, StringComparer.OrdinalIgnoreCase)
+            .Union(guests, StringComparer.OrdinalIgnoreCase)
+            .OrderBy(a => People.IsGuest(a))
+            .ThenByDescending(a => string.Equals(a, me, StringComparison.OrdinalIgnoreCase))
+            .ThenBy(a => People.Name(a), StringComparer.OrdinalIgnoreCase)
             .ToList();
-        var options = logins.Select(l =>
+        var options = assignees.Select(a =>
         {
-            var (selected, mixed) = Mark(current, c => c.Contains(l, StringComparer.OrdinalIgnoreCase));
-            var name = users.FirstOrDefault(u => string.Equals(u.Login, l, StringComparison.OrdinalIgnoreCase))?.Name;
-            var detail = string.Equals(l, me, StringComparison.OrdinalIgnoreCase) ? "自分" : string.IsNullOrWhiteSpace(name) ? null : name.Trim();
-            return new PickerOption("@" + l, detail, IsSelected: selected, IsMixed: mixed, Avatar: l);
+            var (selected, mixed) = Mark(current, c => c.Contains(a, StringComparer.OrdinalIgnoreCase));
+            var name = users.FirstOrDefault(u => string.Equals(u.Login, a, StringComparison.OrdinalIgnoreCase))?.Name;
+            var detail = People.IsGuest(a) ? "GitHub なし"
+                : string.Equals(a, me, StringComparison.OrdinalIgnoreCase) ? "自分"
+                : string.IsNullOrWhiteSpace(name) ? null : name.Trim();
+            return new PickerOption(People.Display(a), detail, IsSelected: selected, IsMixed: mixed, Avatar: a);
         }).ToList();
 
         var picker = new QuickPicker("担当者", options, multiple: true,
-            note: "ここにいない人は、リポジトリへの招待が必要です（プロジェクトの「…」→「メンバーを招待」）。");
-        return await picker.ShowAsync(anchor, position) is null ? null : new ToggleChoice(logins, picker.States);
+            note: "ここにいない人は、リポジトリへの招待（プロジェクトの「…」→「メンバーを招待」）か、プロジェクトの設定で加えられます。");
+        return await picker.ShowAsync(anchor, position) is null ? null : new ToggleChoice(assignees, picker.States);
     }
 
     // ---------------------------------------------------------------- 作業するリポジトリ（要件 F-TSK-18）

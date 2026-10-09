@@ -80,7 +80,7 @@ public sealed class TaskRowViewModel(TaskItem task, string projectName, DateOnly
     public string IssueAutomationName =>
         $"{Title}、{StatusText}、更新 {UpdatedText}" + (AssigneeText.Length > 0 ? $"、担当 {AssigneeText}" : "");
 
-    public string AssigneeText => string.Join(", ", Task.Assignees.Select(a => "@" + a));
+    public string AssigneeText => string.Join(", ", Task.Assignees.Select(People.Display));
 
     // ---- 値のセル（押すとその場でピッカーを開く。空のときは「—」を出して押せることを示す）
 

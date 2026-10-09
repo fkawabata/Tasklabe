@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Tasklabe.App.Services;
+using Tasklabe.Core.Domain;
 using Tasklabe.Core.Gantt;
 
 namespace Tasklabe.App.Controls;
@@ -129,8 +130,8 @@ internal sealed partial class GanttRowPresenter : Grid
         _assignee.Text = node.Task.Assignees.Count switch
         {
             0 => "",
-            1 => node.Task.Assignees[0],
-            var n => $"{node.Task.Assignees[0]} +{n - 1}",
+            1 => People.Name(node.Task.Assignees[0]),
+            var n => $"{People.Name(node.Task.Assignees[0])} +{n - 1}",
         };
 
         var summary = node.Summary;

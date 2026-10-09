@@ -118,7 +118,8 @@ internal static class ProjectMapper
             Repositories = TaskValues.ParseRepositories(values.GetValueOrDefault(F.Repositories)?.Text),
             Branches = TaskValues.ParseBranches(values.GetValueOrDefault(F.Branches)?.Text),
             MilestoneId = issue.Milestone?.Id,
-            Assignees = issue.Assignees?.Nodes?.Select(a => a.Login ?? "").Where(l => l.Length > 0).ToList() ?? [],
+            Assignees = [.. issue.Assignees?.Nodes?.Select(a => a.Login ?? "").Where(l => l.Length > 0) ?? [],
+                .. People.ParseGuestNames(values.GetValueOrDefault(F.GuestAssignees)?.Text)],
             BlockedBy = TaskValues.ParseIssueIds(TaskValues.IssueIds(issue.BlockedBy?.Nodes?.Select(n => n.Id ?? "") ?? [])),
             UpdatedAt = issue.UpdatedAt > item.UpdatedAt ? issue.UpdatedAt : item.UpdatedAt,
         };
