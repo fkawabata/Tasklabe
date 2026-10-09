@@ -80,7 +80,7 @@ internal static class CommandPalette
         }
 
         // 画面へ移る
-        entries.Add(new Entry("nav:my", new PickerOption("マイタスク", Glyph: "", Group: "画面"), () =>
+        entries.Add(new Entry("nav:my", new PickerOption("マイタスク", Glyph: "\uE73A", Group: "画面"), () =>
         {
             window.GoToMyTasks();
             return Task.CompletedTask;
@@ -88,7 +88,7 @@ internal static class CommandPalette
         var projects = (await services.Store.GetProjectsAsync()).Where(p => !p.Closed && p.Kind != ProjectKind.Inbox).ToList();
         foreach (var p in projects.OrderBy(p => p.IsTeam).ThenBy(p => p.Title, StringComparer.CurrentCulture))
         {
-            entries.Add(new Entry("nav:" + p.Id, new PickerOption(p.Title, p.IsTeam ? "チーム" : "個人", p.IsTeam ? "" : "", Group: "画面"), () =>
+            entries.Add(new Entry("nav:" + p.Id, new PickerOption(p.Title, p.IsTeam ? "チーム" : "個人", p.IsTeam ? "\uE716" : "\uE77B", Group: "画面"), () =>
             {
                 window.OpenProject(p.Id);
                 return Task.CompletedTask;
@@ -97,7 +97,7 @@ internal static class CommandPalette
 
         foreach (var (tab, label) in ((string, string)[])[("general", "設定: 全般"), ("personal", "設定: 個人のプロジェクトの既定"), ("team", "設定: チームのプロジェクトの既定")])
         {
-            entries.Add(new Entry("settings:" + tab, new PickerOption(label, Glyph: "", Group: "画面"), () =>
+            entries.Add(new Entry("settings:" + tab, new PickerOption(label, Glyph: "\uE713", Group: "画面"), () =>
             {
                 window.OpenSettings(tab);
                 return Task.CompletedTask;

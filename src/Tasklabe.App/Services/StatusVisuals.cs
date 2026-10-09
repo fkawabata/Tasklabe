@@ -17,12 +17,12 @@ public static class StatusVisuals
 
     public static string Glyph(StatusCategory category) => category switch
     {
-        StatusCategory.Backlog => "",
-        StatusCategory.InProgress => "",
-        StatusCategory.Done => "",
-        StatusCategory.Pending => "",
-        StatusCategory.Canceled => "",
-        _ => "",
+        StatusCategory.Backlog => "\uECE4",
+        StatusCategory.InProgress => "\uF16A",
+        StatusCategory.Done => "\uEC61",
+        StatusCategory.Pending => "\uF2D9",
+        StatusCategory.Canceled => "\uEB90",
+        _ => "\uEA3A",
     };
 
     /// <summary>アイコンの色のリソース名。進めているものと終えたものを強調色、止めているものを控えめな色にする。</summary>

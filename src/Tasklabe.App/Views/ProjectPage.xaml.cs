@@ -71,7 +71,7 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         {
             _projectId = project.Id;
             KindText.Text = project.IsTeam ? "チーム" : "個人";
-            KindIcon.Glyph = project.IsTeam ? "" : "";
+            KindIcon.Glyph = project.IsTeam ? "\uE716" : "\uE77B";
             ApplyProjectKind(project.IsTeam);
             AccessChip.Hide();
             if (project.IsTeam)

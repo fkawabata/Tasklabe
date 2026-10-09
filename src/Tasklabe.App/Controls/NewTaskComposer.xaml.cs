@@ -212,7 +212,7 @@ public sealed partial class NewTaskComposer : UserControl
         var project = draft.Project;
         bool team = project?.IsTeam == true;
         _project.SetValue(project is null ? null : ProjectDisplay.Name(project),
-            project?.Kind switch { ProjectKind.Inbox => "", ProjectKind.Team => "", _ => "" });
+            project?.Kind switch { ProjectKind.Inbox => "\uE7C3", ProjectKind.Team => "\uE716", _ => "\uE77B" });
 
         var status = project?.StatusOptions.FirstOrDefault(o => o.Id == draft.StatusOptionId);
         _status.SetValue(status?.Name, StatusVisuals.Glyph(status?.Category ?? StatusCategory.Todo), StatusVisuals.BrushKey(status?.Category ?? StatusCategory.Todo), "ステータス");
@@ -222,9 +222,9 @@ public sealed partial class NewTaskComposer : UserControl
             0 => null,
             1 => "@" + draft.Assignees[0],
             var n => $"@{draft.Assignees[0]} +{n - 1}",
-        }, "", placeholder: "担当");
-        _due.SetValue(draft.Target is { } due ? DateText.Short(due) : null, "", placeholder: "期日");
-        _estimate.SetValue(EffortText.Of(draft.EstimateHours), "", placeholder: "工数");
+        }, "\uE77B", placeholder: "担当");
+        _due.SetValue(draft.Target is { } due ? DateText.Short(due) : null, "\uE787", placeholder: "期日");
+        _estimate.SetValue(EffortText.Of(draft.EstimateHours), "\uE916", placeholder: "工数");
         _kind.Visibility = team ? Visibility.Visible : Visibility.Collapsed;
         _kind.SetValue(KindVisuals.Name(draft.Kind));
         KindVisuals.Apply(_kind.Icon, draft.Kind);

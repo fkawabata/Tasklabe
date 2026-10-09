@@ -30,7 +30,7 @@ public static class CreateBranchDialog
         var error = new TextBlock { Style = caption, Foreground = ThemeResources.Brush("SystemFillColorCriticalBrush"), TextWrapping = TextWrapping.Wrap, Visibility = Visibility.Collapsed };
         Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(name, "ブランチ名");
 
-        void Refresh() => repositoryButton.SetValue(repository, "", placeholder: "リポジトリを選ぶ…");
+        void Refresh() => repositoryButton.SetValue(repository, "\uE8B7", placeholder: "リポジトリを選ぶ…");
         repositoryButton.Pick = async b =>
         {
             if (await ValuePickers.RepositoryAsync(b, null, task.Repositories, repository) is { } picked)

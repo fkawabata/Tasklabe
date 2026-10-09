@@ -30,7 +30,7 @@ public sealed partial class FilterBar : UserControl
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
         var left = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
-        left.Children.Add(new FontIcon { Glyph = "", FontSize = 12, VerticalAlignment = VerticalAlignment.Center, Foreground = ThemeResources.Brush("TextFillColorSecondaryBrush") });
+        left.Children.Add(new FontIcon { Glyph = "\uE71C", FontSize = 12, VerticalAlignment = VerticalAlignment.Center, Foreground = ThemeResources.Brush("TextFillColorSecondaryBrush") });
         left.Children.Add(_chips);
         left.Children.Add(_clearAll);
         grid.Children.Add(new ScrollViewer
@@ -67,7 +67,7 @@ public sealed partial class FilterBar : UserControl
 
     private static Button CreateChip(FilterChip chip)
     {
-        var close = new FontIcon { Glyph = "", FontSize = 10, VerticalAlignment = VerticalAlignment.Center };
+        var close = new FontIcon { Glyph = "\uE711", FontSize = 10, VerticalAlignment = VerticalAlignment.Center };
         var content = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 6 };
         content.Children.Add(new TextBlock { Text = chip.Label, Style = AppResources.Style("Text.Caption"), VerticalAlignment = VerticalAlignment.Center });
         content.Children.Add(close);

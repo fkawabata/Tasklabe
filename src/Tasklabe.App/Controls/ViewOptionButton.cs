@@ -14,29 +14,29 @@ internal sealed record ViewOption<T>(T Value, string Label, string? Detail, stri
 /// </summary>
 internal static class ViewOptions
 {
-    public const string OrderingGlyph = "";
-    public const string GroupingGlyph = "";
+    public const string OrderingGlyph = "\uE8CB";
+    public const string GroupingGlyph = "\uF168";
 
     /// <summary>並び順の候補。計画の並びを持たない画面（マイタスク）では、既定を期日の順とする。</summary>
     public static IReadOnlyList<ViewOption<TaskOrdering>> Orderings(bool hasPlanOrder)
     {
         List<ViewOption<TaskOrdering>> list = hasPlanOrder
-            ? [new(TaskOrdering.Default, "計画の順", null, ""), new(TaskOrdering.Due, "期日", "早い順", "")]
-            : [new(TaskOrdering.Default, "期日", "早い順", "")];
-        list.Add(new(TaskOrdering.Updated, "更新", "新しい順", ""));
-        list.Add(new(TaskOrdering.Created, "作成", "新しい順", ""));
-        list.Add(new(TaskOrdering.Estimate, "工数", "大きい順", ""));
-        list.Add(new(TaskOrdering.Title, "タイトル", "名前の順", ""));
+            ? [new(TaskOrdering.Default, "計画の順", null, "\uE8FD"), new(TaskOrdering.Due, "期日", "早い順", "\uE787")]
+            : [new(TaskOrdering.Default, "期日", "早い順", "\uE787")];
+        list.Add(new(TaskOrdering.Updated, "更新", "新しい順", "\uE81C"));
+        list.Add(new(TaskOrdering.Created, "作成", "新しい順", "\uE710"));
+        list.Add(new(TaskOrdering.Estimate, "工数", "大きい順", "\uE916"));
+        list.Add(new(TaskOrdering.Title, "タイトル", "名前の順", "\uE8D2"));
         return list;
     }
 
     public static string GlyphOf(KanbanGrouping grouping) => grouping switch
     {
-        KanbanGrouping.Project => "",
-        KanbanGrouping.Assignee => "",
-        KanbanGrouping.Parent => "",
-        KanbanGrouping.Kind => "",
-        _ => "",
+        KanbanGrouping.Project => "\uE8F1",
+        KanbanGrouping.Assignee => "\uE77B",
+        KanbanGrouping.Parent => "\uE8B7",
+        KanbanGrouping.Kind => "\uE7C1",
+        _ => "\uEA37",
     };
 
     /// <summary>候補をアイコン付きのピッカーで選ぶ（UX 規約 UX-01）。選ばなければ null。</summary>

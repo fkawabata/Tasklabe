@@ -318,7 +318,7 @@ internal static class ValuePickers
         var options = projects.Select(p => new PickerOption(
             ProjectDisplay.Name(p),
             p.Kind == ProjectKind.Inbox ? "既定" : null,
-            p.Kind switch { ProjectKind.Inbox => "", ProjectKind.Team => "", _ => "" },
+            p.Kind switch { ProjectKind.Inbox => "\uE7C3", ProjectKind.Team => "\uE716", _ => "\uE77B" },
             IsSelected: !excludeCurrent && current.Contains(p.Id),
             Group: p.IsTeam ? "チーム" : "個人")).ToList();
         return await new QuickPicker(title, options).ShowAsync(anchor, position) is { Index: >= 0 } r

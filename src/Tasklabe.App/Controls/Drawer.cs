@@ -99,7 +99,7 @@ public sealed partial class Drawer : UserControl
         titles.Children.Add(_description);
 
         _closeButton.Style = AppResources.Style("Drawer.Button");
-        _closeButton.Content = new FontIcon { FontSize = 14, Glyph = "" };
+        _closeButton.Content = new FontIcon { FontSize = 14, Glyph = "\uE711" };
         AutomationProperties.SetName(_closeButton, "閉じる");
         ToolTipService.SetToolTip(_closeButton, "閉じる (Esc)");
         _closeButton.Click += (_, _) => DismissRequested?.Invoke(this, new DrawerDismissEventArgs(0));

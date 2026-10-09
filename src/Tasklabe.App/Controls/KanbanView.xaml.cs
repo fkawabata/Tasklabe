@@ -480,7 +480,7 @@ public sealed partial class KanbanView : UserControl
 
             bool collapsed = _collapsedLanes.Contains(laneId);
             cells.Visibility = collapsed ? Visibility.Collapsed : Visibility.Visible;
-            var chevron = new FontIcon { FontSize = 12, Glyph = collapsed ? "" : "" };
+            var chevron = new FontIcon { FontSize = 12, Glyph = collapsed ? "\uE76C" : "\uE70D" };
             var title = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
             title.Children.Add(chevron);
             title.Children.Add(new TextBlock { Text = lane.Key.Title, Style = AppResources.Style("Text.BodyStrong") });
@@ -497,7 +497,7 @@ public sealed partial class KanbanView : UserControl
             {
                 bool nowCollapsed = cells.Visibility == Visibility.Visible;
                 cells.Visibility = nowCollapsed ? Visibility.Collapsed : Visibility.Visible;
-                chevron.Glyph = nowCollapsed ? "" : "";
+                chevron.Glyph = nowCollapsed ? "\uE76C" : "\uE70D";
                 if (nowCollapsed)
                 {
                     _collapsedLanes.Add(laneId);
@@ -624,7 +624,7 @@ public sealed partial class KanbanView : UserControl
         {
             var add = new Button
             {
-                Content = new FontIcon { Glyph = "", FontSize = 12 },
+                Content = new FontIcon { Glyph = "\uE710", FontSize = 12 },
                 Style = AppResources.Style("SubtleButtonStyle"),
                 Width = 28,
                 Height = 28,
@@ -639,7 +639,7 @@ public sealed partial class KanbanView : UserControl
         }
         header.Children.Add(new FontIcon
         {
-            Glyph = column.Category is { } c ? StatusVisuals.Glyph(c) : "",
+            Glyph = column.Category is { } c ? StatusVisuals.Glyph(c) : "\uE9CE",
             FontSize = 14,
             Foreground = ThemeResources.Brush(StatusVisuals.BrushKey(column.Category)),
             VerticalAlignment = VerticalAlignment.Center,

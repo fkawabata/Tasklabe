@@ -25,8 +25,8 @@ public static class KindVisuals
 
     public static string Glyph(TaskKind kind) => kind switch
     {
-        TaskKind.Issue => "",       // 旗
-        _ => "",                    // チェックリスト
+        TaskKind.Issue => "\uE7C1",       // 旗
+        _ => "\uE9D5",                    // チェックリスト
     };
 
     /// <summary>既存のアイコンを、その区分の見た目にする。</summary>
