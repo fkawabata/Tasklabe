@@ -18,7 +18,7 @@ public sealed partial class GanttView
     {
         HoverTitle.Text = row.Task.Title;
         HoverDetail.Text = Details(row);
-        HoverDelay.Text = row.DelayDays > 0 ? $"遅れ {row.DelayDays} 日" : "";
+        HoverDelay.Text = row.DelayDays > 0 ? Texts.Count("Gantt_Delay", row.DelayDays) : "";
         HoverDelay.Visibility = row.DelayDays > 0 ? Visibility.Visible : Visibility.Collapsed;
         HoverCard.Visibility = Visibility.Visible;
         HoverCard.Measure(new Size(320, 400));
@@ -34,9 +34,17 @@ public sealed partial class GanttView
     private void ShowMilestoneHover(MilestoneSummary s, Point position)
     {
         HoverTitle.Text = "◆ " + s.Milestone.Title;
-        HoverDetail.Text = $"期日 {DateText.Long(s.Milestone.Due!.Value)}\n"
-            + (s.Total == 0 ? "このマイルストーンのタスクはありません" : $"進捗 {s.Progress.ProgressPercent:0}%　完了 {s.Done} / {s.Total} 件")
-            + (s.Late > 0 && s.LateEnd is { } lateEnd ? $"\n⚠ 期日超え {s.Late} 件（最も遅い終了 {DateText.Short(lateEnd)}・▲{s.LateDays}日）" : "");
+        var lines = new List<string>
+        {
+            Texts.Format("Card_Due", DateText.Long(s.Milestone.Due!.Value)),
+            s.Total == 0 ? Texts.Get("Gantt_MilestoneEmpty") : Texts.Format("Gantt_MilestoneProgress", s.Progress.ProgressPercent, s.Done, s.Total),
+        };
+        if (s.Late > 0 && s.LateEnd is { } lateEnd)
+        {
+            lines.Add(Texts.Format("Gantt_MilestoneLate", s.Late, DateText.Short(lateEnd), s.LateDays));
+        }
+
+        HoverDetail.Text = string.Join('\n', lines);
         HoverDelay.Visibility = Visibility.Collapsed;
         HoverCard.Visibility = Visibility.Visible;
         HoverCard.Measure(new Size(320, 400));
@@ -49,35 +57,35 @@ public sealed partial class GanttView
         var lines = new List<string>();
         if (row.Task.NonBlocking)
         {
-            lines.Add("後続を待たせない");
+            lines.Add(Texts.Get("Menu_NonBlocking"));
         }
 
         if (IsPreviewing && _originalPlans.TryGetValue(row.Task.ItemId, out var original) && PlanOf(row) is { } moved && moved != original)
         {
-            lines.Add($"調整前　{FormatDate(original.Start)} 〜 {FormatDate(original.End)}");
+            lines.Add(Texts.Format("Gantt_Before", FormatDate(original.Start), FormatDate(original.End)));
         }
 
         lines.Add(row.HasPlan
-            ? $"予定　{FormatDate(row.PlanStart!.Value)} 〜 {FormatDate(row.PlanEnd!.Value)}（{WorkCalendar.CountWorkingDays(row.PlanStart.Value, row.PlanEnd.Value)} 稼働日）"
-            : "予定　—");
+            ? Texts.Count("Gantt_Plan", WorkCalendar.CountWorkingDays(row.PlanStart!.Value, row.PlanEnd!.Value), FormatDate(row.PlanStart!.Value), FormatDate(row.PlanEnd!.Value))
+            : Texts.Get("Gantt_NoPlan"));
         if (row.FrameStart is { } frameStart && row.Node is { } early)
         {
-            lines.Add($"枠超え　子の予定が枠（{FormatDate(frameStart)}〜）より {PlanFrame.EarlyDays(early)} 稼働日前に始まります");
+            lines.Add(Texts.Count("Gantt_FrameEarly", PlanFrame.EarlyDays(early), FormatDate(frameStart)));
         }
 
         if (row.FrameEnd is { } frame && row.Node is { } node)
         {
-            lines.Add($"枠超え　子の予定が枠（〜{FormatDate(frame)}）を {PlanFrame.OverrunDays(node)} 稼働日超えています");
+            lines.Add(Texts.Count("Gantt_FrameOverrun", PlanFrame.OverrunDays(node), FormatDate(frame)));
         }
         if (row.ActualStart is { } a)
         {
             lines.Add(row.IsForecast
-                ? $"実績　{FormatDate(a)} 〜（見込み終了 {FormatDate(row.ActualEnd!.Value)}）"
-                : $"実績　{FormatDate(a)} 〜 {FormatDate(row.ActualEnd!.Value)}");
+                ? Texts.Format("Gantt_ActualForecast", FormatDate(a), FormatDate(row.ActualEnd!.Value))
+                : Texts.Format("Gantt_Actual", FormatDate(a), FormatDate(row.ActualEnd!.Value)));
         }
 
         var summary = row.Node!.Summary;
-        lines.Add($"進捗　{summary.ProgressPercent:0}%　工数　{(summary.EstimateHours > 0 ? EffortText.Of(summary.EstimateHours) : "未見積り")}");
+        lines.Add(Texts.Format("Gantt_ProgressEffort", summary.ProgressPercent, summary.EstimateHours > 0 ? EffortText.Of(summary.EstimateHours) : Texts.Get("Status_Unestimated")));
         lines.AddRange(PhaseLines(row));
         return string.Join('\n', lines);
     }
@@ -94,10 +102,12 @@ public sealed partial class GanttView
         }
 
         int days = (int)Math.Round(Math.Abs(reading.PaceDays));
-        yield return "仕事の量　" + (days < 1 ? "予定どおり" : reading.PaceDays > 0 ? $"予定より約 {days} 日分先行" : $"予定より約 {days} 日分遅れ") + "（イナズマ線）";
+        yield return days < 1 ? Texts.Get("Gantt_PaceOnTrack")
+            : reading.PaceDays > 0 ? Texts.Count("Gantt_PaceAhead", days)
+            : Texts.Count("Gantt_PaceBehind", days);
         yield return reading is { Bottleneck: { } task, BottleneckEnd: { } end }
-            ? $"終わりの見込み　「{task.Title}」が {FormatDate(end)} まで延び、予定より遅れる見込み（バーの色）"
-            : "終わりの見込み　予定内（バーの色）";
+            ? Texts.Format("Gantt_ForecastLate", task.Title, FormatDate(end))
+            : Texts.Get("Gantt_ForecastOnTrack");
     }
 
     /// <summary>読み上げ用の説明（タスク名、予定期間、進捗率、遅れの日数）。</summary>
@@ -105,20 +115,21 @@ public sealed partial class GanttView
     {
         if (row.Milestone is { } m)
         {
-            return $"マイルストーン {m.Milestone.Title}、期日 {FormatDate(m.Milestone.Due!.Value)}、進捗 {row.ProgressPercent:0}%";
+            return string.Join(Texts.Get("Common_ListSeparator"), Texts.Format("Gantt_MilestoneName", m.Milestone.Title),
+                Texts.Format("Card_Due", FormatDate(m.Milestone.Due!.Value)), Texts.Format("Card_Progress", row.ProgressPercent));
         }
 
         var parts = new List<string> { row.Task.Title };
-        parts.Add(row.HasPlan ? $"予定 {FormatDate(row.PlanStart!.Value)} から {FormatDate(row.PlanEnd!.Value)}" : "予定 なし");
-        parts.Add($"進捗 {row.ProgressPercent:0}%");
+        parts.Add(row.HasPlan ? Texts.Format("Gantt_PlanName", FormatDate(row.PlanStart!.Value), FormatDate(row.PlanEnd!.Value)) : Texts.Get("Gantt_NoPlanName"));
+        parts.Add(Texts.Format("Card_Progress", row.ProgressPercent));
 
         if (row.DelayDays > 0)
         {
-            parts.Add($"遅れ {row.DelayDays} 日");
+            parts.Add(Texts.Count("Gantt_Delay", row.DelayDays));
         }
 
         parts.AddRange(PhaseLines(row));
-        return string.Join("、", parts);
+        return string.Join(Texts.Get("Common_ListSeparator"), parts);
     }
 
     private static string FormatDate(DateOnly date) => DateText.Short(date);

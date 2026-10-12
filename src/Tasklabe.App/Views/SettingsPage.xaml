@@ -9,22 +9,22 @@
         <StackPanel x:Name="RootPanel" Padding="{StaticResource Padding.Page}" HorizontalAlignment="Center" Spacing="{StaticResource Space.S}">
             <TextBlock
                 AutomationProperties.HeadingLevel="Level1"
-                Style="{StaticResource Text.Title}"
-                Text="設定" />
+                x:Uid="Settings_Title"
+                Style="{StaticResource Text.Title}" />
 
             <!-- 全般（アプリ全体）と、個人・チームのプロジェクトの既定（UI デザイン設計書 3.6 節） -->
             <SelectorBar x:Name="Tabs" Margin="0,0,0,8" controls:TabIndicator.Slides="True" SelectionChanged="OnTabChanged">
-                <SelectorBarItem x:Name="GeneralTab" IsSelected="True" Tag="general" Text="全般">
+                <SelectorBarItem x:Name="GeneralTab" x:Uid="Settings_GeneralTab" IsSelected="True" Tag="general">
                     <SelectorBarItem.Icon>
                         <FontIcon Glyph="&#xE713;" />
                     </SelectorBarItem.Icon>
                 </SelectorBarItem>
-                <SelectorBarItem x:Name="PersonalTab" Tag="personal" Text="個人プロジェクトの既定">
+                <SelectorBarItem x:Name="PersonalTab" x:Uid="Settings_PersonalTab" Tag="personal">
                     <SelectorBarItem.Icon>
                         <FontIcon Glyph="&#xE77B;" />
                     </SelectorBarItem.Icon>
                 </SelectorBarItem>
-                <SelectorBarItem x:Name="TeamTab" Tag="team" Text="チームプロジェクトの既定">
+                <SelectorBarItem x:Name="TeamTab" x:Uid="Settings_TeamTab" Tag="team">
                     <SelectorBarItem.Icon>
                         <FontIcon Glyph="&#xE716;" />
                     </SelectorBarItem.Icon>
@@ -42,20 +42,48 @@
                 <TextBlock
                     Margin="0,24,0,0"
                     AutomationProperties.HeadingLevel="Level2"
-                    Style="{StaticResource Text.BodyStrong}"
-                    Text="プロジェクトごとの設定" />
+                    x:Uid="Settings_PerProjectHeading"
+                    Style="{StaticResource Text.BodyStrong}" />
                 <TextBlock
+                    x:Uid="Settings_PerProjectDescription"
                     Style="{StaticResource Text.Caption}"
-                    Text="プロジェクトの設定で、この既定を上書きできます。プロジェクト画面の「…」からも開けます。"
                     TextWrapping="Wrap" />
                 <StackPanel x:Name="ProjectLinks" Spacing="{StaticResource Space.XS}" />
             </StackPanel>
 
             <StackPanel x:Name="GeneralPanel" Spacing="{StaticResource Space.S}">
+            <!-- 表示の言語（要件 F-SET-08）。起動し直したときに反映する -->
+            <Border
+                Padding="16,12"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="{StaticResource Radius.Card}">
+                <Grid ColumnSpacing="{StaticResource Space.L}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <FontIcon VerticalAlignment="Center" Glyph="&#xF2B7;" />
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock x:Uid="Settings_Language" Style="{StaticResource Text.Body}" />
+                        <TextBlock x:Uid="Settings_LanguageDescription" Style="{StaticResource Text.Caption}" TextWrapping="Wrap" />
+                    </StackPanel>
+                    <ContentControl
+                        x:Name="LanguageHost"
+                        Grid.Column="2"
+                        MinWidth="200"
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Stretch" />
+                </Grid>
+            </Border>
+
             <TextBlock
+                x:Uid="Settings_AppearanceHeading"
+                Margin="0,16,0,0"
                 AutomationProperties.HeadingLevel="Level2"
-                Style="{StaticResource Text.BodyStrong}"
-                Text="外観" />
+                Style="{StaticResource Text.BodyStrong}" />
 
             <Border
                 Padding="16,12"
@@ -71,8 +99,8 @@
                     </Grid.ColumnDefinitions>
                     <FontIcon VerticalAlignment="Center" Glyph="&#xE790;" />
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Style="{StaticResource Text.Body}" Text="テーマ" />
-                        <TextBlock Style="{StaticResource Text.Caption}" Text="ハイコントラストは Windows の設定に従います" />
+                        <TextBlock x:Uid="Settings_Theme" Style="{StaticResource Text.Body}" />
+                        <TextBlock x:Uid="Settings_ThemeDescription" Style="{StaticResource Text.Caption}" TextWrapping="Wrap" />
                     </StackPanel>
                     <!-- 候補はピッカーで選ぶ（UX 規約 UX-02） -->
                     <ContentControl
@@ -99,16 +127,16 @@
                     </Grid.ColumnDefinitions>
                     <FontIcon VerticalAlignment="Center" Glyph="&#xE82F;" />
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Style="{StaticResource Text.Body}" Text="操作のヒントを表示する" />
-                        <TextBlock Style="{StaticResource Text.Caption}" Text="ダイアログや詳細パネルの下端に、使えるキーを書いておきます" />
+                        <TextBlock x:Uid="Settings_Hints" Style="{StaticResource Text.Body}" />
+                        <TextBlock x:Uid="Settings_HintsDescription" Style="{StaticResource Text.Caption}" TextWrapping="Wrap" />
                     </StackPanel>
                     <ToggleSwitch
                         x:Name="HintsSwitch"
+                        x:Uid="Settings_HintsSwitch"
                         Grid.Column="2"
                         MinWidth="0"
                         VerticalAlignment="Center"
-                        Toggled="OnHintsToggled"
-                        AutomationProperties.Name="操作のヒントを表示する" />
+                        Toggled="OnHintsToggled" />
                 </Grid>
             </Border>
 
@@ -116,8 +144,8 @@
             <TextBlock
                 Margin="0,16,0,0"
                 AutomationProperties.HeadingLevel="Level2"
-                Style="{StaticResource Text.BodyStrong}"
-                Text="カンバン" />
+                x:Uid="Settings_KanbanHeading"
+                Style="{StaticResource Text.BodyStrong}" />
             <Border
                 Padding="16,12"
                 Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
@@ -132,16 +160,16 @@
                     </Grid.ColumnDefinitions>
                     <FontIcon VerticalAlignment="Center" Glyph="&#xF0E2;" />
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Style="{StaticResource Text.Body}" Text="空の列を表示する" />
-                        <TextBlock Style="{StaticResource Text.Caption}" Text="オフにすると、カードが 1 枚もない列を隠します。すべてのカンバンに効きます" />
+                        <TextBlock x:Uid="Settings_EmptyColumns" Style="{StaticResource Text.Body}" />
+                        <TextBlock x:Uid="Settings_EmptyColumnsDescription" Style="{StaticResource Text.Caption}" TextWrapping="Wrap" />
                     </StackPanel>
                     <ToggleSwitch
                         x:Name="EmptyColumnsSwitch"
                         Grid.Column="2"
                         MinWidth="0"
                         VerticalAlignment="Center"
-                        Toggled="OnEmptyColumnsToggled"
-                        AutomationProperties.Name="空の列を表示する" />
+                        x:Uid="Settings_EmptyColumnsSwitch"
+                        Toggled="OnEmptyColumnsToggled" />
                 </Grid>
             </Border>
 
@@ -149,8 +177,8 @@
             <TextBlock
                 Margin="0,16,0,0"
                 AutomationProperties.HeadingLevel="Level2"
-                Style="{StaticResource Text.BodyStrong}"
-                Text="番号を表示する" />
+                x:Uid="Settings_NumberHeading"
+                Style="{StaticResource Text.BodyStrong}" />
             <Border
                 Padding="16,4"
                 Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
@@ -165,14 +193,14 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <FontIcon VerticalAlignment="Center" Glyph="&#xE8FD;" />
-                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource Text.Body}" Text="計画の表" />
+                        <TextBlock x:Uid="Settings_NumberInPlan" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource Text.Body}" />
                         <ToggleSwitch
                             x:Name="NumberInPlanSwitch"
                             Grid.Column="2"
                             MinWidth="0"
                             VerticalAlignment="Center"
-                            Toggled="OnNumberToggled"
-                            AutomationProperties.Name="計画の表に番号を表示する" />
+                            x:Uid="Settings_NumberInPlanSwitch"
+                            Toggled="OnNumberToggled" />
                     </Grid>
                     <Grid Padding="0,8" ColumnSpacing="{StaticResource Space.L}"
                         BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
@@ -183,14 +211,14 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <FontIcon VerticalAlignment="Center" Glyph="&#xE9D2;" />
-                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource Text.Body}" Text="ガントチャート" />
+                        <TextBlock x:Uid="Settings_NumberInGantt" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource Text.Body}" />
                         <ToggleSwitch
                             x:Name="NumberInGanttSwitch"
                             Grid.Column="2"
                             MinWidth="0"
                             VerticalAlignment="Center"
-                            Toggled="OnNumberToggled"
-                            AutomationProperties.Name="ガントチャートに番号を表示する" />
+                            x:Uid="Settings_NumberInGanttSwitch"
+                            Toggled="OnNumberToggled" />
                     </Grid>
                     <Grid Padding="0,8" ColumnSpacing="{StaticResource Space.L}"
                         BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
@@ -201,14 +229,14 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <FontIcon VerticalAlignment="Center" Glyph="&#xE7C1;" />
-                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource Text.Body}" Text="課題の一覧" />
+                        <TextBlock x:Uid="Settings_NumberInIssues" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource Text.Body}" />
                         <ToggleSwitch
                             x:Name="NumberInIssuesSwitch"
                             Grid.Column="2"
                             MinWidth="0"
                             VerticalAlignment="Center"
-                            Toggled="OnNumberToggled"
-                            AutomationProperties.Name="課題の一覧に番号を表示する" />
+                            x:Uid="Settings_NumberInIssuesSwitch"
+                            Toggled="OnNumberToggled" />
                     </Grid>
                 </StackPanel>
             </Border>
@@ -217,24 +245,24 @@
             <Grid Margin="0,16,0,0">
                 <TextBlock
                     AutomationProperties.HeadingLevel="Level2"
-                    Style="{StaticResource Text.BodyStrong}"
-                    Text="キーボード" />
+                    x:Uid="Settings_KeyboardHeading"
+                    Style="{StaticResource Text.BodyStrong}" />
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Spacing="{StaticResource Space.S}">
-                    <Button Click="OnShowShortcuts" Content="一覧を見る" />
-                    <Button Click="OnResetAllShortcuts" Content="すべて既定に戻す…" />
+                    <Button x:Uid="Settings_ShowShortcuts" Click="OnShowShortcuts" />
+                    <Button x:Uid="Settings_ResetAllShortcuts" Click="OnResetAllShortcuts" />
                 </StackPanel>
             </Grid>
             <TextBlock
+                x:Uid="Settings_KeyboardDescription"
                 Style="{StaticResource Text.Caption}"
-                Text="よく使う操作のキーを変えられます。修飾キーのない 1 文字は、文字を入力していないときに働きます。"
                 TextWrapping="Wrap" />
             <StackPanel x:Name="ShortcutSections" Spacing="{StaticResource Space.S}" />
 
             <TextBlock
                 Margin="0,16,0,0"
                 AutomationProperties.HeadingLevel="Level2"
-                Style="{StaticResource Text.BodyStrong}"
-                Text="アカウント" />
+                x:Uid="Settings_AccountHeading"
+                Style="{StaticResource Text.BodyStrong}" />
 
             <Border
                 Padding="16,12"
@@ -256,8 +284,8 @@
                     <Button
                         Grid.Column="2"
                         VerticalAlignment="Center"
-                        Click="OnSignOutClick"
-                        Content="サインアウト…" />
+                        x:Uid="Settings_SignOut"
+                        Click="OnSignOutClick" />
                 </Grid>
             </Border>
 
@@ -275,7 +303,7 @@
                     </Grid.ColumnDefinitions>
                     <FontIcon VerticalAlignment="Center" Glyph="&#xE716;" />
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Style="{StaticResource Text.Body}" Text="Organization へのアクセス" />
+                        <TextBlock x:Uid="Settings_Organizations" Style="{StaticResource Text.Body}" />
                         <TextBlock
                             x:Name="OrganizationsText"
                             Style="{StaticResource Text.Caption}"
@@ -284,8 +312,8 @@
                     <HyperlinkButton
                         x:Name="OrganizationAccessLink"
                         Grid.Column="2"
-                        VerticalAlignment="Center"
-                        Content="GitHub で確認する" />
+                        x:Uid="Settings_OrganizationAccess"
+                        VerticalAlignment="Center" />
                 </Grid>
             </Border>
             </StackPanel>

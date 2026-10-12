@@ -142,7 +142,6 @@ public static class TaskShortcuts
         var task = tasks[0];
         var project = projects[task.ProjectId];
         bool many = tasks.Count > 1;
-        string Subject(string verb) => many ? $"{tasks.Count} 件の{verb}" : $"「{task.Title}」の{verb}";
 
         switch (actionId)
         {
@@ -174,7 +173,7 @@ public static class TaskShortcuts
                 if (own.Count > 0)
                 {
                     await TaskCommands.ApplyAsync([.. own.Select(t => (t, TaskRules.ToggleDone(t, projects[t.ProjectId].StatusOptions, Today)))],
-                        own.Count > 1 ? $"{own.Count} 件の完了を切り替えました" : null);
+                        own.Count > 1 ? Texts.Format("Toast_ToggledDone", own.Count) : null);
                 }
 
                 ReportParents(tasks.Count - own.Count, own.Count == 0);
@@ -207,15 +206,15 @@ public static class TaskShortcuts
                 var open = tasks.Where(t => !t.IsDone).ToList();
                 if (open.Count == 0)
                 {
-                    App.Current.Shell?.ShowInfo("進捗率を変えられません", "完了・中止したタスクの進捗率は 100 % に固定しています。");
+                    App.Current.Shell?.ShowInfo(Texts.Get("Progress_LockedTitle"), Texts.Get("Progress_LockedMessage"));
                     return true;
                 }
 
                 if (await ValuePickers.ProgressAsync(target.Anchor, target.Position, [.. open.Select(t => t.EffectiveProgress)]) is { } progress)
                 {
                     await TaskCommands.ApplyAsync([.. open.Select(t => (t, TaskRules.Set(t, TaskField.Progress, TaskValues.Number(progress.Value))))],
-                        many ? $"{Subject("進捗率")}を {progress.Value:0}% にしました" : null);
-                    ReportSkipped(tasks.Count - open.Count, "完了・中止したタスク");
+                        many ? Texts.Format("Toast_ProgressChanged", tasks.Count, progress.Value) : null);
+                    ReportSkipped(tasks.Count - open.Count, Texts.Get("Skipped_Done"));
                 }
 
                 return true;
@@ -235,8 +234,8 @@ public static class TaskShortcuts
                 if (choice is not null)
                 {
                     await TaskCommands.ApplyAsync([.. team.Select(t => (t, TaskRules.Set(t, TaskField.Assignees, TaskValues.Logins(choice.ApplyTo(t.Assignees)))))],
-                        many ? $"{Subject("担当者")}を変えました" : null);
-                    ReportSkipped(tasks.Count - team.Count, "個人のプロジェクトのタスク");
+                        many ? Texts.Format("Toast_AssigneeChanged", tasks.Count) : null);
+                    ReportSkipped(tasks.Count - team.Count, Texts.Get("Skipped_Personal"));
                 }
 
                 return true;
@@ -255,15 +254,15 @@ public static class TaskShortcuts
                 await TaskCommands.ApplyAsync([.. team.Select(t => (t, TaskRules.Set(t, TaskField.Assignees, TaskValues.Logins(remove
                     ? t.Assignees.Where(a => !string.Equals(a, me, StringComparison.OrdinalIgnoreCase))
                     : t.Assignees.Append(me).Distinct(StringComparer.OrdinalIgnoreCase)))))],
-                    many ? (remove ? $"{team.Count} 件の担当から自分を外しました" : $"{team.Count} 件を自分の担当にしました") : null);
+                    many ? (remove ? Texts.Format("Toast_UnassignedMe", team.Count) : Texts.Format("Toast_AssignedMe", team.Count)) : null);
                 return true;
             }
 
             case "task.due":
-                if (await ValuePickers.DateAsync(target.Anchor, target.Position, "期日（予定終了日）", [.. tasks.Select(t => t.Target)]) is { } due)
+                if (await ValuePickers.DateAsync(target.Anchor, target.Position, Texts.Get("Picker_Due"), [.. tasks.Select(t => t.Target)]) is { } due)
                 {
                     await TaskCommands.ApplyAsync([.. tasks.Select(t => (t, TaskRules.Set(t, TaskField.Target, TaskValues.Date(due.Value))))],
-                        many ? $"{Subject("期日")}を変えました" : null);
+                        many ? Texts.Format("Toast_DueChanged", tasks.Count) : null);
                 }
 
                 return true;
@@ -273,7 +272,7 @@ public static class TaskShortcuts
                 {
                     await TaskCommands.ApplyAsync([.. tasks.Select(t => (t, TaskRules.Set(t, TaskField.Estimate,
                         estimate.Value is { } h ? TaskValues.Number(h) : null)))],
-                        many ? $"{Subject("想定工数")}を変えました" : null);
+                        many ? Texts.Format("Toast_EstimateChanged", tasks.Count) : null);
                 }
 
                 return true;
@@ -309,7 +308,7 @@ public static class TaskShortcuts
                     await TaskCommands.DemoteAsync(same);
                 }
 
-                ReportSkipped(tasks.Count - same.Count, "区分やプロジェクトの違うタスク");
+                ReportSkipped(tasks.Count - same.Count, Texts.Get("Skipped_OtherKind"));
                 return true;
             }
 
@@ -322,7 +321,7 @@ public static class TaskShortcuts
                 return true;
 
             case "task.project":
-                if (await ValuePickers.ProjectAsync(target.Anchor, target.Position, "別のプロジェクトへ移す",
+                if (await ValuePickers.ProjectAsync(target.Anchor, target.Position, KeyHints.Name("task.project"),
                     [.. tasks.Select(t => t.ProjectId).Distinct()], excludeCurrent: !many) is { } destination)
                 {
                     await TaskCommands.MoveAsync(tasks, destination.Value);
@@ -335,7 +334,7 @@ public static class TaskShortcuts
                 if (await ValuePickers.RepositoriesAsync(target.Anchor, target.Position, [.. tasks.Select(t => t.Repositories)]) is { } repositories)
                 {
                     await TaskCommands.ApplyAsync([.. tasks.Select(t => (t, TaskRules.Set(t, TaskField.Repositories, TaskValues.Repositories(repositories.ApplyTo(t.Repositories)))))],
-                        many ? $"{Subject("作業するリポジトリ")}を変えました" : null);
+                        many ? Texts.Format("Toast_RepositoryChanged", tasks.Count) : null);
                 }
 
                 return true;
@@ -353,22 +352,22 @@ public static class TaskShortcuts
                 var keys = tasks.Select(TaskKeys.Of).Where(k => k.Length > 0).ToList();
                 if (keys.Count == 0)
                 {
-                    App.Current.Shell?.ShowToast("GitHub に送るまで番号はありません");
+                    App.Current.Shell?.ShowToast(Texts.Get("Toast_NoKeyYet"));
                     return true;
                 }
 
                 var keyPackage = new DataPackage();
                 keyPackage.SetText(string.Join(Environment.NewLine, keys));
                 Clipboard.SetContent(keyPackage);
-                App.Current.Shell?.ShowToast(keys.Count == 1 ? $"{keys[0]} をコピーしました" : $"{keys.Count} 件の番号をコピーしました");
-                ReportSkipped(tasks.Count - keys.Count, "GitHub にまだ送っていないタスク");
+                App.Current.Shell?.ShowToast(keys.Count == 1 ? Texts.Format("Toast_CopiedKey", keys[0]) : Texts.Format("Toast_CopiedKeys", keys.Count));
+                ReportSkipped(tasks.Count - keys.Count, Texts.Get("Skipped_NotSent"));
                 return true;
 
             case "task.copyUrl" when task.Url is { } url:
                 var package = new DataPackage();
                 package.SetText(url);
                 Clipboard.SetContent(package);
-                App.Current.Shell?.ShowToast("Issue の URL をコピーしました");
+                App.Current.Shell?.ShowToast(Texts.Get("Toast_CopiedUrl"));
                 return true;
 
             case "task.delete":
@@ -402,17 +401,18 @@ public static class TaskShortcuts
     {
         if (count > 0)
         {
-            App.Current.Shell?.ShowInfo(all ? "ステータスを変えられません" : $"{count} 件は変更できませんでした",
-                "子を持つタスクのステータスは、子のステータスから決まります。");
+            App.Current.Shell?.ShowInfo(all ? Texts.Get("Status_LockedTitle") : Texts.Count("Skipped_Title", count),
+                Texts.Get("Status_LockedMessage"));
         }
     }
 
     /// <summary>複数への操作で変えなかったものがあれば、件数と理由を知らせる（UX 規約 UX-07）。</summary>
-    private static void ReportSkipped(int count, string what)
+    /// <param name="reason">対象にならない理由の文。</param>
+    private static void ReportSkipped(int count, string reason)
     {
         if (count > 0)
         {
-            App.Current.Shell?.ShowInfo($"{count} 件は変更できませんでした", $"{what}は、この操作の対象になりません。");
+            App.Current.Shell?.ShowInfo(Texts.Count("Skipped_Title", count), reason);
         }
     }
 }

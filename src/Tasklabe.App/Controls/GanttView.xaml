@@ -6,8 +6,7 @@
     xmlns:controls="using:Tasklabe.App.Controls"
     xmlns:win2d="using:Microsoft.Graphics.Canvas.UI.Xaml"
     IsTabStop="True"
-    UseSystemFocusVisuals="False"
-    AutomationProperties.Name="ガントチャート">
+    UseSystemFocusVisuals="False">
 
     <UserControl.Resources>
         <Style x:Key="HeaderText" BasedOn="{StaticResource Text.Caption}" TargetType="TextBlock">
@@ -25,25 +24,20 @@
     <!-- 依存関係による日程の調整のプレビュー（UI デザイン設計書 3.3.5 節） -->
     <InfoBar
         x:Name="PreviewBar"
-        Title="日程の調整を確認"
+        x:Uid="Gantt_PreviewBar"
         IsClosable="False"
         IsOpen="False"
-        Severity="Informational"
-        AutomationProperties.Name="日程の調整のプレビュー">
+        Severity="Informational">
         <InfoBar.Content>
             <StackPanel Margin="0,0,0,12" Orientation="Horizontal" Spacing="{StaticResource Space.S}">
                 <Button
                     x:Name="ConfirmPreviewButton"
+                    x:Uid="Gantt_Confirm"
                     Click="OnConfirmPreview"
-                    Content="確定"
-                    Style="{StaticResource AccentButtonStyle}"
-                    ToolTipService.ToolTip="プレビューの予定を保存します"
-                    AutomationProperties.Name="日程の調整を確定" />
+                    Style="{StaticResource AccentButtonStyle}" />
                 <Button
-                    Click="OnCancelPreview"
-                    Content="キャンセル"
-                    ToolTipService.ToolTip="何も保存せず元に戻します (Esc)"
-                    AutomationProperties.Name="日程の調整をキャンセル" />
+                    x:Uid="Gantt_CancelPreview"
+                    Click="OnCancelPreview" />
             </StackPanel>
         </InfoBar.Content>
     </InfoBar>
@@ -78,10 +72,10 @@
                 <ColumnDefinition x:Name="EstimateHeaderColumn" Width="56" />
                 <ColumnDefinition x:Name="ProgressHeaderColumn" Width="52" />
             </Grid.ColumnDefinitions>
-            <TextBlock Style="{StaticResource HeaderText}" Text="タスク" />
-            <TextBlock Grid.Column="1" Style="{StaticResource HeaderText}" Text="担当" />
-            <TextBlock Grid.Column="2" HorizontalAlignment="Right" Style="{StaticResource HeaderText}" Text="工数" />
-            <TextBlock Grid.Column="3" HorizontalAlignment="Right" Style="{StaticResource HeaderText}" Text="進捗" />
+            <TextBlock Style="{StaticResource HeaderText}" x:Uid="Gantt_ColumnTask" />
+            <TextBlock Grid.Column="1" Style="{StaticResource HeaderText}" x:Uid="List_ColumnAssignee" />
+            <TextBlock Grid.Column="2" HorizontalAlignment="Right" Style="{StaticResource HeaderText}" x:Uid="List_ColumnEstimate" />
+            <TextBlock Grid.Column="3" HorizontalAlignment="Right" Style="{StaticResource HeaderText}" x:Uid="List_ColumnProgress" />
         </Grid>
 
         <!-- 左: WBS の行（表示範囲の行だけを並べる） -->
@@ -106,7 +100,7 @@
             BorderThickness="1,0,0,0"
             ManipulationDelta="OnSplitterManipulationDelta"
             ManipulationMode="TranslateX"
-            AutomationProperties.Name="列の幅" />
+            x:Uid="Gantt_Splitter" />
 
         <!-- 右: タイムライン（見出しと本体） -->
         <win2d:CanvasSwapChainPanel
@@ -138,10 +132,10 @@
             Click="OnTodayJump"
             controls:Pill.IsEnabled="True"
             Visibility="Collapsed"
-            AutomationProperties.Name="今日へ戻る">
+            x:Uid="Gantt_TodayJump">
             <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.S}">
                 <FontIcon x:Name="TodayJumpLeft" FontSize="12" Glyph="&#xE72B;" />
-                <TextBlock Text="今日へ" />
+                <TextBlock x:Uid="Gantt_TodayJumpText" />
                 <FontIcon x:Name="TodayJumpRight" FontSize="12" Glyph="&#xE72A;" />
             </StackPanel>
         </Button>

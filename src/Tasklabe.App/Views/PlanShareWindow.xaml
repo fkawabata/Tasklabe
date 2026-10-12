@@ -35,8 +35,8 @@
             <StackPanel VerticalAlignment="Center">
                 <TextBlock
                     AutomationProperties.HeadingLevel="Level1"
-                    Style="{StaticResource Text.Subtitle}"
-                    Text="共有ビュー" />
+                    x:Uid="Share_Heading"
+                    Style="{StaticResource Text.Subtitle}" />
                 <TextBlock x:Name="SummaryText" Style="{StaticResource Text.Caption}" TextTrimming="CharacterEllipsis" />
             </StackPanel>
             <StackPanel
@@ -52,35 +52,32 @@
             <Button
                 x:Name="CopyImageButton"
                 Grid.Column="2"
-                Click="OnCopyImage"
-                ToolTipService.ToolTip="見えているビューを画像としてコピーします。資料やチャットにそのまま貼れます (Ctrl + Shift + C)"
-                AutomationProperties.Name="画像をコピー">
+                x:Uid="Share_CopyImage"
+                Click="OnCopyImage">
                 <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.S}">
                     <FontIcon FontSize="14" Glyph="&#xEB9F;" />
-                    <TextBlock Text="画像をコピー" />
+                    <TextBlock x:Uid="Share_CopyImageText" />
                 </StackPanel>
             </Button>
             <Button
                 x:Name="CopyButton"
                 Grid.Column="3"
-                Click="OnCopy"
-                ToolTipService.ToolTip="Mermaid の gantt 記法でコピーします。GitHub の Issue や README に貼ると図になります (Ctrl + C)"
-                AutomationProperties.Name="Mermaid をコピー">
+                x:Uid="Share_CopyMermaid"
+                Click="OnCopy">
                 <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.S}">
                     <FontIcon FontSize="14" Glyph="&#xE8C8;" />
-                    <TextBlock Text="Mermaid をコピー" />
+                    <TextBlock x:Uid="Share_CopyMermaidText" />
                 </StackPanel>
             </Button>
             <Button
                 x:Name="SaveButton"
                 Grid.Column="4"
                 Click="OnSave"
-                Style="{StaticResource AccentButtonStyle}"
-                ToolTipService.ToolTip="Markdown・Mermaid・画像（PNG）のファイルに書き出します (Ctrl + S)"
-                AutomationProperties.Name="ファイルに書き出す">
+                x:Uid="Share_Export"
+                Style="{StaticResource AccentButtonStyle}">
                 <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.S}">
                     <FontIcon FontSize="14" Glyph="&#xE74E;" />
-                    <TextBlock Text="ファイルに書き出す…" />
+                    <TextBlock x:Uid="Share_ExportText" />
                 </StackPanel>
             </Button>
         </Grid>
@@ -90,9 +87,8 @@
             <StackPanel Spacing="{StaticResource Space.L}">
                 <TextBox
                     x:Name="TitleBox"
-                    Header="タイトル"
-                    TextChanged="OnOptionChanged"
-                    AutomationProperties.Name="図のタイトル" />
+                    x:Uid="Share_TitleBox"
+                    TextChanged="OnOptionChanged" />
 
                 <StackPanel Spacing="{StaticResource Space.S}">
                     <!-- 候補から選ぶ項目と日付は、ほかの画面と同じピッカーで選ぶ（UX 規約 UX-02） -->
@@ -105,17 +101,17 @@
                         <ContentControl x:Name="FromHost" HorizontalContentAlignment="Stretch" />
                         <ContentControl x:Name="ToHost" Grid.Column="1" HorizontalContentAlignment="Stretch" />
                     </Grid>
-                    <TextBlock Style="{StaticResource Text.Caption}" Text="期間と重なるタスクを表示します。" TextWrapping="Wrap" />
+                    <TextBlock x:Uid="Share_RangeNote" Style="{StaticResource Text.Caption}" TextWrapping="Wrap" />
                 </StackPanel>
 
                 <ContentControl x:Name="SectionsHost" HorizontalContentAlignment="Stretch" />
 
                 <StackPanel>
-                    <TextBlock Margin="0,0,0,4" Text="含めるもの" />
-                    <CheckBox x:Name="MilestonesBox" Click="OnOptionChanged" Content="マイルストーン" />
-                    <CheckBox x:Name="ParentBarsBox" Click="OnOptionChanged" Content="親タスクのバー" />
-                    <CheckBox x:Name="CompletedBox" Click="OnOptionChanged" Content="完了したタスク" />
-                    <CheckBox x:Name="CanceledBox" Click="OnOptionChanged" Content="中止したタスク" />
+                    <TextBlock x:Uid="Share_Include" Margin="0,0,0,4" />
+                    <CheckBox x:Name="MilestonesBox" x:Uid="Share_Milestones" Click="OnOptionChanged" />
+                    <CheckBox x:Name="ParentBarsBox" x:Uid="Share_ParentBars" Click="OnOptionChanged" />
+                    <CheckBox x:Name="CompletedBox" x:Uid="Share_Completed" Click="OnOptionChanged" />
+                    <CheckBox x:Name="CanceledBox" x:Uid="Share_Canceled" Click="OnOptionChanged" />
                     <TextBlock
                         x:Name="FilterNote"
                         Style="{StaticResource Text.Caption}"
@@ -123,12 +119,12 @@
                 </StackPanel>
 
                 <StackPanel>
-                    <TextBlock Margin="0,0,0,4" Text="表示" />
-                    <CheckBox x:Name="StatusBox" Click="OnOptionChanged" Content="状態を色で示す（完了・進行中・遅れ）" />
-                    <CheckBox x:Name="AssigneeBox" Click="OnOptionChanged" Content="担当者を名前に添える" />
-                    <CheckBox x:Name="ProgressBox" Click="OnOptionChanged" Content="進捗率を名前に添える" />
-                    <CheckBox x:Name="HolidaysBox" Click="OnOptionChanged" Content="休日を網掛けする" />
-                    <CheckBox x:Name="TodayBox" Click="OnOptionChanged" Content="今日の線" />
+                    <TextBlock x:Uid="Share_Display" Margin="0,0,0,4" />
+                    <CheckBox x:Name="StatusBox" x:Uid="Share_StatusColors" Click="OnOptionChanged" />
+                    <CheckBox x:Name="AssigneeBox" x:Uid="Share_Assignees" Click="OnOptionChanged" />
+                    <CheckBox x:Name="ProgressBox" x:Uid="Share_Progress" Click="OnOptionChanged" />
+                    <CheckBox x:Name="HolidaysBox" x:Uid="Share_Holidays" Click="OnOptionChanged" />
+                    <CheckBox x:Name="TodayBox" x:Uid="Share_TodayLine" Click="OnOptionChanged" />
                 </StackPanel>
 
                 <ContentControl x:Name="FormatHost" HorizontalContentAlignment="Stretch" />
@@ -149,12 +145,12 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <SelectorBar x:Name="ViewSelector" Margin="8,4" controls:TabIndicator.Slides="True" SelectionChanged="OnViewChanged">
-                <SelectorBarItem x:Name="ViewTab" IsSelected="True" Text="ビュー">
+                <SelectorBarItem x:Name="ViewTab" x:Uid="Share_ViewTab" IsSelected="True">
                     <SelectorBarItem.Icon>
                         <FontIcon Glyph="&#xE9D9;" />
                     </SelectorBarItem.Icon>
                 </SelectorBarItem>
-                <SelectorBarItem x:Name="CodeTab" Text="Mermaid のコード">
+                <SelectorBarItem x:Name="CodeTab" x:Uid="Share_CodeTab">
                     <SelectorBarItem.Icon>
                         <FontIcon Glyph="&#xE943;" />
                     </SelectorBarItem.Icon>
@@ -177,8 +173,8 @@
                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 TextWrapping="NoWrap"
-                Visibility="Collapsed"
-                AutomationProperties.Name="Mermaid のコード" />
+                x:Uid="Share_CodeBox"
+                Visibility="Collapsed" />
         </Grid>
     </Grid>
 </Window>

@@ -48,8 +48,8 @@ public sealed partial class GanttOutlineView : UserControl
         _today = today;
         _canvas.Height = HeightOf(outline);
         AutomationProperties.SetName(this, outline.ItemCount == 0
-            ? "共有ビュー: 表示するタスクがありません"
-            : $"共有ビュー: {outline.Title} {outline.ItemCount} 件（内容は「コード」で読めます）");
+            ? Texts.Get("Outline_EmptyName")
+            : Texts.Count("Outline_Name", outline.ItemCount, outline.Title));
         _canvas.Invalidate();
     }
 
@@ -118,6 +118,12 @@ public sealed partial class GanttOutlineView : UserControl
     private static readonly CanvasTextFormat TitleFormat = new() { FontFamily = "Segoe UI Variable Display, BIZ UDPGothic", FontSize = 20, FontWeight = Microsoft.UI.Text.FontWeights.Bold, WordWrapping = CanvasWordWrapping.NoWrap };
     private static readonly CanvasTextFormat SectionFormat = new() { FontFamily = "Segoe UI Variable Text, BIZ UDPGothic", FontSize = 13, FontWeight = Microsoft.UI.Text.FontWeights.Bold, WordWrapping = CanvasWordWrapping.NoWrap, TrimmingGranularity = CanvasTextTrimmingGranularity.Character };
     private static readonly CanvasTextFormat LabelFormat = new() { FontFamily = "Segoe UI Variable Text, BIZ UDPGothic", FontSize = 12, WordWrapping = CanvasWordWrapping.NoWrap };
+    // 目盛りの日付の書式（表示の言語の文言から引く）
+    private static readonly string MonthDayFormat = Texts.Get("Date_MonthDay");
+    private static readonly string MonthFormat = Texts.Get("Date_MonthShort");
+    private static readonly string MonthTitleFormat = Texts.Get("Date_MonthTitle");
+    private static readonly string TodayLabel = Texts.Get("Preset_Today");
+
     private static readonly CanvasTextFormat AxisFormat = new() { FontFamily = "Segoe UI Variable Text, BIZ UDPGothic", FontSize = 12, WordWrapping = CanvasWordWrapping.NoWrap };
 
     private void Draw(CanvasDrawingSession ds, float width, Palette c)
@@ -137,7 +143,7 @@ public sealed partial class GanttOutlineView : UserControl
         y += TitleHeight;
         if (outline.Span is not { } span || outline.ItemCount == 0)
         {
-            using var empty = new CanvasTextLayout(ds, "表示するタスクがありません。期間や含めるものを見直してください。", LabelFormat, width - Pad * 2, RowHeight);
+            using var empty = new CanvasTextLayout(ds, Texts.Get("Outline_Empty"), LabelFormat, width - Pad * 2, RowHeight);
             ds.DrawTextLayout(empty, (float)(width - empty.LayoutBounds.Width) / 2, y + AxisHeight, c.TextSecondary);
             return;
         }
@@ -210,7 +216,7 @@ public sealed partial class GanttOutlineView : UserControl
         {
             float tx = X(_today) + dayWidth / 2;
             ds.DrawLine(tx, top - 6, tx, bottom, c.Today, 2);
-            using var label = new CanvasTextLayout(ds, "今日", AxisFormat, 100, 20);
+            using var label = new CanvasTextLayout(ds, TodayLabel, AxisFormat, 100, 20);
             float lw = (float)label.LayoutBounds.Width + 10;
             ds.FillRoundedRectangle(tx - lw / 2, top - 22, lw, 17, 4, 4, c.Today);
             ds.DrawTextLayout(label, tx - lw / 2 + 5, top - 22, c.OnAccent);
@@ -232,7 +238,7 @@ public sealed partial class GanttOutlineView : UserControl
             float dx = x(d);
             if (d == first || d.Day == 1)
             {
-                using var month = new CanvasTextLayout(ds, $"{d.Year}年{d.Month}月", AxisFormat, 200, 20);
+                using var month = new CanvasTextLayout(ds, d.ToString(MonthTitleFormat, DateText.Culture), AxisFormat, 200, 20);
                 if (dx >= lastLabelEnd)
                 {
                     ds.DrawTextLayout(month, dx + 2, y, c.TextSecondary);
@@ -247,7 +253,7 @@ public sealed partial class GanttOutlineView : UserControl
             }
 
             ds.DrawLine(dx, top, dx, bottom, c.Grid, 1);
-            string text = dayWidth >= 22 ? d.Day.ToString(DateText.Japanese) : dayWidth >= 5 ? $"{d.Month}/{d.Day}" : $"{d.Month}月";
+            string text = dayWidth >= 22 ? d.Day.ToString(DateText.Culture) : dayWidth >= 5 ? d.ToString(MonthDayFormat, DateText.Culture) : d.ToString(MonthFormat, DateText.Culture);
             using var layout = new CanvasTextLayout(ds, text, AxisFormat, 100, 20);
             float lx = dayWidth >= 22 ? dx + (dayWidth - (float)layout.LayoutBounds.Width) / 2 : dx + 3;
             ds.DrawTextLayout(layout, lx, tier2, c.TextTertiary);

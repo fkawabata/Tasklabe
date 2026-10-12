@@ -100,8 +100,8 @@ public sealed partial class Drawer : UserControl
 
         _closeButton.Style = AppResources.Style("Drawer.Button");
         _closeButton.Content = new FontIcon { FontSize = 14, Glyph = "\uE711" };
-        AutomationProperties.SetName(_closeButton, "閉じる");
-        ToolTipService.SetToolTip(_closeButton, "閉じる (Esc)");
+        AutomationProperties.SetName(_closeButton, Texts.Get("Common_Close"));
+        ToolTipService.SetToolTip(_closeButton, Texts.Format("Common_WithKey", Texts.Get("Common_Close"), "Esc"));
         _closeButton.Click += (_, _) => DismissRequested?.Invoke(this, new DrawerDismissEventArgs(0));
 
         // 見出しはつまんで引く持ち手を兼ねる

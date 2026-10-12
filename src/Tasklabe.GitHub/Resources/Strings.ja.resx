@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddToProjectFailed" xml:space="preserve">
+    <value>プロジェクトにタスクを追加できませんでした。</value>
+  </data>
+  <data name="AuthenticationInvalid" xml:space="preserve">
+    <value>GitHub の認証が無効になりました（401）。</value>
+  </data>
+  <data name="AuthenticationInvalidDetail" xml:space="preserve">
+    <value>GitHub の認証が無効になりました（401, request-id: {0}, {1}）。</value>
+  </data>
+  <data name="BranchCreateFailed" xml:space="preserve">
+    <value>ブランチを作れませんでした。同じ名前のブランチが既にないか確かめてください。</value>
+  </data>
+  <data name="CannotConnect" xml:space="preserve">
+    <value>GitHub に接続できません。</value>
+  </data>
+  <data name="CodeExpired" xml:space="preserve">
+    <value>コードの有効期限が切れました。もう一度お試しください。</value>
+  </data>
+  <data name="DeviceCodeFailed" xml:space="preserve">
+    <value>デバイスコードを取得できませんでした。</value>
+  </data>
+  <data name="EmptyResponse" xml:space="preserve">
+    <value>GitHub から空の応答が返されました。</value>
+  </data>
+  <data name="FieldAddFailed" xml:space="preserve">
+    <value>プロジェクトにフィールド「{0}」を追加できませんでした。</value>
+  </data>
+  <data name="FieldMissing" xml:space="preserve">
+    <value>プロジェクトにフィールド「{0}」がありません。</value>
+  </data>
+  <data name="HttpError" xml:space="preserve">
+    <value>GitHub がエラーを返しました（{0}）。</value>
+  </data>
+  <data name="IssueCreateFailed" xml:space="preserve">
+    <value>Issue を作成できませんでした。</value>
+  </data>
+  <data name="IssueTransferFailed" xml:space="preserve">
+    <value>Issue を移動できませんでした。</value>
+  </data>
+  <data name="KindOptionMissing" xml:space="preserve">
+    <value>種別「{0}」の選択肢がありません。</value>
+  </data>
+  <data name="MilestoneCreateFailed" xml:space="preserve">
+    <value>マイルストーンを作れませんでした。</value>
+  </data>
+  <data name="MilestoneIdUnreadable" xml:space="preserve">
+    <value>マイルストーンの ID を読み取れません。</value>
+  </data>
+  <data name="MilestonePermission" xml:space="preserve">
+    <value>リポジトリのマイルストーンを変える権限がありません（Write 以上が必要です）。</value>
+  </data>
+  <data name="MilestoneUpdateFailed" xml:space="preserve">
+    <value>マイルストーンを変えられませんでした。</value>
+  </data>
+  <data name="NonBlockingOptionDescription" xml:space="preserve">
+    <value>後続の開始を待たせない（Tasklabe の依存関係の計算から外す）</value>
+  </data>
+  <data name="NotSignedIn" xml:space="preserve">
+    <value>サインインしていません。</value>
+  </data>
+  <data name="ProjectCreateFailed" xml:space="preserve">
+    <value>プロジェクトを作成できませんでした。</value>
+  </data>
+  <data name="ProjectNotFound" xml:space="preserve">
+    <value>プロジェクトが見つかりません。</value>
+  </data>
+  <data name="RepositoryCreateFailed" xml:space="preserve">
+    <value>リポジトリを作成できませんでした。</value>
+  </data>
+  <data name="RepositoryHasNoCommits" xml:space="preserve">
+    <value>{0} にはまだコミットがないため、ブランチを作れません。</value>
+  </data>
+  <data name="RepositoryNotFound" xml:space="preserve">
+    <value>リポジトリ {0} が見つかりません。</value>
+  </data>
+  <data name="ScheduleOptionMissing" xml:space="preserve">
+    <value>日程の扱い「{0}」の選択肢がありません。</value>
+  </data>
+  <data name="SignInCanceled" xml:space="preserve">
+    <value>サインインがキャンセルされました。</value>
+  </data>
+  <data name="SignInFailed" xml:space="preserve">
+    <value>サインインに失敗しました。</value>
+  </data>
+  <data name="StatusFieldMissing" xml:space="preserve">
+    <value>プロジェクトに Status フィールドがありません。</value>
+  </data>
+  <data name="TaskNotFound" xml:space="preserve">
+    <value>タスクが見つかりません。</value>
+  </data>
+  <data name="ViewerFailed" xml:space="preserve">
+    <value>ユーザー情報を取得できませんでした。</value>
+  </data>
+</root>

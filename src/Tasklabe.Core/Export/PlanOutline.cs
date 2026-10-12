@@ -2,6 +2,7 @@ using System.Globalization;
 using Tasklabe.Core.Calendar;
 using Tasklabe.Core.Domain;
 using Tasklabe.Core.Gantt;
+using Tasklabe.Core.Resources;
 using Tasklabe.Core.Wbs;
 
 namespace Tasklabe.Core.Export;
@@ -100,9 +101,9 @@ public sealed record GanttOutline(
 /// <summary>ガントチャートの行から、共有ビューの形を作る。</summary>
 public static class PlanOutline
 {
-    public const string OtherSection = "その他";
-    public const string Unassigned = "未割り当て";
-    public const string MilestoneSection = "マイルストーン";
+    public static string OtherSection => Strings.OutlineOther;
+    public static string Unassigned => Strings.OutlineUnassigned;
+    public static string MilestoneSection => Strings.OutlineMilestones;
 
     /// <param name="visible">画面の絞り込み（担当者など）。一致しないタスクは含めない。</param>
     /// <param name="milestones">プロジェクトのマイルストーン（期限。要件 F-MS-03）。期日に ◆ として置く。</param>
@@ -181,7 +182,7 @@ public static class PlanOutline
                     continue;
                 }
 
-                marks.Add(new OutlineItem(string.IsNullOrWhiteSpace(m.Title) ? "（無題）" : m.Title.Trim(), due, due, true,
+                marks.Add(new OutlineItem(string.IsNullOrWhiteSpace(m.Title) ? Strings.Untitled : m.Title.Trim(), due, due, true,
                     options.StatusColors && m.IsClosed, false, false));
                 min = min is { } m1 && m1 <= due ? m1 : due;
                 max = max is { } x1 && x1 >= due ? x1 : due;
@@ -240,7 +241,7 @@ public static class PlanOutline
     private static OutlineItem Item(GanttRow row, OutlineOptions options, DateOnly start, DateOnly end, DateOnly today)
     {
         var task = row.Task;
-        var name = string.IsNullOrWhiteSpace(task.Title) ? "（無題）" : task.Title.Trim();
+        var name = string.IsNullOrWhiteSpace(task.Title) ? Strings.Untitled : task.Title.Trim();
         if (options.AssigneeInName && task.Assignees.Count > 0)
         {
             name += " " + string.Join(" ", task.Assignees.Select(People.Display));

@@ -86,6 +86,7 @@ public sealed partial class GanttView : UserControl
     public GanttView()
     {
         InitializeComponent();
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(this, Texts.Get("Gantt_Name"));
         KeyDown += OnKeyDown;
         Canvas.SetZIndex(_stickyDivider, 200);
         RowsHost.Children.Add(_stickyDivider);
@@ -907,7 +908,7 @@ public sealed partial class GanttView : UserControl
         bool parent = row.Kind == GanttRowKind.Parent;
         var extras = new List<MenuEntry>
         {
-            new MenuCommand("予定をクリア", "\uE894", () => App.Current.Services.Edits.ApplyChangesAsync(task,
+            new MenuCommand(Texts.Get("Gantt_ClearPlan"), "\uE894", () => App.Current.Services.Edits.ApplyChangesAsync(task,
                 [.. TaskRules.Set(task, TaskField.Start, null).Concat(TaskRules.Set(task, TaskField.Target, null))]))
             {
                 IsEnabled = !parent && (task.Start is not null || task.Target is not null),

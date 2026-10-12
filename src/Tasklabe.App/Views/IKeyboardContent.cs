@@ -51,4 +51,5 @@ public interface ICommandSource
 
 /// <summary>コマンドパレットの 1 つの操作。</summary>
 /// <param name="Keys">割り当てたキー（右端に示す）。</param>
-public sealed record PaletteCommand(string Label, string? Keys, Func<Task> Run, string Group = "操作");
+/// <param name="Group">見出し。null なら「操作」。</param>
+public sealed record PaletteCommand(string Label, string? Keys, Func<Task> Run, string? Group = null);

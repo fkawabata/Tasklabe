@@ -75,8 +75,8 @@ public static class BulkPlanDialog
         bool link = ViewState.Get(LinkKey) != "off";
         var startMode = ViewState.Get(StartKey) == "blank" ? BulkStart.Blank : BulkStart.AfterPrevious;
 
-        var placeButton = new PickerButton("置き場所") { MinWidth = 220 };
-        void ShowPlace() => placeButton.SetValue(parent?.Task.Title ?? "（最上位）", "\uE8FD");
+        var placeButton = new PickerButton(Texts.Get("Picker_Parent")) { MinWidth = 220 };
+        void ShowPlace() => placeButton.SetValue(parent?.Task.Title ?? Texts.Get("Bulk_TopLevel"), "\uE8FD");
         placeButton.Pick = async b =>
         {
             if (await ValuePickers.ParentAsync(b, null, plan, parent?.Task.IssueId) is { } picked)
@@ -88,29 +88,29 @@ public static class BulkPlanDialog
         ShowPlace();
 
         // 依存関係と開始日の決め方は、どちらも決まった候補から選ぶ
-        var linkButton = PickerButton.ForChoices("依存関係", ["上の行の後につなぐ", "つながない"], link ? 0 : 1, i =>
+        var linkButton = PickerButton.ForChoices(Texts.Get("Bulk_Dependencies"), [Texts.Get("Bulk_LinkAfterAbove"), Texts.Get("Bulk_NoLink")], link ? 0 : 1, i =>
         {
             link = i == 0;
             ViewState.Set(LinkKey, link ? null : "off");
             Refresh();
-        }, ["上の行が終わってから始める（✕ で行ごとに外せる）", null]);
+        }, [Texts.Get("Bulk_LinkAfterAboveTip"), null]);
         linkButton.MinWidth = 220;
-        var startButton = PickerButton.ForChoices("開始日", ["前の行の翌稼働日にする", "空けておく"], startMode == BulkStart.AfterPrevious ? 0 : 1, i =>
+        var startButton = PickerButton.ForChoices(Texts.Get("Bulk_Start"), [Texts.Get("Bulk_StartAfterPrevious"), Texts.Get("Bulk_StartEmpty")], startMode == BulkStart.AfterPrevious ? 0 : 1, i =>
         {
             startMode = i == 0 ? BulkStart.AfterPrevious : BulkStart.Blank;
             ViewState.Set(StartKey, startMode == BulkStart.Blank ? "blank" : null);
             Refresh();
-        }, ["前の行の終わり（マイルストーンなら期日）の翌稼働日を入れておく", null]);
+        }, [Texts.Get("Bulk_StartAfterPreviousTip"), null]);
         startButton.MinWidth = 240;
 
         var settings = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 16 };
-        settings.Children.Add(PickerButton.Labeled("置き場所", placeButton));
-        settings.Children.Add(PickerButton.Labeled("依存関係", linkButton));
-        settings.Children.Add(PickerButton.Labeled("開始日", startButton));
+        settings.Children.Add(PickerButton.Labeled(Texts.Get("Picker_Parent"), placeButton));
+        settings.Children.Add(PickerButton.Labeled(Texts.Get("Bulk_Dependencies"), linkButton));
+        settings.Children.Add(PickerButton.Labeled(Texts.Get("Bulk_Start"), startButton));
 
         // ---- 表
         var header = RowGrid();
-        foreach (var (text, column) in ((string, int)[])[("区分", 1), ("名前", 2), ("日程", 3), ("期間", 4), ("先行", 5)])
+        foreach (var (text, column) in ((string, int)[])[(Texts.Get("Bulk_ColumnKind"), 1), (Texts.Get("Bulk_ColumnName"), 2), (Texts.Get("Bulk_ColumnDates"), 3), (Texts.Get("Bulk_ColumnDays"), 4), (Texts.Get("Bulk_ColumnPredecessor"), 5)])
         {
             var label = new TextBlock { Text = text, Style = caption };
             Grid.SetColumn(label, column);
@@ -123,8 +123,8 @@ public static class BulkPlanDialog
         panel.Children.Add(new StackPanel { Spacing = 6, Children = { header, scroller } });
         panel.Children.Add(new StackPanel { Spacing = 2, Children = { summary, problem } });
 
-        dialog = AppDialog.Create(root, "計画をまとめて入力", panel, "作成", multiline: true,
-            extraHint: "Enter で次の行　Tab で次の項目");
+        dialog = AppDialog.Create(root, KeyHints.Name("wbs.bulk"), panel, Texts.Get("Common_Create"), multiline: true,
+            extraHint: Texts.Get("Bulk_Hint"));
         dialog.Resources["ContentDialogMaxWidth"] = Width + 80;
         // Enter は次の行へ移るのに使うため、既定のボタンは置かず、作成のボタンは見た目だけ強調する
         dialog.DefaultButton = ContentDialogButton.None;
@@ -165,18 +165,18 @@ public static class BulkPlanDialog
             {
                 View = RowGrid(),
                 Number = new TextBlock { Style = caption, HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Center },
-                KindButton = new PickerButton("区分"),
-                TitleBox = new TextBox { PlaceholderText = Hints.Shown ? "名前（Enter で次の行）" : "名前" },
-                DatesButton = new PickerButton("日程"),
+                KindButton = new PickerButton(Texts.Get("Bulk_ColumnKind")),
+                TitleBox = new TextBox { PlaceholderText = Hints.Shown ? Texts.Get("Bulk_NamePlaceholderHint") : Texts.Get("Bulk_ColumnName") },
+                DatesButton = new PickerButton(Texts.Get("Bulk_ColumnDates")),
                 Days = new TextBlock { Style = caption, VerticalAlignment = VerticalAlignment.Center },
                 // 入れ物は Tab で止まらないようにし、中のチップか「つなぐ」だけに止まる
                 Link = new ContentControl { VerticalAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Left, IsTabStop = false },
             };
-            AutomationProperties.SetName(row.TitleBox, "名前");
+            AutomationProperties.SetName(row.TitleBox, Texts.Get("Bulk_ColumnName"));
 
             row.KindButton.Pick = async b =>
             {
-                if (await ValuePickers.ChoiceAsync(b, "区分", ["親タスク", "マイルストーン"], row.Kind == BulkKind.Parent ? 0 : 1) is { } i)
+                if (await ValuePickers.ChoiceAsync(b, Texts.Get("Bulk_ColumnKind"), [Texts.Get("Bulk_Parent"), Texts.Get("Field_Milestone")], row.Kind == BulkKind.Parent ? 0 : 1) is { } i)
                 {
                     row.Kind = i == 0 ? BulkKind.Parent : BulkKind.Milestone;
                     Refresh();
@@ -209,7 +209,7 @@ public static class BulkPlanDialog
                 var info = resolved.FirstOrDefault(r => r.Index == rows.IndexOf(row));
                 if (row.Kind == BulkKind.Milestone)
                 {
-                    if (await ValuePickers.DateAsync(b, null, "期日", [info is null ? row.End : info.End]) is { } due)
+                    if (await ValuePickers.DateAsync(b, null, Texts.Get("SelectionBar_Due"), [info is null ? row.End : info.End]) is { } due)
                     {
                         row.End = due.Value;
                         Refresh();
@@ -220,7 +220,7 @@ public static class BulkPlanDialog
 
                 // 名前のない行は自動の値を持たないため、選んだ値のまま開く
                 var (start, end) = info is null ? (row.Start, row.End) : (info.Start, info.End);
-                if (await DateRangePicker.ShowAsync(b, "予定", start, end, PlanPresets(info)) is { } range)
+                if (await DateRangePicker.ShowAsync(b, Texts.Get("Field_Plan"), start, end, PlanPresets(info)) is { } range)
                 {
                     // 自動で入れた開始のまま決めたなら、選んだ値にはせず、前の行に合わせて動き続けるようにする
                     row.Start = info is { StartIsAuto: true } && range.Start == info.Start ? null : range.Start;
@@ -250,13 +250,13 @@ public static class BulkPlanDialog
 
             var presets = new List<DateRangePreset>
             {
-                new("1 週間", _ => (s, BulkPlan.EndAfter(s, BulkSpan.OneWeek) ?? s)),
-                new("2 週間", _ => (s, BulkPlan.EndAfter(s, BulkSpan.TwoWeeks) ?? s)),
-                new("1 か月", _ => (s, BulkPlan.EndAfter(s, BulkSpan.OneMonth) ?? s)),
+                new(Texts.Get("Bulk_OneWeek"), _ => (s, BulkPlan.EndAfter(s, BulkSpan.OneWeek) ?? s)),
+                new(Texts.Get("Bulk_TwoWeeks"), _ => (s, BulkPlan.EndAfter(s, BulkSpan.TwoWeeks) ?? s)),
+                new(Texts.Get("Bulk_OneMonth"), _ => (s, BulkPlan.EndAfter(s, BulkSpan.OneMonth) ?? s)),
             };
             if (BulkPlan.PreviousWorkingDays(resolved, info.Index) is { } n)
             {
-                presets.Add(new($"前の行と同じ期間（{n} 日）", _ => (s, BulkPlan.EndAfter(s, BulkSpan.SameAsPrevious, n) ?? s)));
+                presets.Add(new(Texts.Count("Bulk_SameAsPrevious", n), _ => (s, BulkPlan.EndAfter(s, BulkSpan.SameAsPrevious, n) ?? s)));
             }
 
             return presets;
@@ -273,7 +273,7 @@ public static class BulkPlanDialog
                 var info = resolved.FirstOrDefault(r => r.Index == i);
                 bool milestone = row.Kind == BulkKind.Milestone;
                 row.Number.Text = (i + 1).ToString(CultureInfo.InvariantCulture);
-                row.KindButton.SetValue(milestone ? "マイルストーン" : "親タスク", "");
+                row.KindButton.SetValue(milestone ? Texts.Get("Field_Milestone") : Texts.Get("Bulk_Parent"), "");
                 if (milestone)
                 {
                     MilestoneVisuals.Apply(row.KindButton.Icon);
@@ -288,22 +288,22 @@ public static class BulkPlanDialog
                 // 名前のある行は、自動の値だけでできている日程を薄い斜体で示す（親タスクは、開始が自動で終了が未定のとき）
                 var (start, end) = info is null ? (row.Start, row.End) : (info.Start, info.End);
                 row.DatesButton.SetValue(milestone ? (end is { } due ? DateText.Short(due, today) : null) : DateText.Range(start, end), "\uE787",
-                    placeholder: milestone ? "期日を選ぶ…" : "予定を選ぶ…",
+                    placeholder: milestone ? Texts.Get("Bulk_ChooseDue") : Texts.Get("Bulk_ChoosePlan"),
                     isAuto: info is not null && (milestone ? info.EndIsAuto : info is { StartIsAuto: true, End: null }),
                     isPending: info is null);
-                row.Days.Text = info?.WorkingDays is { } d ? $"{d} 日" : "";
+                row.Days.Text = info?.WorkingDays is { } d ? Texts.Count("Bulk_Days", d) : "";
                 row.Link.Content = LinkView(row, info);
             }
 
             var first = resolved.Select(r => r.Start ?? r.End).FirstOrDefault(d => d is not null);
             var last = resolved.Select(r => r.End).LastOrDefault(d => d is not null);
             summary.Text = resolved.Count == 0
-                ? "名前を入れた行を作ります。"
-                : Counts(resolved) + (first is { } f ? $"　{DateText.Short(f, today)}〜{(last is { } l && l >= f ? DateText.Short(l, today) : "")}" : "");
-            problem.Text = string.Join("　", resolved.Where(r => r.Problem is not null).Select(r => $"{r.Index + 1} 行目: {r.Problem}"));
+                ? Texts.Get("Bulk_SummaryEmpty")
+                : first is { } f ? Texts.Format("Bulk_SummaryWithDates", Counts(resolved), DateText.Range(f, last is { } l && l >= f ? l : null)) : Counts(resolved);
+            problem.Text = string.Join(Texts.Get("Common_HintSeparator"), resolved.Where(r => r.Problem is not null).Select(r => Texts.Format("Bulk_RowProblem", r.Index + 1, r.Problem)));
             if (dialog is not null)
             {
-                dialog.PrimaryButtonText = resolved.Count > 0 ? $"{Counts(resolved)} を作成" : "作成";
+                dialog.PrimaryButtonText = resolved.Count > 0 ? Texts.Format("Bulk_CreateCounts", Counts(resolved)) : Texts.Get("Common_Create");
                 dialog.IsPrimaryButtonEnabled = CanCreate();
             }
         }
@@ -328,8 +328,8 @@ public static class BulkPlanDialog
                     Background = ThemeResources.Brush("SubtleFillColorSecondaryBrush"),
                 };
                 Pill.SetIsEnabled(chip, true);
-                AutomationProperties.SetName(chip, $"先行: {name}。押すとつなぎを外します");
-                ToolTipService.SetToolTip(chip, $"「{rows[p].Title.Trim()}」が終わってから始める。押すと外します");
+                AutomationProperties.SetName(chip, Texts.Format("Bulk_UnlinkName", name));
+                ToolTipService.SetToolTip(chip, Texts.Format("Bulk_UnlinkName", rows[p].Title.Trim()));
                 chip.Click += (_, _) =>
                 {
                     row.Unlinked = true;
@@ -338,8 +338,8 @@ public static class BulkPlanDialog
                 return chip;
             }
 
-            var relink = new HyperlinkButton { Content = "つなぐ", Padding = new Thickness(4, 0, 4, 0) };
-            AutomationProperties.SetName(relink, "上の行の後につなぐ");
+            var relink = new HyperlinkButton { Content = Texts.Get("Bulk_Relink"), Padding = new Thickness(4, 0, 4, 0) };
+            AutomationProperties.SetName(relink, Texts.Get("Bulk_LinkAfterAbove"));
             relink.Click += (_, _) =>
             {
                 row.Unlinked = false;
@@ -385,8 +385,8 @@ public static class BulkPlanDialog
             }
             catch (Exception ex) when (ex is GitHubException or HttpRequestException or InvalidOperationException)
             {
-                App.Current.Shell?.ShowInfo("マイルストーンを作れませんでした",
-                    (ex is InvalidOperationException ? ex.Message : SyncEngine.Describe(ex)) + "　タスクも作っていません。");
+                App.Current.Shell?.ShowInfo(Texts.Get("Bulk_MilestoneFailedTitle"),
+                    Texts.Format("Bulk_MilestoneFailedMessage", ex is InvalidOperationException ? ex.Message : SyncEngine.Describe(ex)));
                 return;
             }
 
@@ -434,7 +434,7 @@ public static class BulkPlanDialog
 
         services.Store.ItemIdReplaced += OnReplaced;
         _ = Task.Delay(TimeSpan.FromMinutes(1)).ContinueWith(_ => services.Store.ItemIdReplaced -= OnReplaced, TaskScheduler.Default);
-        App.Current.Shell?.ShowUndoable($"{Counts(resolved)} を計画に作成しました", async () =>
+        App.Current.Shell?.ShowUndoable(Texts.Format("Bulk_Created", Counts(resolved)), async () =>
         {
             services.Store.ItemIdReplaced -= OnReplaced;
             List<string> ids;
@@ -466,12 +466,12 @@ public static class BulkPlanDialog
                 }
                 catch (Exception ex) when (ex is GitHubException or HttpRequestException)
                 {
-                    App.Current.Shell?.ShowInfo("マイルストーンを消せませんでした", SyncEngine.Describe(ex));
+                    App.Current.Shell?.ShowInfo(Texts.Get("Bulk_MilestoneDeleteFailed"), SyncEngine.Describe(ex));
                     return;
                 }
             }
 
-            App.Current.Shell?.ShowToast($"{Counts(resolved)} の作成を取り消しました");
+            App.Current.Shell?.ShowToast(Texts.Format("Bulk_Undone", Counts(resolved)));
         });
     }
 
@@ -482,9 +482,9 @@ public static class BulkPlanDialog
     {
         int parents = resolved.Count(r => r.Kind == BulkKind.Parent);
         int milestones = resolved.Count - parents;
-        return milestones == 0 ? $"親タスク {parents}"
-            : parents == 0 ? $"マイルストーン {milestones}"
-            : $"親タスク {parents}・マイルストーン {milestones}";
+        return milestones == 0 ? Texts.Count("Bulk_Parents", parents)
+            : parents == 0 ? Texts.Count("Bulk_Milestones", milestones)
+            : Texts.Format("Bulk_Both", Texts.Count("Bulk_Parents", parents), Texts.Count("Bulk_Milestones", milestones));
     }
 
     /// <summary>番号・区分・名前・日程・期間・先行の列。</summary>

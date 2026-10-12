@@ -1,4 +1,5 @@
 using System.Text;
+using Tasklabe.Core.Resources;
 
 namespace Tasklabe.Core.Domain;
 
@@ -57,20 +58,20 @@ public static class ProjectKey
         ArgumentNullException.ThrowIfNull(taken);
         if (!IsValid(key))
         {
-            return $"キーは英字で始まる、英字と数字だけの {MinLength}〜{MaxLength} 文字にしてください。";
+            return Strings.ProjectKeyInvalid(MinLength, MaxLength);
         }
 
         if (key == InboxKey)
         {
-            return $"{InboxKey} は未分類のタスクの番号に使うため、ほかのプロジェクトには使えません。";
+            return Strings.ProjectKeyReservedForInbox(InboxKey);
         }
 
         if (taken.Contains(key, StringComparer.Ordinal))
         {
-            return $"{key} はほかのプロジェクトで使っています。";
+            return Strings.ProjectKeyInUse(key);
         }
 
-        return linked?.Contains(key, StringComparer.Ordinal) == true ? $"{key}- はリポジトリの自動リンクで別の行き先に使われています。" : null;
+        return linked?.Contains(key, StringComparer.Ordinal) == true ? Strings.ProjectKeyUsedByAutolink(key) : null;
     }
 
     /// <summary>

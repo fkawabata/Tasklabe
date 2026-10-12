@@ -1,0 +1,522 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Action_app_help" xml:space="preserve">
+    <value>Show keyboard shortcuts</value>
+  </data>
+  <data name="Action_app_palette" xml:space="preserve">
+    <value>Open command palette</value>
+  </data>
+  <data name="Action_app_sync" xml:space="preserve">
+    <value>Sync now</value>
+  </data>
+  <data name="Action_composer_assign" xml:space="preserve">
+    <value>Choose assignee</value>
+  </data>
+  <data name="Action_composer_detail" xml:space="preserve">
+    <value>Continue in details panel</value>
+  </data>
+  <data name="Action_composer_due" xml:space="preserve">
+    <value>Choose due date</value>
+  </data>
+  <data name="Action_composer_estimate" xml:space="preserve">
+    <value>Choose estimate</value>
+  </data>
+  <data name="Action_composer_kind" xml:space="preserve">
+    <value>Choose type</value>
+  </data>
+  <data name="Action_composer_project" xml:space="preserve">
+    <value>Choose project</value>
+  </data>
+  <data name="Action_composer_status" xml:space="preserve">
+    <value>Choose status</value>
+  </data>
+  <data name="Action_composer_submit" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Action_gantt_edit" xml:space="preserve">
+    <value>Toggle edit mode</value>
+  </data>
+  <data name="Action_gantt_extend" xml:space="preserve">
+    <value>Extend by 1 day</value>
+  </data>
+  <data name="Action_gantt_moveEarlier" xml:space="preserve">
+    <value>Move 1 day earlier</value>
+  </data>
+  <data name="Action_gantt_moveLater" xml:space="preserve">
+    <value>Move 1 day later</value>
+  </data>
+  <data name="Action_gantt_scale" xml:space="preserve">
+    <value>Switch scale (day, week, month)</value>
+  </data>
+  <data name="Action_gantt_shrink" xml:space="preserve">
+    <value>Shorten by 1 day</value>
+  </data>
+  <data name="Action_gantt_today" xml:space="preserve">
+    <value>Go to today</value>
+  </data>
+  <data name="Action_kanban_moveNext" xml:space="preserve">
+    <value>Move card to next column</value>
+  </data>
+  <data name="Action_kanban_movePrev" xml:space="preserve">
+    <value>Move card to previous column</value>
+  </data>
+  <data name="Action_nav_settings" xml:space="preserve">
+    <value>Open settings</value>
+  </data>
+  <data name="Action_preview_confirm" xml:space="preserve">
+    <value>Confirm schedule changes</value>
+  </data>
+  <data name="Action_task_addChild" xml:space="preserve">
+    <value>Add subtask</value>
+  </data>
+  <data name="Action_task_assign" xml:space="preserve">
+    <value>Change assignee</value>
+  </data>
+  <data name="Action_task_assignMe" xml:space="preserve">
+    <value>Assign or unassign me</value>
+  </data>
+  <data name="Action_task_branch" xml:space="preserve">
+    <value>Create or choose branch</value>
+  </data>
+  <data name="Action_task_copyKey" xml:space="preserve">
+    <value>Copy ID</value>
+  </data>
+  <data name="Action_task_copyUrl" xml:space="preserve">
+    <value>Copy issue URL</value>
+  </data>
+  <data name="Action_task_delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Action_task_detail" xml:space="preserve">
+    <value>Open details</value>
+  </data>
+  <data name="Action_task_due" xml:space="preserve">
+    <value>Set due date</value>
+  </data>
+  <data name="Action_task_estimate" xml:space="preserve">
+    <value>Set estimate</value>
+  </data>
+  <data name="Action_task_new" xml:space="preserve">
+    <value>Add task</value>
+  </data>
+  <data name="Action_task_openInBrowser" xml:space="preserve">
+    <value>Open in GitHub</value>
+  </data>
+  <data name="Action_task_plan" xml:space="preserve">
+    <value>Move to plan or Triage</value>
+  </data>
+  <data name="Action_task_predecessor" xml:space="preserve">
+    <value>Add predecessor</value>
+  </data>
+  <data name="Action_task_progress" xml:space="preserve">
+    <value>Change progress</value>
+  </data>
+  <data name="Action_task_project" xml:space="preserve">
+    <value>Move to another project</value>
+  </data>
+  <data name="Action_task_rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="Action_task_repository" xml:space="preserve">
+    <value>Choose working repository</value>
+  </data>
+  <data name="Action_task_status" xml:space="preserve">
+    <value>Change status</value>
+  </data>
+  <data name="Action_task_toggleDone" xml:space="preserve">
+    <value>Toggle complete</value>
+  </data>
+  <data name="Action_view_filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Action_view_group" xml:space="preserve">
+    <value>Change grouping</value>
+  </data>
+  <data name="Action_view_sort" xml:space="preserve">
+    <value>Change sort order</value>
+  </data>
+  <data name="Action_wbs_bulk" xml:space="preserve">
+    <value>Enter plan in bulk</value>
+  </data>
+  <data name="Action_wbs_collapse" xml:space="preserve">
+    <value>Collapse</value>
+  </data>
+  <data name="Action_wbs_expand" xml:space="preserve">
+    <value>Expand</value>
+  </data>
+  <data name="Action_wbs_indent" xml:space="preserve">
+    <value>Indent (child of row above)</value>
+  </data>
+  <data name="Action_wbs_insertAfter" xml:space="preserve">
+    <value>Insert row below</value>
+  </data>
+  <data name="Action_wbs_moveDown" xml:space="preserve">
+    <value>Move row down</value>
+  </data>
+  <data name="Action_wbs_moveUp" xml:space="preserve">
+    <value>Move row up</value>
+  </data>
+  <data name="Action_wbs_outdent" xml:space="preserve">
+    <value>Outdent</value>
+  </data>
+  <data name="BranchNameEmpty" xml:space="preserve">
+    <value>Enter a branch name.</value>
+  </data>
+  <data name="BranchNameInvalidCharacters" xml:space="preserve">
+    <value>Branch names can't contain spaces or ~ ^ : ? * [ \.</value>
+  </data>
+  <data name="BranchNameInvalidForm" xml:space="preserve">
+    <value>This isn't a valid branch name (it can't start with - or /, contain .. or //, or end with ., /, or .lock).</value>
+  </data>
+  <data name="BulkPlanEndBeforeStart" xml:space="preserve">
+    <value>The finish is before the start</value>
+  </data>
+  <data name="EffortDays" xml:space="preserve">
+    <value>{0:0.#} d</value>
+  </data>
+  <data name="Field_ActualEnd" xml:space="preserve">
+    <value>actual finish</value>
+  </data>
+  <data name="Field_ActualStart" xml:space="preserve">
+    <value>actual start</value>
+  </data>
+  <data name="Field_Assignees" xml:space="preserve">
+    <value>assignees</value>
+  </data>
+  <data name="Field_BlockedBy" xml:space="preserve">
+    <value>predecessors</value>
+  </data>
+  <data name="Field_Body" xml:space="preserve">
+    <value>description</value>
+  </data>
+  <data name="Field_Branches" xml:space="preserve">
+    <value>branches</value>
+  </data>
+  <data name="Field_Estimate" xml:space="preserve">
+    <value>estimate</value>
+  </data>
+  <data name="Field_Kind" xml:space="preserve">
+    <value>type</value>
+  </data>
+  <data name="Field_Milestone" xml:space="preserve">
+    <value>milestone</value>
+  </data>
+  <data name="Field_Other" xml:space="preserve">
+    <value>field</value>
+  </data>
+  <data name="Field_Parent" xml:space="preserve">
+    <value>parent task</value>
+  </data>
+  <data name="Field_Progress" xml:space="preserve">
+    <value>progress</value>
+  </data>
+  <data name="Field_Repositories" xml:space="preserve">
+    <value>repositories</value>
+  </data>
+  <data name="Field_Schedule" xml:space="preserve">
+    <value>don't-block-successors setting</value>
+  </data>
+  <data name="Field_SortOrder" xml:space="preserve">
+    <value>order</value>
+  </data>
+  <data name="Field_Start" xml:space="preserve">
+    <value>start</value>
+  </data>
+  <data name="Field_State" xml:space="preserve">
+    <value>state</value>
+  </data>
+  <data name="Field_Status" xml:space="preserve">
+    <value>status</value>
+  </data>
+  <data name="Field_Target" xml:space="preserve">
+    <value>finish</value>
+  </data>
+  <data name="Field_Title" xml:space="preserve">
+    <value>title</value>
+  </data>
+  <data name="Fixed_chooseNth_Keys" xml:space="preserve">
+    <value>1–9, 0</value>
+  </data>
+  <data name="Fixed_chooseNth_Label" xml:space="preserve">
+    <value>Choose the nth option (toggles it in multi-select pickers)</value>
+  </data>
+  <data name="Fixed_close_Keys" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="Fixed_close_Label" xml:space="preserve">
+    <value>Close the innermost layer (picker → dialog → details panel → selection or edit mode)</value>
+  </data>
+  <data name="Fixed_closeLayer_Keys" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="Fixed_closeLayer_Label" xml:space="preserve">
+    <value>Close (multi-select pickers apply the choices)</value>
+  </data>
+  <data name="Fixed_confirm_Keys" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="Fixed_confirm_Label" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Fixed_editCell_Keys" xml:space="preserve">
+    <value>F2</value>
+  </data>
+  <data name="Fixed_editCell_Label" xml:space="preserve">
+    <value>Edit cell</value>
+  </data>
+  <data name="Fixed_extend_Keys" xml:space="preserve">
+    <value>Shift + ↑ / ↓</value>
+  </data>
+  <data name="Fixed_extend_Label" xml:space="preserve">
+    <value>Extend selection</value>
+  </data>
+  <data name="Fixed_focusPane_Keys" xml:space="preserve">
+    <value>F6</value>
+  </data>
+  <data name="Fixed_focusPane_Label" xml:space="preserve">
+    <value>Move focus between the details panel and the view (navigation and view when no panel is open)</value>
+  </data>
+  <data name="Fixed_menu_Keys" xml:space="preserve">
+    <value>Shift + F10</value>
+  </data>
+  <data name="Fixed_menu_Label" xml:space="preserve">
+    <value>Open task menu</value>
+  </data>
+  <data name="Fixed_moveCell_Keys" xml:space="preserve">
+    <value>← / →</value>
+  </data>
+  <data name="Fixed_moveCell_Label" xml:space="preserve">
+    <value>Move between cells</value>
+  </data>
+  <data name="Fixed_moveFocus_Keys" xml:space="preserve">
+    <value>Ctrl + ↑ / ↓, Ctrl + Space</value>
+  </data>
+  <data name="Fixed_moveFocus_Label" xml:space="preserve">
+    <value>Move without changing the selection; select or deselect the focused task</value>
+  </data>
+  <data name="Fixed_moveOption_Keys" xml:space="preserve">
+    <value>↑ / ↓, Home / End</value>
+  </data>
+  <data name="Fixed_moveOption_Label" xml:space="preserve">
+    <value>Move between options</value>
+  </data>
+  <data name="Fixed_navigate_Keys" xml:space="preserve">
+    <value>Alt + 1–9</value>
+  </data>
+  <data name="Fixed_navigate_Label" xml:space="preserve">
+    <value>Go to the nth navigation item (1 is My tasks)</value>
+  </data>
+  <data name="Fixed_nextField_Keys" xml:space="preserve">
+    <value>Tab / Shift + Tab</value>
+  </data>
+  <data name="Fixed_nextField_Label" xml:space="preserve">
+    <value>Move between the input and options, or to the next or previous field</value>
+  </data>
+  <data name="Fixed_open_Keys" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="Fixed_open_Label" xml:space="preserve">
+    <value>Open details (edit the cell in the plan table)</value>
+  </data>
+  <data name="Fixed_redo_Keys" xml:space="preserve">
+    <value>Ctrl + Y / Ctrl + Shift + Z</value>
+  </data>
+  <data name="Fixed_redo_Label" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="Fixed_select_Keys" xml:space="preserve">
+    <value>↑ / ↓</value>
+  </data>
+  <data name="Fixed_select_Label" xml:space="preserve">
+    <value>Select task</value>
+  </data>
+  <data name="Fixed_selectAll_Keys" xml:space="preserve">
+    <value>Ctrl + A</value>
+  </data>
+  <data name="Fixed_selectAll_Label" xml:space="preserve">
+    <value>Select all</value>
+  </data>
+  <data name="Fixed_switchView_Keys" xml:space="preserve">
+    <value>Ctrl + 1–5</value>
+  </data>
+  <data name="Fixed_switchView_Label" xml:space="preserve">
+    <value>Switch view</value>
+  </data>
+  <data name="Fixed_toggleDone_Keys" xml:space="preserve">
+    <value>Space</value>
+  </data>
+  <data name="Fixed_toggleDone_Label" xml:space="preserve">
+    <value>Toggle complete (list and table)</value>
+  </data>
+  <data name="Fixed_undo_Keys" xml:space="preserve">
+    <value>Ctrl + Z</value>
+  </data>
+  <data name="Fixed_undo_Label" xml:space="preserve">
+    <value>Undo (while typing, undo the typing)</value>
+  </data>
+  <data name="GuestNameComma" xml:space="preserve">
+    <value>Names can't contain commas</value>
+  </data>
+  <data name="GuestNameEmpty" xml:space="preserve">
+    <value>Enter a name</value>
+  </data>
+  <data name="GuestNameLeadingMark" xml:space="preserve">
+    <value>Names can't start with {0}</value>
+  </data>
+  <data name="GuestNameTooLong" xml:space="preserve">
+    <value>Names can be up to {0} characters</value>
+  </data>
+  <data name="Holiday_AutumnalEquinox" xml:space="preserve">
+    <value>Autumnal Equinox Day</value>
+  </data>
+  <data name="Holiday_Children" xml:space="preserve">
+    <value>Children's Day</value>
+  </data>
+  <data name="Holiday_Citizens" xml:space="preserve">
+    <value>Citizens' Holiday</value>
+  </data>
+  <data name="Holiday_ComingOfAge" xml:space="preserve">
+    <value>Coming of Age Day</value>
+  </data>
+  <data name="Holiday_Constitution" xml:space="preserve">
+    <value>Constitution Memorial Day</value>
+  </data>
+  <data name="Holiday_Culture" xml:space="preserve">
+    <value>Culture Day</value>
+  </data>
+  <data name="Holiday_EmperorsBirthday" xml:space="preserve">
+    <value>Emperor's Birthday</value>
+  </data>
+  <data name="Holiday_Enthronement" xml:space="preserve">
+    <value>Enthronement Day</value>
+  </data>
+  <data name="Holiday_EnthronementCeremony" xml:space="preserve">
+    <value>Enthronement Ceremony Day</value>
+  </data>
+  <data name="Holiday_Foundation" xml:space="preserve">
+    <value>National Foundation Day</value>
+  </data>
+  <data name="Holiday_Greenery" xml:space="preserve">
+    <value>Greenery Day</value>
+  </data>
+  <data name="Holiday_HealthAndSports" xml:space="preserve">
+    <value>Health and Sports Day</value>
+  </data>
+  <data name="Holiday_LaborThanksgiving" xml:space="preserve">
+    <value>Labor Thanksgiving Day</value>
+  </data>
+  <data name="Holiday_Marine" xml:space="preserve">
+    <value>Marine Day</value>
+  </data>
+  <data name="Holiday_Mountain" xml:space="preserve">
+    <value>Mountain Day</value>
+  </data>
+  <data name="Holiday_NewYear" xml:space="preserve">
+    <value>New Year's Day</value>
+  </data>
+  <data name="Holiday_RespectForTheAged" xml:space="preserve">
+    <value>Respect for the Aged Day</value>
+  </data>
+  <data name="Holiday_Showa" xml:space="preserve">
+    <value>Showa Day</value>
+  </data>
+  <data name="Holiday_Sports" xml:space="preserve">
+    <value>Sports Day</value>
+  </data>
+  <data name="Holiday_Substitute" xml:space="preserve">
+    <value>Substitute Holiday</value>
+  </data>
+  <data name="Holiday_VernalEquinox" xml:space="preserve">
+    <value>Vernal Equinox Day</value>
+  </data>
+  <data name="KanbanUnsetColumn" xml:space="preserve">
+    <value>Not set</value>
+  </data>
+  <data name="OutlineMilestones" xml:space="preserve">
+    <value>Milestones</value>
+  </data>
+  <data name="OutlineOther" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="OutlineUnassigned" xml:space="preserve">
+    <value>Unassigned</value>
+  </data>
+  <data name="ProjectKeyInUse" xml:space="preserve">
+    <value>{0} is already used by another project.</value>
+  </data>
+  <data name="ProjectKeyInvalid" xml:space="preserve">
+    <value>Use {0}–{1} letters and digits, starting with a letter.</value>
+  </data>
+  <data name="ProjectKeyReservedForInbox" xml:space="preserve">
+    <value>{0} is reserved for Inbox task IDs and can't be used for other projects.</value>
+  </data>
+  <data name="ProjectKeyUsedByAutolink" xml:space="preserve">
+    <value>{0}- is already used by an autolink in the repository.</value>
+  </data>
+  <data name="ShortcutCategory_composer" xml:space="preserve">
+    <value>Add task</value>
+  </data>
+  <data name="ShortcutCategory_gantt" xml:space="preserve">
+    <value>Gantt chart</value>
+  </data>
+  <data name="ShortcutCategory_global" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="ShortcutCategory_kanban" xml:space="preserve">
+    <value>Board</value>
+  </data>
+  <data name="ShortcutCategory_layer" xml:space="preserve">
+    <value>Pickers and dialogs</value>
+  </data>
+  <data name="ShortcutCategory_task" xml:space="preserve">
+    <value>Selected tasks</value>
+  </data>
+  <data name="ShortcutCategory_wbs" xml:space="preserve">
+    <value>Plan table</value>
+  </data>
+  <data name="StatusNameDuplicate" xml:space="preserve">
+    <value>Two statuses have the same name.</value>
+  </data>
+  <data name="StatusNameEmpty" xml:space="preserve">
+    <value>A status has no name.</value>
+  </data>
+  <data name="StatusNeedsDone" xml:space="preserve">
+    <value>At least one status must be in the Done category.</value>
+  </data>
+  <data name="StatusNeedsNotStarted" xml:space="preserve">
+    <value>At least one status must be in the Backlog or Todo category.</value>
+  </data>
+  <data name="UndoField" xml:space="preserve">
+    <value>Change to {1} of “{0}”</value>
+  </data>
+  <data name="UndoPredecessorAndOthers_One" xml:space="preserve">
+    <value>Change to predecessors of “{0}” and {1} schedule</value>
+  </data>
+  <data name="UndoPredecessorAndOthers_Other" xml:space="preserve">
+    <value>Change to predecessors of “{0}” and {1} schedules</value>
+  </data>
+  <data name="UndoPredecessorAndSchedule" xml:space="preserve">
+    <value>Change to predecessors and schedule of “{0}”</value>
+  </data>
+  <data name="UndoTasks_One" xml:space="preserve">
+    <value>Change to {0} task</value>
+  </data>
+  <data name="UndoTasks_Other" xml:space="preserve">
+    <value>Change to {0} tasks</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>(Untitled)</value>
+  </data>
+</root>

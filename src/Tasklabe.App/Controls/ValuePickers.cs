@@ -68,9 +68,9 @@ internal sealed record StatusChoice(string Name, StatusCategory Category, bool B
         var substituted = ByCategory
             ? projects.Select(p => In(p)?.Category).OfType<StatusCategory>().Where(c => c != Category).Distinct().ToList()
             : [];
-        var head = count > 1 ? $"{count} 件のステータスを「{Name}」にしました" : $"ステータスを「{Name}」にしました";
+        var head = count > 1 ? Texts.Format("Status_ChangedMany", count, Name) : Texts.Format("Status_ChangedOne", Name);
         return substituted.Count > 0
-            ? $"{head}（{Name} のないプロジェクトは {string.Join("・", substituted.Select(StatusVisuals.Name))}）"
+            ? Texts.Format("Status_Substituted", head, Name, string.Join(Texts.Get("Common_NameSeparator"), substituted.Select(StatusVisuals.Name)))
             : count > 1 ? head : null;
     }
 }
@@ -103,7 +103,7 @@ internal static class ValuePickers
                 StatusVisuals.BrushKey(c.Category), mixed);
         }).ToList();
 
-        return await new QuickPicker(projects.Count > 1 ? "ステータスのカテゴリ" : "ステータス", options).ShowAsync(anchor, position) is { Index: >= 0 } r
+        return await new QuickPicker(projects.Count > 1 ? Texts.Get("Picker_StatusCategory") : Texts.Get("Picker_Status"), options).ShowAsync(anchor, position) is { Index: >= 0 } r
             ? new Picked<StatusChoice>(choices[r.Index])
             : null;
     }
@@ -118,8 +118,8 @@ internal static class ValuePickers
             var (selected, mixed) = Mark(current, c => Math.Abs(c - v) < 0.5);
             return new PickerOption($"{v:0}%", IsSelected: selected, IsMixed: mixed);
         }).ToList();
-        var picker = new QuickPicker("進捗率", options, input: "0〜100 の数値（例: 60）", validate: text =>
-            ParseNumber(text.TrimEnd('%')) is { } v && v is >= 0 and <= 100 ? null : "0〜100 の数値を入力してください（例: 60）");
+        var picker = new QuickPicker(Texts.Get("Picker_Progress"), options, input: Texts.Get("Picker_ProgressInput"), validate: text =>
+            ParseNumber(text.TrimEnd('%')) is { } v && v is >= 0 and <= 100 ? null : Texts.Get("Picker_ProgressInvalid"));
         return await picker.ShowAsync(anchor, position) switch
         {
             { Index: >= 0 } r => new Picked<double>(values[r.Index]),
@@ -164,14 +164,13 @@ internal static class ValuePickers
         {
             var (selected, mixed) = Mark(current, c => c.Contains(a, StringComparer.OrdinalIgnoreCase));
             var name = users.FirstOrDefault(u => string.Equals(u.Login, a, StringComparison.OrdinalIgnoreCase))?.Name;
-            var detail = People.IsGuest(a) ? "GitHub なし"
-                : string.Equals(a, me, StringComparison.OrdinalIgnoreCase) ? "自分"
+            var detail = People.IsGuest(a) ? Texts.Get("Picker_NoGitHub")
+                : string.Equals(a, me, StringComparison.OrdinalIgnoreCase) ? Texts.Get("Picker_Me")
                 : string.IsNullOrWhiteSpace(name) ? null : name.Trim();
             return new PickerOption(People.Display(a), detail, IsSelected: selected, IsMixed: mixed, Avatar: a);
         }).ToList();
 
-        var picker = new QuickPicker("担当者", options, multiple: true,
-            note: "ここにいない人は、リポジトリへの招待（プロジェクトの「…」→「メンバーを招待」）か、プロジェクトの設定で加えられます。");
+        var picker = new QuickPicker(Texts.Get("Picker_Assignee"), options, multiple: true, note: Texts.Get("Picker_AssigneeNote"));
         return await picker.ShowAsync(anchor, position) is null ? null : new ToggleChoice(assignees, picker.States);
     }
 
@@ -197,11 +196,11 @@ internal static class ValuePickers
         {
             var (selected, mixed) = Mark(current, c => c.Contains(n, StringComparer.OrdinalIgnoreCase));
             var canWrite = candidates.FirstOrDefault(r => string.Equals(r.NameWithOwner, n, StringComparison.OrdinalIgnoreCase))?.CanWrite;
-            return new PickerOption(n, canWrite == false ? "読み取りのみ" : null, IsSelected: selected, IsMixed: mixed);
+            return new PickerOption(n, canWrite == false ? Texts.Get("Picker_ReadOnly") : null, IsSelected: selected, IsMixed: mixed);
         }).ToList();
 
-        var picker = new QuickPicker("作業するリポジトリ", options, multiple: true, filterable: true, input: "owner/name で絞り込む", width: 400,
-            note: "自分が所有・共同編集・所属する Organization のリポジトリを、最近 push した順に並べています。");
+        var picker = new QuickPicker(Texts.Get("Picker_Repository"), options, multiple: true, filterable: true, input: Texts.Get("Picker_RepositoryInput"), width: 400,
+            note: Texts.Get("Picker_RepositoryNote"));
         return await picker.ShowAsync(anchor, position) is null ? null : new ToggleChoice(names, picker.States);
     }
 
@@ -220,8 +219,8 @@ internal static class ValuePickers
             .Select(r => r.NameWithOwner).ToList();
         var names = preferred.Concat(others).ToList();
         var options = names.Select((n, i) => new PickerOption(n, IsSelected: string.Equals(n, current, StringComparison.OrdinalIgnoreCase),
-            Group: i < preferred.Count ? "作業するリポジトリ" : "ほかのリポジトリ")).ToList();
-        var picker = new QuickPicker("ブランチを作るリポジトリ", options, filterable: true, input: "owner/name で絞り込む", width: 400);
+            Group: i < preferred.Count ? Texts.Get("Picker_Repository") : Texts.Get("Picker_OtherRepositories"))).ToList();
+        var picker = new QuickPicker(Texts.Get("Picker_BranchRepository"), options, filterable: true, input: Texts.Get("Picker_RepositoryInput"), width: 400);
         return await picker.ShowAsync(anchor, position) is { Index: >= 0 } r ? new Picked<string>(names[r.Index]) : null;
     }
 
@@ -234,7 +233,7 @@ internal static class ValuePickers
             return candidates;
         }
 
-        App.Current.Shell?.ShowInfo("リポジトリの候補を取れませんでした", "GitHub に接続できるか確かめて、もう一度開いてください。");
+        App.Current.Shell?.ShowInfo(Texts.Get("Picker_RepositoryFailedTitle"), Texts.Get("Picker_RepositoryFailedMessage"));
         return null;
     }
 
@@ -256,10 +255,10 @@ internal static class ValuePickers
     /// <summary>期日の候補。1 日を選ぶ暦の左に並べる。</summary>
     public static IReadOnlyList<DateRangePreset> DuePresets { get; } =
     [
-        new("今日", t => (t, t)),
-        new("明日", t => (t.AddDays(1), t.AddDays(1))),
-        new("今週末", t => (MyTaskView.EndOfWeek(t), MyTaskView.EndOfWeek(t))),
-        new("来週末", t => (MyTaskView.EndOfWeek(t).AddDays(7), MyTaskView.EndOfWeek(t).AddDays(7))),
+        new(Texts.Get("Preset_Today"), t => (t, t)),
+        new(Texts.Get("Preset_Tomorrow"), t => (t.AddDays(1), t.AddDays(1))),
+        new(Texts.Get("Preset_ThisWeekend"), t => (MyTaskView.EndOfWeek(t), MyTaskView.EndOfWeek(t))),
+        new(Texts.Get("Preset_NextWeekend"), t => (MyTaskView.EndOfWeek(t).AddDays(7), MyTaskView.EndOfWeek(t).AddDays(7))),
     ];
 
     /// <summary>1 日を選ぶ暦で日付を選ぶ。「クリア」で消す。複数のタスクで値が混在しているときは、いまの値を示さない。</summary>
@@ -277,25 +276,25 @@ internal static class ValuePickers
     /// <summary>予定（開始日〜期日）の候補。先の日付を決めることが多いので、今日から先の範囲を並べる。</summary>
     public static IReadOnlyList<DateRangePreset> PlanPresets { get; } =
     [
-        new("今日", t => (t, t)),
-        new("明日", t => (t.AddDays(1), t.AddDays(1))),
-        new("今週末まで", t => (t, MyTaskView.EndOfWeek(t))),
-        new("来週（月〜金）", t => (MyTaskView.EndOfWeek(t).AddDays(1), MyTaskView.EndOfWeek(t).AddDays(5))),
-        new("今日から 1 週間", t => (t, t.AddDays(6))),
-        new("今日から 2 週間", t => (t, t.AddDays(13))),
-        new("今月末まで", t => (t, new DateOnly(t.Year, t.Month, 1).AddMonths(1).AddDays(-1))),
-        new("来月", t => (new DateOnly(t.Year, t.Month, 1).AddMonths(1), new DateOnly(t.Year, t.Month, 1).AddMonths(2).AddDays(-1))),
+        new(Texts.Get("Preset_Today"), t => (t, t)),
+        new(Texts.Get("Preset_Tomorrow"), t => (t.AddDays(1), t.AddDays(1))),
+        new(Texts.Get("Preset_UntilWeekend"), t => (t, MyTaskView.EndOfWeek(t))),
+        new(Texts.Get("Preset_NextWeek"), t => (MyTaskView.EndOfWeek(t).AddDays(1), MyTaskView.EndOfWeek(t).AddDays(5))),
+        new(Texts.Get("Preset_OneWeek"), t => (t, t.AddDays(6))),
+        new(Texts.Get("Preset_TwoWeeks"), t => (t, t.AddDays(13))),
+        new(Texts.Get("Preset_UntilMonthEnd"), t => (t, new DateOnly(t.Year, t.Month, 1).AddMonths(1).AddDays(-1))),
+        new(Texts.Get("Preset_NextMonth"), t => (new DateOnly(t.Year, t.Month, 1).AddMonths(1), new DateOnly(t.Year, t.Month, 1).AddMonths(2).AddDays(-1))),
     ];
 
     /// <summary>実績（開始日〜終了日）の候補。済んだ日付を記すので、今日までの範囲を並べる。</summary>
     public static IReadOnlyList<DateRangePreset> ActualPresets { get; } =
     [
-        new("今日", t => (t, t)),
-        new("昨日", t => (t.AddDays(-1), t.AddDays(-1))),
-        new("昨日から今日", t => (t.AddDays(-1), t)),
-        new("今週（今日まで）", t => (MyTaskView.EndOfWeek(t).AddDays(-6), t)),
-        new("先週（月〜金）", t => (MyTaskView.EndOfWeek(t).AddDays(-13), MyTaskView.EndOfWeek(t).AddDays(-9))),
-        new("今月（今日まで）", t => (new DateOnly(t.Year, t.Month, 1), t)),
+        new(Texts.Get("Preset_Today"), t => (t, t)),
+        new(Texts.Get("Preset_Yesterday"), t => (t.AddDays(-1), t.AddDays(-1))),
+        new(Texts.Get("Preset_YesterdayToToday"), t => (t.AddDays(-1), t)),
+        new(Texts.Get("Preset_ThisWeekSoFar"), t => (MyTaskView.EndOfWeek(t).AddDays(-6), t)),
+        new(Texts.Get("Preset_LastWeek"), t => (MyTaskView.EndOfWeek(t).AddDays(-13), MyTaskView.EndOfWeek(t).AddDays(-9))),
+        new(Texts.Get("Preset_ThisMonthSoFar"), t => (new DateOnly(t.Year, t.Month, 1), t)),
     ];
 
     // ---------------------------------------------------------------- 想定工数
@@ -306,10 +305,10 @@ internal static class ValuePickers
         var options = values.Select(v =>
         {
             var (selected, mixed) = Mark(current, c => c == v);
-            return new PickerOption(v is { } h ? EffortText.Of(h) : "なし", IsSelected: selected, IsMixed: mixed);
+            return new PickerOption(v is { } h ? EffortText.Of(h) : Texts.Get("Common_None"), IsSelected: selected, IsMixed: mixed);
         }).ToList();
-        var picker = new QuickPicker("想定工数（時間）", options, input: "時間を入力（例: 6）", validate: text =>
-            ParseNumber(text.TrimEnd('h', 'H')) is >= 0 ? null : "0 以上の時間を入力してください（例: 6、1.5）");
+        var picker = new QuickPicker(Texts.Get("Picker_Estimate"), options, input: Texts.Get("Picker_EstimateInput"), validate: text =>
+            ParseNumber(text.TrimEnd('h', 'H')) is >= 0 ? null : Texts.Get("Picker_EstimateInvalid"));
         return await picker.ShowAsync(anchor, position) switch
         {
             { Index: >= 0 } r => new Picked<double?>(values[r.Index]),
@@ -332,10 +331,10 @@ internal static class ValuePickers
             .ToList();
         var options = projects.Select(p => new PickerOption(
             ProjectDisplay.Name(p),
-            p.Kind == ProjectKind.Inbox ? "既定" : null,
+            p.Kind == ProjectKind.Inbox ? Texts.Get("Picker_DefaultProject") : null,
             p.Kind switch { ProjectKind.Inbox => "\uE7C3", ProjectKind.Team => "\uE716", _ => "\uE77B" },
             IsSelected: !excludeCurrent && current.Contains(p.Id),
-            Group: p.IsTeam ? "チーム" : "個人")).ToList();
+            Group: p.IsTeam ? Texts.Get("Common_Team") : Texts.Get("Common_Personal"))).ToList();
         return await new QuickPicker(title, options).ShowAsync(anchor, position) is { Index: >= 0 } r
             ? new Picked<Project>(projects[r.Index])
             : null;
@@ -352,7 +351,7 @@ internal static class ValuePickers
             var (selected, mixed) = Mark(current, c => c == k);
             return new PickerOption(KindVisuals.Name(k), IsSelected: selected, IsMixed: mixed, ToolTip: KindVisuals.Description(k));
         }).ToList();
-        return await new QuickPicker("区分", options, width: 420).ShowAsync(anchor, position) is { Index: >= 0 } r
+        return await new QuickPicker(Texts.Get("Picker_Kind"), options, width: 420).ShowAsync(anchor, position) is { Index: >= 0 } r
             ? new Picked<TaskKind>(kinds[r.Index])
             : null;
     }
@@ -367,9 +366,9 @@ internal static class ValuePickers
         var me = tree.Find(task.ItemId)?.Task ?? task;
         var candidates = tree.All().Where(n => DependencyScheduler.CanLink(tree, n.Task, me) == LinkCheck.Ok).ToList();
         var options = candidates
-            .Select(n => new PickerOption(new string('　', n.Depth) + n.Task.Title, n.Task.Target is { } t ? "〜" + DateText.Short(t) : null))
+            .Select(n => new PickerOption(new string('　', n.Depth) + n.Task.Title, n.Task.Target is { } t ? Texts.Format("Date_RangeTo", DateText.Short(t)) : null))
             .ToList();
-        var picker = new QuickPicker("先行タスクを追加（終わってから始める）", options, input: "タスク名で絞り込む", filterable: true, width: 380);
+        var picker = new QuickPicker(Texts.Get("Picker_Predecessor"), options, input: Texts.Get("Picker_TaskInput"), filterable: true, width: 380);
         return await picker.ShowAsync(anchor, position) is { Index: >= 0 } r ? new Picked<TaskItem>(candidates[r.Index].Task) : null;
     }
 
@@ -377,11 +376,11 @@ internal static class ValuePickers
     public static async Task<Picked<TaskNode?>?> ParentAsync(FrameworkElement anchor, Point? position, TaskTree plan, string? currentIssueId)
     {
         var nodes = plan.All().ToList();
-        var options = new List<PickerOption> { new("（最上位に置く）", IsSelected: currentIssueId is null) };
+        var options = new List<PickerOption> { new(Texts.Get("Picker_TopLevel"), IsSelected: currentIssueId is null) };
         options.AddRange(nodes.Select(n => new PickerOption(
             new string('　', n.Depth) + n.Task.Title,
             IsSelected: n.Task.IssueId == currentIssueId)));
-        var picker = new QuickPicker("置き場所", options, input: nodes.Count >= 10 ? "タスク名で絞り込む" : null, filterable: nodes.Count >= 10, width: 380);
+        var picker = new QuickPicker(Texts.Get("Picker_Parent"), options, input: nodes.Count >= 10 ? Texts.Get("Picker_TaskInput") : null, filterable: nodes.Count >= 10, width: 380);
         return await picker.ShowAsync(anchor, position) switch
         {
             { Index: 0 } => new Picked<TaskNode?>(null),

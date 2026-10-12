@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json.Nodes;
+using Tasklabe.GitHub.Resources;
 
 namespace Tasklabe.GitHub;
 
@@ -43,8 +44,8 @@ public sealed partial class GitHubApi
 
             // 管理者でないと 403、リポジトリが見えないと 404 を返す
             HttpStatusCode.Forbidden or HttpStatusCode.NotFound => AutolinkResult.NotPermitted,
-            HttpStatusCode.Unauthorized => throw new GitHubAuthenticationException("GitHub の認証が無効になりました（401）。"),
-            _ => throw new GitHubHttpException(response.StatusCode, $"GitHub がエラーを返しました（{(int)response.StatusCode}）。"),
+            HttpStatusCode.Unauthorized => throw new GitHubAuthenticationException(Strings.AuthenticationInvalid),
+            _ => throw new GitHubHttpException(response.StatusCode, Strings.HttpError((int)response.StatusCode)),
         };
     }
 
@@ -63,12 +64,12 @@ public sealed partial class GitHubApi
 
         if (response.StatusCode == HttpStatusCode.Unauthorized)
         {
-            throw new GitHubAuthenticationException("GitHub の認証が無効になりました（401）。");
+            throw new GitHubAuthenticationException(Strings.AuthenticationInvalid);
         }
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new GitHubHttpException(response.StatusCode, $"GitHub がエラーを返しました（{(int)response.StatusCode}）。");
+            throw new GitHubHttpException(response.StatusCode, Strings.HttpError((int)response.StatusCode));
         }
 
         var own = $"https://{_host.Name}/{owner}/{name}/issues/<num>";

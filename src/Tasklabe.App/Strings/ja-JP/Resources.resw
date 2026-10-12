@@ -1,0 +1,2917 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Access_OpenProject" xml:space="preserve">
+    <value>Project の表示</value>
+  </data>
+  <data name="Access_OpenRepository" xml:space="preserve">
+    <value>リポジトリの表示</value>
+  </data>
+  <data name="Access_ProjectMessage" xml:space="preserve">
+    <value>この Project を編集する権限がないため、ステータスや日程などの変更を GitHub に送れません。Project の管理者に、Write 以上の権限で招待するよう依頼してください。</value>
+  </data>
+  <data name="Access_RepositoryMessage" xml:space="preserve">
+    <value>リポジトリ {0} に書き込む権限がないため、タスクを追加・変更しても GitHub に送れません。リポジトリの管理者に、コラボレーター（Write 以上）として招待するよう依頼してください。</value>
+  </data>
+  <data name="Access_Title" xml:space="preserve">
+    <value>招待が必要です</value>
+  </data>
+  <data name="Archive_Confirm" xml:space="preserve">
+    <value>アーカイブ</value>
+  </data>
+  <data name="Archive_Message" xml:space="preserve">
+    <value>「{0}」を一覧から外します。タスクは GitHub に残り、GitHub 側で戻すこともできます。</value>
+  </data>
+  <data name="Archive_Title" xml:space="preserve">
+    <value>プロジェクトをアーカイブしますか？</value>
+  </data>
+  <data name="Branch_ChosenCopied" xml:space="preserve">
+    <value>{0} を選び、切り替えるコマンドをコピーしました</value>
+  </data>
+  <data name="Branch_CreatedCopied" xml:space="preserve">
+    <value>{0} を作り、切り替えるコマンドをコピーしました</value>
+  </data>
+  <data name="Branch_CreateDescription" xml:space="preserve">
+    <value>リポジトリの既定のブランチから作り、GitHub の Issue の Development に紐づけます。このブランチの PR は Issue に紐づきます。作ったら、手元で切り替えるコマンドをコピーします。</value>
+  </data>
+  <data name="Branch_CreateTitle" xml:space="preserve">
+    <value>ブランチの作成</value>
+  </data>
+  <data name="Branch_Existing" xml:space="preserve">
+    <value>既存のブランチ</value>
+  </data>
+  <data name="Branch_Filter" xml:space="preserve">
+    <value>ブランチ名で絞り込む</value>
+  </data>
+  <data name="Branch_LoadFailed" xml:space="preserve">
+    <value>{0} のブランチを取れませんでした</value>
+  </data>
+  <data name="Branch_Name" xml:space="preserve">
+    <value>ブランチ名</value>
+  </data>
+  <data name="Branch_NeedRepository" xml:space="preserve">
+    <value>リポジトリを選んでください。</value>
+  </data>
+  <data name="Branch_New" xml:space="preserve">
+    <value>新しいブランチの作成…</value>
+  </data>
+  <data name="Branch_NoCommits" xml:space="preserve">
+    <value>{0} にはまだコミットがありません</value>
+  </data>
+  <data name="Branch_NoCommitsMessage" xml:space="preserve">
+    <value>最初のコミットを push すると、ブランチを作れるようになります。</value>
+  </data>
+  <data name="Branch_NoOthers" xml:space="preserve">
+    <value>既定のブランチ（{0}）のほかにブランチはありません。</value>
+  </data>
+  <data name="Branch_NotYetChooseMessage" xml:space="preserve">
+    <value>GitHub にタスクを送り終えてから作成・選択できます。</value>
+  </data>
+  <data name="Branch_NotYetMessage" xml:space="preserve">
+    <value>GitHub にタスクを送り終えてから作れます。</value>
+  </data>
+  <data name="Branch_NotYetTitle" xml:space="preserve">
+    <value>まだブランチを扱えません</value>
+  </data>
+  <data name="Branch_Order" xml:space="preserve">
+    <value>既定のブランチ（{0}）は除いて、最近コミットした順に並べています。</value>
+  </data>
+  <data name="Branch_PickerTitle" xml:space="preserve">
+    <value>{0} のブランチ</value>
+  </data>
+  <data name="Branch_Repository" xml:space="preserve">
+    <value>リポジトリ</value>
+  </data>
+  <data name="Branch_ThisTask" xml:space="preserve">
+    <value>このタスクのブランチ</value>
+  </data>
+  <data name="Bulk_Both" xml:space="preserve">
+    <value>{0}・{1}</value>
+  </data>
+  <data name="Bulk_ChooseDue" xml:space="preserve">
+    <value>期日の選択…</value>
+  </data>
+  <data name="Bulk_ChoosePlan" xml:space="preserve">
+    <value>予定の選択…</value>
+  </data>
+  <data name="Bulk_ColumnDates" xml:space="preserve">
+    <value>日程</value>
+  </data>
+  <data name="Bulk_ColumnDays" xml:space="preserve">
+    <value>期間</value>
+  </data>
+  <data name="Bulk_ColumnKind" xml:space="preserve">
+    <value>区分</value>
+  </data>
+  <data name="Bulk_ColumnName" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="Bulk_ColumnPredecessor" xml:space="preserve">
+    <value>先行</value>
+  </data>
+  <data name="Bulk_CreateCounts" xml:space="preserve">
+    <value>{0} を作成</value>
+  </data>
+  <data name="Bulk_Created" xml:space="preserve">
+    <value>{0} を計画に作成しました</value>
+  </data>
+  <data name="Bulk_Days_One" xml:space="preserve">
+    <value>{0} 日</value>
+  </data>
+  <data name="Bulk_Days_Other" xml:space="preserve">
+    <value>{0} 日</value>
+  </data>
+  <data name="Bulk_Dependencies" xml:space="preserve">
+    <value>依存関係</value>
+  </data>
+  <data name="Bulk_Hint" xml:space="preserve">
+    <value>Enter で次の行　Tab で次の項目</value>
+  </data>
+  <data name="Bulk_LinkAfterAbove" xml:space="preserve">
+    <value>上の行の後に接続</value>
+  </data>
+  <data name="Bulk_LinkAfterAboveTip" xml:space="preserve">
+    <value>上の行が終わってから始める（✕ で行ごとに外せる）</value>
+  </data>
+  <data name="Bulk_MilestoneDeleteFailed" xml:space="preserve">
+    <value>マイルストーンを消せませんでした</value>
+  </data>
+  <data name="Bulk_MilestoneFailedMessage" xml:space="preserve">
+    <value>{0}　タスクも作っていません。</value>
+  </data>
+  <data name="Bulk_MilestoneFailedTitle" xml:space="preserve">
+    <value>マイルストーンを作れませんでした</value>
+  </data>
+  <data name="Bulk_Milestones_One" xml:space="preserve">
+    <value>マイルストーン {0}</value>
+  </data>
+  <data name="Bulk_Milestones_Other" xml:space="preserve">
+    <value>マイルストーン {0}</value>
+  </data>
+  <data name="Bulk_NamePlaceholderHint" xml:space="preserve">
+    <value>名前（Enter で次の行）</value>
+  </data>
+  <data name="Bulk_NoLink" xml:space="preserve">
+    <value>接続しない</value>
+  </data>
+  <data name="Bulk_OneMonth" xml:space="preserve">
+    <value>1 か月</value>
+  </data>
+  <data name="Bulk_OneWeek" xml:space="preserve">
+    <value>1 週間</value>
+  </data>
+  <data name="Bulk_Parent" xml:space="preserve">
+    <value>親タスク</value>
+  </data>
+  <data name="Bulk_Parents_One" xml:space="preserve">
+    <value>親タスク {0}</value>
+  </data>
+  <data name="Bulk_Parents_Other" xml:space="preserve">
+    <value>親タスク {0}</value>
+  </data>
+  <data name="Bulk_Relink" xml:space="preserve">
+    <value>接続</value>
+  </data>
+  <data name="Bulk_RowProblem" xml:space="preserve">
+    <value>{0} 行目: {1}</value>
+  </data>
+  <data name="Bulk_SameAsPrevious_One" xml:space="preserve">
+    <value>前の行と同じ期間（{0} 日）</value>
+  </data>
+  <data name="Bulk_SameAsPrevious_Other" xml:space="preserve">
+    <value>前の行と同じ期間（{0} 日）</value>
+  </data>
+  <data name="Bulk_Start" xml:space="preserve">
+    <value>開始日</value>
+  </data>
+  <data name="Bulk_StartAfterPrevious" xml:space="preserve">
+    <value>前の行の翌稼働日</value>
+  </data>
+  <data name="Bulk_StartAfterPreviousTip" xml:space="preserve">
+    <value>前の行の終わり（マイルストーンなら期日）の翌稼働日を入れておく</value>
+  </data>
+  <data name="Bulk_StartEmpty" xml:space="preserve">
+    <value>空けておく</value>
+  </data>
+  <data name="Bulk_SummaryEmpty" xml:space="preserve">
+    <value>名前を入れた行を作ります。</value>
+  </data>
+  <data name="Bulk_SummaryWithDates" xml:space="preserve">
+    <value>{0}　{1}</value>
+  </data>
+  <data name="Bulk_TopLevel" xml:space="preserve">
+    <value>（最上位）</value>
+  </data>
+  <data name="Bulk_TwoWeeks" xml:space="preserve">
+    <value>2 週間</value>
+  </data>
+  <data name="Bulk_Undone" xml:space="preserve">
+    <value>{0} の作成を取り消しました</value>
+  </data>
+  <data name="Bulk_UnlinkName" xml:space="preserve">
+    <value>「{0}」とのつなぎの解除</value>
+  </data>
+  <data name="Card_Assignee" xml:space="preserve">
+    <value>担当 {0}</value>
+  </data>
+  <data name="Card_Due" xml:space="preserve">
+    <value>期日 {0}</value>
+  </data>
+  <data name="Card_Estimate" xml:space="preserve">
+    <value>工数 {0}</value>
+  </data>
+  <data name="Card_Progress" xml:space="preserve">
+    <value>進捗 {0:0}%</value>
+  </data>
+  <data name="Card_ProgressText" xml:space="preserve">
+    <value>進捗 {0}</value>
+  </data>
+  <data name="Card_Updated" xml:space="preserve">
+    <value>更新 {0}</value>
+  </data>
+  <data name="Chain_Done_One" xml:space="preserve">
+    <value>依存関係を {0} 本追加しました</value>
+  </data>
+  <data name="Chain_Done_Other" xml:space="preserve">
+    <value>依存関係を {0} 本追加しました</value>
+  </data>
+  <data name="Chain_Message" xml:space="preserve">
+    <value>「{0}」の配下を予定の順につなぎます。予定期間が重なるタスクは並列とみなし、互いにはつなぎません。</value>
+  </data>
+  <data name="Chain_NothingMessage" xml:space="preserve">
+    <value>配下のタスクに予定がないか、すでに順番につながっています。予定期間が重なるタスクどうしは並列とみなしてつなぎません。</value>
+  </data>
+  <data name="Chain_NothingTitle" xml:space="preserve">
+    <value>つなぐ依存関係はありません</value>
+  </data>
+  <data name="Chain_Title_One" xml:space="preserve">
+    <value>依存関係を {0} 本追加</value>
+  </data>
+  <data name="Chain_Title_Other" xml:space="preserve">
+    <value>依存関係を {0} 本追加</value>
+  </data>
+  <data name="Common_Add" xml:space="preserve">
+    <value>追加</value>
+  </data>
+  <data name="Common_Bullet" xml:space="preserve">
+    <value>・{0}</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Common_Change" xml:space="preserve">
+    <value>変更</value>
+  </data>
+  <data name="Common_Close" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+  <data name="Common_Create" xml:space="preserve">
+    <value>作成</value>
+  </data>
+  <data name="Common_Delete" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="Common_Details" xml:space="preserve">
+    <value>詳細の表示</value>
+  </data>
+  <data name="Common_Ellipsis" xml:space="preserve">
+    <value>{0}…</value>
+  </data>
+  <data name="Common_HintSeparator" xml:space="preserve">
+    <value>　</value>
+  </data>
+  <data name="Common_ListSeparator" xml:space="preserve">
+    <value>、</value>
+  </data>
+  <data name="Common_NameSeparator" xml:space="preserve">
+    <value>・</value>
+  </data>
+  <data name="Common_None" xml:space="preserve">
+    <value>なし</value>
+  </data>
+  <data name="Common_Personal" xml:space="preserve">
+    <value>個人</value>
+  </data>
+  <data name="Common_Redo" xml:space="preserve">
+    <value>やり直し</value>
+  </data>
+  <data name="Common_Remove" xml:space="preserve">
+    <value>外す</value>
+  </data>
+  <data name="Common_Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Common_Team" xml:space="preserve">
+    <value>チーム</value>
+  </data>
+  <data name="Common_TwoSentences" xml:space="preserve">
+    <value>{0}{1}</value>
+  </data>
+  <data name="Common_Undo" xml:space="preserve">
+    <value>元に戻す</value>
+  </data>
+  <data name="Common_WithKey" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Composer_Body.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>説明</value>
+  </data>
+  <data name="Composer_Body.PlaceholderText" xml:space="preserve">
+    <value>説明を追加…</value>
+  </data>
+  <data name="Composer_DetailButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>詳細を入力</value>
+  </data>
+  <data name="Composer_DetailText.Text" xml:space="preserve">
+    <value>詳細を入力…</value>
+  </data>
+  <data name="Composer_Hint" xml:space="preserve">
+    <value>{0} で追加　{1} で詳細　Tab で項目を移動　Alt + S などで項目を選択</value>
+  </data>
+  <data name="Composer_HintNeedTitle" xml:space="preserve">
+    <value>タスク名を入力すると追加できます　{0} で詳細　Tab で項目を移動　Alt + S などで項目を選択</value>
+  </data>
+  <data name="Composer_Project" xml:space="preserve">
+    <value>追加先</value>
+  </data>
+  <data name="Composer_Title.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>タスク名</value>
+  </data>
+  <data name="Composer_Title.PlaceholderText" xml:space="preserve">
+    <value>タスク名</value>
+  </data>
+  <data name="Conflict_Chip_One" xml:space="preserve">
+    <value>後続 {0} 件に影響</value>
+  </data>
+  <data name="Conflict_Chip_Other" xml:space="preserve">
+    <value>後続 {0} 件に影響</value>
+  </data>
+  <data name="Conflict_DelayedMessage_One" xml:space="preserve">
+    <value>見込みどおりに進むと、後続 {0} 件が先行の終わりより前に始まる予定になっています。</value>
+  </data>
+  <data name="Conflict_DelayedMessage_Other" xml:space="preserve">
+    <value>見込みどおりに進むと、後続 {0} 件が先行の終わりより前に始まる予定になっています。</value>
+  </data>
+  <data name="Conflict_DelayedTitle" xml:space="preserve">
+    <value>先行タスクが遅れています</value>
+  </data>
+  <data name="Conflict_Dismiss" xml:space="preserve">
+    <value>見送り</value>
+  </data>
+  <data name="Conflict_Empty" xml:space="preserve">
+    <value>（なし）</value>
+  </data>
+  <data name="Conflict_OverlapMessage_One" xml:space="preserve">
+    <value>後続 {0} 件が、先行タスクの終わりより前に始まる予定になっています。</value>
+  </data>
+  <data name="Conflict_OverlapMessage_Other" xml:space="preserve">
+    <value>後続 {0} 件が、先行タスクの終わりより前に始まる予定になっています。</value>
+  </data>
+  <data name="Conflict_OverlapTitle" xml:space="preserve">
+    <value>後続タスクの予定が先行と重なっています</value>
+  </data>
+  <data name="Conflict_Overwritten" xml:space="preserve">
+    <value>「{0}」の{1}は GitHub 上で変更されていましたが、この PC での変更で上書きしました。</value>
+  </data>
+  <data name="Conflict_OverwrittenTitle" xml:space="preserve">
+    <value>他の変更を上書きしました</value>
+  </data>
+  <data name="Conflict_OverwrittenValues" xml:space="preserve">
+    <value>「{0}」の{1}は GitHub 上で「{2}」に変更されていましたが、この PC での変更「{3}」で上書きしました。</value>
+  </data>
+  <data name="Conflict_Pair" xml:space="preserve">
+    <value>「{0}」→「{1}」</value>
+  </data>
+  <data name="Conflict_Preview" xml:space="preserve">
+    <value>調整のプレビュー</value>
+  </data>
+  <data name="Conflict_ShiftNote" xml:space="preserve">
+    <value>調整すると、連鎖する後続を含めて {0} 件を後ろへずらします。</value>
+  </data>
+  <data name="Date_Full" xml:space="preserve">
+    <value>yyyy年M月d日 dddd</value>
+  </data>
+  <data name="Date_MonthDay" xml:space="preserve">
+    <value>M/d</value>
+  </data>
+  <data name="Date_MonthShort" xml:space="preserve">
+    <value>M月</value>
+  </data>
+  <data name="Date_MonthTitle" xml:space="preserve">
+    <value>yyyy年M月</value>
+  </data>
+  <data name="Date_Range" xml:space="preserve">
+    <value>{0} 〜 {1}</value>
+  </data>
+  <data name="Date_RangeFrom" xml:space="preserve">
+    <value>{0} 〜</value>
+  </data>
+  <data name="Date_RangeTo" xml:space="preserve">
+    <value>〜 {0}</value>
+  </data>
+  <data name="Date_Short" xml:space="preserve">
+    <value>M/d(ddd)</value>
+  </data>
+  <data name="Date_ShortWithYear" xml:space="preserve">
+    <value>yyyy/M/d(ddd)</value>
+  </data>
+  <data name="Date_TodayName" xml:space="preserve">
+    <value>{0}（今日）</value>
+  </data>
+  <data name="DatePicker_Apply" xml:space="preserve">
+    <value>適用</value>
+  </data>
+  <data name="DatePicker_ChooseEnd" xml:space="preserve">
+    <value>終了日を選んでください</value>
+  </data>
+  <data name="DatePicker_Clear" xml:space="preserve">
+    <value>クリア</value>
+  </data>
+  <data name="DatePicker_DateInput" xml:space="preserve">
+    <value>日付を入力（9/25、+3、t など）</value>
+  </data>
+  <data name="DatePicker_Days_One" xml:space="preserve">
+    <value>{0} 日間</value>
+  </data>
+  <data name="DatePicker_Days_Other" xml:space="preserve">
+    <value>{0} 日間</value>
+  </data>
+  <data name="DatePicker_InputName" xml:space="preserve">
+    <value>{0}の入力</value>
+  </data>
+  <data name="DatePicker_InvalidDate" xml:space="preserve">
+    <value>日付として読み取れません（例: 9/25、2026/9/25、+3、t）</value>
+  </data>
+  <data name="DatePicker_InvalidRange" xml:space="preserve">
+    <value>範囲として読み取れません（例: 10/5-10/9、t〜+4、〜10/9）</value>
+  </data>
+  <data name="DatePicker_Mixed" xml:space="preserve">
+    <value>複数の値</value>
+  </data>
+  <data name="DatePicker_NextMonth" xml:space="preserve">
+    <value>次の月</value>
+  </data>
+  <data name="DatePicker_NoDate" xml:space="preserve">
+    <value>日付なし</value>
+  </data>
+  <data name="DatePicker_NoEnd" xml:space="preserve">
+    <value>終了日なし</value>
+  </data>
+  <data name="DatePicker_NoStart" xml:space="preserve">
+    <value>開始日なし</value>
+  </data>
+  <data name="DatePicker_Presets" xml:space="preserve">
+    <value>候補</value>
+  </data>
+  <data name="DatePicker_PreviousMonth" xml:space="preserve">
+    <value>前の月</value>
+  </data>
+  <data name="DatePicker_RangeInput" xml:space="preserve">
+    <value>範囲を入力（10/5-10/9、t〜+4、〜10/9 など）</value>
+  </data>
+  <data name="Delete_LocalMessage" xml:space="preserve">
+    <value>「{0}」を削除します。この操作は元に戻せません。</value>
+  </data>
+  <data name="Delete_ManyMessage" xml:space="preserve">
+    <value>次の {0} 件のタスクと、GitHub の Issue を削除します。この操作は元に戻せません。</value>
+  </data>
+  <data name="Delete_ManyTitle" xml:space="preserve">
+    <value>{0} 件のタスクを削除しますか？</value>
+  </data>
+  <data name="Delete_Message" xml:space="preserve">
+    <value>「{0}」（{1}）と GitHub の Issue を削除します。この操作は元に戻せません。</value>
+  </data>
+  <data name="Delete_More" xml:space="preserve">
+    <value>ほか {0} 件</value>
+  </data>
+  <data name="Delete_Title" xml:space="preserve">
+    <value>タスクを削除しますか？</value>
+  </data>
+  <data name="Detail_AddSubtask" xml:space="preserve">
+    <value>サブタスクの追加</value>
+  </data>
+  <data name="Detail_BodyPlaceholder" xml:space="preserve">
+    <value>説明の追加…（Markdown）</value>
+  </data>
+  <data name="Detail_Branch" xml:space="preserve">
+    <value>ブランチ</value>
+  </data>
+  <data name="Detail_BranchFor" xml:space="preserve">
+    <value>{0} のブランチの作成・選択</value>
+  </data>
+  <data name="Detail_BranchOnlyRepository" xml:space="preserve">
+    <value>ブランチだけがあるリポジトリです（作業するリポジトリには選んでいません）</value>
+  </data>
+  <data name="Detail_ChainNote" xml:space="preserve">
+    <value>予定期間が重なるタスクは並列とみなし、互いにはつなぎません。</value>
+  </data>
+  <data name="Detail_ChooseRepository" xml:space="preserve">
+    <value>リポジトリの選択…</value>
+  </data>
+  <data name="Detail_CreateButton.Content" xml:space="preserve">
+    <value>追加</value>
+  </data>
+  <data name="Detail_DeleteText.Text" xml:space="preserve">
+    <value>削除…</value>
+  </data>
+  <data name="Detail_DiscardButton.Content" xml:space="preserve">
+    <value>破棄</value>
+  </data>
+  <data name="Detail_DraftHint" xml:space="preserve">
+    <value>{0} で追加　Esc で閉じる　Alt + S などで項目を選択</value>
+  </data>
+  <data name="Detail_ExternalPredecessor" xml:space="preserve">
+    <value>（このプロジェクトの計画にないタスク）</value>
+  </data>
+  <data name="Detail_Hint" xml:space="preserve">
+    <value>↑↓ で前後のタスク　Esc で閉じる　Alt + S などで項目を選択</value>
+  </data>
+  <data name="Detail_Inherited" xml:space="preserve">
+    <value>{0}（親「{1}」から受け継ぐ）</value>
+  </data>
+  <data name="Detail_MilestoneAuto" xml:space="preserve">
+    <value>期日から自動で決定</value>
+  </data>
+  <data name="Detail_MilestoneNote" xml:space="preserve">
+    <value>マイルストーンは、プロジェクトの「…」→「マイルストーン」で作れます。</value>
+  </data>
+  <data name="Detail_MilestoneOverrun" xml:space="preserve">
+    <value>期日超え: 予定終了日がマイルストーンの期日（{0}）より後です</value>
+  </data>
+  <data name="Detail_NeedTitle" xml:space="preserve">
+    <value>タスク名を入力すると追加できます</value>
+  </data>
+  <data name="Detail_NewTask" xml:space="preserve">
+    <value>新しいタスク</value>
+  </data>
+  <data name="Detail_NoMilestones" xml:space="preserve">
+    <value>まだありません</value>
+  </data>
+  <data name="Detail_NonBlockingNote" xml:space="preserve">
+    <value>このタスクの終わりを待たずに、後続（親の後続を含む）を始められます。親タスクの最後の振り返りなどに使います。</value>
+  </data>
+  <data name="Detail_NotAdded" xml:space="preserve">
+    <value>まだ追加していません</value>
+  </data>
+  <data name="Detail_OpenBranch" xml:space="preserve">
+    <value>ブランチ {0} を GitHub で表示</value>
+  </data>
+  <data name="Detail_OpenChosenBranch" xml:space="preserve">
+    <value>GitHub で表示（選んだブランチ）</value>
+  </data>
+  <data name="Detail_OpenLinkedBranch" xml:space="preserve">
+    <value>GitHub で表示（Issue に紐づくブランチ）</value>
+  </data>
+  <data name="Detail_OpenRepository" xml:space="preserve">
+    <value>{0} を GitHub で表示</value>
+  </data>
+  <data name="Detail_OpenSubtask" xml:space="preserve">
+    <value>サブタスク「{0}」の表示</value>
+  </data>
+  <data name="Detail_Predecessors" xml:space="preserve">
+    <value>先行タスク</value>
+  </data>
+  <data name="Detail_ProgressLocked" xml:space="preserve">
+    <value>完了・中止したタスクの進捗率は 100 % に固定しています</value>
+  </data>
+  <data name="Detail_RemovePredecessor" xml:space="preserve">
+    <value>先行タスク「{0}」を外す</value>
+  </data>
+  <data name="Detail_RemoveRepository" xml:space="preserve">
+    <value>{0} を作業するリポジトリから外す</value>
+  </data>
+  <data name="Detail_Section" xml:space="preserve">
+    <value>詳細</value>
+  </data>
+  <data name="Detail_StartsAfter" xml:space="preserve">
+    <value>終わってから始める</value>
+  </data>
+  <data name="Detail_Subtasks" xml:space="preserve">
+    <value>サブタスク</value>
+  </data>
+  <data name="Detail_SubtaskSummary" xml:space="preserve">
+    <value>完了 {0} / {1}</value>
+  </data>
+  <data name="Detail_UnlinkBranch" xml:space="preserve">
+    <value>ブランチ {0} を外す</value>
+  </data>
+  <data name="Detail_UnlinkBranchTip" xml:space="preserve">
+    <value>外す（ブランチは消しません）</value>
+  </data>
+  <data name="Dialog_ConfirmHint" xml:space="preserve">
+    <value>Enter でキャンセル　Tab で「{0}」へ移って Enter で{0}</value>
+  </data>
+  <data name="Dialog_Hint" xml:space="preserve">
+    <value>{0} で{1}　Esc でキャンセル</value>
+  </data>
+  <data name="Dialog_InfoHint" xml:space="preserve">
+    <value>Enter か Esc で閉じる</value>
+  </data>
+  <data name="Discard_Confirm" xml:space="preserve">
+    <value>破棄</value>
+  </data>
+  <data name="Discard_Message" xml:space="preserve">
+    <value>「{0}」はまだ追加していません。破棄すると入力した内容は戻せません。</value>
+  </data>
+  <data name="Discard_NoTitle" xml:space="preserve">
+    <value>（タスク名なし）</value>
+  </data>
+  <data name="Discard_Title" xml:space="preserve">
+    <value>入力中のタスクを破棄しますか？</value>
+  </data>
+  <data name="DueDate_OverdueName" xml:space="preserve">
+    <value>{0}（期日超過）</value>
+  </data>
+  <data name="DueDate_OverdueTip" xml:space="preserve">
+    <value>期日を過ぎています</value>
+  </data>
+  <data name="Empty_AddIssue" xml:space="preserve">
+    <value>課題の追加</value>
+  </data>
+  <data name="Empty_FilteredMessage" xml:space="preserve">
+    <value>絞り込みの条件を変えるか、解除してください。</value>
+  </data>
+  <data name="Empty_FilteredTitle" xml:space="preserve">
+    <value>条件に一致するタスクはありません</value>
+  </data>
+  <data name="Empty_IssuesMessage" xml:space="preserve">
+    <value>GitHub でこのプロジェクトに追加した Issue や、ここで追加した課題が並びます。計画へ入れるときは「計画へ移動」を使います。</value>
+  </data>
+  <data name="Empty_IssuesTitle" xml:space="preserve">
+    <value>課題はありません</value>
+  </data>
+  <data name="Empty_ListMessage" xml:space="preserve">
+    <value>このプロジェクトのタスクがここに並びます。</value>
+  </data>
+  <data name="Empty_ListTitle" xml:space="preserve">
+    <value>タスクはありません</value>
+  </data>
+  <data name="Empty_OtherPersonalMessage" xml:space="preserve">
+    <value>追加したタスクが、ここにも表示されます。</value>
+  </data>
+  <data name="Empty_OtherTeamMessage" xml:space="preserve">
+    <value>「計画」に追加したタスクが、ここにも表示されます。</value>
+  </data>
+  <data name="Empty_PlanMessage" xml:space="preserve">
+    <value>親タスクと作業を追加して計画を組み立てます。</value>
+  </data>
+  <data name="Empty_PlanMessageWithKeys" xml:space="preserve">
+    <value>親タスクと作業を追加して計画を組み立てます。表では Insert キーで下に、Shift + Insert キーで子の行を追加できます。</value>
+  </data>
+  <data name="Empty_PlanTitle" xml:space="preserve">
+    <value>計画にタスクはありません</value>
+  </data>
+  <data name="Failure_Change" xml:space="preserve">
+    <value>「{0}」の変更: {1}</value>
+  </data>
+  <data name="Failure_Create" xml:space="preserve">
+    <value>「{0}」の作成: {1}</value>
+  </data>
+  <data name="Failure_Delete" xml:space="preserve">
+    <value>「{0}」の削除: {1}</value>
+  </data>
+  <data name="Failure_DeletedTask" xml:space="preserve">
+    <value>（削除したタスク）</value>
+  </data>
+  <data name="Failure_Discard" xml:space="preserve">
+    <value>変更の破棄</value>
+  </data>
+  <data name="Failure_Field" xml:space="preserve">
+    <value>「{0}」の{1}の変更: {2}</value>
+  </data>
+  <data name="Failure_Message" xml:space="preserve">
+    <value>権限や招待が原因のときは、解決してから再送してください。不要なら、変更を破棄して GitHub の内容に戻せます。</value>
+  </data>
+  <data name="Failure_Move" xml:space="preserve">
+    <value>「{0}」の別のプロジェクトへの移動: {1}</value>
+  </data>
+  <data name="Failure_Retry" xml:space="preserve">
+    <value>再送</value>
+  </data>
+  <data name="Failure_Title_One" xml:space="preserve">
+    <value>{0} 件の変更を GitHub に送信できませんでした</value>
+  </data>
+  <data name="Failure_Title_Other" xml:space="preserve">
+    <value>{0} 件の変更を GitHub に送信できませんでした</value>
+  </data>
+  <data name="Field_Actual" xml:space="preserve">
+    <value>実績</value>
+  </data>
+  <data name="Field_Assignee" xml:space="preserve">
+    <value>担当者</value>
+  </data>
+  <data name="Field_Body" xml:space="preserve">
+    <value>説明</value>
+  </data>
+  <data name="Field_Estimate" xml:space="preserve">
+    <value>想定工数</value>
+  </data>
+  <data name="Field_Kind" xml:space="preserve">
+    <value>区分</value>
+  </data>
+  <data name="Field_Milestone" xml:space="preserve">
+    <value>マイルストーン</value>
+  </data>
+  <data name="Field_Plan" xml:space="preserve">
+    <value>予定</value>
+  </data>
+  <data name="Field_Progress" xml:space="preserve">
+    <value>進捗率</value>
+  </data>
+  <data name="Field_Project" xml:space="preserve">
+    <value>プロジェクト</value>
+  </data>
+  <data name="Field_Status" xml:space="preserve">
+    <value>ステータス</value>
+  </data>
+  <data name="Field_Title" xml:space="preserve">
+    <value>タスク名</value>
+  </data>
+  <data name="Filter_All" xml:space="preserve">
+    <value>すべて</value>
+  </data>
+  <data name="Filter_Assignee" xml:space="preserve">
+    <value>担当者</value>
+  </data>
+  <data name="Filter_AssigneeChip" xml:space="preserve">
+    <value>担当: {0}</value>
+  </data>
+  <data name="Filter_AssigneeMe" xml:space="preserve">
+    <value>担当: 自分</value>
+  </data>
+  <data name="Filter_ByAssignee" xml:space="preserve">
+    <value>担当者での絞り込み</value>
+  </data>
+  <data name="Filter_ChipName" xml:space="preserve">
+    <value>{0}（Delete で解除）</value>
+  </data>
+  <data name="Filter_ChooseKind" xml:space="preserve">
+    <value>絞り込む条件</value>
+  </data>
+  <data name="Filter_ClearAll" xml:space="preserve">
+    <value>すべて解除</value>
+  </data>
+  <data name="Filter_CompletedCards" xml:space="preserve">
+    <value>完了・中止のカード</value>
+  </data>
+  <data name="Filter_CompletedChip" xml:space="preserve">
+    <value>完了・中止: {0}</value>
+  </data>
+  <data name="Filter_Count" xml:space="preserve">
+    <value>{0} 件中 {1} 件を表示</value>
+  </data>
+  <data name="Filter_FullName" xml:space="preserve">
+    <value>絞り込みの条件: {0}。{1}</value>
+  </data>
+  <data name="Filter_Name" xml:space="preserve">
+    <value>絞り込みの条件</value>
+  </data>
+  <data name="Filter_NoAssignee" xml:space="preserve">
+    <value>担当者なし</value>
+  </data>
+  <data name="Filter_NothingToFilter" xml:space="preserve">
+    <value>このビューで絞り込める条件はありません</value>
+  </data>
+  <data name="Gantt_Actual" xml:space="preserve">
+    <value>実績　{0} 〜 {1}</value>
+  </data>
+  <data name="Gantt_ActualForecast" xml:space="preserve">
+    <value>実績　{0} 〜（見込み終了 {1}）</value>
+  </data>
+  <data name="Gantt_Before" xml:space="preserve">
+    <value>調整前　{0} 〜 {1}</value>
+  </data>
+  <data name="Gantt_CancelPreview.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>日程の調整をキャンセル</value>
+  </data>
+  <data name="Gantt_CancelPreview.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>何も保存せず元に戻します (Esc)</value>
+  </data>
+  <data name="Gantt_CancelPreview.Content" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Gantt_ClearPlan" xml:space="preserve">
+    <value>予定のクリア</value>
+  </data>
+  <data name="Gantt_ColumnTask.Text" xml:space="preserve">
+    <value>タスク</value>
+  </data>
+  <data name="Gantt_Confirm.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>日程の調整を確定</value>
+  </data>
+  <data name="Gantt_Confirm.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>プレビューの予定を保存します</value>
+  </data>
+  <data name="Gantt_Confirm.Content" xml:space="preserve">
+    <value>確定</value>
+  </data>
+  <data name="Gantt_Delay_One" xml:space="preserve">
+    <value>遅れ {0} 日</value>
+  </data>
+  <data name="Gantt_Delay_Other" xml:space="preserve">
+    <value>遅れ {0} 日</value>
+  </data>
+  <data name="Gantt_DragLabel_One" xml:space="preserve">
+    <value>{1} 〜 {2}  {0} 稼働日</value>
+  </data>
+  <data name="Gantt_DragLabel_Other" xml:space="preserve">
+    <value>{1} 〜 {2}  {0} 稼働日</value>
+  </data>
+  <data name="Gantt_EditingName" xml:space="preserve">
+    <value>ガントチャート（編集モード）</value>
+  </data>
+  <data name="Gantt_ForecastLate" xml:space="preserve">
+    <value>終わりの見込み　「{0}」が {1} まで延び、予定より遅れる見込み（バーの色）</value>
+  </data>
+  <data name="Gantt_ForecastOnTrack" xml:space="preserve">
+    <value>終わりの見込み　予定内（バーの色）</value>
+  </data>
+  <data name="Gantt_FrameEarly_One" xml:space="preserve">
+    <value>枠超え　子の予定が枠（{1}〜）より {0} 稼働日前に始まります</value>
+  </data>
+  <data name="Gantt_FrameEarly_Other" xml:space="preserve">
+    <value>枠超え　子の予定が枠（{1}〜）より {0} 稼働日前に始まります</value>
+  </data>
+  <data name="Gantt_FrameOverrun_One" xml:space="preserve">
+    <value>枠超え　子の予定が枠（〜{1}）を {0} 稼働日超えています</value>
+  </data>
+  <data name="Gantt_FrameOverrun_Other" xml:space="preserve">
+    <value>枠超え　子の予定が枠（〜{1}）を {0} 稼働日超えています</value>
+  </data>
+  <data name="Gantt_LinkProblem" xml:space="preserve">
+    <value>依存関係を追加できません</value>
+  </data>
+  <data name="Gantt_MilestoneEmpty" xml:space="preserve">
+    <value>このマイルストーンのタスクはありません</value>
+  </data>
+  <data name="Gantt_MilestoneLate" xml:space="preserve">
+    <value>⚠ 期日超え {0} 件（最も遅い終了 {1}・▲{2}日）</value>
+  </data>
+  <data name="Gantt_MilestoneName" xml:space="preserve">
+    <value>マイルストーン {0}</value>
+  </data>
+  <data name="Gantt_MilestoneProgress" xml:space="preserve">
+    <value>進捗 {0:0}%　完了 {1} / {2} 件</value>
+  </data>
+  <data name="Gantt_Name" xml:space="preserve">
+    <value>ガントチャート</value>
+  </data>
+  <data name="Gantt_NoPlan" xml:space="preserve">
+    <value>予定　—</value>
+  </data>
+  <data name="Gantt_NoPlanName" xml:space="preserve">
+    <value>予定 なし</value>
+  </data>
+  <data name="Gantt_PaceAhead_One" xml:space="preserve">
+    <value>仕事の量　予定より約 {0} 日分先行（イナズマ線）</value>
+  </data>
+  <data name="Gantt_PaceAhead_Other" xml:space="preserve">
+    <value>仕事の量　予定より約 {0} 日分先行（イナズマ線）</value>
+  </data>
+  <data name="Gantt_PaceBehind_One" xml:space="preserve">
+    <value>仕事の量　予定より約 {0} 日分遅れ（イナズマ線）</value>
+  </data>
+  <data name="Gantt_PaceBehind_Other" xml:space="preserve">
+    <value>仕事の量　予定より約 {0} 日分遅れ（イナズマ線）</value>
+  </data>
+  <data name="Gantt_PaceOnTrack" xml:space="preserve">
+    <value>仕事の量　予定どおり（イナズマ線）</value>
+  </data>
+  <data name="Gantt_Plan_One" xml:space="preserve">
+    <value>予定　{1} 〜 {2}（{0} 稼働日）</value>
+  </data>
+  <data name="Gantt_Plan_Other" xml:space="preserve">
+    <value>予定　{1} 〜 {2}（{0} 稼働日）</value>
+  </data>
+  <data name="Gantt_PlanName" xml:space="preserve">
+    <value>予定 {0} から {1}</value>
+  </data>
+  <data name="Gantt_PreviewAdjusted_One" xml:space="preserve">
+    <value>動かしたバー {0} 件の予定を保存します。後続との食い違いはありません。</value>
+  </data>
+  <data name="Gantt_PreviewAdjusted_Other" xml:space="preserve">
+    <value>動かしたバー {0} 件の予定を保存します。後続との食い違いはありません。</value>
+  </data>
+  <data name="Gantt_PreviewBar.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>日程の調整のプレビュー</value>
+  </data>
+  <data name="Gantt_PreviewBar.Title" xml:space="preserve">
+    <value>日程の調整を確認</value>
+  </data>
+  <data name="Gantt_PreviewLink_One" xml:space="preserve">
+    <value>「{1}」→「{2}」の依存関係を張ると、後続 {0} 件を後ろへずらします。確定で依存関係と合わせて保存します。</value>
+  </data>
+  <data name="Gantt_PreviewLink_Other" xml:space="preserve">
+    <value>「{1}」→「{2}」の依存関係を張ると、後続 {0} 件を後ろへずらします。確定で依存関係と合わせて保存します。</value>
+  </data>
+  <data name="Gantt_PreviewShiftDelayed_One" xml:space="preserve">
+    <value>先行タスクの遅れに合わせて、後続 {0} 件を後ろへずらします（「{1}」の後）。バーをドラッグして調整できます。</value>
+  </data>
+  <data name="Gantt_PreviewShiftDelayed_Other" xml:space="preserve">
+    <value>先行タスクの遅れに合わせて、後続 {0} 件を後ろへずらします（「{1}」の後）。バーをドラッグして調整できます。</value>
+  </data>
+  <data name="Gantt_PreviewShiftDelayedOnly_One" xml:space="preserve">
+    <value>先行タスクの遅れに合わせて、後続 {0} 件を後ろへずらします（「{1}」の後）。</value>
+  </data>
+  <data name="Gantt_PreviewShiftDelayedOnly_Other" xml:space="preserve">
+    <value>先行タスクの遅れに合わせて、後続 {0} 件を後ろへずらします（「{1}」の後）。</value>
+  </data>
+  <data name="Gantt_PreviewShiftPlan_One" xml:space="preserve">
+    <value>先行タスクの予定に合わせて、後続 {0} 件を後ろへずらします（「{1}」の後）。バーをドラッグして調整できます。</value>
+  </data>
+  <data name="Gantt_PreviewShiftPlan_Other" xml:space="preserve">
+    <value>先行タスクの予定に合わせて、後続 {0} 件を後ろへずらします（「{1}」の後）。バーをドラッグして調整できます。</value>
+  </data>
+  <data name="Gantt_PreviewShiftPlanOnly_One" xml:space="preserve">
+    <value>先行タスクの予定に合わせて、後続 {0} 件を後ろへずらします（「{1}」の後）。</value>
+  </data>
+  <data name="Gantt_PreviewShiftPlanOnly_Other" xml:space="preserve">
+    <value>先行タスクの予定に合わせて、後続 {0} 件を後ろへずらします（「{1}」の後）。</value>
+  </data>
+  <data name="Gantt_PreviewWithAdjusted_One" xml:space="preserve">
+    <value>動かしたバー {0} 件と合わせて保存します。</value>
+  </data>
+  <data name="Gantt_PreviewWithAdjusted_Other" xml:space="preserve">
+    <value>動かしたバー {0} 件と合わせて保存します。</value>
+  </data>
+  <data name="Gantt_ProgressEffort" xml:space="preserve">
+    <value>進捗　{0:0}%　工数　{1}</value>
+  </data>
+  <data name="Gantt_Splitter.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>列の幅</value>
+  </data>
+  <data name="Gantt_TodayJump.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>今日へ戻る</value>
+  </data>
+  <data name="Gantt_TodayJumpText.Text" xml:space="preserve">
+    <value>今日へ</value>
+  </data>
+  <data name="Gantt_TodayJumpTip" xml:space="preserve">
+    <value>今日（{0}）へ移動</value>
+  </data>
+  <data name="Gantt_YearFormat" xml:space="preserve">
+    <value>yyyy年</value>
+  </data>
+  <data name="Kanban_AddTo" xml:space="preserve">
+    <value>「{0}」にタスクを追加</value>
+  </data>
+  <data name="Kanban_CollapseLane" xml:space="preserve">
+    <value>{0}（{1} 件）を折りたたむ</value>
+  </data>
+  <data name="Kanban_Count" xml:space="preserve">
+    <value>{0} 件</value>
+  </data>
+  <data name="Kanban_CountWithEffort" xml:space="preserve">
+    <value>{0} 件 · {1}</value>
+  </data>
+  <data name="Kanban_ExpandLane" xml:space="preserve">
+    <value>{0}（{1} 件）を展開</value>
+  </data>
+  <data name="Kanban_Hide" xml:space="preserve">
+    <value>表示しない</value>
+  </data>
+  <data name="Kanban_IssueChip.Text" xml:space="preserve">
+    <value>課題</value>
+  </data>
+  <data name="Kanban_Moved_One" xml:space="preserve">
+    <value>{0} 件を「{1}」へ移動しました</value>
+  </data>
+  <data name="Kanban_Moved_Other" xml:space="preserve">
+    <value>{0} 件を「{1}」へ移動しました</value>
+  </data>
+  <data name="Kanban_MovedSubstituted_One" xml:space="preserve">
+    <value>{0} 件を「{1}」へ移動しました（{1} のないプロジェクトは {2}）</value>
+  </data>
+  <data name="Kanban_MovedSubstituted_Other" xml:space="preserve">
+    <value>{0} 件を「{1}」へ移動しました（{1} のないプロジェクトは {2}）</value>
+  </data>
+  <data name="Kanban_NoAssigneeIcon.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>担当者なし</value>
+  </data>
+  <data name="Kanban_NoCards" xml:space="preserve">
+    <value>表示するカードはありません</value>
+  </data>
+  <data name="Kanban_NoParent" xml:space="preserve">
+    <value>親タスクなし</value>
+  </data>
+  <data name="Kanban_NoStatus" xml:space="preserve">
+    <value>{0} のステータスがないため、移しませんでした</value>
+  </data>
+  <data name="Kanban_PastMonth" xml:space="preserve">
+    <value>直近 1 か月</value>
+  </data>
+  <data name="Kanban_PastWeek" xml:space="preserve">
+    <value>直近 1 週間</value>
+  </data>
+  <data name="Keys_App" xml:space="preserve">
+    <value>アプリ</value>
+  </data>
+  <data name="Keys_AppDescription" xml:space="preserve">
+    <value>どこでも効く（文字を入力しているときを除く）</value>
+  </data>
+  <data name="Keys_Intro" xml:space="preserve">
+    <value>修飾キーのない 1 文字は、文字を入力していないときに働きます。割り当ては［設定］の［キーボード］で変えられ、画面に示すキーも合わせて変わります。キーを覚えていなくても、コマンドパレット（{0}）から名前で探して実行できます。</value>
+  </data>
+  <data name="Keys_Layer" xml:space="preserve">
+    <value>開いている層</value>
+  </data>
+  <data name="Keys_LayerDescription" xml:space="preserve">
+    <value>ピッカー・ダイアログ・詳細パネルが開いているあいだは、ここのキーだけが効く</value>
+  </data>
+  <data name="Keys_ListsHeading" xml:space="preserve">
+    <value>一覧・表・カンバン</value>
+  </data>
+  <data name="Keys_Task" xml:space="preserve">
+    <value>選んでいるタスク</value>
+  </data>
+  <data name="Keys_TaskDescription" xml:space="preserve">
+    <value>一覧・計画の表・カンバン・ガントで選んでいるタスクに効く。複数を選んでいれば、すべてに効く</value>
+  </data>
+  <data name="Keys_Title" xml:space="preserve">
+    <value>キーの一覧</value>
+  </data>
+  <data name="Keys_View" xml:space="preserve">
+    <value>画面の中</value>
+  </data>
+  <data name="Keys_ViewDescription" xml:space="preserve">
+    <value>フォーカスのある一覧・表・カンバン・ガントの中で効く</value>
+  </data>
+  <data name="Kind_Issue" xml:space="preserve">
+    <value>課題</value>
+  </data>
+  <data name="Kind_IssueDescription" xml:space="preserve">
+    <value>計画に入れる前の検討事項。日程は持たず、「計画へ移動」でタスクになる</value>
+  </data>
+  <data name="Kind_Task" xml:space="preserve">
+    <value>タスク</value>
+  </data>
+  <data name="Kind_TaskDescription" xml:space="preserve">
+    <value>計画の中の作業。日程・工数・進捗率を持つ</value>
+  </data>
+  <data name="Link_Cycle" xml:space="preserve">
+    <value>「{0}」は「{1}」より前に行う必要があるため、依存関係が循環します。</value>
+  </data>
+  <data name="Link_Hierarchy" xml:space="preserve">
+    <value>「{0}」と「{1}」は親子の関係です。親タスクの中の順序は、中の作業どうしをつないでください。</value>
+  </data>
+  <data name="Link_NotPlanned" xml:space="preserve">
+    <value>課題とは依存関係を張れません。先に「計画へ移動」でタスクにしてください。</value>
+  </data>
+  <data name="List_ColumnAssignee.Text" xml:space="preserve">
+    <value>担当</value>
+  </data>
+  <data name="List_ColumnAssigneeName" xml:space="preserve">
+    <value>担当</value>
+  </data>
+  <data name="List_ColumnDue.Text" xml:space="preserve">
+    <value>期日</value>
+  </data>
+  <data name="List_ColumnEstimate.Text" xml:space="preserve">
+    <value>工数</value>
+  </data>
+  <data name="List_ColumnIssue.Text" xml:space="preserve">
+    <value>課題</value>
+  </data>
+  <data name="List_ColumnProgress.Text" xml:space="preserve">
+    <value>進捗</value>
+  </data>
+  <data name="List_ColumnProject.Text" xml:space="preserve">
+    <value>プロジェクト</value>
+  </data>
+  <data name="List_ColumnStatus.Text" xml:space="preserve">
+    <value>ステータス</value>
+  </data>
+  <data name="List_ColumnTask.Text" xml:space="preserve">
+    <value>タスク</value>
+  </data>
+  <data name="List_ColumnUpdated.Text" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="List_IssuesName" xml:space="preserve">
+    <value>課題の一覧</value>
+  </data>
+  <data name="List_List.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>タスク一覧</value>
+  </data>
+  <data name="List_NotSent.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>GitHub へ送信待ち</value>
+  </data>
+  <data name="List_TasksName" xml:space="preserve">
+    <value>タスクの一覧</value>
+  </data>
+  <data name="Menu_Assignee" xml:space="preserve">
+    <value>担当者…</value>
+  </data>
+  <data name="Menu_BackName" xml:space="preserve">
+    <value>{0}、戻る</value>
+  </data>
+  <data name="Menu_ChainChildren" xml:space="preserve">
+    <value>配下を予定の順に接続…</value>
+  </data>
+  <data name="Menu_CheckedName" xml:space="preserve">
+    <value>{0}、選択中</value>
+  </data>
+  <data name="Menu_CopyKeyOf" xml:space="preserve">
+    <value>{0} をコピー</value>
+  </data>
+  <data name="Menu_Due" xml:space="preserve">
+    <value>期日…</value>
+  </data>
+  <data name="Menu_Estimate" xml:space="preserve">
+    <value>想定工数…</value>
+  </data>
+  <data name="Menu_ExternalTask" xml:space="preserve">
+    <value>（このプロジェクトにないタスク）</value>
+  </data>
+  <data name="Menu_MoveToPlan" xml:space="preserve">
+    <value>計画へ移動…</value>
+  </data>
+  <data name="Menu_MoveToTriage" xml:space="preserve">
+    <value>課題へ移動</value>
+  </data>
+  <data name="Menu_NonBlocking" xml:space="preserve">
+    <value>後続を待たせない</value>
+  </data>
+  <data name="Menu_Progress" xml:space="preserve">
+    <value>進捗率…</value>
+  </data>
+  <data name="Menu_RemovePredecessor" xml:space="preserve">
+    <value>先行タスクの解除</value>
+  </data>
+  <data name="Menu_Repository" xml:space="preserve">
+    <value>作業するリポジトリ…</value>
+  </data>
+  <data name="Menu_Status" xml:space="preserve">
+    <value>ステータス</value>
+  </data>
+  <data name="Menu_SubmenuName" xml:space="preserve">
+    <value>{0}、サブメニュー</value>
+  </data>
+  <data name="Menu_TaskMenuName" xml:space="preserve">
+    <value>タスクのメニュー</value>
+  </data>
+  <data name="Milestones_Add" xml:space="preserve">
+    <value>マイルストーンの追加</value>
+  </data>
+  <data name="Milestones_Delete" xml:space="preserve">
+    <value>このマイルストーンの削除</value>
+  </data>
+  <data name="Milestones_Description" xml:space="preserve">
+    <value>プロジェクトの期限です。期日までのタスクが自動で入り、ガントの区切りと集計に使います。GitHub ではリポジトリの Milestone になります。消しても、タスクは残り、期日から次のマイルストーンに入ります。</value>
+  </data>
+  <data name="Milestones_NameField" xml:space="preserve">
+    <value>マイルストーンの名前</value>
+  </data>
+  <data name="Milestones_NamePlaceholder" xml:space="preserve">
+    <value>名前（リリース、設計完了 など）</value>
+  </data>
+  <data name="Milestones_NeedName" xml:space="preserve">
+    <value>名前を入れてください</value>
+  </data>
+  <data name="Milestones_NeedNameMessage" xml:space="preserve">
+    <value>名前のないマイルストーンは保存できません。消すときは、ごみ箱のボタンを押します。</value>
+  </data>
+  <data name="Milestones_Progress" xml:space="preserve">
+    <value>進捗 {0:0}%・完了 {1} / {2} 件</value>
+  </data>
+  <data name="Milestones_Restore" xml:space="preserve">
+    <value>削除の取りやめ</value>
+  </data>
+  <data name="Milestones_Saved" xml:space="preserve">
+    <value>マイルストーンを保存しました</value>
+  </data>
+  <data name="Milestones_SaveFailed" xml:space="preserve">
+    <value>保存できませんでした</value>
+  </data>
+  <data name="MyTasks_Done" xml:space="preserve">
+    <value>完了</value>
+  </data>
+  <data name="MyTasks_DoneOrCanceled" xml:space="preserve">
+    <value>完了・中止</value>
+  </data>
+  <data name="MyTasks_EmptyMessage" xml:space="preserve">
+    <value>自分のタスクが、期日の近い順にここへ集まります。</value>
+  </data>
+  <data name="MyTasks_Loading" xml:space="preserve">
+    <value>GitHub から読み込んでいます</value>
+  </data>
+  <data name="MyTasks_LoadingMessage" xml:space="preserve">
+    <value>初めての同期には少し時間がかかります。</value>
+  </data>
+  <data name="MyTasks_NoFilter" xml:space="preserve">
+    <value>リストで絞り込める条件はありません。カンバン（Ctrl + 2）では完了・中止のカードを絞り込めます</value>
+  </data>
+  <data name="MyTasks_NoGrouping" xml:space="preserve">
+    <value>リストにはグループがありません。カンバン（Ctrl + 2）で選べます</value>
+  </data>
+  <data name="MyTasks_Open" xml:space="preserve">
+    <value>タスク</value>
+  </data>
+  <data name="MyTasks_Remaining" xml:space="preserve">
+    <value>残工数 {0}</value>
+  </data>
+  <data name="MyTasks_Title.Text" xml:space="preserve">
+    <value>マイタスク</value>
+  </data>
+  <data name="MyTasks_ViewList.Text" xml:space="preserve">
+    <value>リスト</value>
+  </data>
+  <data name="Nav_MyTasks" xml:space="preserve">
+    <value>マイタスク</value>
+  </data>
+  <data name="Nav_MyTasksItem.Content" xml:space="preserve">
+    <value>マイタスク</value>
+  </data>
+  <data name="Nav_NewProject.Content" xml:space="preserve">
+    <value>新しいプロジェクト</value>
+  </data>
+  <data name="NewProject_HiddenOrganizations" xml:space="preserve">
+    <value>所属している Organization が一覧にない場合は、その組織が外部アプリの利用を制限している可能性があります。GitHub の Tasklabe の設定ページから、組織へのアクセスをリクエストしてください。</value>
+  </data>
+  <data name="NewProject_InvalidRepositoryName" xml:space="preserve">
+    <value>新しいリポジトリの名前は、英数字と . _ - で入力してください（例: web-renewal）</value>
+  </data>
+  <data name="NewProject_Kind" xml:space="preserve">
+    <value>種類</value>
+  </data>
+  <data name="NewProject_NamePlaceholder" xml:space="preserve">
+    <value>例: Web サイトのリニューアル</value>
+  </data>
+  <data name="NewProject_NeedName" xml:space="preserve">
+    <value>プロジェクト名を入力すると作成できます</value>
+  </data>
+  <data name="NewProject_NeedOrganization" xml:space="preserve">
+    <value>Organization を選ぶと作成できます</value>
+  </data>
+  <data name="NewProject_NeedRepository" xml:space="preserve">
+    <value>タスクを作成するリポジトリを選ぶと作成できます</value>
+  </data>
+  <data name="NewProject_NewRepository" xml:space="preserve">
+    <value>新しいリポジトリの作成</value>
+  </data>
+  <data name="NewProject_NoOrganizations" xml:space="preserve">
+    <value>使える Organization がありません</value>
+  </data>
+  <data name="NewProject_NoTeamOrganizations" xml:space="preserve">
+    <value>チームのプロジェクトを作れる Organization がありません。</value>
+  </data>
+  <data name="NewProject_OrganizationProblem" xml:space="preserve">
+    <value>{0}: {1}。{2}</value>
+  </data>
+  <data name="NewProject_PersonalDefaults" xml:space="preserve">
+    <value>個人のプロジェクトの既定</value>
+  </data>
+  <data name="NewProject_PersonalTip" xml:space="preserve">
+    <value>自分だけが使うプロジェクト</value>
+  </data>
+  <data name="NewProject_Repository" xml:space="preserve">
+    <value>タスクを作成するリポジトリ</value>
+  </data>
+  <data name="NewProject_RepositoryName" xml:space="preserve">
+    <value>新しいリポジトリの名前</value>
+  </data>
+  <data name="NewProject_RepositoryNamePlaceholder" xml:space="preserve">
+    <value>例: web-renewal</value>
+  </data>
+  <data name="NewProject_ReviewAccess" xml:space="preserve">
+    <value>GitHub で Tasklabe の組織アクセスを確認</value>
+  </data>
+  <data name="NewProject_Source" xml:space="preserve">
+    <value>設定の引き継ぎ元</value>
+  </data>
+  <data name="NewProject_SourceDescription" xml:space="preserve">
+    <value>ステータスの名前・カテゴリ・並びと、工数・稼働日などの設定を引き継ぎます。作った後も、プロジェクトの設定で変えられます。</value>
+  </data>
+  <data name="NewProject_TeamDefaults" xml:space="preserve">
+    <value>チームのプロジェクトの既定</value>
+  </data>
+  <data name="NewProject_TeamTip" xml:space="preserve">
+    <value>Organization で共有するプロジェクト</value>
+  </data>
+  <data name="NewProject_Title" xml:space="preserve">
+    <value>新しいプロジェクト</value>
+  </data>
+  <data name="NewProject_UnavailableOrganizations" xml:space="preserve">
+    <value>選択できない Organization があります。{0}</value>
+  </data>
+  <data name="Order_Alphabetical" xml:space="preserve">
+    <value>名前の順</value>
+  </data>
+  <data name="Order_Created" xml:space="preserve">
+    <value>作成</value>
+  </data>
+  <data name="Order_Due" xml:space="preserve">
+    <value>期日</value>
+  </data>
+  <data name="Order_Earliest" xml:space="preserve">
+    <value>早い順</value>
+  </data>
+  <data name="Order_Estimate" xml:space="preserve">
+    <value>工数</value>
+  </data>
+  <data name="Order_Largest" xml:space="preserve">
+    <value>大きい順</value>
+  </data>
+  <data name="Order_Newest" xml:space="preserve">
+    <value>新しい順</value>
+  </data>
+  <data name="Order_Plan" xml:space="preserve">
+    <value>計画の順</value>
+  </data>
+  <data name="Order_Title" xml:space="preserve">
+    <value>タイトル</value>
+  </data>
+  <data name="Order_Updated" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="Org_AuthorizeSso" xml:space="preserve">
+    <value>{0} の SSO の承認</value>
+  </data>
+  <data name="Org_CannotCreate" xml:space="preserve">
+    <value>プロジェクトを作成する権限がありません</value>
+  </data>
+  <data name="Org_CannotCreateAdvice" xml:space="preserve">
+    <value>組織でプロジェクトを作成する権限がありません。</value>
+  </data>
+  <data name="Org_FetchFailed" xml:space="preserve">
+    <value>{0} のプロジェクトを取得できません</value>
+  </data>
+  <data name="Org_Forbidden" xml:space="preserve">
+    <value>アクセス権がありません</value>
+  </data>
+  <data name="Org_ForbiddenAdvice" xml:space="preserve">
+    <value>組織のプロジェクトを参照する権限がありません。</value>
+  </data>
+  <data name="Org_NotApproved" xml:space="preserve">
+    <value>Tasklabe が未承認</value>
+  </data>
+  <data name="Org_NotApprovedAdvice" xml:space="preserve">
+    <value>組織が外部アプリの利用を制限しています。組織の管理者に Tasklabe の承認を依頼してください。</value>
+  </data>
+  <data name="Org_RequestApproval" xml:space="preserve">
+    <value>{0} への承認のリクエスト</value>
+  </data>
+  <data name="Org_SsoRequired" xml:space="preserve">
+    <value>SSO の承認が必要</value>
+  </data>
+  <data name="Org_SsoRequiredAdvice" xml:space="preserve">
+    <value>組織がシングルサインオン（SAML）を利用しています。GitHub でトークンの SSO 承認を行ってください。</value>
+  </data>
+  <data name="Outline_Empty" xml:space="preserve">
+    <value>表示するタスクがありません。期間や含めるものを見直してください。</value>
+  </data>
+  <data name="Outline_EmptyName" xml:space="preserve">
+    <value>共有ビュー: 表示するタスクがありません</value>
+  </data>
+  <data name="Outline_Name_One" xml:space="preserve">
+    <value>共有ビュー: {1} {0} 件（内容は「コード」で読めます）</value>
+  </data>
+  <data name="Outline_Name_Other" xml:space="preserve">
+    <value>共有ビュー: {1} {0} 件（内容は「コード」で読めます）</value>
+  </data>
+  <data name="Palette_Actions" xml:space="preserve">
+    <value>操作</value>
+  </data>
+  <data name="Palette_ActionsForMany" xml:space="preserve">
+    <value>{0} 件への操作</value>
+  </data>
+  <data name="Palette_ActionsForOne" xml:space="preserve">
+    <value>「{0}」への操作</value>
+  </data>
+  <data name="Palette_ArchiveProject" xml:space="preserve">
+    <value>プロジェクトのアーカイブ…</value>
+  </data>
+  <data name="Palette_GanttDay" xml:space="preserve">
+    <value>ガント: 表示の単位を日に変更</value>
+  </data>
+  <data name="Palette_GanttEndEdit" xml:space="preserve">
+    <value>ガント: 編集モードの終了</value>
+  </data>
+  <data name="Palette_GanttMonth" xml:space="preserve">
+    <value>ガント: 表示の単位を月に変更</value>
+  </data>
+  <data name="Palette_GanttShare" xml:space="preserve">
+    <value>ガント: 共有ビューの表示</value>
+  </data>
+  <data name="Palette_GanttStartEdit" xml:space="preserve">
+    <value>ガント: 編集モードの開始</value>
+  </data>
+  <data name="Palette_GanttToday" xml:space="preserve">
+    <value>ガント: 今日へ移動</value>
+  </data>
+  <data name="Palette_GanttWeek" xml:space="preserve">
+    <value>ガント: 表示の単位を週に変更</value>
+  </data>
+  <data name="Palette_Input" xml:space="preserve">
+    <value>操作・画面・タスク（名前か番号）を探す</value>
+  </data>
+  <data name="Palette_InsertChildRow" xml:space="preserve">
+    <value>計画の表: 子の行を追加</value>
+  </data>
+  <data name="Palette_InsertRow" xml:space="preserve">
+    <value>計画の表: 下に行を追加</value>
+  </data>
+  <data name="Palette_OpenProjectInGitHub" xml:space="preserve">
+    <value>プロジェクトを GitHub で表示</value>
+  </data>
+  <data name="Palette_Pages" xml:space="preserve">
+    <value>画面</value>
+  </data>
+  <data name="Palette_Recent" xml:space="preserve">
+    <value>最近使った操作</value>
+  </data>
+  <data name="Palette_RenameProject" xml:space="preserve">
+    <value>プロジェクト名の変更…</value>
+  </data>
+  <data name="Palette_SettingsGeneral" xml:space="preserve">
+    <value>設定: 全般</value>
+  </data>
+  <data name="Palette_SettingsPersonal" xml:space="preserve">
+    <value>設定: 個人のプロジェクトの既定</value>
+  </data>
+  <data name="Palette_SettingsTeam" xml:space="preserve">
+    <value>設定: チームのプロジェクトの既定</value>
+  </data>
+  <data name="Palette_ShowAccess" xml:space="preserve">
+    <value>招待が必要な理由の表示</value>
+  </data>
+  <data name="Palette_ShowConflict" xml:space="preserve">
+    <value>日程の食い違いの表示</value>
+  </data>
+  <data name="Palette_Tasks" xml:space="preserve">
+    <value>タスク</value>
+  </data>
+  <data name="Palette_ThisProject" xml:space="preserve">
+    <value>このプロジェクト</value>
+  </data>
+  <data name="Palette_Title" xml:space="preserve">
+    <value>コマンドパレット</value>
+  </data>
+  <data name="Palette_View" xml:space="preserve">
+    <value>ビュー: {0}</value>
+  </data>
+  <data name="PaneSizer_Tip" xml:space="preserve">
+    <value>幅の変更（ダブルクリックで元の幅）</value>
+  </data>
+  <data name="Picker_Assignee" xml:space="preserve">
+    <value>担当者</value>
+  </data>
+  <data name="Picker_AssigneeNote" xml:space="preserve">
+    <value>ここにいない人は、リポジトリへの招待（プロジェクトの「…」→「メンバーの招待」）か、プロジェクトの設定で加えられます。</value>
+  </data>
+  <data name="Picker_BranchRepository" xml:space="preserve">
+    <value>ブランチを作るリポジトリ</value>
+  </data>
+  <data name="Picker_CheckedName" xml:space="preserve">
+    <value>{0}、選択中</value>
+  </data>
+  <data name="Picker_CloseName" xml:space="preserve">
+    <value>{0}を閉じる</value>
+  </data>
+  <data name="Picker_CurrentName" xml:space="preserve">
+    <value>{0}、いまの値</value>
+  </data>
+  <data name="Picker_DefaultProject" xml:space="preserve">
+    <value>既定</value>
+  </data>
+  <data name="Picker_Due" xml:space="preserve">
+    <value>期日（予定終了日）</value>
+  </data>
+  <data name="Picker_Estimate" xml:space="preserve">
+    <value>想定工数（時間）</value>
+  </data>
+  <data name="Picker_EstimateInput" xml:space="preserve">
+    <value>時間を入力（例: 6）</value>
+  </data>
+  <data name="Picker_EstimateInvalid" xml:space="preserve">
+    <value>0 以上の時間を入力してください（例: 6、1.5）</value>
+  </data>
+  <data name="Picker_FilterableHint" xml:space="preserve">
+    <value>数字キーで選択　文字で絞り込み　Esc で閉じる</value>
+  </data>
+  <data name="Picker_FilterHint" xml:space="preserve">
+    <value>文字で絞り込み　↓ で候補へ　Enter で先頭を選択　Esc で閉じる</value>
+  </data>
+  <data name="Picker_FilterInput" xml:space="preserve">
+    <value>文字を入力して絞り込む</value>
+  </data>
+  <data name="Picker_Hint" xml:space="preserve">
+    <value>数字キーか Enter で決定　Esc で閉じる</value>
+  </data>
+  <data name="Picker_InputHint" xml:space="preserve">
+    <value>数字キーか Enter で決定　Tab で入力　Esc で閉じる</value>
+  </data>
+  <data name="Picker_Kind" xml:space="preserve">
+    <value>区分</value>
+  </data>
+  <data name="Picker_Me" xml:space="preserve">
+    <value>自分</value>
+  </data>
+  <data name="Picker_MixedCheckedName" xml:space="preserve">
+    <value>{0}、一部のタスクで選択中</value>
+  </data>
+  <data name="Picker_MixedName" xml:space="preserve">
+    <value>{0}、一部のタスクの値</value>
+  </data>
+  <data name="Picker_MultipleHint" xml:space="preserve">
+    <value>{0} 件を選択中　Space で選択・解除</value>
+  </data>
+  <data name="Picker_NoGitHub" xml:space="preserve">
+    <value>GitHub なし</value>
+  </data>
+  <data name="Picker_NoMatch" xml:space="preserve">
+    <value>一致する候補はありません</value>
+  </data>
+  <data name="Picker_NoOptions" xml:space="preserve">
+    <value>選べる候補はありません</value>
+  </data>
+  <data name="Picker_OptionDetailName" xml:space="preserve">
+    <value>{0}、{1}</value>
+  </data>
+  <data name="Picker_OtherRepositories" xml:space="preserve">
+    <value>ほかのリポジトリ</value>
+  </data>
+  <data name="Picker_Parent" xml:space="preserve">
+    <value>置き場所</value>
+  </data>
+  <data name="Picker_Predecessor" xml:space="preserve">
+    <value>先行タスクの追加（終わってから始める）</value>
+  </data>
+  <data name="Picker_Progress" xml:space="preserve">
+    <value>進捗率</value>
+  </data>
+  <data name="Picker_ProgressInput" xml:space="preserve">
+    <value>0〜100 の数値（例: 60）</value>
+  </data>
+  <data name="Picker_ProgressInvalid" xml:space="preserve">
+    <value>0〜100 の数値を入力してください（例: 60）</value>
+  </data>
+  <data name="Picker_ReadOnly" xml:space="preserve">
+    <value>読み取りのみ</value>
+  </data>
+  <data name="Picker_Repository" xml:space="preserve">
+    <value>作業するリポジトリ</value>
+  </data>
+  <data name="Picker_RepositoryFailedMessage" xml:space="preserve">
+    <value>GitHub に接続できるか確かめて、もう一度開いてください。</value>
+  </data>
+  <data name="Picker_RepositoryFailedTitle" xml:space="preserve">
+    <value>リポジトリの候補を取れませんでした</value>
+  </data>
+  <data name="Picker_RepositoryInput" xml:space="preserve">
+    <value>owner/name で絞り込む</value>
+  </data>
+  <data name="Picker_RepositoryNote" xml:space="preserve">
+    <value>自分が所有・共同編集・所属する Organization のリポジトリを、最近 push した順に並べています。</value>
+  </data>
+  <data name="Picker_Status" xml:space="preserve">
+    <value>ステータス</value>
+  </data>
+  <data name="Picker_StatusCategory" xml:space="preserve">
+    <value>ステータスのカテゴリ</value>
+  </data>
+  <data name="Picker_TaskInput" xml:space="preserve">
+    <value>タスク名で絞り込む</value>
+  </data>
+  <data name="Picker_TopLevel" xml:space="preserve">
+    <value>（最上位に置く）</value>
+  </data>
+  <data name="PickerButton_Auto" xml:space="preserve">
+    <value>{0}（自動）</value>
+  </data>
+  <data name="PickerButton_Name" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Preset_LastWeek" xml:space="preserve">
+    <value>先週（月〜金）</value>
+  </data>
+  <data name="Preset_NextMonth" xml:space="preserve">
+    <value>来月</value>
+  </data>
+  <data name="Preset_NextWeek" xml:space="preserve">
+    <value>来週（月〜金）</value>
+  </data>
+  <data name="Preset_NextWeekend" xml:space="preserve">
+    <value>来週末</value>
+  </data>
+  <data name="Preset_OneWeek" xml:space="preserve">
+    <value>今日から 1 週間</value>
+  </data>
+  <data name="Preset_ThisMonthSoFar" xml:space="preserve">
+    <value>今月（今日まで）</value>
+  </data>
+  <data name="Preset_ThisWeekend" xml:space="preserve">
+    <value>今週末</value>
+  </data>
+  <data name="Preset_ThisWeekSoFar" xml:space="preserve">
+    <value>今週（今日まで）</value>
+  </data>
+  <data name="Preset_Today" xml:space="preserve">
+    <value>今日</value>
+  </data>
+  <data name="Preset_Tomorrow" xml:space="preserve">
+    <value>明日</value>
+  </data>
+  <data name="Preset_TwoWeeks" xml:space="preserve">
+    <value>今日から 2 週間</value>
+  </data>
+  <data name="Preset_UntilMonthEnd" xml:space="preserve">
+    <value>今月末まで</value>
+  </data>
+  <data name="Preset_UntilWeekend" xml:space="preserve">
+    <value>今週末まで</value>
+  </data>
+  <data name="Preset_Yesterday" xml:space="preserve">
+    <value>昨日</value>
+  </data>
+  <data name="Preset_YesterdayToToday" xml:space="preserve">
+    <value>昨日から今日</value>
+  </data>
+  <data name="Progress_LockedMessage" xml:space="preserve">
+    <value>完了・中止したタスクの進捗率は 100 % に固定しています。</value>
+  </data>
+  <data name="Progress_LockedTitle" xml:space="preserve">
+    <value>進捗率を変えられません</value>
+  </data>
+  <data name="Project_AddButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>タスクを追加</value>
+  </data>
+  <data name="Project_Archive" xml:space="preserve">
+    <value>アーカイブ…</value>
+  </data>
+  <data name="Project_BulkPlanButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>計画をまとめて入力</value>
+  </data>
+  <data name="Project_BulkPlanText.Text" xml:space="preserve">
+    <value>まとめて入力</value>
+  </data>
+  <data name="Project_FilterButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>絞り込み</value>
+  </data>
+  <data name="Project_FilterText.Text" xml:space="preserve">
+    <value>絞り込み</value>
+  </data>
+  <data name="Project_GanttEdit.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>編集モード</value>
+  </data>
+  <data name="Project_GanttEditText.Text" xml:space="preserve">
+    <value>編集</value>
+  </data>
+  <data name="Project_GanttToday.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>今日へ移動</value>
+  </data>
+  <data name="Project_GanttTodayText.Text" xml:space="preserve">
+    <value>今日</value>
+  </data>
+  <data name="Project_GroupingOnlyKanban" xml:space="preserve">
+    <value>このビューではグループを選べません。カンバンで選べます</value>
+  </data>
+  <data name="Project_InazumaToggle.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>イナズマ線の表示</value>
+  </data>
+  <data name="Project_InazumaToggle.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>イナズマ線の表示</value>
+  </data>
+  <data name="Project_Inbox" xml:space="preserve">
+    <value>未分類</value>
+  </data>
+  <data name="Project_Invite" xml:space="preserve">
+    <value>メンバーの招待</value>
+  </data>
+  <data name="Project_InviteToProject" xml:space="preserve">
+    <value>Project のアクセス設定の表示</value>
+  </data>
+  <data name="Project_InviteToRepository" xml:space="preserve">
+    <value>リポジトリのアクセス設定の表示</value>
+  </data>
+  <data name="Project_Menu" xml:space="preserve">
+    <value>プロジェクトの操作</value>
+  </data>
+  <data name="Project_MenuButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>プロジェクトの操作</value>
+  </data>
+  <data name="Project_MenuButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>プロジェクトの操作</value>
+  </data>
+  <data name="Project_Milestones" xml:space="preserve">
+    <value>マイルストーン…</value>
+  </data>
+  <data name="Project_NameField" xml:space="preserve">
+    <value>プロジェクト名</value>
+  </data>
+  <data name="Project_OpenInGitHub" xml:space="preserve">
+    <value>GitHub で表示</value>
+  </data>
+  <data name="Project_OrderingOnlyKanban" xml:space="preserve">
+    <value>このビューでは並び順を選べません。カンバンで選べます</value>
+  </data>
+  <data name="Project_OtherEmpty.ActionText" xml:space="preserve">
+    <value>タスクを追加</value>
+  </data>
+  <data name="Project_OtherEmpty.Title" xml:space="preserve">
+    <value>タスクはまだありません</value>
+  </data>
+  <data name="Project_PersonalSummary" xml:space="preserve">
+    <value>未完了 {0} 件</value>
+  </data>
+  <data name="Project_PersonalSummaryRemaining" xml:space="preserve">
+    <value>未完了 {0} 件   残 {1}</value>
+  </data>
+  <data name="Project_Rename" xml:space="preserve">
+    <value>名前の変更…</value>
+  </data>
+  <data name="Project_RenameTitle" xml:space="preserve">
+    <value>プロジェクト名の変更</value>
+  </data>
+  <data name="Project_Scale" xml:space="preserve">
+    <value>表示の単位</value>
+  </data>
+  <data name="Project_ScaleDay" xml:space="preserve">
+    <value>日</value>
+  </data>
+  <data name="Project_ScaleMonth" xml:space="preserve">
+    <value>月</value>
+  </data>
+  <data name="Project_ScaleWeek" xml:space="preserve">
+    <value>週</value>
+  </data>
+  <data name="Project_Settings" xml:space="preserve">
+    <value>プロジェクトの設定</value>
+  </data>
+  <data name="Project_Share.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>共有ビューの表示</value>
+  </data>
+  <data name="Project_Share.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>共有ビューの表示</value>
+  </data>
+  <data name="Project_ShareText.Text" xml:space="preserve">
+    <value>共有</value>
+  </data>
+  <data name="Project_StickyToggle.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>親タスクを上端に固定</value>
+  </data>
+  <data name="Project_StickyToggle.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>親タスクを上端に固定</value>
+  </data>
+  <data name="Project_TeamSummary" xml:space="preserve">
+    <value>進捗 {0:0}%   残 {1} / {2}</value>
+  </data>
+  <data name="Project_TeamSummaryUnestimated" xml:space="preserve">
+    <value>進捗 {0:0}%   残 {1} / {2}   未見積り {3} 件</value>
+  </data>
+  <data name="Project_ViewGantt.Text" xml:space="preserve">
+    <value>ガント</value>
+  </data>
+  <data name="Project_ViewIssues.Text" xml:space="preserve">
+    <value>課題</value>
+  </data>
+  <data name="Project_ViewKanban.Text" xml:space="preserve">
+    <value>カンバン</value>
+  </data>
+  <data name="Project_ViewKanbanName" xml:space="preserve">
+    <value>カンバン</value>
+  </data>
+  <data name="Project_ViewListName" xml:space="preserve">
+    <value>リスト</value>
+  </data>
+  <data name="Project_ViewPlan.Text" xml:space="preserve">
+    <value>計画</value>
+  </data>
+  <data name="Project_ViewPlanName" xml:space="preserve">
+    <value>計画</value>
+  </data>
+  <data name="Project_ViewStatus.Text" xml:space="preserve">
+    <value>状況</value>
+  </data>
+  <data name="ProjectSettings_Back.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>プロジェクトへ戻る</value>
+  </data>
+  <data name="ProjectSettings_BackText.Text" xml:space="preserve">
+    <value>プロジェクトへ戻る</value>
+  </data>
+  <data name="ProjectSettings_OpenPersonalDefaults" xml:space="preserve">
+    <value>個人のプロジェクトの既定の表示</value>
+  </data>
+  <data name="ProjectSettings_OpenTeamDefaults" xml:space="preserve">
+    <value>チームのプロジェクトの既定の表示</value>
+  </data>
+  <data name="ProjectSettings_PersonalIntro" xml:space="preserve">
+    <value>このプロジェクトだけの設定です。設定しない項目は、個人のプロジェクトの既定に従います。</value>
+  </data>
+  <data name="ProjectSettings_ReadOnly" xml:space="preserve">
+    <value>表示のみ</value>
+  </data>
+  <data name="ProjectSettings_ReadOnlyMessage" xml:space="preserve">
+    <value>この Project を編集する権限がないため、設定は表示だけです。変えたいときは、Project の管理者に依頼してください。</value>
+  </data>
+  <data name="ProjectSettings_TeamIntro" xml:space="preserve">
+    <value>このプロジェクトだけの設定です。GitHub の Project に保存し、メンバー全員で同じ設定を使います。ショートカットキーなどアプリ全体の設定は、左下の「設定」で変えます。</value>
+  </data>
+  <data name="ProjectSettings_Title" xml:space="preserve">
+    <value>{0} の設定</value>
+  </data>
+  <data name="Promote_AndMore" xml:space="preserve">
+    <value> ほか</value>
+  </data>
+  <data name="Promote_Chain" xml:space="preserve">
+    <value>直前のタスク「{0}」の後に接続</value>
+  </data>
+  <data name="Promote_ChainNone" xml:space="preserve">
+    <value>直前のタスクの後に接続（置き場所にタスクがありません）</value>
+  </data>
+  <data name="Promote_Confirm" xml:space="preserve">
+    <value>移動</value>
+  </data>
+  <data name="Promote_DoneMany" xml:space="preserve">
+    <value>{0} 件を計画へ移動しました</value>
+  </data>
+  <data name="Promote_DoneOne" xml:space="preserve">
+    <value>「{0}」を計画へ移動しました</value>
+  </data>
+  <data name="Promote_InheritNote" xml:space="preserve">
+    <value>置き場所の親に張った依存関係は、つながなくても受け継ぎます。</value>
+  </data>
+  <data name="Promote_ManyHeading" xml:space="preserve">
+    <value>{0} 件の課題（{1}）</value>
+  </data>
+  <data name="Promote_ManyNote" xml:space="preserve">
+    <value>同じ Issue のまま、置き場所の末尾へ移します。日程は後から計画の表やガントで決めます。</value>
+  </data>
+  <data name="Promote_SingleNote" xml:space="preserve">
+    <value>同じ Issue のまま、計画の中へ移します。日程は後から計画の表やガントでも変えられます。</value>
+  </data>
+  <data name="Promote_Start" xml:space="preserve">
+    <value>予定開始日</value>
+  </data>
+  <data name="Promote_Title" xml:space="preserve">
+    <value>計画へ移動</value>
+  </data>
+  <data name="Quick_AddButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>追加</value>
+  </data>
+  <data name="Quick_AddedTo" xml:space="preserve">
+    <value>「{0}」を{1}に追加しました</value>
+  </data>
+  <data name="Quick_AddFailed" xml:space="preserve">
+    <value>追加できませんでした。入力はそのまま残しています</value>
+  </data>
+  <data name="Quick_Continue.Content" xml:space="preserve">
+    <value>続ける</value>
+  </data>
+  <data name="Quick_DetailButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>詳細を入力</value>
+  </data>
+  <data name="Quick_DetailText.Text" xml:space="preserve">
+    <value>詳細</value>
+  </data>
+  <data name="Quick_Discard.Content" xml:space="preserve">
+    <value>破棄</value>
+  </data>
+  <data name="Quick_DiscardQuestion.Text" xml:space="preserve">
+    <value>入力中のタスクを破棄しますか？</value>
+  </data>
+  <data name="Quick_Hint" xml:space="preserve">
+    <value>{0} で追加　{1} で詳細　Esc で閉じる</value>
+  </data>
+  <data name="Quick_HintNeedTitle" xml:space="preserve">
+    <value>タスク名を入力すると追加できます　{0} で詳細　Esc で閉じる</value>
+  </data>
+  <data name="Quick_WindowTitle" xml:space="preserve">
+    <value>{0} - Tasklabe</value>
+  </data>
+  <data name="Row_ValueName" xml:space="preserve">
+    <value>{0} の{1}: {2}</value>
+  </data>
+  <data name="SelectionBar_Assignee" xml:space="preserve">
+    <value>担当者</value>
+  </data>
+  <data name="SelectionBar_Clear" xml:space="preserve">
+    <value>で解除</value>
+  </data>
+  <data name="SelectionBar_Count" xml:space="preserve">
+    <value>{0} 件を選択中</value>
+  </data>
+  <data name="SelectionBar_Delete" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="SelectionBar_Due" xml:space="preserve">
+    <value>期日</value>
+  </data>
+  <data name="SelectionBar_Estimate" xml:space="preserve">
+    <value>工数</value>
+  </data>
+  <data name="SelectionBar_Plan" xml:space="preserve">
+    <value>計画</value>
+  </data>
+  <data name="SelectionBar_Status" xml:space="preserve">
+    <value>ステータス</value>
+  </data>
+  <data name="Settings_AccountHeading.Text" xml:space="preserve">
+    <value>アカウント</value>
+  </data>
+  <data name="Settings_AppearanceHeading.Text" xml:space="preserve">
+    <value>外観</value>
+  </data>
+  <data name="Settings_Assign" xml:space="preserve">
+    <value>割り当て</value>
+  </data>
+  <data name="Settings_ChangeShortcut" xml:space="preserve">
+    <value>変更…</value>
+  </data>
+  <data name="Settings_ChangeShortcutHint" xml:space="preserve">
+    <value>キーを押してから、Tab で「割り当て」へ移って Enter　Esc でキャンセル</value>
+  </data>
+  <data name="Settings_ChangeShortcutName" xml:space="preserve">
+    <value>{0}のキーの変更</value>
+  </data>
+  <data name="Settings_ChangeShortcutTitle" xml:space="preserve">
+    <value>キーの変更</value>
+  </data>
+  <data name="Settings_EmptyColumns.Text" xml:space="preserve">
+    <value>空の列の表示</value>
+  </data>
+  <data name="Settings_EmptyColumnsDescription.Text" xml:space="preserve">
+    <value>オフにすると、カードが 1 枚もない列を隠します。すべてのカンバンに効きます。</value>
+  </data>
+  <data name="Settings_EmptyColumnsSwitch.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>空の列の表示</value>
+  </data>
+  <data name="Settings_GeneralTab.Text" xml:space="preserve">
+    <value>全般</value>
+  </data>
+  <data name="Settings_Hints.Text" xml:space="preserve">
+    <value>操作のヒントの表示</value>
+  </data>
+  <data name="Settings_HintsDescription.Text" xml:space="preserve">
+    <value>ダイアログや詳細パネルの下端に、使えるキーを書いておきます。</value>
+  </data>
+  <data name="Settings_HintsSwitch.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>操作のヒントの表示</value>
+  </data>
+  <data name="Settings_KanbanHeading.Text" xml:space="preserve">
+    <value>カンバン</value>
+  </data>
+  <data name="Settings_KeyboardDescription.Text" xml:space="preserve">
+    <value>よく使う操作のキーを変えられます。修飾キーのない 1 文字は、文字を入力していないときに働きます。</value>
+  </data>
+  <data name="Settings_KeyboardHeading.Text" xml:space="preserve">
+    <value>キーボード</value>
+  </data>
+  <data name="Settings_KeyConflict" xml:space="preserve">
+    <value>「{0}」に割り当て済みです。割り当てると「{0}」からは外します。</value>
+  </data>
+  <data name="Settings_KeyReserved" xml:space="preserve">
+    <value>このキーは画面の基本操作（移動、決定、取り消しなど）に使うため割り当てられません。</value>
+  </data>
+  <data name="Settings_KeyTargetName" xml:space="preserve">
+    <value>割り当てるキーの入力</value>
+  </data>
+  <data name="Settings_Language.Text" xml:space="preserve">
+    <value>表示の言語（Language）</value>
+  </data>
+  <data name="Settings_LanguageDescription.Text" xml:space="preserve">
+    <value>変えた言語は、アプリを起動し直すと反映されます。</value>
+  </data>
+  <data name="Settings_LanguagePicker" xml:space="preserve">
+    <value>表示の言語</value>
+  </data>
+  <data name="Settings_LanguageSystem" xml:space="preserve">
+    <value>Windows に合わせる</value>
+  </data>
+  <data name="Settings_None" xml:space="preserve">
+    <value>なし</value>
+  </data>
+  <data name="Settings_NoOrganizations" xml:space="preserve">
+    <value>利用できる Organization はありません。</value>
+  </data>
+  <data name="Settings_NoShortcut" xml:space="preserve">
+    <value>割り当てなし</value>
+  </data>
+  <data name="Settings_NumberHeading.Text" xml:space="preserve">
+    <value>番号の表示</value>
+  </data>
+  <data name="Settings_NumberInGantt.Text" xml:space="preserve">
+    <value>ガントチャート</value>
+  </data>
+  <data name="Settings_NumberInGanttSwitch.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>ガントチャートの番号の表示</value>
+  </data>
+  <data name="Settings_NumberInIssues.Text" xml:space="preserve">
+    <value>課題の一覧</value>
+  </data>
+  <data name="Settings_NumberInIssuesSwitch.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>課題の一覧の番号の表示</value>
+  </data>
+  <data name="Settings_NumberInPlan.Text" xml:space="preserve">
+    <value>計画の表</value>
+  </data>
+  <data name="Settings_NumberInPlanSwitch.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>計画の表の番号の表示</value>
+  </data>
+  <data name="Settings_OpenProjectSettings" xml:space="preserve">
+    <value>設定の表示</value>
+  </data>
+  <data name="Settings_OpenProjectSettingsName" xml:space="preserve">
+    <value>{0} の設定の表示</value>
+  </data>
+  <data name="Settings_OrganizationAccess.Content" xml:space="preserve">
+    <value>GitHub で確認</value>
+  </data>
+  <data name="Settings_OrganizationList" xml:space="preserve">
+    <value>利用できる Organization: {0}</value>
+  </data>
+  <data name="Settings_OrganizationProblem" xml:space="preserve">
+    <value>{0}（{1}）</value>
+  </data>
+  <data name="Settings_Organizations.Text" xml:space="preserve">
+    <value>Organization へのアクセス</value>
+  </data>
+  <data name="Settings_OrganizationsNote" xml:space="preserve">
+    <value>{0} 所属している組織が表示されない場合は、組織が外部アプリの利用を制限している可能性があります。</value>
+  </data>
+  <data name="Settings_PerProjectDescription.Text" xml:space="preserve">
+    <value>プロジェクトの設定で、この既定を上書きできます。プロジェクト画面の「…」からも開けます。</value>
+  </data>
+  <data name="Settings_PerProjectHeading.Text" xml:space="preserve">
+    <value>プロジェクトごとの設定</value>
+  </data>
+  <data name="Settings_PersonalDefaultsDescription" xml:space="preserve">
+    <value>個人のプロジェクト（マイタスクを含む）の既定です。マイタスクのように複数のプロジェクトをまたぐ画面の工数の表示にも使います。</value>
+  </data>
+  <data name="Settings_PersonalRepository" xml:space="preserve">
+    <value>個人用リポジトリ: {0}</value>
+  </data>
+  <data name="Settings_PersonalTab.Text" xml:space="preserve">
+    <value>個人プロジェクトの既定</value>
+  </data>
+  <data name="Settings_PressKey" xml:space="preserve">
+    <value>キーを押してください</value>
+  </data>
+  <data name="Settings_PressKeyFor" xml:space="preserve">
+    <value>「{0}」に割り当てるキーを押してください。いまの割り当て: {1}</value>
+  </data>
+  <data name="Settings_ProjectOverrides" xml:space="preserve">
+    <value>このプロジェクトで上書きしています</value>
+  </data>
+  <data name="Settings_ProjectUsesDefaults" xml:space="preserve">
+    <value>既定に従っています</value>
+  </data>
+  <data name="Settings_ResetAllMessage" xml:space="preserve">
+    <value>変えた割り当てをすべて既定に戻します。</value>
+  </data>
+  <data name="Settings_ResetAllShortcuts.Content" xml:space="preserve">
+    <value>すべて既定に戻す…</value>
+  </data>
+  <data name="Settings_ResetAllTitle" xml:space="preserve">
+    <value>キーの割り当てを既定に戻しますか？</value>
+  </data>
+  <data name="Settings_ResetShortcut" xml:space="preserve">
+    <value>既定に戻す</value>
+  </data>
+  <data name="Settings_ResetShortcutName" xml:space="preserve">
+    <value>{0}のキーを既定に戻す</value>
+  </data>
+  <data name="Settings_ShowShortcuts.Content" xml:space="preserve">
+    <value>一覧の表示</value>
+  </data>
+  <data name="Settings_SignOut.Content" xml:space="preserve">
+    <value>サインアウト…</value>
+  </data>
+  <data name="Settings_SignOutConfirm" xml:space="preserve">
+    <value>サインアウト</value>
+  </data>
+  <data name="Settings_SignOutMessage" xml:space="preserve">
+    <value>この PC に保存したアクセストークンとキャッシュを削除します。GitHub 上のデータは削除されません。</value>
+  </data>
+  <data name="Settings_SignOutTitle" xml:space="preserve">
+    <value>サインアウトしますか？</value>
+  </data>
+  <data name="Settings_TeamDefaultsDescription" xml:space="preserve">
+    <value>チームのプロジェクトの既定です。新しいチームのプロジェクトには、作った時点のこの値を書き込み、メンバー全員で共有します。</value>
+  </data>
+  <data name="Settings_TeamTab.Text" xml:space="preserve">
+    <value>チームプロジェクトの既定</value>
+  </data>
+  <data name="Settings_Theme.Text" xml:space="preserve">
+    <value>テーマ</value>
+  </data>
+  <data name="Settings_ThemeDark" xml:space="preserve">
+    <value>ダーク</value>
+  </data>
+  <data name="Settings_ThemeDescription.Text" xml:space="preserve">
+    <value>ハイコントラストは Windows の設定に従います。</value>
+  </data>
+  <data name="Settings_ThemeLight" xml:space="preserve">
+    <value>ライト</value>
+  </data>
+  <data name="Settings_ThemePicker" xml:space="preserve">
+    <value>テーマ</value>
+  </data>
+  <data name="Settings_ThemeSystem" xml:space="preserve">
+    <value>Windows に合わせる</value>
+  </data>
+  <data name="Settings_Title.Text" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="Settings_Unassign" xml:space="preserve">
+    <value>割り当ての解除</value>
+  </data>
+  <data name="SettingsEditor_AddDate" xml:space="preserve">
+    <value>日付を足す…</value>
+  </data>
+  <data name="SettingsEditor_AddHoliday" xml:space="preserve">
+    <value>独自の休日に足す日付</value>
+  </data>
+  <data name="SettingsEditor_AddStatus" xml:space="preserve">
+    <value>ステータスの追加</value>
+  </data>
+  <data name="SettingsEditor_Applied" xml:space="preserve">
+    <value>GitHub に反映しました</value>
+  </data>
+  <data name="SettingsEditor_AutolinkFailed" xml:space="preserve">
+    <value>GitHub の自動リンクは登録できませんでした。</value>
+  </data>
+  <data name="SettingsEditor_AutolinkNotPermitted" xml:space="preserve">
+    <value>リポジトリの管理者でないため、GitHub の自動リンクは登録できませんでした。番号はアプリの中で使えます。コミットやコメントでもリンクにするには、リポジトリの管理者にこの画面でキーを決め直してもらうか、リポジトリの設定の Autolink references に「{0}-」を登録してもらってください。</value>
+  </data>
+  <data name="SettingsEditor_AutolinkRegistered" xml:space="preserve">
+    <value>GitHub のリポジトリの自動リンクにも登録しました。コミットやコメントに書いた {0} が Issue へのリンクになります。</value>
+  </data>
+  <data name="SettingsEditor_DayOffName" xml:space="preserve">
+    <value>{0}を休む</value>
+  </data>
+  <data name="SettingsEditor_DaysOff" xml:space="preserve">
+    <value>休む曜日</value>
+  </data>
+  <data name="SettingsEditor_Decide" xml:space="preserve">
+    <value>決定</value>
+  </data>
+  <data name="SettingsEditor_DecideName" xml:space="preserve">
+    <value>このキーで決定</value>
+  </data>
+  <data name="SettingsEditor_DefaultKind" xml:space="preserve">
+    <value>区分の既定</value>
+  </data>
+  <data name="SettingsEditor_DefaultKindDescription" xml:space="preserve">
+    <value>N キーや ＋ で追加したタスクを、課題とタスクのどちらとして入れるか。</value>
+  </data>
+  <data name="SettingsEditor_DefaultKindPicker" xml:space="preserve">
+    <value>新しいタスクの区分の既定</value>
+  </data>
+  <data name="SettingsEditor_DefaultStatusesDescription" xml:space="preserve">
+    <value>新しいプロジェクトを作るときの、ステータスの名前・カテゴリ・並びです。作った後は、プロジェクトの設定で変えられます。</value>
+  </data>
+  <data name="SettingsEditor_EditOnGitHub" xml:space="preserve">
+    <value>色や説明を GitHub で編集</value>
+  </data>
+  <data name="SettingsEditor_Effort" xml:space="preserve">
+    <value>工数</value>
+  </data>
+  <data name="SettingsEditor_EffortDescription" xml:space="preserve">
+    <value>工数の入力は常に時間で行い、表示だけを切り替えます。</value>
+  </data>
+  <data name="SettingsEditor_EffortUnit" xml:space="preserve">
+    <value>表示の単位</value>
+  </data>
+  <data name="SettingsEditor_EffortUnitPicker" xml:space="preserve">
+    <value>工数の表示の単位</value>
+  </data>
+  <data name="SettingsEditor_ExtraHolidays" xml:space="preserve">
+    <value>独自の休日</value>
+  </data>
+  <data name="SettingsEditor_ExtraHolidaysDescription" xml:space="preserve">
+    <value>夏季休業や年末年始など、会社やチームで決めた休みを足します。</value>
+  </data>
+  <data name="SettingsEditor_FollowsPersonalDefaults" xml:space="preserve">
+    <value>個人のプロジェクトの既定（全体の設定）に従っています。</value>
+  </data>
+  <data name="SettingsEditor_FollowsTeamDefaults" xml:space="preserve">
+    <value>チームのプロジェクトの既定（全体の設定）に従っています。メンバーそれぞれの PC の既定が使われるため、全員でそろえるには、このプロジェクトで設定してください。</value>
+  </data>
+  <data name="SettingsEditor_GuestExists" xml:space="preserve">
+    <value>{0} は既にいます</value>
+  </data>
+  <data name="SettingsEditor_GuestNameField" xml:space="preserve">
+    <value>GitHub を使わないメンバーの名前</value>
+  </data>
+  <data name="SettingsEditor_GuestPlaceholder" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="SettingsEditor_GuestProblem" xml:space="preserve">
+    <value>メンバーを追加できません</value>
+  </data>
+  <data name="SettingsEditor_Guests" xml:space="preserve">
+    <value>GitHub を使わないメンバー</value>
+  </data>
+  <data name="SettingsEditor_GuestsDescription" xml:space="preserve">
+    <value>名前で担当者にできます。外しても、割り当て済みのタスクの担当者は残ります。</value>
+  </data>
+  <data name="SettingsEditor_Hours" xml:space="preserve">
+    <value>時間 (h)</value>
+  </data>
+  <data name="SettingsEditor_HoursPerDay" xml:space="preserve">
+    <value>1 日の稼働時間</value>
+  </data>
+  <data name="SettingsEditor_HoursPerDayDescription" xml:space="preserve">
+    <value>人日の換算と、状況の画面で担当者の負荷の上限に使います。</value>
+  </data>
+  <data name="SettingsEditor_HoursPerDayField" xml:space="preserve">
+    <value>1 日の稼働時間（時間）</value>
+  </data>
+  <data name="SettingsEditor_InboxKey" xml:space="preserve">
+    <value>未分類のタスクは {0} のように呼びます。</value>
+  </data>
+  <data name="SettingsEditor_JapaneseHolidays" xml:space="preserve">
+    <value>日本の祝日を休む</value>
+  </data>
+  <data name="SettingsEditor_Key" xml:space="preserve">
+    <value>キー</value>
+  </data>
+  <data name="SettingsEditor_KeyDescription" xml:space="preserve">
+    <value>キーは GitHub のリポジトリの自動リンクにも登録し、コミットやコメントに書いた {0} が Issue へのリンクになります。</value>
+  </data>
+  <data name="SettingsEditor_KeyField" xml:space="preserve">
+    <value>番号のキー</value>
+  </data>
+  <data name="SettingsEditor_KeyProblem" xml:space="preserve">
+    <value>キーを変更できません</value>
+  </data>
+  <data name="SettingsEditor_KeySaved" xml:space="preserve">
+    <value>キーを保存しました</value>
+  </data>
+  <data name="SettingsEditor_KeySavedExample" xml:space="preserve">
+    <value>このプロジェクトのタスクは {0} のように呼びます。</value>
+  </data>
+  <data name="SettingsEditor_KeySaveFailed" xml:space="preserve">
+    <value>キーを GitHub に保存できませんでした</value>
+  </data>
+  <data name="SettingsEditor_LegacyCalendar" xml:space="preserve">
+    <value>この PC にだけ保存されていた設定です。変えると GitHub に保存し、メンバーと共有します。</value>
+  </data>
+  <data name="SettingsEditor_LevelOption" xml:space="preserve">
+    <value>{0} 段（{1}）</value>
+  </data>
+  <data name="SettingsEditor_Levels" xml:space="preserve">
+    <value>あらかじめ用意する段</value>
+  </data>
+  <data name="SettingsEditor_LevelsDescription" xml:space="preserve">
+    <value>段に満たないタスクは後ろを 0 で埋めます（{0}）。それより深いタスクは段を足します（{1}）。</value>
+  </data>
+  <data name="SettingsEditor_MoveDown" xml:space="preserve">
+    <value>{0} を下へ移動</value>
+  </data>
+  <data name="SettingsEditor_MoveUp" xml:space="preserve">
+    <value>{0} を上へ移動</value>
+  </data>
+  <data name="SettingsEditor_NewStatus" xml:space="preserve">
+    <value>新しいステータス</value>
+  </data>
+  <data name="SettingsEditor_NewStatusNumbered" xml:space="preserve">
+    <value>新しいステータス {0}</value>
+  </data>
+  <data name="SettingsEditor_NewTask" xml:space="preserve">
+    <value>新しいタスク</value>
+  </data>
+  <data name="SettingsEditor_Numbering" xml:space="preserve">
+    <value>番号の振り方</value>
+  </data>
+  <data name="SettingsEditor_NumberingRow" xml:space="preserve">
+    <value>振り方</value>
+  </data>
+  <data name="SettingsEditor_Numbers" xml:space="preserve">
+    <value>番号</value>
+  </data>
+  <data name="SettingsEditor_Outline" xml:space="preserve">
+    <value>階層番号</value>
+  </data>
+  <data name="SettingsEditor_OutlinePersonal" xml:space="preserve">
+    <value>タスクを、計画の中の位置で呼びます（{0}）。並べ替えると番号も変わります。</value>
+  </data>
+  <data name="SettingsEditor_OutlineTeam" xml:space="preserve">
+    <value>計画のタスクを、計画の中の位置で呼びます（{0}）。並べ替えると番号も変わります。課題は {1} のように呼びます。</value>
+  </data>
+  <data name="SettingsEditor_Override" xml:space="preserve">
+    <value>このプロジェクトで設定する</value>
+  </data>
+  <data name="SettingsEditor_OverrideName" xml:space="preserve">
+    <value>{0}をこのプロジェクトで設定する</value>
+  </data>
+  <data name="SettingsEditor_PersonDays" xml:space="preserve">
+    <value>人日</value>
+  </data>
+  <data name="SettingsEditor_ProjectStatusesDescription" xml:space="preserve">
+    <value>このプロジェクトのステータスの名前・カテゴリ・並びです。変更はすぐに GitHub の Project に反映します。タスクがあるステータスは外せません。</value>
+  </data>
+  <data name="SettingsEditor_RemoveGuest" xml:space="preserve">
+    <value>{0} をメンバーから外す</value>
+  </data>
+  <data name="SettingsEditor_RemoveHoliday" xml:space="preserve">
+    <value>{0} を独自の休日から外す</value>
+  </data>
+  <data name="SettingsEditor_RemoveStatus" xml:space="preserve">
+    <value>{0} を外す</value>
+  </data>
+  <data name="SettingsEditor_ResetCalendar" xml:space="preserve">
+    <value>標準（土日と祝日が休み）に戻す</value>
+  </data>
+  <data name="SettingsEditor_ResetStatuses" xml:space="preserve">
+    <value>標準の 6 種に戻す</value>
+  </data>
+  <data name="SettingsEditor_Retry" xml:space="preserve">
+    <value>もう一度保存</value>
+  </data>
+  <data name="SettingsEditor_Saved" xml:space="preserve">
+    <value>GitHub に保存しました</value>
+  </data>
+  <data name="SettingsEditor_SavedKey" xml:space="preserve">
+    <value>このプロジェクトのタスクは {0} のように呼びます。キーを変えても、前のキーの自動リンクは残ります。</value>
+  </data>
+  <data name="SettingsEditor_SavedMessage" xml:space="preserve">
+    <value>このプロジェクトのメンバー全員に同じ設定が使われます。</value>
+  </data>
+  <data name="SettingsEditor_SaveFailed" xml:space="preserve">
+    <value>設定を GitHub に保存できませんでした</value>
+  </data>
+  <data name="SettingsEditor_Sequential" xml:space="preserve">
+    <value>通し番号</value>
+  </data>
+  <data name="SettingsEditor_SequentialPersonal" xml:space="preserve">
+    <value>Issue の番号を使います（{0}）。</value>
+  </data>
+  <data name="SettingsEditor_SequentialTeam" xml:space="preserve">
+    <value>Issue の番号を使います（{0}）。課題を計画へ移しても変わりません。</value>
+  </data>
+  <data name="SettingsEditor_StatusCategory" xml:space="preserve">
+    <value>{0} のカテゴリ</value>
+  </data>
+  <data name="SettingsEditor_Statuses" xml:space="preserve">
+    <value>ステータス</value>
+  </data>
+  <data name="SettingsEditor_StatusesFailed" xml:space="preserve">
+    <value>ステータスを GitHub に反映できませんでした</value>
+  </data>
+  <data name="SettingsEditor_StatusesSaved" xml:space="preserve">
+    <value>ステータスの変更を Project に保存しました。</value>
+  </data>
+  <data name="SettingsEditor_StatusInUse_One" xml:space="preserve">
+    <value>タスクが {0} 件あるため外せません</value>
+  </data>
+  <data name="SettingsEditor_StatusInUse_Other" xml:space="preserve">
+    <value>タスクが {0} 件あるため外せません</value>
+  </data>
+  <data name="SettingsEditor_StatusNameField" xml:space="preserve">
+    <value>{0} 番目のステータスの名前</value>
+  </data>
+  <data name="SettingsEditor_StatusProblem" xml:space="preserve">
+    <value>ステータスを変更できません</value>
+  </data>
+  <data name="SettingsEditor_SuggestedKey" xml:space="preserve">
+    <value>名前から提案したキーです。決めると、プロジェクトの名前を変えても番号が変わらず、メンバーとも同じ番号になります。</value>
+  </data>
+  <data name="SettingsEditor_Usage" xml:space="preserve">
+    <value>{0} 件</value>
+  </data>
+  <data name="SettingsEditor_UseDefault" xml:space="preserve">
+    <value>既定に従う</value>
+  </data>
+  <data name="SettingsEditor_WorkDays" xml:space="preserve">
+    <value>稼働日</value>
+  </data>
+  <data name="SettingsEditor_WorkDaysDescription" xml:space="preserve">
+    <value>ガントの休日の表示、稼働日数、遅れや日程の調整の計算に使います。</value>
+  </data>
+  <data name="Share_Assignees.Content" xml:space="preserve">
+    <value>担当者を名前に併記</value>
+  </data>
+  <data name="Share_ByAssignee" xml:space="preserve">
+    <value>担当者ごと</value>
+  </data>
+  <data name="Share_ByTopParent" xml:space="preserve">
+    <value>最上位の親タスクごと</value>
+  </data>
+  <data name="Share_Canceled.Content" xml:space="preserve">
+    <value>中止したタスク</value>
+  </data>
+  <data name="Share_CodeBox.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Mermaid のコード</value>
+  </data>
+  <data name="Share_CodeTab.Text" xml:space="preserve">
+    <value>Mermaid のコード</value>
+  </data>
+  <data name="Share_Completed.Content" xml:space="preserve">
+    <value>完了したタスク</value>
+  </data>
+  <data name="Share_CopiedCode" xml:space="preserve">
+    <value>Mermaid のコードをコピーしました</value>
+  </data>
+  <data name="Share_CopiedImage" xml:space="preserve">
+    <value>画像をコピーしました</value>
+  </data>
+  <data name="Share_CopiedMarkdown" xml:space="preserve">
+    <value>Mermaid を Markdown としてコピーしました</value>
+  </data>
+  <data name="Share_CopyImage.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>画像のコピー</value>
+  </data>
+  <data name="Share_CopyImage.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>画像のコピー (Ctrl + Shift + C)</value>
+  </data>
+  <data name="Share_CopyImageText.Text" xml:space="preserve">
+    <value>画像のコピー</value>
+  </data>
+  <data name="Share_CopyMermaid.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Mermaid のコピー</value>
+  </data>
+  <data name="Share_CopyMermaid.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Mermaid のコピー (Ctrl + C)</value>
+  </data>
+  <data name="Share_CopyMermaidText.Text" xml:space="preserve">
+    <value>Mermaid のコピー</value>
+  </data>
+  <data name="Share_Display.Text" xml:space="preserve">
+    <value>表示</value>
+  </data>
+  <data name="Share_Export.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>ファイルへの書き出し</value>
+  </data>
+  <data name="Share_Export.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>ファイルへの書き出し (Ctrl + S)</value>
+  </data>
+  <data name="Share_Exported" xml:space="preserve">
+    <value>{0} に書き出しました</value>
+  </data>
+  <data name="Share_ExportText.Text" xml:space="preserve">
+    <value>ファイルへの書き出し…</value>
+  </data>
+  <data name="Share_FileMarkdown" xml:space="preserve">
+    <value>Markdown（Mermaid の図）</value>
+  </data>
+  <data name="Share_FilePng" xml:space="preserve">
+    <value>画像（PNG）</value>
+  </data>
+  <data name="Share_FilterNote" xml:space="preserve">
+    <value>画面の担当者の絞り込み（{0}）に従います。</value>
+  </data>
+  <data name="Share_Format" xml:space="preserve">
+    <value>Mermaid の形式</value>
+  </data>
+  <data name="Share_FormatCode" xml:space="preserve">
+    <value>Mermaid のコードだけ</value>
+  </data>
+  <data name="Share_FormatCodeTip" xml:space="preserve">
+    <value>Mermaid Live Editor やほかのツールに貼るときに使います</value>
+  </data>
+  <data name="Share_FormatMarkdown" xml:space="preserve">
+    <value>Markdown（```mermaid で囲む）</value>
+  </data>
+  <data name="Share_FormatMarkdownTip" xml:space="preserve">
+    <value>GitHub の Issue や README に貼ると、そのまま図として表示されます</value>
+  </data>
+  <data name="Share_From" xml:space="preserve">
+    <value>期間の開始日</value>
+  </data>
+  <data name="Share_FromPlaceholder" xml:space="preserve">
+    <value>開始</value>
+  </data>
+  <data name="Share_Heading.Text" xml:space="preserve">
+    <value>共有ビュー</value>
+  </data>
+  <data name="Share_Holidays.Content" xml:space="preserve">
+    <value>休日の網掛け</value>
+  </data>
+  <data name="Share_Include.Text" xml:space="preserve">
+    <value>含めるもの</value>
+  </data>
+  <data name="Share_Items_One" xml:space="preserve">
+    <value>{0} 件</value>
+  </data>
+  <data name="Share_Items_Other" xml:space="preserve">
+    <value>{0} 件</value>
+  </data>
+  <data name="Share_Milestones.Content" xml:space="preserve">
+    <value>マイルストーン</value>
+  </data>
+  <data name="Share_ParentBars.Content" xml:space="preserve">
+    <value>親タスクのバー</value>
+  </data>
+  <data name="Share_Progress.Content" xml:space="preserve">
+    <value>進捗率を名前に併記</value>
+  </data>
+  <data name="Share_Range" xml:space="preserve">
+    <value>期間</value>
+  </data>
+  <data name="Share_RangeAll" xml:space="preserve">
+    <value>すべての期間</value>
+  </data>
+  <data name="Share_RangeAroundToday" xml:space="preserve">
+    <value>今日の前後（1 週前〜4 週後）</value>
+  </data>
+  <data name="Share_RangeCustom" xml:space="preserve">
+    <value>期間の指定</value>
+  </data>
+  <data name="Share_RangeNote.Text" xml:space="preserve">
+    <value>期間と重なるタスクを表示します。</value>
+  </data>
+  <data name="Share_RangeThisMonth" xml:space="preserve">
+    <value>今月</value>
+  </data>
+  <data name="Share_StatusColors.Content" xml:space="preserve">
+    <value>状態の色分け（完了・進行中・遅れ）</value>
+  </data>
+  <data name="Share_TitleBox.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>図のタイトル</value>
+  </data>
+  <data name="Share_TitleBox.Header" xml:space="preserve">
+    <value>タイトル</value>
+  </data>
+  <data name="Share_To" xml:space="preserve">
+    <value>期間の終了日</value>
+  </data>
+  <data name="Share_TodayLine.Content" xml:space="preserve">
+    <value>今日の線</value>
+  </data>
+  <data name="Share_ToPlaceholder" xml:space="preserve">
+    <value>終了</value>
+  </data>
+  <data name="Share_Unscheduled_One" xml:space="preserve">
+    <value>予定のないタスク {0} 件は含めません</value>
+  </data>
+  <data name="Share_Unscheduled_Other" xml:space="preserve">
+    <value>予定のないタスク {0} 件は含めません</value>
+  </data>
+  <data name="Share_ViewTab.Text" xml:space="preserve">
+    <value>ビュー</value>
+  </data>
+  <data name="Share_WindowTitle" xml:space="preserve">
+    <value>共有ビュー - {0}</value>
+  </data>
+  <data name="SignIn_Advanced.Header" xml:space="preserve">
+    <value>詳細設定</value>
+  </data>
+  <data name="SignIn_Button.Content" xml:space="preserve">
+    <value>GitHub でサインイン</value>
+  </data>
+  <data name="SignIn_Cancel.Content" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="SignIn_CheckingAccount" xml:space="preserve">
+    <value>アカウントを確認しています</value>
+  </data>
+  <data name="SignIn_Code.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>確認コード</value>
+  </data>
+  <data name="SignIn_EnterCode.Text" xml:space="preserve">
+    <value>ブラウザで次のコードを入力し、Tasklabe を承認してください。コードはクリップボードにコピーしてあります。</value>
+  </data>
+  <data name="SignIn_Expired" xml:space="preserve">
+    <value>GitHub の認証が無効になりました。もう一度サインインしてください。この PC の送信待ちの変更は保持されています。</value>
+  </data>
+  <data name="SignIn_Intro.Text" xml:space="preserve">
+    <value>タスクとプロジェクトは GitHub に保存されます。GitHub アカウントでサインインしてください。</value>
+  </data>
+  <data name="SignIn_LoadingTasks" xml:space="preserve">
+    <value>タスクを取得しています</value>
+  </data>
+  <data name="SignIn_OpenAgain.Content" xml:space="preserve">
+    <value>もう一度ブラウザを開く</value>
+  </data>
+  <data name="SignIn_Repository.Header" xml:space="preserve">
+    <value>個人用リポジトリ</value>
+  </data>
+  <data name="SignIn_Waiting.Text" xml:space="preserve">
+    <value>承認されると自動的に続行します</value>
+  </data>
+  <data name="SignIn_Welcome.Text" xml:space="preserve">
+    <value>Tasklabe へようこそ</value>
+  </data>
+  <data name="Skipped_Done" xml:space="preserve">
+    <value>完了・中止したタスクは、この操作の対象になりません。</value>
+  </data>
+  <data name="Skipped_NotSent" xml:space="preserve">
+    <value>GitHub にまだ送っていないタスクは、この操作の対象になりません。</value>
+  </data>
+  <data name="Skipped_OtherKind" xml:space="preserve">
+    <value>区分やプロジェクトの違うタスクは、この操作の対象になりません。</value>
+  </data>
+  <data name="Skipped_Personal" xml:space="preserve">
+    <value>個人のプロジェクトのタスクは、この操作の対象になりません。</value>
+  </data>
+  <data name="Skipped_Title_One" xml:space="preserve">
+    <value>{0} 件は変更できませんでした</value>
+  </data>
+  <data name="Skipped_Title_Other" xml:space="preserve">
+    <value>{0} 件は変更できませんでした</value>
+  </data>
+  <data name="Status_Ahead" xml:space="preserve">
+    <value>予定より進んでいます</value>
+  </data>
+  <data name="Status_AllInPlan" xml:space="preserve">
+    <value>すべて計画に入っています</value>
+  </data>
+  <data name="Status_AttentionEmpty.Text" xml:space="preserve">
+    <value>該当するタスクはありません。</value>
+  </data>
+  <data name="Status_AttentionHeading.Text" xml:space="preserve">
+    <value>注意が必要なタスク</value>
+  </data>
+  <data name="Status_Behind" xml:space="preserve">
+    <value>予定より遅れています</value>
+  </data>
+  <data name="Status_Capacity" xml:space="preserve">
+    <value>1 日 {0:0.#}h を超える日を強調します</value>
+  </data>
+  <data name="Status_CellName" xml:space="preserve">
+    <value>{0} {1} {2}</value>
+  </data>
+  <data name="Status_CellOverloadedName" xml:space="preserve">
+    <value>{0} {1} {2}、過負荷</value>
+  </data>
+  <data name="Status_CellTip" xml:space="preserve">
+    <value>{0}　{1} / {2}
+{3}</value>
+  </data>
+  <data name="Status_ChangedMany" xml:space="preserve">
+    <value>{0} 件のステータスを「{1}」にしました</value>
+  </data>
+  <data name="Status_ChangedOne" xml:space="preserve">
+    <value>ステータスを「{0}」にしました</value>
+  </data>
+  <data name="Status_DaysAhead" xml:space="preserve">
+    <value>+{0:0.#}日</value>
+  </data>
+  <data name="Status_DaysBehind" xml:space="preserve">
+    <value>▲{0:0.#}日</value>
+  </data>
+  <data name="Status_DaysEven" xml:space="preserve">
+    <value>±0日</value>
+  </data>
+  <data name="Status_DelayedLabel.Text" xml:space="preserve">
+    <value>遅延タスク</value>
+  </data>
+  <data name="Status_DelayedTab.Text" xml:space="preserve">
+    <value>遅延</value>
+  </data>
+  <data name="Status_DoneCount" xml:space="preserve">
+    <value>完了 {0} / {1} 件</value>
+  </data>
+  <data name="Status_DueSoon" xml:space="preserve">
+    <value>期日が近い</value>
+  </data>
+  <data name="Status_DueThisWeek" xml:space="preserve">
+    <value>今週が期日 {0} 件</value>
+  </data>
+  <data name="Status_Estimated" xml:space="preserve">
+    <value>想定 {0}</value>
+  </data>
+  <data name="Status_ExcludingUnestimated" xml:space="preserve">
+    <value>未見積り {0} 件を除く</value>
+  </data>
+  <data name="Status_IssuesLabel.Text" xml:space="preserve">
+    <value>課題</value>
+  </data>
+  <data name="Status_Late" xml:space="preserve">
+    <value>⚠ 期日超え {0} 件（{1}・▲{2}日）</value>
+  </data>
+  <data name="Status_LockedMessage" xml:space="preserve">
+    <value>子を持つタスクのステータスは、子のステータスから決まります。</value>
+  </data>
+  <data name="Status_LockedTitle" xml:space="preserve">
+    <value>ステータスを変えられません</value>
+  </data>
+  <data name="Status_MaxDelay_One" xml:space="preserve">
+    <value>最大 {0} 日の遅れ</value>
+  </data>
+  <data name="Status_MaxDelay_Other" xml:space="preserve">
+    <value>最大 {0} 日の遅れ</value>
+  </data>
+  <data name="Status_MilestonesHeading.Text" xml:space="preserve">
+    <value>マイルストーン</value>
+  </data>
+  <data name="Status_NoDelays" xml:space="preserve">
+    <value>遅れているタスクはありません</value>
+  </data>
+  <data name="Status_NoDue" xml:space="preserve">
+    <value>期日なし</value>
+  </data>
+  <data name="Status_NoPlanTasks" xml:space="preserve">
+    <value>計画のタスクがありません</value>
+  </data>
+  <data name="Status_NoTasks" xml:space="preserve">
+    <value>タスクなし</value>
+  </data>
+  <data name="Status_NotInPlan" xml:space="preserve">
+    <value>計画に入っていない</value>
+  </data>
+  <data name="Status_OnTrack" xml:space="preserve">
+    <value>予定どおりです</value>
+  </data>
+  <data name="Status_ProgressLabel.Text" xml:space="preserve">
+    <value>進捗</value>
+  </data>
+  <data name="Status_RemainingLabel.Text" xml:space="preserve">
+    <value>残工数</value>
+  </data>
+  <data name="Status_ScheduleLabel.Text" xml:space="preserve">
+    <value>予定比</value>
+  </data>
+  <data name="Status_SoonTab.Text" xml:space="preserve">
+    <value>期日が近い</value>
+  </data>
+  <data name="Status_Substituted" xml:space="preserve">
+    <value>{0}（{1} のないプロジェクトは {2}）</value>
+  </data>
+  <data name="Status_Unestimated" xml:space="preserve">
+    <value>未見積り</value>
+  </data>
+  <data name="Status_UnestimatedTab.Text" xml:space="preserve">
+    <value>未見積り</value>
+  </data>
+  <data name="Status_WorkloadEmpty.Text" xml:space="preserve">
+    <value>割り当てられた残作業がありません。</value>
+  </data>
+  <data name="Status_WorkloadHeading.Text" xml:space="preserve">
+    <value>担当者別の負荷（今後 2 週間）</value>
+  </data>
+  <data name="Sync_Error" xml:space="preserve">
+    <value>同期できません</value>
+  </data>
+  <data name="Sync_Failed" xml:space="preserve">
+    <value>送信失敗 {0} 件</value>
+  </data>
+  <data name="Sync_NotSent" xml:space="preserve">
+    <value>GitHub へ送信待ち</value>
+  </data>
+  <data name="Sync_NotYet" xml:space="preserve">
+    <value>同期前</value>
+  </data>
+  <data name="Sync_Offline" xml:space="preserve">
+    <value>オフライン</value>
+  </data>
+  <data name="Sync_OfflinePending" xml:space="preserve">
+    <value>オフライン・送信待ち {0} 件</value>
+  </data>
+  <data name="Sync_Pending" xml:space="preserve">
+    <value>送信待ち {0} 件</value>
+  </data>
+  <data name="Sync_Synced" xml:space="preserve">
+    <value>同期済み {0:HH:mm}</value>
+  </data>
+  <data name="Sync_SyncedPartial" xml:space="preserve">
+    <value>同期済み {0:HH:mm}（一部取得できず）</value>
+  </data>
+  <data name="Sync_Syncing" xml:space="preserve">
+    <value>同期中</value>
+  </data>
+  <data name="Toast_Added" xml:space="preserve">
+    <value>「{0}」を追加しました</value>
+  </data>
+  <data name="Toast_AddedHidden" xml:space="preserve">
+    <value>「{0}」を追加しました。表示の条件に合わないため、一覧には表示されません</value>
+  </data>
+  <data name="Toast_AssignedMe" xml:space="preserve">
+    <value>{0} 件を自分の担当にしました</value>
+  </data>
+  <data name="Toast_AssigneeChanged" xml:space="preserve">
+    <value>{0} 件の担当者を変えました</value>
+  </data>
+  <data name="Toast_CopiedKey" xml:space="preserve">
+    <value>{0} をコピーしました</value>
+  </data>
+  <data name="Toast_CopiedKeys" xml:space="preserve">
+    <value>{0} 件の番号をコピーしました</value>
+  </data>
+  <data name="Toast_CopiedUrl" xml:space="preserve">
+    <value>Issue の URL をコピーしました</value>
+  </data>
+  <data name="Toast_DueChanged" xml:space="preserve">
+    <value>{0} 件の期日を変えました</value>
+  </data>
+  <data name="Toast_EstimateChanged" xml:space="preserve">
+    <value>{0} 件の想定工数を変えました</value>
+  </data>
+  <data name="Toast_MovedMany" xml:space="preserve">
+    <value>{0} 件を{1}へ移動しました</value>
+  </data>
+  <data name="Toast_MovedOne" xml:space="preserve">
+    <value>「{0}」を{1}へ移動しました</value>
+  </data>
+  <data name="Toast_MovedToTriageMany" xml:space="preserve">
+    <value>{0} 件を課題へ移動しました</value>
+  </data>
+  <data name="Toast_MovedToTriageOne" xml:space="preserve">
+    <value>「{0}」を課題へ移動しました</value>
+  </data>
+  <data name="Toast_NoKeyYet" xml:space="preserve">
+    <value>GitHub に送るまで番号はありません</value>
+  </data>
+  <data name="Toast_PlanChanged" xml:space="preserve">
+    <value>{0} 件の予定を変えました</value>
+  </data>
+  <data name="Toast_ProgressChanged" xml:space="preserve">
+    <value>{0} 件の進捗率を {1:0}% にしました</value>
+  </data>
+  <data name="Toast_RepositoryChanged" xml:space="preserve">
+    <value>{0} 件の作業するリポジトリを変えました</value>
+  </data>
+  <data name="Toast_ShowAll" xml:space="preserve">
+    <value>すべて表示</value>
+  </data>
+  <data name="Toast_ToggledDone" xml:space="preserve">
+    <value>{0} 件の完了を切り替えました</value>
+  </data>
+  <data name="Toast_UnassignedMe" xml:space="preserve">
+    <value>{0} 件の担当から自分を外しました</value>
+  </data>
+  <data name="Undo_NothingToRedo" xml:space="preserve">
+    <value>やり直せる操作はありません</value>
+  </data>
+  <data name="Undo_NothingToUndo" xml:space="preserve">
+    <value>元に戻せる操作はありません</value>
+  </data>
+  <data name="Undo_Redone" xml:space="preserve">
+    <value>やり直しました: {0}</value>
+  </data>
+  <data name="Undo_Undone" xml:space="preserve">
+    <value>元に戻しました: {0}</value>
+  </data>
+  <data name="View_Grouping" xml:space="preserve">
+    <value>グループ</value>
+  </data>
+  <data name="View_Ordering" xml:space="preserve">
+    <value>並び順</value>
+  </data>
+  <data name="Wbs_Chevron.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>展開／折りたたみ</value>
+  </data>
+  <data name="Wbs_Collapsed" xml:space="preserve">
+    <value>折りたたみ</value>
+  </data>
+  <data name="Wbs_ColumnFinish.Text" xml:space="preserve">
+    <value>終了</value>
+  </data>
+  <data name="Wbs_ColumnStart.Text" xml:space="preserve">
+    <value>開始</value>
+  </data>
+  <data name="Wbs_DropAfter" xml:space="preserve">
+    <value>「{0}」の後ろへ</value>
+  </data>
+  <data name="Wbs_DropBefore" xml:space="preserve">
+    <value>「{0}」の前へ</value>
+  </data>
+  <data name="Wbs_DropInside" xml:space="preserve">
+    <value>「{0}」の子へ</value>
+  </data>
+  <data name="Wbs_Editor.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>タイトルの編集</value>
+  </data>
+  <data name="Wbs_Expanded" xml:space="preserve">
+    <value>展開</value>
+  </data>
+  <data name="Wbs_FinishName" xml:space="preserve">
+    <value>終了 {0}</value>
+  </data>
+  <data name="Wbs_FrameEarlyName_One" xml:space="preserve">
+    <value>開始の枠超え {0} 日</value>
+  </data>
+  <data name="Wbs_FrameEarlyName_Other" xml:space="preserve">
+    <value>開始の枠超え {0} 日</value>
+  </data>
+  <data name="Wbs_FrameEarlyTip" xml:space="preserve">
+    <value>枠超え: 子の予定が {0} から始まり、この枠（{1}〜）より前に出ています</value>
+  </data>
+  <data name="Wbs_FrameOverrunName_One" xml:space="preserve">
+    <value>枠超え {0} 日</value>
+  </data>
+  <data name="Wbs_FrameOverrunName_Other" xml:space="preserve">
+    <value>枠超え {0} 日</value>
+  </data>
+  <data name="Wbs_FrameOverrunTip" xml:space="preserve">
+    <value>枠超え: 子の予定が {0} まで、この枠（{1}）を超えています</value>
+  </data>
+  <data name="Wbs_Level" xml:space="preserve">
+    <value>階層 {0}</value>
+  </data>
+  <data name="Wbs_List.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>計画の表</value>
+  </data>
+  <data name="Wbs_StartName" xml:space="preserve">
+    <value>開始 {0}</value>
+  </data>
+  <data name="Wbs_StatusFromChildren" xml:space="preserve">
+    <value>ステータス: {0}（子のステータスから決まります）</value>
+  </data>
+  <data name="Wbs_StatusIcon.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>ステータスを変える</value>
+  </data>
+</root>

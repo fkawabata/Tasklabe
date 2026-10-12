@@ -73,7 +73,7 @@ public sealed partial class QuickAddWindow : Window
     public QuickAddWindow()
     {
         InitializeComponent();
-        Title = "タスクを追加 - Tasklabe";
+        Title = Texts.Format("Quick_WindowTitle", KeyHints.Name("task.new"));
         AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "Assets", "Tasklabe.ico"));
         Root.RequestedTheme = App.Current.Theme;
         if (AppWindow.Presenter is OverlappedPresenter presenter)
@@ -336,13 +336,14 @@ public sealed partial class QuickAddWindow : Window
 
         AddButton.IsEnabled = Composer.CanCreate;
         var keymap = App.Current.Services.Keymap;
-        AddLabel.Content ??= KeyCaps.Content("追加", "composer.submit");
+        AddLabel.Content ??= KeyCaps.Content(Texts.Get("Common_Add"), "composer.submit");
         HintText.Foreground = ThemeResources.Brush("TextFillColorTertiaryBrush");
         HintText.Text = !Hints.Shown ? ""
-            : (Composer.CanCreate ? $"{keymap.Display("composer.submit")} で追加" : "タスク名を入力すると追加できます")
-              + $"　{keymap.Display("composer.detail")} で詳細　Esc で閉じる";
-        ToolTipService.SetToolTip(AddButton, KeyHints.Tip("composer.submit", "追加する"));
-        ToolTipService.SetToolTip(DetailButton, KeyHints.Tip("composer.detail", "詳細パネルで入力を続ける"));
+            : Composer.CanCreate
+                ? Texts.Format("Quick_Hint", keymap.Display("composer.submit"), keymap.Display("composer.detail"))
+                : Texts.Format("Quick_HintNeedTitle", keymap.Display("composer.detail"));
+        ToolTipService.SetToolTip(AddButton, KeyHints.Tip("composer.submit"));
+        ToolTipService.SetToolTip(DetailButton, KeyHints.Tip("composer.detail"));
     }
 
     private void ShowConfirm(bool show)
@@ -450,11 +451,11 @@ public sealed partial class QuickAddWindow : Window
             AddLabel.Opacity = 1;
             AddedMark.Visibility = Visibility.Collapsed;
             HintText.Foreground = ThemeResources.Brush("SystemFillColorCriticalBrush");
-            HintText.Text = "追加できませんでした。入力はそのまま残しています";
+            HintText.Text = Texts.Get("Quick_AddFailed");
             return;
         }
 
-        App.Current.Shell?.ShowToast($"「{draft.Title.Trim()}」を追加しました");
+        App.Current.Shell?.ShowToast(Texts.Format("Toast_Added", draft.Title.Trim()));
         _addedTimer.Start();
     }
 
@@ -465,7 +466,7 @@ public sealed partial class QuickAddWindow : Window
         AddLabel.Opacity = 0;
         AddedMark.Visibility = Visibility.Visible;
         HintText.Foreground = ThemeResources.Brush("TextFillColorSecondaryBrush");
-        HintText.Text = project.Length > 0 ? $"「{title}」を{project}に追加しました" : $"「{title}」を追加しました";
+        HintText.Text = project.Length > 0 ? Texts.Format("Quick_AddedTo", title, project) : Texts.Format("Toast_Added", title);
     }
 
     /// <summary>「詳細」: 本体を開き、入力を引き継いで詳細パネルで作成を続ける（UX-09）。</summary>

@@ -22,15 +22,15 @@ public sealed partial class TaskDetailPane : UserControl
 {
     private readonly TextBox _title;
     private readonly TextBox _body;
-    private readonly PickerButton _projectButton = new("プロジェクト");
-    private readonly PickerButton _status = new("ステータス");
-    private readonly PickerButton _assignee = new("担当者");
-    private readonly PickerButton _plan = new("予定");
-    private readonly PickerButton _estimate = new("想定工数");
-    private readonly PickerButton _kind = new("区分");
-    private readonly PickerButton _progress = new("進捗率");
-    private readonly PickerButton _actual = new("実績");
-    private readonly PickerButton _milestone = new("マイルストーン");
+    private readonly PickerButton _projectButton = new(Texts.Get("Field_Project"));
+    private readonly PickerButton _status = new(Texts.Get("Field_Status"));
+    private readonly PickerButton _assignee = new(Texts.Get("Field_Assignee"));
+    private readonly PickerButton _plan = new(Texts.Get("Field_Plan"));
+    private readonly PickerButton _estimate = new(Texts.Get("Field_Estimate"));
+    private readonly PickerButton _kind = new(Texts.Get("Field_Kind"));
+    private readonly PickerButton _progress = new(Texts.Get("Field_Progress"));
+    private readonly PickerButton _actual = new(Texts.Get("Field_Actual"));
+    private readonly PickerButton _milestone = new(Texts.Get("Field_Milestone"));
     private readonly FrameworkElement _milestoneRow;
     private readonly FrameworkElement _assigneeRow;
     private readonly FrameworkElement _kindRow;
@@ -41,11 +41,14 @@ public sealed partial class TaskDetailPane : UserControl
     private readonly StackPanel _predecessorList = new() { Spacing = 2 };
     private readonly StackPanel _inheritedList = new() { Spacing = 2, Visibility = Visibility.Collapsed };
     private readonly Button _chainChildren;
-    private readonly CheckBox _nonBlocking = new() { Content = "後続を待たせない" };
+
+    /// <summary>「配下を予定の順に接続」の説明。名前だけでは何が起きるかが決まらないため、項目の下に添える（UX 規約 UX-33）。</summary>
+    private readonly TextBlock _chainNote = new() { TextWrapping = TextWrapping.Wrap, Visibility = Visibility.Collapsed, Margin = new Thickness(12, 0, 0, 0) };
+    private readonly CheckBox _nonBlocking = new() { Content = Texts.Get("Menu_NonBlocking") };
     private readonly StackPanel _subtaskPanel = new() { Spacing = 4, Visibility = Visibility.Collapsed };
     private readonly StackPanel _subtaskList = new() { Spacing = 2 };
     private readonly TextBlock _subtaskSummary = new() { HorizontalAlignment = HorizontalAlignment.Right };
-    private readonly TextBox _subtaskInput = new() { PlaceholderText = "サブタスクを追加" };
+    private readonly TextBox _subtaskInput = new() { PlaceholderText = Texts.Get("Detail_AddSubtask") };
     private readonly StackPanel _repositoryPanel = new() { Spacing = 4 };
     private readonly StackPanel _repositoryList = new() { Spacing = 2 };
     private Button? _addRepository;
@@ -66,7 +69,7 @@ public sealed partial class TaskDetailPane : UserControl
 
         _openButton.Style = AppResources.Style("Drawer.Button");
         _openButton.Content = new FontIcon { FontSize = 14, Glyph = "\uE8A7" };
-        AutomationProperties.SetName(_openButton, "GitHub で開く");
+        AutomationProperties.SetName(_openButton, KeyHints.Name("task.openInBrowser"));
         _openButton.Click += OnOpenInBrowser;
 
         var caption = AppResources.Style("Text.Caption");
@@ -74,11 +77,11 @@ public sealed partial class TaskDetailPane : UserControl
         {
             FontSize = 20,
             FontWeight = Microsoft.UI.Text.FontWeights.SemiBold,
-            PlaceholderText = "タスク名",
+            PlaceholderText = Texts.Get("Field_Title"),
             TextWrapping = TextWrapping.Wrap,
             Style = (Style)Resources["FlatTextBox"],
         };
-        AutomationProperties.SetName(_title, "タスク名");
+        AutomationProperties.SetName(_title, Texts.Get("Field_Title"));
         _title.KeyDown += OnTitleKeyDown;
         _title.LostFocus += OnTitleLostFocus;
         _title.TextChanged += (_, _) =>
@@ -94,11 +97,11 @@ public sealed partial class TaskDetailPane : UserControl
         {
             AcceptsReturn = true,
             MinHeight = 80,
-            PlaceholderText = "説明を追加…（Markdown）",
+            PlaceholderText = Texts.Get("Detail_BodyPlaceholder"),
             TextWrapping = TextWrapping.Wrap,
             Style = (Style)Resources["FlatTextBox"],
         };
-        AutomationProperties.SetName(_body, "説明");
+        AutomationProperties.SetName(_body, Texts.Get("Field_Body"));
         _body.LostFocus += OnBodyLostFocus;
         _body.TextChanged += (_, _) =>
         {
@@ -109,30 +112,31 @@ public sealed partial class TaskDetailPane : UserControl
         };
 
         // 追加のダイアログと同じ項目を同じ順に置く（UX-10）
-        Fields.Children.Add(Row("プロジェクト", _projectButton));
+        Fields.Children.Add(Row(Texts.Get("Field_Project"), _projectButton));
         Fields.Children.Add(_title);
         Fields.Children.Add(_body);
-        Fields.Children.Add(Row("ステータス", _status));
-        _assigneeRow = Row("担当者", _assignee);
+        Fields.Children.Add(Row(Texts.Get("Field_Status"), _status));
+        _assigneeRow = Row(Texts.Get("Field_Assignee"), _assignee);
         Fields.Children.Add(_assigneeRow);
-        Fields.Children.Add(Row("予定", _plan));
-        Fields.Children.Add(Row("想定工数", _estimate));
-        _kindRow = Row("区分", _kind);
+        Fields.Children.Add(Row(Texts.Get("Field_Plan"), _plan));
+        Fields.Children.Add(Row(Texts.Get("Field_Estimate"), _estimate));
+        _kindRow = Row(Texts.Get("Field_Kind"), _kind);
         Fields.Children.Add(_kindRow);
 
         // ここから詳細パネルにしかない項目
-        _progressRow = Row("進捗率", _progress);
+        _progressRow = Row(Texts.Get("Field_Progress"), _progress);
         _actualRows = new StackPanel
         {
             Spacing = 12,
-            Children = { Row("実績", _actual) },
+            Children = { Row(Texts.Get("Field_Actual"), _actual) },
         };
 
         var chainText = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
         chainText.Children.Add(new FontIcon { FontSize = 12, Glyph = "\uE71B" });
-        chainText.Children.Add(new TextBlock { Text = "配下を予定の順につなぐ…" });
+        chainText.Children.Add(new TextBlock { Text = Texts.Get("Menu_ChainChildren") });
         _chainChildren = new Button { Content = chainText, Style = AppResources.Style("SubtleButtonStyle"), Visibility = Visibility.Collapsed };
-        ToolTipService.SetToolTip(_chainChildren, "予定期間が重なるタスクは並列とみなし、互いにはつなぎません");
+        _chainNote.Text = Texts.Get("Detail_ChainNote");
+        _chainNote.Style = caption;
         _chainChildren.Click += async (_, _) =>
         {
             if (_task is { } task)
@@ -143,9 +147,9 @@ public sealed partial class TaskDetailPane : UserControl
 
         var addText = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
         addText.Children.Add(new FontIcon { FontSize = 12, Glyph = "\uE710" });
-        addText.Children.Add(new TextBlock { Text = "先行タスクを追加…" });
+        addText.Children.Add(new TextBlock { Text = Texts.Format("Common_Ellipsis", KeyHints.Name("task.predecessor")) });
         var addPredecessor = PickerTriggerButton(addText);
-        ToolTipService.SetToolTip(addPredecessor, KeyHints.Tip("task.predecessor", "先行タスクを追加"));
+        ToolTipService.SetToolTip(addPredecessor, KeyHints.Tip("task.predecessor"));
         addPredecessor.Click += async (_, _) =>
         {
             if (_task is { } task)
@@ -154,7 +158,8 @@ public sealed partial class TaskDetailPane : UserControl
             }
         };
 
-        ToolTipService.SetToolTip(_nonBlocking, "このタスクの終わりを待たずに、後続（親の後続を含む）を始められるようにします。親タスクの最後の振り返りなどに使います");
+        // 名前だけでは何が起きるかが決まらないため、項目の下に説明を添える（UX 規約 UX-33）
+        var nonBlockingNote = new TextBlock { Text = Texts.Get("Detail_NonBlockingNote"), Style = caption, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(28, -4, 0, 0) };
         _nonBlocking.Click += async (_, _) =>
         {
             if (_task is { } task)
@@ -164,21 +169,23 @@ public sealed partial class TaskDetailPane : UserControl
         };
 
         var predecessorHeader = new Grid();
-        predecessorHeader.Children.Add(new TextBlock { Text = "先行タスク", Style = caption });
-        predecessorHeader.Children.Add(new TextBlock { Text = "終わってから始める", Style = caption, HorizontalAlignment = HorizontalAlignment.Right });
+        predecessorHeader.Children.Add(new TextBlock { Text = Texts.Get("Detail_Predecessors"), Style = caption });
+        predecessorHeader.Children.Add(new TextBlock { Text = Texts.Get("Detail_StartsAfter"), Style = caption, HorizontalAlignment = HorizontalAlignment.Right });
         _predecessorPanel.Children.Add(predecessorHeader);
         _predecessorPanel.Children.Add(_predecessorList);
         _predecessorPanel.Children.Add(_inheritedList);
         _predecessorPanel.Children.Add(addPredecessor);
         _predecessorPanel.Children.Add(_chainChildren);
+        _predecessorPanel.Children.Add(_chainNote);
         _predecessorPanel.Children.Add(_nonBlocking);
+        _predecessorPanel.Children.Add(nonBlockingNote);
 
         // サブタスク（要件 F-TSK-04）。開いたまま分解できるよう、名前を書いて Enter で足す
         var subtaskHeader = new Grid();
-        subtaskHeader.Children.Add(new TextBlock { Text = "サブタスク", Style = caption });
+        subtaskHeader.Children.Add(new TextBlock { Text = Texts.Get("Detail_Subtasks"), Style = caption });
         _subtaskSummary.Style = caption;
         subtaskHeader.Children.Add(_subtaskSummary);
-        AutomationProperties.SetName(_subtaskInput, "サブタスクを追加");
+        AutomationProperties.SetName(_subtaskInput, Texts.Get("Detail_AddSubtask"));
         _subtaskInput.KeyDown += OnSubtaskInputKeyDown;
         _subtaskPanel.Children.Add(subtaskHeader);
         _subtaskPanel.Children.Add(_subtaskList);
@@ -186,14 +193,14 @@ public sealed partial class TaskDetailPane : UserControl
 
         // 作業するリポジトリと、Issue に紐づくブランチ（要件 F-TSK-18、19）
         var repositoryHeader = new Grid();
-        repositoryHeader.Children.Add(new TextBlock { Text = "作業するリポジトリ", Style = caption });
-        repositoryHeader.Children.Add(new TextBlock { Text = "ブランチ", Style = caption, HorizontalAlignment = HorizontalAlignment.Right });
+        repositoryHeader.Children.Add(new TextBlock { Text = Texts.Get("Picker_Repository"), Style = caption });
+        repositoryHeader.Children.Add(new TextBlock { Text = Texts.Get("Detail_Branch"), Style = caption, HorizontalAlignment = HorizontalAlignment.Right });
         var addRepositoryText = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
         addRepositoryText.Children.Add(new FontIcon { FontSize = 12, Glyph = "\uE710" });
-        addRepositoryText.Children.Add(new TextBlock { Text = "リポジトリを選ぶ…" });
+        addRepositoryText.Children.Add(new TextBlock { Text = Texts.Get("Detail_ChooseRepository") });
         var addRepository = PickerTriggerButton(addRepositoryText);
         _addRepository = addRepository;
-        ToolTipService.SetToolTip(addRepository, KeyHints.Tip("task.repository", "作業するリポジトリを選ぶ"));
+        ToolTipService.SetToolTip(addRepository, KeyHints.Tip("task.repository"));
         addRepository.Click += async (_, _) =>
         {
             if (_task is { } task)
@@ -205,7 +212,7 @@ public sealed partial class TaskDetailPane : UserControl
         _repositoryPanel.Children.Add(_repositoryList);
         _repositoryPanel.Children.Add(addRepository);
 
-        _milestoneRow = Row("マイルストーン", _milestone);
+        _milestoneRow = Row(Texts.Get("Field_Milestone"), _milestone);
         _detailOnly = new StackPanel
         {
             Spacing = 12,
@@ -216,7 +223,7 @@ public sealed partial class TaskDetailPane : UserControl
                     BorderBrush = ThemeResources.Brush("DividerStrokeColorDefaultBrush"),
                     BorderThickness = new Thickness(0, 1, 0, 0),
                     Padding = new Thickness(0, 8, 0, 0),
-                    Child = new TextBlock { Text = "詳細", Style = caption },
+                    Child = new TextBlock { Text = Texts.Get("Detail_Section"), Style = caption },
                 },
                 _progressRow,
                 _milestoneRow,
@@ -242,10 +249,10 @@ public sealed partial class TaskDetailPane : UserControl
             [(_projectButton, "composer.project"), (_status, "composer.status"), (_assignee, "composer.assign"),
              (_plan, "composer.due"), (_estimate, "composer.estimate"), (_kind, "composer.kind")])
         {
-            ToolTipService.SetToolTip(button, KeyHints.Tip(id, AutomationProperties.GetName(button).Split(':')[0]));
+            ToolTipService.SetToolTip(button, KeyHints.Tip(id));
         }
 
-        ToolTipService.SetToolTip(_openButton, KeyHints.Tip("task.openInBrowser", "GitHub で開く"));
+        ToolTipService.SetToolTip(_openButton, KeyHints.Tip("task.openInBrowser"));
         AddHandler(PreviewKeyDownEvent, new KeyEventHandler(OnPanePreviewKeyDown), true);
     }
 
@@ -342,7 +349,7 @@ public sealed partial class TaskDetailPane : UserControl
         try
         {
             var projectName = project is null ? "" : ProjectDisplay.Name(project);
-            SetHeader(task.IsLocal ? "GitHub へ送信待ち" : TaskKeys.Of(task), projectName);
+            SetHeader(task.IsLocal ? Texts.Get("Sync_NotSent") : TaskKeys.Of(task), projectName);
             _openButton.Visibility = Visibility.Visible;
             _openButton.IsEnabled = task.Url is not null;
             if (!sameTask)
@@ -383,17 +390,17 @@ public sealed partial class TaskDetailPane : UserControl
             _actualRows.Visibility = Visibility.Visible;
             _progress.SetValue($"{task.EffectiveProgress:0}%", "\uE9D2");
             _progress.IsEnabled = !task.IsDone;
-            ToolTipService.SetToolTip(_progress, task.IsDone ? "完了・中止したタスクの進捗率は 100 % に固定しています" : KeyHints.Tip("task.progress", "進捗率を変える"));
+            ToolTipService.SetToolTip(_progress, task.IsDone ? Texts.Get("Detail_ProgressLocked") : KeyHints.Tip("task.progress"));
             _actual.SetValue(DateText.Range(task.ActualStart, task.ActualEnd), "\uE787");
             ShowMilestone(task, project);
 
             // 計画への出し入れは、計画を持つチームプロジェクトでだけ意味を持つ
             PlanButton.Visibility = team ? Visibility.Visible : Visibility.Collapsed;
-            PlanButtonText.Text = task.Kind == TaskKind.Issue ? "計画に移す…" : "課題へ戻す";
+            PlanButtonText.Text = task.Kind == TaskKind.Issue ? Texts.Get("Menu_MoveToPlan") : Texts.Get("Menu_MoveToTriage");
             PlanButtonIcon.Glyph = task.Kind == TaskKind.Issue ? "\uE8DE" : "\uE7C1";
             AutomationProperties.SetName(PlanButton, PlanButtonText.Text);
             ToolTipService.SetToolTip(PlanButton, KeyHints.Tip("task.plan", PlanButtonText.Text.TrimEnd('…')));
-            ToolTipService.SetToolTip(DeleteButton, KeyHints.Tip("task.delete", "削除"));
+            ToolTipService.SetToolTip(DeleteButton, KeyHints.Tip("task.delete"));
 
             // サブタスクは計画のタスク（個人ではすべてのタスク）だけが持つ
             _subtaskPanel.Visibility = TaskShortcuts.CanHaveChildren(task) ? Visibility.Visible : Visibility.Collapsed;
@@ -416,7 +423,7 @@ public sealed partial class TaskDetailPane : UserControl
                 await BuildPredecessorsAsync(task);
             }
 
-            HintText.Text = "↑↓ で前後のタスク　Esc で閉じる　Alt + S などで項目を選ぶ";
+            HintText.Text = Texts.Get("Detail_Hint");
             HintText.Visibility = Hints.Shown ? Visibility.Visible : Visibility.Collapsed;
         }
         finally
@@ -449,7 +456,7 @@ public sealed partial class TaskDetailPane : UserControl
     {
         if (_draft is { } draft)
         {
-            if (await DateRangePicker.ShowAsync(button, "予定", draft.Start, draft.Target, ValuePickers.PlanPresets) is { } picked)
+            if (await DateRangePicker.ShowAsync(button, Texts.Get("Field_Plan"), draft.Start, draft.Target, ValuePickers.PlanPresets) is { } picked)
             {
                 draft.Start = picked.Start;
                 draft.Target = picked.End;
@@ -466,7 +473,7 @@ public sealed partial class TaskDetailPane : UserControl
 
         var (startField, endField) = plan ? (TaskField.Start, TaskField.Target) : (TaskField.ActualStart, TaskField.ActualEnd);
         var (start, end) = plan ? (task.Start, task.Target) : (task.ActualStart, task.ActualEnd);
-        if (await DateRangePicker.ShowAsync(button, plan ? "予定" : "実績", start, end, plan ? ValuePickers.PlanPresets : ValuePickers.ActualPresets) is { } range)
+        if (await DateRangePicker.ShowAsync(button, plan ? Texts.Get("Field_Plan") : Texts.Get("Field_Actual"), start, end, plan ? ValuePickers.PlanPresets : ValuePickers.ActualPresets) is { } range)
         {
             var changes = TaskRules.Set(task, startField, TaskValues.Date(range.Start))
                 .Concat(TaskRules.Set(task, endField, TaskValues.Date(range.End)))
@@ -482,7 +489,7 @@ public sealed partial class TaskDetailPane : UserControl
     {
         if (_draft is { } draft)
         {
-            if (await ValuePickers.ProjectAsync(button, null, "追加先", draft.Project is { } p ? [p.Id] : [], excludeCurrent: false) is { } picked)
+            if (await ValuePickers.ProjectAsync(button, null, Texts.Get("Field_Project"), draft.Project is { } p ? [p.Id] : [], excludeCurrent: false) is { } picked)
             {
                 SetDraftProject(draft, picked.Value, keepValues: true);
                 ShowDraftValues();
@@ -492,7 +499,7 @@ public sealed partial class TaskDetailPane : UserControl
         }
 
         if (_task is { } task
-            && await ValuePickers.ProjectAsync(button, null, "別のプロジェクトへ移す", [task.ProjectId], excludeCurrent: true) is { } target)
+            && await ValuePickers.ProjectAsync(button, null, KeyHints.Name("task.project"), [task.ProjectId], excludeCurrent: true) is { } target)
         {
             var moved = await TaskCommands.MoveAsync([task], target.Value);
             if (moved.Count > 0)
@@ -621,7 +628,7 @@ public sealed partial class TaskDetailPane : UserControl
         _draft = draft;
         _task = null;
         _project = draft.Project;
-        SetHeader("新しいタスク", "まだ追加していません");
+        SetHeader(Texts.Get("Detail_NewTask"), Texts.Get("Detail_NotAdded"));
         _openButton.Visibility = Visibility.Collapsed;
         ExistingFooter.Visibility = Visibility.Collapsed;
         CreateFooter.Visibility = Visibility.Visible;
@@ -631,7 +638,7 @@ public sealed partial class TaskDetailPane : UserControl
         ShowDraftValues();
 
         var submit = App.Current.Services.Keymap.Display("composer.submit");
-        HintText.Text = $"{submit} で追加　Esc で閉じる　Alt + S などで項目を選ぶ";
+        HintText.Text = Texts.Format("Detail_DraftHint", submit);
         HintText.Visibility = Hints.Shown ? Visibility.Visible : Visibility.Collapsed;
         UpdateCreateState();
         DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, FocusDraftField);
@@ -734,8 +741,8 @@ public sealed partial class TaskDetailPane : UserControl
         bool can = _draft?.CanCreate == true;
         CreateButton.IsEnabled = can;
         ToolTipService.SetToolTip(CreateButton, can
-            ? KeyHints.Tip("composer.submit", "追加")
-            : "タスク名を入力すると追加できます");
+            ? KeyHints.Tip("composer.submit")
+            : Texts.Get("Detail_NeedTitle"));
     }
 
     private void FocusDraftField()
@@ -768,7 +775,7 @@ public sealed partial class TaskDetailPane : UserControl
         _draft = null;
         var created = await draft.CreateAsync();
         App.Current.Shell?.SelectTask(created);
-        App.Current.Shell?.ShowToast($"「{created.Title}」を追加しました");
+        App.Current.Shell?.ShowToast(Texts.Format("Toast_Added", created.Title));
     }
 
     private async void OnDiscard(object sender, RoutedEventArgs e) => await App.Current.MainWindow!.CloseDetailAsync();
@@ -783,8 +790,8 @@ public sealed partial class TaskDetailPane : UserControl
             return true;
         }
 
-        var dialog = AppDialog.Confirm(XamlRoot, "入力中のタスクを破棄しますか？",
-            $"「{(draft.Title.Trim().Length > 0 ? draft.Title.Trim() : "（タスク名なし）")}」はまだ追加していません。破棄すると入力した内容は戻せません。", "破棄");
+        var dialog = AppDialog.Confirm(XamlRoot, Texts.Get("Discard_Title"),
+            Texts.Format("Discard_Message", draft.Title.Trim().Length > 0 ? draft.Title.Trim() : Texts.Get("Discard_NoTitle")), Texts.Get("Discard_Confirm"));
         return await dialog.ShowAsync() == ContentDialogResult.Primary;
     }
 
@@ -904,7 +911,7 @@ public sealed partial class TaskDetailPane : UserControl
                 Padding = new Thickness(4, 2, 4, 2),
                 HorizontalAlignment = HorizontalAlignment.Left,
             };
-            AutomationProperties.SetName(open, $"サブタスク「{child.Title}」を開く");
+            AutomationProperties.SetName(open, Texts.Format("Detail_OpenSubtask", child.Title));
             open.Click += (_, _) => App.Current.Shell?.SelectTask(child);
             Grid.SetColumn(open, 1);
             grid.Children.Add(open);
@@ -915,7 +922,7 @@ public sealed partial class TaskDetailPane : UserControl
             _subtaskList.Children.Add(grid);
         }
 
-        _subtaskSummary.Text = children.Count == 0 ? "" : $"完了 {children.Count(c => c.IsCompleted)} / {children.Count}";
+        _subtaskSummary.Text = children.Count == 0 ? "" : Texts.Format("Detail_SubtaskSummary", children.Count(c => c.IsCompleted), children.Count);
     }
 
     private async void OnSubtaskInputKeyDown(object sender, KeyRoutedEventArgs e)
@@ -962,7 +969,7 @@ public sealed partial class TaskDetailPane : UserControl
 
             var title = new TextBlock
             {
-                Text = pred?.Title ?? "（このプロジェクトの計画にないタスク）",
+                Text = pred?.Title ?? Texts.Get("Detail_ExternalPredecessor"),
                 VerticalAlignment = VerticalAlignment.Center,
                 TextTrimming = TextTrimming.CharacterEllipsis,
             };
@@ -983,8 +990,8 @@ public sealed partial class TaskDetailPane : UserControl
                 Style = AppResources.Style("SubtleButtonStyle"),
                 Padding = new Thickness(6),
             };
-            AutomationProperties.SetName(remove, $"先行タスク「{title.Text}」を外す");
-            ToolTipService.SetToolTip(remove, "外す");
+            AutomationProperties.SetName(remove, Texts.Format("Detail_RemovePredecessor", title.Text));
+            ToolTipService.SetToolTip(remove, Texts.Get("Common_Remove"));
             remove.Click += async (_, _) =>
             {
                 if (_task is { } current)
@@ -1005,7 +1012,7 @@ public sealed partial class TaskDetailPane : UserControl
         {
             _inheritedList.Children.Add(new TextBlock
             {
-                Text = $"{pred.Title}（親「{ancestor.Title}」から受け継ぐ）",
+                Text = Texts.Format("Detail_Inherited", pred.Title, ancestor.Title),
                 Style = caption,
                 TextTrimming = TextTrimming.CharacterEllipsis,
             });
@@ -1021,6 +1028,7 @@ public sealed partial class TaskDetailPane : UserControl
         _chainChildren.Visibility = tree.All().Any(n => n.Task.ParentIssueId == task.IssueId)
             ? Visibility.Visible
             : Visibility.Collapsed;
+        _chainNote.Visibility = _chainChildren.Visibility;
     }
 
     // ---------------------------------------------------------------- 作業するリポジトリ（要件 F-TSK-18、19）
@@ -1069,13 +1077,13 @@ public sealed partial class TaskDetailPane : UserControl
             name.Children.Add(new FontIcon { Glyph = "\uE8B7", FontSize = 12 });
             name.Children.Add(new TextBlock { Text = repository, TextTrimming = TextTrimming.CharacterEllipsis });
             var link = new HyperlinkButton { Content = name, NavigateUri = new Uri($"https://{host}/{repository}"), Padding = new Thickness(4, 2, 4, 2) };
-            AutomationProperties.SetName(link, $"{repository} を GitHub で開く");
-            ToolTipService.SetToolTip(link, associated ? "GitHub で開く" : "ブランチだけがあるリポジトリです（作業するリポジトリには選んでいません）");
+            AutomationProperties.SetName(link, Texts.Format("Detail_OpenRepository", repository));
+            ToolTipService.SetToolTip(link, associated ? KeyHints.Name("task.openInBrowser") : Texts.Get("Detail_BranchOnlyRepository"));
             grid.Children.Add(link);
 
             var branch = new Button { Content = new FontIcon { Glyph = "\uE8D4", FontSize = 12 }, Style = subtle, Padding = new Thickness(6), IsEnabled = !task.IsLocal };
-            AutomationProperties.SetName(branch, $"{repository} のブランチを作る・選ぶ");
-            ToolTipService.SetToolTip(branch, KeyHints.Tip("task.branch", "ブランチを作る・選ぶ"));
+            AutomationProperties.SetName(branch, Texts.Format("Detail_BranchFor", repository));
+            ToolTipService.SetToolTip(branch, KeyHints.Tip("task.branch"));
 
             // パネルの右端はウィンドウの右端にあたるため、行の右端のボタンのツールチップは左へ出し、画面の外で切れないようにする
             ToolTipService.SetPlacement(branch, Microsoft.UI.Xaml.Controls.Primitives.PlacementMode.Left);
@@ -1092,8 +1100,8 @@ public sealed partial class TaskDetailPane : UserControl
             if (associated)
             {
                 var remove = new Button { Content = new FontIcon { Glyph = "\uE711", FontSize = 12 }, Style = subtle, Padding = new Thickness(6) };
-                AutomationProperties.SetName(remove, $"{repository} を作業するリポジトリから外す");
-                ToolTipService.SetToolTip(remove, "外す");
+                AutomationProperties.SetName(remove, Texts.Format("Detail_RemoveRepository", repository));
+                ToolTipService.SetToolTip(remove, Texts.Get("Common_Remove"));
                 ToolTipService.SetPlacement(remove, Microsoft.UI.Xaml.Controls.Primitives.PlacementMode.Left);
                 remove.Click += async (_, _) =>
                 {
@@ -1124,8 +1132,8 @@ public sealed partial class TaskDetailPane : UserControl
                     branchLink.NavigateUri = new Uri(url);
                 }
 
-                AutomationProperties.SetName(branchLink, $"ブランチ {b.Name} を GitHub で開く");
-                ToolTipService.SetToolTip(branchLink, isChosen ? "GitHub で開く（選んだブランチ）" : "GitHub で開く（Issue に紐づくブランチ）");
+                AutomationProperties.SetName(branchLink, Texts.Format("Detail_OpenBranch", b.Name));
+                ToolTipService.SetToolTip(branchLink, isChosen ? Texts.Get("Detail_OpenChosenBranch") : Texts.Get("Detail_OpenLinkedBranch"));
                 row.Children.Add(branchLink);
 
                 // 選んだブランチは外せる。Issue に紐づくブランチは GitHub の Development で扱う
@@ -1133,8 +1141,8 @@ public sealed partial class TaskDetailPane : UserControl
                 {
                     var entry = TaskValues.BranchEntry(b.RepositoryNameWithOwner, b.Name);
                     var unlink = new Button { Content = new FontIcon { Glyph = "\uE711", FontSize = 12 }, Style = subtle, Padding = new Thickness(6) };
-                    AutomationProperties.SetName(unlink, $"ブランチ {b.Name} を外す");
-                    ToolTipService.SetToolTip(unlink, "外す（ブランチは消しません）");
+                    AutomationProperties.SetName(unlink, Texts.Format("Detail_UnlinkBranch", b.Name));
+                    ToolTipService.SetToolTip(unlink, Texts.Get("Detail_UnlinkBranchTip"));
                     unlink.Click += async (_, _) =>
                     {
                         if (_task is { } current)
@@ -1174,11 +1182,11 @@ public sealed partial class TaskDetailPane : UserControl
 
         var current = project!.Milestones.FirstOrDefault(m => m.Id == task.MilestoneId);
         bool auto = task.MilestoneId == Tasklabe.Core.Milestones.MilestonePlan.Auto(task.Target, project.Milestones)?.Id;
-        _milestone.SetValue(current?.Title, "", placeholder: project.Milestones.Count == 0 ? "まだありません" : "なし", isAuto: auto);
+        _milestone.SetValue(current?.Title, "", placeholder: project.Milestones.Count == 0 ? Texts.Get("Detail_NoMilestones") : Texts.Get("Common_None"), isAuto: auto);
         MilestoneVisuals.Apply(_milestone.Icon);
         _milestone.Icon.Visibility = Visibility.Visible;
         ToolTipService.SetToolTip(_milestone, current?.Due is { } due && task.Target > due && !task.IsDone
-            ? $"期日超え: 予定終了日がマイルストーンの期日（{DateText.Short(due)}）より後です"
+            ? Texts.Format("Detail_MilestoneOverrun", DateText.Short(due))
             : null);
     }
 
@@ -1194,15 +1202,15 @@ public sealed partial class TaskDetailPane : UserControl
         bool isAuto = task.MilestoneId == auto?.Id;
         var choices = new List<(string Label, string? Detail, string? Id)>
         {
-            ("期日から自動で決める", auto is null ? "なし" : auto.Title, auto?.Id),
+            (Texts.Get("Detail_MilestoneAuto"), auto is null ? Texts.Get("Common_None") : auto.Title, auto?.Id),
         };
         choices.AddRange(ordered.Concat(project.Milestones.Where(m => m.Due is null))
             .Select(m => ((string Label, string? Detail, string? Id))("◆ " + m.Title, m.Due is { } d ? DateText.Short(d) : null, m.Id)));
-        choices.Add(("なし", null, null));
+        choices.Add((Texts.Get("Common_None"), null, null));
         var options = choices.Select((c, i) => new PickerOption(c.Label, c.Detail,
             IsSelected: i == 0 ? isAuto : !isAuto && c.Id == task.MilestoneId)).ToList();
-        var picker = new QuickPicker("マイルストーン", options,
-            note: project.Milestones.Count == 0 ? "マイルストーンは、プロジェクトの「…」→「マイルストーン」で作れます。" : null);
+        var picker = new QuickPicker(Texts.Get("Field_Milestone"), options,
+            note: project.Milestones.Count == 0 ? Texts.Get("Detail_MilestoneNote") : null);
         if (await picker.ShowAsync(button) is { Index: >= 0 } r && choices[r.Index].Id != task.MilestoneId)
         {
             await App.Current.Services.Edits.SetAsync(task, TaskField.Milestone, choices[r.Index].Id);

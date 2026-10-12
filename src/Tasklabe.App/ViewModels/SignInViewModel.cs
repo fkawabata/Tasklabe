@@ -73,7 +73,7 @@ public sealed partial class SignInViewModel(AppServices services) : ObservableOb
             services.SetToken(token);
 
             Stage = SignInStage.SettingUp;
-            ProgressText = "アカウントを確認しています";
+            ProgressText = Texts.Get("SignIn_CheckingAccount");
             var user = await services.Api.GetViewerAsync(ct);
             services.Tokens.Save(user.Login, token);
 
@@ -95,7 +95,7 @@ public sealed partial class SignInViewModel(AppServices services) : ObservableOb
             settings.PersonalRepositoryName = repository.NameWithOwner;
             services.SaveSettings();
 
-            ProgressText = "タスクを取得しています";
+            ProgressText = Texts.Get("SignIn_LoadingTasks");
             await services.Sync.SyncAsync(force: true, ct);
 
             Completed?.Invoke(this, EventArgs.Empty);

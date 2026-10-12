@@ -2,6 +2,7 @@ using Tasklabe.Core.Domain;
 using Tasklabe.Core.Editing;
 using Tasklabe.Core.Milestones;
 using Tasklabe.Core.Wbs;
+using Tasklabe.Data.Resources;
 
 namespace Tasklabe.Data;
 
@@ -182,7 +183,7 @@ public sealed class TaskEditService(SqliteTaskStore store, SyncEngine sync, Time
         double? estimateHours = null, DateOnly? start = null, IEnumerable<string>? blockedBy = null)
     {
         var repository = project.RepositoryNameWithOwner
-            ?? throw new InvalidOperationException("プロジェクトにリポジトリがリンクされていません。");
+            ?? throw new InvalidOperationException(Strings.ProjectHasNoRepository);
         var task = SqliteTaskStore.NewLocalTask(
             $"{TaskItem.LocalIdPrefix}{Guid.NewGuid():N}", project.Id,
             new NewTaskPayload(title.Trim(), string.IsNullOrWhiteSpace(body) ? null : body.Trim(), repository), time.GetUtcNow());

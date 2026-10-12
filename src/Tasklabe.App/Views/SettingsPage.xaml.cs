@@ -76,10 +76,21 @@ public sealed partial class SettingsPage : Page
         base.OnNavigatedTo(e);
 
         ElementTheme[] themes = [ElementTheme.Default, ElementTheme.Light, ElementTheme.Dark];
-        ThemeHost.Content = PickerButton.ForChoices("テーマ", ["Windows の設定に従う", "ライト", "ダーク"],
+        ThemeHost.Content = PickerButton.ForChoices(Texts.Get("Settings_ThemePicker"),
+            [Texts.Get("Settings_ThemeSystem"), Texts.Get("Settings_ThemeLight"), Texts.Get("Settings_ThemeDark")],
             Array.IndexOf(themes, App.Current.Theme), i => App.Current.Theme = themes[i]);
 
         var settings = App.Current.Services.CurrentSettings;
+
+        // 言語の名前は、どちらの言語で表示していても読めるよう、その言語で書く
+        string[] languages = [UiLanguage.System, UiLanguage.Japanese, UiLanguage.English];
+        LanguageHost.Content = PickerButton.ForChoices(Texts.Get("Settings_LanguagePicker"),
+            [Texts.Get("Settings_LanguageSystem"), "日本語", "English"],
+            Math.Max(0, Array.IndexOf(languages, settings.Language)), i =>
+            {
+                settings.Language = languages[i];
+                App.Current.Services.SaveSettings();
+            });
         EmptyColumnsSwitch.IsOn = settings.KanbanShowEmptyColumns;
         HintsSwitch.IsOn = settings.ShowHints;
         NumberInPlanSwitch.IsOn = settings.ShowNumberInPlan;
@@ -87,7 +98,7 @@ public sealed partial class SettingsPage : Page
         NumberInIssuesSwitch.IsOn = settings.ShowNumberInIssues;
 
         AccountText.Text = settings.UserName is { Length: > 0 } name ? $"{name} (@{settings.UserLogin})" : $"@{settings.UserLogin}";
-        RepositoryText.Text = $"個人用リポジトリ: {settings.PersonalRepositoryName}";
+        RepositoryText.Text = Texts.Format("Settings_PersonalRepository", settings.PersonalRepositoryName);
 
         OrganizationAccessLink.NavigateUri = Dialogs.NewProjectDialog.ApplicationSettingsUrl;
         _ = LoadOrganizationsAsync();
@@ -123,9 +134,7 @@ public sealed partial class SettingsPage : Page
         }
 
         bool team = tab == "team";
-        DefaultsIntro.Text = team
-            ? "チームのプロジェクトの既定です。新しいチームのプロジェクトには、作った時点のこの値を書き込み、メンバー全員で共有します。"
-            : "個人のプロジェクト（マイタスクを含む）の既定です。マイタスクのように複数のプロジェクトをまたぐ画面の工数の表示にも使います。";
+        DefaultsIntro.Text = team ? Texts.Get("Settings_TeamDefaultsDescription") : Texts.Get("Settings_PersonalDefaultsDescription");
         DefaultsEditor.LoadDefaults(team);
         _ = BuildProjectLinksAsync(team);
     }
@@ -149,13 +158,13 @@ public sealed partial class SettingsPage : Page
             texts.Children.Add(new TextBlock { Text = ProjectDisplay.Name(project), Style = AppResources.Style("Text.Body") });
             texts.Children.Add(new TextBlock
             {
-                Text = project.Settings.IsEmpty ? "既定に従っています" : "このプロジェクトで上書きしています",
+                Text = project.Settings.IsEmpty ? Texts.Get("Settings_ProjectUsesDefaults") : Texts.Get("Settings_ProjectOverrides"),
                 Style = AppResources.Style("Text.Caption"),
             });
             grid.Children.Add(texts);
 
-            var open = new Button { Content = "設定を開く", VerticalAlignment = VerticalAlignment.Center };
-            AutomationProperties.SetName(open, $"{ProjectDisplay.Name(project)} の設定を開く");
+            var open = new Button { Content = Texts.Get("Settings_OpenProjectSettings"), VerticalAlignment = VerticalAlignment.Center };
+            AutomationProperties.SetName(open, Texts.Format("Settings_OpenProjectSettingsName", ProjectDisplay.Name(project)));
             open.Click += (_, _) => App.Current.MainWindow!.OpenProjectSettings(project.Id);
             Grid.SetColumn(open, 1);
             grid.Children.Add(open);
@@ -176,7 +185,7 @@ public sealed partial class SettingsPage : Page
             var card = new StackPanel { Spacing = 2 };
             card.Children.Add(new TextBlock
             {
-                Text = group.Key,
+                Text = ShortcutCatalog.CategoryName(group.Key),
                 Style = AppResources.Style("Text.Caption"),
                 Margin = new Thickness(0, 0, 0, 4),
             });
@@ -201,20 +210,20 @@ public sealed partial class SettingsPage : Page
         grid.Children.Add(new TextBlock { Text = definition.Label, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap });
 
         var keys = keymap.Display(definition.Id);
-        var caps = Dialogs.ShortcutHelpDialog.KeyCaps(keys.Length > 0 ? keys : "割り当てなし");
+        var caps = Dialogs.ShortcutHelpDialog.KeyCaps(keys.Length > 0 ? keys : Texts.Get("Settings_NoShortcut"));
         Grid.SetColumn(caps, 1);
         grid.Children.Add(caps);
 
-        var change = new Button { Content = "変更…", VerticalAlignment = VerticalAlignment.Center };
-        AutomationProperties.SetName(change, $"{definition.Label}のキーを変更");
+        var change = new Button { Content = Texts.Get("Settings_ChangeShortcut"), VerticalAlignment = VerticalAlignment.Center };
+        AutomationProperties.SetName(change, Texts.Format("Settings_ChangeShortcutName", definition.Label));
         change.Click += async (_, _) => await ChangeShortcutAsync(definition);
         Grid.SetColumn(change, 2);
         grid.Children.Add(change);
 
         if (!keymap.For(definition.Id).SequenceEqual(definition.Defaults))
         {
-            var reset = new HyperlinkButton { Content = "既定に戻す", VerticalAlignment = VerticalAlignment.Center };
-            AutomationProperties.SetName(reset, $"{definition.Label}のキーを既定に戻す");
+            var reset = new HyperlinkButton { Content = Texts.Get("Settings_ResetShortcut"), VerticalAlignment = VerticalAlignment.Center };
+            AutomationProperties.SetName(reset, Texts.Format("Settings_ResetShortcutName", definition.Label));
             reset.Click += (_, _) => Save(App.Current.Services.Keymap.Reset(definition.Id));
             Grid.SetColumn(reset, 3);
             grid.Children.Add(reset);
@@ -232,7 +241,7 @@ public sealed partial class SettingsPage : Page
         KeyGesture? captured = null;
         ShortcutDefinition? conflict = null;
 
-        var shown = new TextBlock { Text = "キーを押してください", Style = AppResources.Style("Text.Subtitle"), HorizontalAlignment = HorizontalAlignment.Center };
+        var shown = new TextBlock { Text = Texts.Get("Settings_PressKey"), Style = AppResources.Style("Text.Subtitle"), HorizontalAlignment = HorizontalAlignment.Center };
         var message = new TextBlock { Style = AppResources.Style("Text.Caption"), TextWrapping = TextWrapping.Wrap, HorizontalAlignment = HorizontalAlignment.Center, TextAlignment = TextAlignment.Center };
         var target = new Button
         {
@@ -241,21 +250,21 @@ public sealed partial class SettingsPage : Page
             MinHeight = 72,
             Style = AppResources.Style("SubtleButtonStyle"),
         };
-        AutomationProperties.SetName(target, "割り当てるキーを押す");
+        AutomationProperties.SetName(target, Texts.Get("Settings_KeyTargetName"));
         var panel = new StackPanel { Spacing = 12, Width = 380 };
-        panel.Children.Add(new TextBlock { Text = $"「{definition.Label}」に割り当てるキーを押してください。いまの割り当て: {Current(keymap, definition.Id)}", TextWrapping = TextWrapping.Wrap });
+        panel.Children.Add(new TextBlock { Text = Texts.Format("Settings_PressKeyFor", definition.Label, Current(keymap, definition.Id)), TextWrapping = TextWrapping.Wrap });
         panel.Children.Add(target);
         panel.Children.Add(message);
-        panel.Children.Add(AppDialog.HintText("キーを押してから、Tab で「割り当てる」へ移って Enter　Esc でキャンセル"));
+        panel.Children.Add(AppDialog.HintText(Texts.Get("Settings_ChangeShortcutHint")));
 
         var dialog = new ContentDialog
         {
             XamlRoot = XamlRoot,
-            Title = "キーを変更",
+            Title = Texts.Get("Settings_ChangeShortcutTitle"),
             Content = panel,
-            PrimaryButtonText = "割り当てる",
-            SecondaryButtonText = "割り当てを外す",
-            CloseButtonText = "キャンセル",
+            PrimaryButtonText = Texts.Get("Settings_Assign"),
+            SecondaryButtonText = Texts.Get("Settings_Unassign"),
+            CloseButtonText = Texts.Get("Common_Cancel"),
             DefaultButton = ContentDialogButton.None,
             IsPrimaryButtonEnabled = false,
         };
@@ -275,8 +284,8 @@ public sealed partial class SettingsPage : Page
             conflict = result == KeymapCheck.Conflict ? other : null;
             message.Text = result switch
             {
-                KeymapCheck.Reserved => "このキーは画面の基本操作（移動、決定、取り消しなど）に使うため割り当てられません。",
-                KeymapCheck.Conflict => $"「{other!.Label}」に割り当て済みです。割り当てると「{other.Label}」からは外します。",
+                KeymapCheck.Reserved => Texts.Get("Settings_KeyReserved"),
+                KeymapCheck.Conflict => Texts.Format("Settings_KeyConflict", other!.Label),
                 _ => "",
             };
             dialog.IsPrimaryButtonEnabled = result != KeymapCheck.Reserved;
@@ -300,7 +309,7 @@ public sealed partial class SettingsPage : Page
         }
     }
 
-    private static string Current(Keymap keymap, string id) => keymap.Display(id) is { Length: > 0 } s ? s : "なし";
+    private static string Current(Keymap keymap, string id) => keymap.Display(id) is { Length: > 0 } s ? s : Texts.Get("Settings_None");
 
     private void Save(Keymap keymap)
     {
@@ -312,7 +321,7 @@ public sealed partial class SettingsPage : Page
 
     private async void OnResetAllShortcuts(object sender, RoutedEventArgs e)
     {
-        var dialog = AppDialog.Confirm(XamlRoot, "キーの割り当てを既定に戻しますか？", "変えた割り当てをすべて既定に戻します。", "既定に戻す");
+        var dialog = AppDialog.Confirm(XamlRoot, Texts.Get("Settings_ResetAllTitle"), Texts.Get("Settings_ResetAllMessage"), Texts.Get("Settings_ResetShortcut"));
         if (await dialog.ShowAsync() == ContentDialogResult.Primary)
         {
             Save(new Keymap());
@@ -324,15 +333,15 @@ public sealed partial class SettingsPage : Page
     {
         var orgs = await App.Current.Services.Store.GetOrganizationsAsync();
         var summary = orgs.Count == 0
-            ? "利用できる Organization はありません。"
-            : "利用できる Organization: " + string.Join("、", orgs.Select(o => o.IsAccessible ? o.Login : $"{o.Login}（{Dialogs.NewProjectDialog.ProblemAdvice(o)}）"));
-        OrganizationsText.Text = summary + " 所属している組織が表示されない場合は、組織が外部アプリの利用を制限している可能性があります。";
+            ? Texts.Get("Settings_NoOrganizations")
+            : Texts.Format("Settings_OrganizationList", string.Join(Texts.Get("Common_ListSeparator"),
+                orgs.Select(o => o.IsAccessible ? o.Login : Texts.Format("Settings_OrganizationProblem", o.Login, Dialogs.NewProjectDialog.ProblemAdvice(o)))));
+        OrganizationsText.Text = Texts.Format("Settings_OrganizationsNote", summary);
     }
 
     private async void OnSignOutClick(object sender, RoutedEventArgs e)
     {
-        var dialog = AppDialog.Confirm(XamlRoot, "サインアウトしますか？",
-            "この PC に保存したアクセストークンとキャッシュを削除します。GitHub 上のデータは削除されません。", "サインアウト");
+        var dialog = AppDialog.Confirm(XamlRoot, Texts.Get("Settings_SignOutTitle"), Texts.Get("Settings_SignOutMessage"), Texts.Get("Settings_SignOutConfirm"));
 
         if (await dialog.ShowAsync() == ContentDialogResult.Primary)
         {

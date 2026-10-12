@@ -19,18 +19,18 @@ public static class CreateBranchDialog
     {
         if (task.IsLocal)
         {
-            App.Current.Shell?.ShowInfo("まだブランチを作れません", "GitHub にタスクを送り終えてから作れます。");
+            App.Current.Shell?.ShowInfo(Texts.Get("Branch_NotYetTitle"), Texts.Get("Branch_NotYetMessage"));
             return;
         }
 
         var caption = AppResources.Style("Text.Caption");
         repository ??= task.Repositories.FirstOrDefault();
-        var repositoryButton = new PickerButton("リポジトリ");
+        var repositoryButton = new PickerButton(Texts.Get("Branch_Repository"));
         var name = new TextBox { Text = BranchName.Suggest(TaskKeys.Of(task), task.Title) };
         var error = new TextBlock { Style = caption, Foreground = ThemeResources.Brush("SystemFillColorCriticalBrush"), TextWrapping = TextWrapping.Wrap, Visibility = Visibility.Collapsed };
-        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(name, "ブランチ名");
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(name, Texts.Get("Branch_Name"));
 
-        void Refresh() => repositoryButton.SetValue(repository, "\uE8B7", placeholder: "リポジトリを選ぶ…");
+        void Refresh() => repositoryButton.SetValue(repository, "\uE8B7", placeholder: Texts.Get("Detail_ChooseRepository"));
         repositoryButton.Pick = async b =>
         {
             if (await ValuePickers.RepositoryAsync(b, null, task.Repositories, repository) is { } picked)
@@ -48,21 +48,20 @@ public static class CreateBranchDialog
             Style = AppResources.Style("Text.BodyStrong"),
             TextWrapping = TextWrapping.Wrap,
         });
-        panel.Children.Add(PickerButton.Labeled("リポジトリ", repositoryButton));
+        panel.Children.Add(PickerButton.Labeled(Texts.Get("Branch_Repository"), repositoryButton));
         var namePanel = new StackPanel { Spacing = 4 };
-        namePanel.Children.Add(new TextBlock { Text = "ブランチ名", Style = caption });
+        namePanel.Children.Add(new TextBlock { Text = Texts.Get("Branch_Name"), Style = caption });
         namePanel.Children.Add(name);
         namePanel.Children.Add(error);
         panel.Children.Add(namePanel);
         panel.Children.Add(new TextBlock
         {
-            Text = "リポジトリの既定のブランチから作り、GitHub の Issue の Development に紐づけます。このブランチの PR は Issue に紐づきます。"
-                + "作ったら、手元で切り替えるコマンドをコピーします。",
+            Text = Texts.Get("Branch_CreateDescription"),
             Style = caption,
             TextWrapping = TextWrapping.Wrap,
         });
 
-        var dialog = AppDialog.Create(root, "ブランチを作る", panel, "作る");
+        var dialog = AppDialog.Create(root, Texts.Get("Branch_CreateTitle"), panel, Texts.Get("Common_Create"));
         dialog.Opened += (_, _) =>
         {
             name.Focus(FocusState.Programmatic);
@@ -72,7 +71,7 @@ public static class CreateBranchDialog
         LinkedBranch? created = null;
         dialog.PrimaryButtonClick += async (d, args) =>
         {
-            var problem = repository is null ? "リポジトリを選んでください。" : BranchName.Problem(name.Text.Trim());
+            var problem = repository is null ? Texts.Get("Branch_NeedRepository") : BranchName.Problem(name.Text.Trim());
             if (problem is not null)
             {
                 error.Text = problem;
@@ -113,7 +112,7 @@ public static class CreateBranchDialog
             await TaskCommands.ApplyAsync([(task, changes)]);
         }
 
-        BranchFlow.CopySwitchCommand(created.Name, $"{created.Name} を作り、切り替えるコマンドをコピーしました");
+        BranchFlow.CopySwitchCommand(created.Name, Texts.Format("Branch_CreatedCopied", created.Name));
         App.Current.Shell?.NotifyDataChanged();
     }
 }

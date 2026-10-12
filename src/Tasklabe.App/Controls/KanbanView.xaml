@@ -78,8 +78,8 @@
                                 <FontIcon
                                     FontSize="14"
                                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                    x:Uid="Kanban_NoAssigneeIcon"
                                     Glyph="&#xE77B;"
-                                    ToolTipService.ToolTip="担当者なし"
                                     Visibility="{x:Bind IsUnassigned}" />
                             </Grid>
                         </Button>
@@ -133,12 +133,12 @@
                             Style="{StaticResource Card.Chip}"
                             IsTabStop="False"
                             Tag="{x:Bind}"
-                            ToolTipService.ToolTip="{x:Bind controls:KeyHints.Tip('task.plan', '課題（計画に入れる前の検討事項）。押すと計画に移せます')}"
+                            ToolTipService.ToolTip="{x:Bind PlanTip}"
                             Visibility="{x:Bind IsIssue}"
-                            AutomationProperties.Name="課題。押すと計画に移せます">
+                            AutomationProperties.Name="{x:Bind PlanTip}">
                             <StackPanel Orientation="Horizontal" Spacing="4">
                                 <FontIcon FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}" Glyph="&#xE7C1;" />
-                                <TextBlock Style="{StaticResource Text.Caption}" Text="課題" />
+                                <TextBlock x:Uid="Kanban_IssueChip" Style="{StaticResource Text.Caption}" />
                             </StackPanel>
                         </Button>
                         <Button
@@ -147,7 +147,7 @@
                             Style="{StaticResource Card.Chip}"
                             IsTabStop="False"
                             Tag="{x:Bind}"
-                            ToolTipService.ToolTip="{x:Bind controls:KeyHints.Tip('task.due', '期日を決める')}"
+                            ToolTipService.ToolTip="{x:Bind controls:KeyHints.Tip('task.due')}"
                             Visibility="{x:Bind HasTarget}"
                             AutomationProperties.Name="{x:Bind DueButtonName}">
                             <StackPanel Orientation="Horizontal" Spacing="4">
@@ -165,7 +165,7 @@
                             Style="{StaticResource Card.Chip}"
                             IsTabStop="False"
                             Tag="{x:Bind}"
-                            ToolTipService.ToolTip="{x:Bind controls:KeyHints.Tip('task.estimate', '想定工数を決める')}"
+                            ToolTipService.ToolTip="{x:Bind controls:KeyHints.Tip('task.estimate')}"
                             Visibility="{x:Bind HasEstimate}"
                             AutomationProperties.Name="{x:Bind EstimateButtonName}">
                             <StackPanel Orientation="Horizontal" Spacing="4">

@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization.Metadata;
+using Tasklabe.GitHub.Resources;
 
 namespace Tasklabe.GitHub.GraphQL;
 
@@ -19,7 +20,7 @@ internal sealed class GraphQLClient(HttpClient http, GitHubHost host, Func<strin
         CancellationToken cancellationToken)
         where T : class
     {
-        var token = tokenProvider() ?? throw new GitHubAuthenticationException("サインインしていません。");
+        var token = tokenProvider() ?? throw new GitHubAuthenticationException(Strings.NotSignedIn);
 
         var body = new JsonObject { ["query"] = query };
         if (variables is not null)
@@ -40,7 +41,7 @@ internal sealed class GraphQLClient(HttpClient http, GitHubHost host, Func<strin
         }
         catch (HttpRequestException ex)
         {
-            throw new GitHubUnavailableException("GitHub に接続できません。", ex);
+            throw new GitHubUnavailableException(Strings.CannotConnect, ex);
         }
 
         using (response)
@@ -51,16 +52,16 @@ internal sealed class GraphQLClient(HttpClient http, GitHubHost host, Func<strin
                 var requestId = response.Headers.TryGetValues("X-GitHub-Request-Id", out var ids) ? ids.FirstOrDefault() : null;
                 var detail = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
                 throw new GitHubAuthenticationException(
-                    $"GitHub の認証が無効になりました（401, request-id: {requestId}, {detail[..Math.Min(detail.Length, 200)]}）。");
+                    Strings.AuthenticationInvalidDetail(requestId, detail[..Math.Min(detail.Length, 200)]));
             }
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new GitHubHttpException(response.StatusCode, $"GitHub がエラーを返しました（{(int)response.StatusCode}）。");
+                throw new GitHubHttpException(response.StatusCode, Strings.HttpError((int)response.StatusCode));
             }
 
             var result = await response.Content.ReadFromJsonAsync(typeInfo, cancellationToken).ConfigureAwait(false)
-                ?? throw new GitHubException("GitHub から空の応答が返されました。");
+                ?? throw new GitHubException(Strings.EmptyResponse);
 
             if (result.Errors is { Count: > 0 } errors)
             {
@@ -69,7 +70,7 @@ internal sealed class GraphQLClient(HttpClient http, GitHubHost host, Func<strin
                     errors.Select(e => e.Type ?? "").ToList());
             }
 
-            var data = result.Data ?? throw new GitHubException("GitHub から空の応答が返されました。");
+            var data = result.Data ?? throw new GitHubException(Strings.EmptyResponse);
             if (data is ViewerData { RateLimit: { } r1 }) LastRateLimit = r1;
             if (data is ViewerProjectsData { RateLimit: { } r2 }) LastRateLimit = r2;
             if (data is ProjectNodeData { RateLimit: { } r3 }) LastRateLimit = r3;

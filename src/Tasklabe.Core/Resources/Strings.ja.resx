@@ -1,0 +1,522 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Action_app_help" xml:space="preserve">
+    <value>キーの一覧の表示</value>
+  </data>
+  <data name="Action_app_palette" xml:space="preserve">
+    <value>コマンドパレットの表示</value>
+  </data>
+  <data name="Action_app_sync" xml:space="preserve">
+    <value>今すぐ同期</value>
+  </data>
+  <data name="Action_composer_assign" xml:space="preserve">
+    <value>担当者の選択</value>
+  </data>
+  <data name="Action_composer_detail" xml:space="preserve">
+    <value>詳細パネルへ移動</value>
+  </data>
+  <data name="Action_composer_due" xml:space="preserve">
+    <value>期日の選択</value>
+  </data>
+  <data name="Action_composer_estimate" xml:space="preserve">
+    <value>工数の選択</value>
+  </data>
+  <data name="Action_composer_kind" xml:space="preserve">
+    <value>区分の選択</value>
+  </data>
+  <data name="Action_composer_project" xml:space="preserve">
+    <value>追加先の選択</value>
+  </data>
+  <data name="Action_composer_status" xml:space="preserve">
+    <value>ステータスの選択</value>
+  </data>
+  <data name="Action_composer_submit" xml:space="preserve">
+    <value>追加</value>
+  </data>
+  <data name="Action_gantt_edit" xml:space="preserve">
+    <value>編集モードの切り替え</value>
+  </data>
+  <data name="Action_gantt_extend" xml:space="preserve">
+    <value>終わりを 1 日延長</value>
+  </data>
+  <data name="Action_gantt_moveEarlier" xml:space="preserve">
+    <value>予定を 1 日前へ移動</value>
+  </data>
+  <data name="Action_gantt_moveLater" xml:space="preserve">
+    <value>予定を 1 日後へ移動</value>
+  </data>
+  <data name="Action_gantt_scale" xml:space="preserve">
+    <value>表示の単位の切り替え（日・週・月）</value>
+  </data>
+  <data name="Action_gantt_shrink" xml:space="preserve">
+    <value>終わりを 1 日短縮</value>
+  </data>
+  <data name="Action_gantt_today" xml:space="preserve">
+    <value>今日へ移動</value>
+  </data>
+  <data name="Action_kanban_moveNext" xml:space="preserve">
+    <value>カードを次の列へ移動</value>
+  </data>
+  <data name="Action_kanban_movePrev" xml:space="preserve">
+    <value>カードを前の列へ移動</value>
+  </data>
+  <data name="Action_nav_settings" xml:space="preserve">
+    <value>設定の表示</value>
+  </data>
+  <data name="Action_preview_confirm" xml:space="preserve">
+    <value>日程の調整の確定</value>
+  </data>
+  <data name="Action_task_addChild" xml:space="preserve">
+    <value>子タスクの追加</value>
+  </data>
+  <data name="Action_task_assign" xml:space="preserve">
+    <value>担当者の変更</value>
+  </data>
+  <data name="Action_task_assignMe" xml:space="preserve">
+    <value>自分を担当に設定・解除</value>
+  </data>
+  <data name="Action_task_branch" xml:space="preserve">
+    <value>ブランチの作成・選択</value>
+  </data>
+  <data name="Action_task_copyKey" xml:space="preserve">
+    <value>番号のコピー</value>
+  </data>
+  <data name="Action_task_copyUrl" xml:space="preserve">
+    <value>Issue の URL をコピー</value>
+  </data>
+  <data name="Action_task_delete" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="Action_task_detail" xml:space="preserve">
+    <value>詳細の表示</value>
+  </data>
+  <data name="Action_task_due" xml:space="preserve">
+    <value>期日の設定</value>
+  </data>
+  <data name="Action_task_estimate" xml:space="preserve">
+    <value>想定工数の設定</value>
+  </data>
+  <data name="Action_task_new" xml:space="preserve">
+    <value>タスクの追加</value>
+  </data>
+  <data name="Action_task_openInBrowser" xml:space="preserve">
+    <value>GitHub で表示</value>
+  </data>
+  <data name="Action_task_plan" xml:space="preserve">
+    <value>計画へ移動・課題へ移動</value>
+  </data>
+  <data name="Action_task_predecessor" xml:space="preserve">
+    <value>先行タスクの追加</value>
+  </data>
+  <data name="Action_task_progress" xml:space="preserve">
+    <value>進捗率の変更</value>
+  </data>
+  <data name="Action_task_project" xml:space="preserve">
+    <value>別のプロジェクトへ移動</value>
+  </data>
+  <data name="Action_task_rename" xml:space="preserve">
+    <value>タイトルの変更</value>
+  </data>
+  <data name="Action_task_repository" xml:space="preserve">
+    <value>作業するリポジトリの選択</value>
+  </data>
+  <data name="Action_task_status" xml:space="preserve">
+    <value>ステータスの変更</value>
+  </data>
+  <data name="Action_task_toggleDone" xml:space="preserve">
+    <value>完了の切り替え</value>
+  </data>
+  <data name="Action_view_filter" xml:space="preserve">
+    <value>絞り込み</value>
+  </data>
+  <data name="Action_view_group" xml:space="preserve">
+    <value>グループの変更</value>
+  </data>
+  <data name="Action_view_sort" xml:space="preserve">
+    <value>並び順の変更</value>
+  </data>
+  <data name="Action_wbs_bulk" xml:space="preserve">
+    <value>計画をまとめて入力</value>
+  </data>
+  <data name="Action_wbs_collapse" xml:space="preserve">
+    <value>折りたたみ</value>
+  </data>
+  <data name="Action_wbs_expand" xml:space="preserve">
+    <value>展開</value>
+  </data>
+  <data name="Action_wbs_indent" xml:space="preserve">
+    <value>字下げ（上の行の子へ）</value>
+  </data>
+  <data name="Action_wbs_insertAfter" xml:space="preserve">
+    <value>下に行を追加</value>
+  </data>
+  <data name="Action_wbs_moveDown" xml:space="preserve">
+    <value>行を下へ移動</value>
+  </data>
+  <data name="Action_wbs_moveUp" xml:space="preserve">
+    <value>行を上へ移動</value>
+  </data>
+  <data name="Action_wbs_outdent" xml:space="preserve">
+    <value>字上げ</value>
+  </data>
+  <data name="BranchNameEmpty" xml:space="preserve">
+    <value>ブランチ名を入力してください。</value>
+  </data>
+  <data name="BranchNameInvalidCharacters" xml:space="preserve">
+    <value>空白と ~ ^ : ? * [ \ はブランチ名に使えません。</value>
+  </data>
+  <data name="BranchNameInvalidForm" xml:space="preserve">
+    <value>ブランチ名の形が正しくありません（- や / で始めない、.. や // を含めない、. や / や .lock で終えない）。</value>
+  </data>
+  <data name="BulkPlanEndBeforeStart" xml:space="preserve">
+    <value>終了が開始より前です</value>
+  </data>
+  <data name="EffortDays" xml:space="preserve">
+    <value>{0:0.#} 人日</value>
+  </data>
+  <data name="Field_ActualEnd" xml:space="preserve">
+    <value>実績終了日</value>
+  </data>
+  <data name="Field_ActualStart" xml:space="preserve">
+    <value>実績開始日</value>
+  </data>
+  <data name="Field_Assignees" xml:space="preserve">
+    <value>担当者</value>
+  </data>
+  <data name="Field_BlockedBy" xml:space="preserve">
+    <value>先行タスク</value>
+  </data>
+  <data name="Field_Body" xml:space="preserve">
+    <value>説明</value>
+  </data>
+  <data name="Field_Branches" xml:space="preserve">
+    <value>ブランチ</value>
+  </data>
+  <data name="Field_Estimate" xml:space="preserve">
+    <value>想定工数</value>
+  </data>
+  <data name="Field_Kind" xml:space="preserve">
+    <value>区分</value>
+  </data>
+  <data name="Field_Milestone" xml:space="preserve">
+    <value>マイルストーン</value>
+  </data>
+  <data name="Field_Other" xml:space="preserve">
+    <value>項目</value>
+  </data>
+  <data name="Field_Parent" xml:space="preserve">
+    <value>親タスク</value>
+  </data>
+  <data name="Field_Progress" xml:space="preserve">
+    <value>進捗率</value>
+  </data>
+  <data name="Field_Repositories" xml:space="preserve">
+    <value>リポジトリ</value>
+  </data>
+  <data name="Field_Schedule" xml:space="preserve">
+    <value>後続を待たせない設定</value>
+  </data>
+  <data name="Field_SortOrder" xml:space="preserve">
+    <value>並び順</value>
+  </data>
+  <data name="Field_Start" xml:space="preserve">
+    <value>予定開始日</value>
+  </data>
+  <data name="Field_State" xml:space="preserve">
+    <value>状態</value>
+  </data>
+  <data name="Field_Status" xml:space="preserve">
+    <value>ステータス</value>
+  </data>
+  <data name="Field_Target" xml:space="preserve">
+    <value>予定終了日</value>
+  </data>
+  <data name="Field_Title" xml:space="preserve">
+    <value>タイトル</value>
+  </data>
+  <data name="Fixed_chooseNth_Keys" xml:space="preserve">
+    <value>1〜9、0</value>
+  </data>
+  <data name="Fixed_chooseNth_Label" xml:space="preserve">
+    <value>n 番目の候補の選択（複数を選ぶピッカーでは選択・解除の切り替え）</value>
+  </data>
+  <data name="Fixed_close_Keys" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="Fixed_close_Label" xml:space="preserve">
+    <value>一番内側の 1 層を閉じる（ピッカー → ダイアログ → 詳細パネル → 選択や編集モード）</value>
+  </data>
+  <data name="Fixed_closeLayer_Keys" xml:space="preserve">
+    <value>Esc</value>
+  </data>
+  <data name="Fixed_closeLayer_Label" xml:space="preserve">
+    <value>閉じる（複数を選ぶピッカーでは、選んだ内容を反映して閉じる）</value>
+  </data>
+  <data name="Fixed_confirm_Keys" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="Fixed_confirm_Label" xml:space="preserve">
+    <value>決定</value>
+  </data>
+  <data name="Fixed_editCell_Keys" xml:space="preserve">
+    <value>F2</value>
+  </data>
+  <data name="Fixed_editCell_Label" xml:space="preserve">
+    <value>セルの編集</value>
+  </data>
+  <data name="Fixed_extend_Keys" xml:space="preserve">
+    <value>Shift + ↑ / ↓</value>
+  </data>
+  <data name="Fixed_extend_Label" xml:space="preserve">
+    <value>複数のタスクの範囲選択</value>
+  </data>
+  <data name="Fixed_focusPane_Keys" xml:space="preserve">
+    <value>F6</value>
+  </data>
+  <data name="Fixed_focusPane_Label" xml:space="preserve">
+    <value>詳細パネルと画面のあいだのフォーカスの移動（パネルがなければナビゲーションと画面）</value>
+  </data>
+  <data name="Fixed_menu_Keys" xml:space="preserve">
+    <value>Shift + F10</value>
+  </data>
+  <data name="Fixed_menu_Label" xml:space="preserve">
+    <value>タスクのメニューの表示</value>
+  </data>
+  <data name="Fixed_moveCell_Keys" xml:space="preserve">
+    <value>← / →</value>
+  </data>
+  <data name="Fixed_moveCell_Label" xml:space="preserve">
+    <value>セルの移動</value>
+  </data>
+  <data name="Fixed_moveFocus_Keys" xml:space="preserve">
+    <value>Ctrl + ↑ / ↓、Ctrl + Space</value>
+  </data>
+  <data name="Fixed_moveFocus_Label" xml:space="preserve">
+    <value>選択を変えずに移動、フォーカスのあるタスクの選択・解除</value>
+  </data>
+  <data name="Fixed_moveOption_Keys" xml:space="preserve">
+    <value>↑ / ↓、Home / End</value>
+  </data>
+  <data name="Fixed_moveOption_Label" xml:space="preserve">
+    <value>候補の移動</value>
+  </data>
+  <data name="Fixed_navigate_Keys" xml:space="preserve">
+    <value>Alt + 1〜9</value>
+  </data>
+  <data name="Fixed_navigate_Label" xml:space="preserve">
+    <value>ナビゲーションの n 番目へ移動（1 はマイタスク）</value>
+  </data>
+  <data name="Fixed_nextField_Keys" xml:space="preserve">
+    <value>Tab / Shift + Tab</value>
+  </data>
+  <data name="Fixed_nextField_Label" xml:space="preserve">
+    <value>入力欄と候補、次の項目・前の項目への移動</value>
+  </data>
+  <data name="Fixed_open_Keys" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="Fixed_open_Label" xml:space="preserve">
+    <value>詳細の表示（計画の表ではセルの編集）</value>
+  </data>
+  <data name="Fixed_redo_Keys" xml:space="preserve">
+    <value>Ctrl + Y / Ctrl + Shift + Z</value>
+  </data>
+  <data name="Fixed_redo_Label" xml:space="preserve">
+    <value>やり直し</value>
+  </data>
+  <data name="Fixed_select_Keys" xml:space="preserve">
+    <value>↑ / ↓</value>
+  </data>
+  <data name="Fixed_select_Label" xml:space="preserve">
+    <value>タスクの選択</value>
+  </data>
+  <data name="Fixed_selectAll_Keys" xml:space="preserve">
+    <value>Ctrl + A</value>
+  </data>
+  <data name="Fixed_selectAll_Label" xml:space="preserve">
+    <value>すべて選択</value>
+  </data>
+  <data name="Fixed_switchView_Keys" xml:space="preserve">
+    <value>Ctrl + 1〜5</value>
+  </data>
+  <data name="Fixed_switchView_Label" xml:space="preserve">
+    <value>ビューの切り替え</value>
+  </data>
+  <data name="Fixed_toggleDone_Keys" xml:space="preserve">
+    <value>Space</value>
+  </data>
+  <data name="Fixed_toggleDone_Label" xml:space="preserve">
+    <value>完了の切り替え（一覧と表）</value>
+  </data>
+  <data name="Fixed_undo_Keys" xml:space="preserve">
+    <value>Ctrl + Z</value>
+  </data>
+  <data name="Fixed_undo_Label" xml:space="preserve">
+    <value>元に戻す（文字の入力中は入力の取り消し）</value>
+  </data>
+  <data name="GuestNameComma" xml:space="preserve">
+    <value>名前にカンマは使えません</value>
+  </data>
+  <data name="GuestNameEmpty" xml:space="preserve">
+    <value>名前を入力してください</value>
+  </data>
+  <data name="GuestNameLeadingMark" xml:space="preserve">
+    <value>名前の先頭に {0} は使えません</value>
+  </data>
+  <data name="GuestNameTooLong" xml:space="preserve">
+    <value>名前は {0} 文字までです</value>
+  </data>
+  <data name="Holiday_AutumnalEquinox" xml:space="preserve">
+    <value>秋分の日</value>
+  </data>
+  <data name="Holiday_Children" xml:space="preserve">
+    <value>こどもの日</value>
+  </data>
+  <data name="Holiday_Citizens" xml:space="preserve">
+    <value>国民の休日</value>
+  </data>
+  <data name="Holiday_ComingOfAge" xml:space="preserve">
+    <value>成人の日</value>
+  </data>
+  <data name="Holiday_Constitution" xml:space="preserve">
+    <value>憲法記念日</value>
+  </data>
+  <data name="Holiday_Culture" xml:space="preserve">
+    <value>文化の日</value>
+  </data>
+  <data name="Holiday_EmperorsBirthday" xml:space="preserve">
+    <value>天皇誕生日</value>
+  </data>
+  <data name="Holiday_Enthronement" xml:space="preserve">
+    <value>天皇の即位の日</value>
+  </data>
+  <data name="Holiday_EnthronementCeremony" xml:space="preserve">
+    <value>即位礼正殿の儀の行われる日</value>
+  </data>
+  <data name="Holiday_Foundation" xml:space="preserve">
+    <value>建国記念の日</value>
+  </data>
+  <data name="Holiday_Greenery" xml:space="preserve">
+    <value>みどりの日</value>
+  </data>
+  <data name="Holiday_HealthAndSports" xml:space="preserve">
+    <value>体育の日</value>
+  </data>
+  <data name="Holiday_LaborThanksgiving" xml:space="preserve">
+    <value>勤労感謝の日</value>
+  </data>
+  <data name="Holiday_Marine" xml:space="preserve">
+    <value>海の日</value>
+  </data>
+  <data name="Holiday_Mountain" xml:space="preserve">
+    <value>山の日</value>
+  </data>
+  <data name="Holiday_NewYear" xml:space="preserve">
+    <value>元日</value>
+  </data>
+  <data name="Holiday_RespectForTheAged" xml:space="preserve">
+    <value>敬老の日</value>
+  </data>
+  <data name="Holiday_Showa" xml:space="preserve">
+    <value>昭和の日</value>
+  </data>
+  <data name="Holiday_Sports" xml:space="preserve">
+    <value>スポーツの日</value>
+  </data>
+  <data name="Holiday_Substitute" xml:space="preserve">
+    <value>振替休日</value>
+  </data>
+  <data name="Holiday_VernalEquinox" xml:space="preserve">
+    <value>春分の日</value>
+  </data>
+  <data name="KanbanUnsetColumn" xml:space="preserve">
+    <value>未設定</value>
+  </data>
+  <data name="OutlineMilestones" xml:space="preserve">
+    <value>マイルストーン</value>
+  </data>
+  <data name="OutlineOther" xml:space="preserve">
+    <value>その他</value>
+  </data>
+  <data name="OutlineUnassigned" xml:space="preserve">
+    <value>未割り当て</value>
+  </data>
+  <data name="ProjectKeyInUse" xml:space="preserve">
+    <value>{0} はほかのプロジェクトで使っています。</value>
+  </data>
+  <data name="ProjectKeyInvalid" xml:space="preserve">
+    <value>キーは英字で始まる、英字と数字だけの {0}〜{1} 文字にしてください。</value>
+  </data>
+  <data name="ProjectKeyReservedForInbox" xml:space="preserve">
+    <value>{0} は未分類のタスクの番号に使うため、ほかのプロジェクトには使えません。</value>
+  </data>
+  <data name="ProjectKeyUsedByAutolink" xml:space="preserve">
+    <value>{0}- はリポジトリの自動リンクで別の行き先に使われています。</value>
+  </data>
+  <data name="ShortcutCategory_composer" xml:space="preserve">
+    <value>タスクの追加</value>
+  </data>
+  <data name="ShortcutCategory_gantt" xml:space="preserve">
+    <value>ガントチャート</value>
+  </data>
+  <data name="ShortcutCategory_global" xml:space="preserve">
+    <value>全体</value>
+  </data>
+  <data name="ShortcutCategory_kanban" xml:space="preserve">
+    <value>カンバン</value>
+  </data>
+  <data name="ShortcutCategory_layer" xml:space="preserve">
+    <value>ピッカー・ダイアログ</value>
+  </data>
+  <data name="ShortcutCategory_task" xml:space="preserve">
+    <value>選んでいるタスク</value>
+  </data>
+  <data name="ShortcutCategory_wbs" xml:space="preserve">
+    <value>計画の表</value>
+  </data>
+  <data name="StatusNameDuplicate" xml:space="preserve">
+    <value>同じ名前のステータスがあります。</value>
+  </data>
+  <data name="StatusNameEmpty" xml:space="preserve">
+    <value>名前が空のステータスがあります。</value>
+  </data>
+  <data name="StatusNeedsDone" xml:space="preserve">
+    <value>カテゴリが Done のステータスが 1 つ以上必要です。</value>
+  </data>
+  <data name="StatusNeedsNotStarted" xml:space="preserve">
+    <value>カテゴリが Backlog か Todo のステータスが 1 つ以上必要です。</value>
+  </data>
+  <data name="UndoField" xml:space="preserve">
+    <value>「{0}」の{1}の変更</value>
+  </data>
+  <data name="UndoPredecessorAndOthers_One" xml:space="preserve">
+    <value>「{0}」の先行タスクの変更と、{1} 件の予定の変更</value>
+  </data>
+  <data name="UndoPredecessorAndOthers_Other" xml:space="preserve">
+    <value>「{0}」の先行タスクの変更と、{1} 件の予定の変更</value>
+  </data>
+  <data name="UndoPredecessorAndSchedule" xml:space="preserve">
+    <value>「{0}」の先行タスクと予定の変更</value>
+  </data>
+  <data name="UndoTasks_One" xml:space="preserve">
+    <value>{0} 件のタスクの変更</value>
+  </data>
+  <data name="UndoTasks_Other" xml:space="preserve">
+    <value>{0} 件のタスクの変更</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>（無題）</value>
+  </data>
+</root>

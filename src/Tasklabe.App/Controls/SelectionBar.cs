@@ -14,17 +14,17 @@ public sealed partial class SelectionBar : UserControl
 {
     private static readonly (string Id, string Label)[] Actions =
     [
-        ("task.status", "ステータス"),
-        ("task.assign", "担当者"),
-        ("task.due", "期日"),
-        ("task.estimate", "工数"),
-        ("task.plan", "計画"),
-        ("task.delete", "削除"),
+        ("task.status", Texts.Get("SelectionBar_Status")),
+        ("task.assign", Texts.Get("SelectionBar_Assignee")),
+        ("task.due", Texts.Get("SelectionBar_Due")),
+        ("task.estimate", Texts.Get("SelectionBar_Estimate")),
+        ("task.plan", Texts.Get("SelectionBar_Plan")),
+        ("task.delete", Texts.Get("SelectionBar_Delete")),
     ];
 
     private readonly TextBlock _count = new() { Style = AppResources.Style("Text.BodyStrong"), VerticalAlignment = VerticalAlignment.Center };
     private readonly StackPanel _keys = new() { Orientation = Orientation.Horizontal, Spacing = 12, VerticalAlignment = VerticalAlignment.Center };
-    private readonly StackPanel _escape = Hint("Esc", "で解除");
+    private readonly StackPanel _escape = Hint("Esc", Texts.Get("SelectionBar_Clear"));
 
     public SelectionBar()
     {
@@ -59,7 +59,7 @@ public sealed partial class SelectionBar : UserControl
             return;
         }
 
-        _count.Text = $"{count} 件を選択中";
+        _count.Text = Texts.Format("SelectionBar_Count", count);
 
         // ヒントを出さない設定では、件数だけを示す
         _keys.Visibility = _escape.Visibility = Hints.Shown ? Visibility.Visible : Visibility.Collapsed;
@@ -74,7 +74,7 @@ public sealed partial class SelectionBar : UserControl
             }
         }
 
-        AutomationProperties.SetName(this, $"{count} 件を選択中");
+        AutomationProperties.SetName(this, _count.Text);
     }
 
     private static StackPanel Hint(string keys, string label) => new()
@@ -90,15 +90,21 @@ public sealed partial class SelectionBar : UserControl
     };
 }
 
-/// <summary>キーのある操作の説明（「担当者を変える (A)」）を、いまのキーの割り当てから作る（UX 規約 UX-17）。</summary>
+/// <summary>キーのある操作の説明（「担当者の変更 (A)」）を、いまのキーの割り当てから作る（UX 規約 UX-17、UX-34）。</summary>
 public static class KeyHints
 {
-    /// <summary>ツールチップの文言。キーを割り当てていなければ操作名だけ。</summary>
+    /// <summary>ツールチップの文言。操作の名前（UX-28）に、割り当てたキーを添える。</summary>
+    public static string Tip(string actionId) => Tip(actionId, Name(actionId));
+
+    /// <summary>ツールチップの文言。キーを割り当てていなければ名前だけ。</summary>
     public static string Tip(string actionId, string label)
     {
         var keys = App.Current.Services.Keymap.Display(actionId);
         return keys.Length > 0 ? $"{label} ({keys})" : label;
     }
+
+    /// <summary>操作の名前。ボタン・メニュー・読み上げ・コマンドパレットで同じものを使う。</summary>
+    public static string Name(string actionId) => Tasklabe.Core.Keyboard.ShortcutCatalog.Find(actionId)?.Label ?? actionId;
 
     /// <summary>読み上げに添えるキー。</summary>
     public static string Keys(string actionId) => App.Current.Services.Keymap.Display(actionId);

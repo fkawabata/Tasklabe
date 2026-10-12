@@ -80,11 +80,11 @@ public sealed partial class WbsRowViewModel(TaskNode node, bool isExpanded, Date
     public string StatusText => Task.StatusName ?? (Task.IsDone ? StatusVisuals.Name(Task.Category) : "—");
 
     public string StatusTip => HasChildren
-        ? $"ステータス: {StatusText}（子のステータスから決まります）"
-        : Controls.KeyHints.Tip("task.status", "ステータス: " + StatusText);
+        ? Texts.Format("Wbs_StatusFromChildren", StatusText)
+        : Controls.KeyHints.Tip("task.status", Texts.Format("PickerButton_Name", Texts.Get("Field_Status"), StatusText));
 
     /// <summary>状態アイコンのツールチップ。押して変える要素のため、キー（S。ステータスのセルから開く）は添えない。</summary>
-    public string StatusIconTip => "ステータス: " + StatusText;
+    public string StatusIconTip => Texts.Format("PickerButton_Name", Texts.Get("Field_Status"), StatusText);
 
     // ---------------------------------------------------------------- 値
 
@@ -102,10 +102,10 @@ public sealed partial class WbsRowViewModel(TaskNode node, bool isExpanded, Date
     public bool HasFrameOverrun => FrameOverrunDays > 0;
 
     /// <summary>終了のセルに添える枠超えの印（「▲2日」）。</summary>
-    public string FrameOverrunText => HasFrameOverrun ? $"▲{FrameOverrunDays}日" : "";
+    public string FrameOverrunText => HasFrameOverrun ? Texts.Format("Status_DaysBehind", FrameOverrunDays) : "";
 
     public string FrameOverrunTip => PlanFrame.OverrunEnd(Node) is { } end && Task.Target is { } frame
-        ? $"枠超え: 子の予定が {DateText.Short(end, today)} まで、この枠（{DateText.Short(frame, today)}）を超えています"
+        ? Texts.Format("Wbs_FrameOverrunTip", DateText.Short(end, today), DateText.Short(frame, today))
         : "";
 
     /// <summary>子の予定が親の枠の始まり（予定開始日）より前に始まる稼働日数（PlanFrame）。はみ出していなければ 0。</summary>
@@ -114,10 +114,10 @@ public sealed partial class WbsRowViewModel(TaskNode node, bool isExpanded, Date
     public bool HasFrameEarly => FrameEarlyDays > 0;
 
     /// <summary>開始のセルに添える枠超えの印（「▲2日」）。</summary>
-    public string FrameEarlyText => HasFrameEarly ? $"▲{FrameEarlyDays}日" : "";
+    public string FrameEarlyText => HasFrameEarly ? Texts.Format("Status_DaysBehind", FrameEarlyDays) : "";
 
     public string FrameEarlyTip => PlanFrame.EarlyStart(Node) is { } start && Task.Start is { } frame
-        ? $"枠超え: 子の予定が {DateText.Short(start, today)} から始まり、この枠（{DateText.Short(frame, today)}〜）より前に出ています"
+        ? Texts.Format("Wbs_FrameEarlyTip", DateText.Short(start, today), DateText.Short(frame, today))
         : "";
 
     /// <summary>子を持つ行は積み上げた工数（読み取り専用）。</summary>
@@ -133,11 +133,47 @@ public sealed partial class WbsRowViewModel(TaskNode node, bool isExpanded, Date
     /// <summary>ステータス・工数・進捗率のセルと状態アイコンを押せる（子を持つ行では押せず、押すと行を選ぶだけ）。</summary>
     public bool CanEditOwnValues => !HasChildren;
 
-    public string AutomationName =>
-        $"{Title}、階層 {Node.Depth + 1}、{StatusText}、進捗 {ProgressText}、工数 {EstimateText}"
-        + (StartText.Length > 0 ? $"、開始 {StartText}" : "") + (TargetText.Length > 0 ? $"、終了 {TargetText}" : "")
-        + (HasFrameEarly ? $"、開始の枠超え {FrameEarlyDays} 日" : "") + (HasFrameOverrun ? $"、枠超え {FrameOverrunDays} 日" : "")
-        + (HasChildren ? (IsExpanded ? "、展開" : "、折りたたみ") : "");
+    /// <summary>読み上げの名前。タイトルのあとに、値を言語の区切りでつないで並べる。</summary>
+    public string AutomationName
+    {
+        get
+        {
+            List<string> parts =
+            [
+                Title,
+                Texts.Format("Wbs_Level", Node.Depth + 1),
+                StatusText,
+                Texts.Format("Card_ProgressText", ProgressText),
+                Texts.Format("Card_Estimate", EstimateText),
+            ];
+            if (StartText.Length > 0)
+            {
+                parts.Add(Texts.Format("Wbs_StartName", StartText));
+            }
+
+            if (TargetText.Length > 0)
+            {
+                parts.Add(Texts.Format("Wbs_FinishName", TargetText));
+            }
+
+            if (HasFrameEarly)
+            {
+                parts.Add(Texts.Count("Wbs_FrameEarlyName", FrameEarlyDays));
+            }
+
+            if (HasFrameOverrun)
+            {
+                parts.Add(Texts.Count("Wbs_FrameOverrunName", FrameOverrunDays));
+            }
+
+            if (HasChildren)
+            {
+                parts.Add(IsExpanded ? Texts.Get("Wbs_Expanded") : Texts.Get("Wbs_Collapsed"));
+            }
+
+            return string.Join(Texts.Get("Common_ListSeparator"), parts);
+        }
+    }
 
     /// <summary>
     /// 同じ見た目の行か。同じなら行を作り直さず、タスクだけを差し替える（作り直すと行の部品が作り直され、表が点滅する）。

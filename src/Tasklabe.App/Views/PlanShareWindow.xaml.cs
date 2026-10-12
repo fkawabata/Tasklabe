@@ -38,18 +38,18 @@ public sealed partial class PlanShareWindow : Window
 
     private static readonly (OutlineRange Value, string Label)[] Ranges =
     [
-        (OutlineRange.All, "すべての期間"),
-        (OutlineRange.AroundToday, "今日の前後（1 週前〜4 週後）"),
-        (OutlineRange.ThisMonth, "今月"),
-        (OutlineRange.NextMonth, "来月"),
-        (OutlineRange.Custom, "期間を指定"),
+        (OutlineRange.All, Texts.Get("Share_RangeAll")),
+        (OutlineRange.AroundToday, Texts.Get("Share_RangeAroundToday")),
+        (OutlineRange.ThisMonth, Texts.Get("Share_RangeThisMonth")),
+        (OutlineRange.NextMonth, Texts.Get("Preset_NextMonth")),
+        (OutlineRange.Custom, Texts.Get("Share_RangeCustom")),
     ];
 
     private static readonly (OutlineSections Value, string Label)[] SectionChoices =
     [
-        (OutlineSections.TopLevel, "最上位の親タスクごと"),
-        (OutlineSections.Assignee, "担当者ごと"),
-        (OutlineSections.None, "なし"),
+        (OutlineSections.TopLevel, Texts.Get("Share_ByTopParent")),
+        (OutlineSections.Assignee, Texts.Get("Share_ByAssignee")),
+        (OutlineSections.None, Texts.Get("Common_None")),
     ];
 
     private OutlineRange _range;
@@ -71,12 +71,12 @@ public sealed partial class PlanShareWindow : Window
         _render = new Debouncer(DispatcherQueue, TimeSpan.FromMilliseconds(150));
         _badge = new Debouncer(DispatcherQueue, TimeSpan.FromSeconds(3));
 
-        Title = $"共有ビュー - {ProjectDisplay.Name(project)}";
+        Title = Texts.Format("Share_WindowTitle", ProjectDisplay.Name(project));
         AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "Assets", "Tasklabe.ico"));
         Root.RequestedTheme = App.Current.Theme;
         FitToScreen();
 
-        FilterNote.Text = filterName is null ? "" : $"画面の担当者の絞り込み（{filterName}）に従います。";
+        FilterNote.Text = filterName is null ? "" : Texts.Format("Share_FilterNote", filterName);
         FilterNote.Visibility = filterName is null ? Visibility.Collapsed : Visibility.Visible;
 
         // 前回の設定（なければ既定）を画面へ
@@ -111,27 +111,27 @@ public sealed partial class PlanShareWindow : Window
     /// <summary>期間・グループ・形式・日付のピッカーボタンを作る。</summary>
     private void BuildPickers()
     {
-        RangeHost.Content = PickerButton.Labeled("期間", PickerButton.ForChoices("期間", [.. Ranges.Select(r => r.Label)],
+        RangeHost.Content = PickerButton.Labeled(Texts.Get("Share_Range"), PickerButton.ForChoices(Texts.Get("Share_Range"), [.. Ranges.Select(r => r.Label)],
             Array.FindIndex(Ranges, r => r.Value == _range), i =>
             {
                 _range = Ranges[i].Value;
                 OnOptionChanged(this, EventArgs.Empty);
             }));
-        SectionsHost.Content = PickerButton.Labeled("グループ", PickerButton.ForChoices("グループ", [.. SectionChoices.Select(r => r.Label)],
+        SectionsHost.Content = PickerButton.Labeled(Texts.Get("View_Grouping"), PickerButton.ForChoices(Texts.Get("View_Grouping"), [.. SectionChoices.Select(r => r.Label)],
             Array.FindIndex(SectionChoices, r => r.Value == _sections), i =>
             {
                 _sections = SectionChoices[i].Value;
                 OnOptionChanged(this, EventArgs.Empty);
             }));
-        FormatHost.Content = PickerButton.Labeled("Mermaid の形式", PickerButton.ForChoices("Mermaid の形式",
-            ["Markdown（```mermaid で囲む）", "Mermaid のコードだけ"], _markdown ? 0 : 1, i =>
+        FormatHost.Content = PickerButton.Labeled(Texts.Get("Share_Format"), PickerButton.ForChoices(Texts.Get("Share_Format"),
+            [Texts.Get("Share_FormatMarkdown"), Texts.Get("Share_FormatCode")], _markdown ? 0 : 1, i =>
             {
                 _markdown = i == 0;
                 OnOptionChanged(this, EventArgs.Empty);
-            }, ["GitHub の Issue や README に貼ると、そのまま図として表示されます", "Mermaid Live Editor やほかのツールに貼るときに使います"]));
+            }, [Texts.Get("Share_FormatMarkdownTip"), Texts.Get("Share_FormatCodeTip")]));
 
-        _fromButton = DateButton("期間の開始日", "開始", () => _from, d => _from = d);
-        _toButton = DateButton("期間の終了日", "終了", () => _to, d => _to = d);
+        _fromButton = DateButton(Texts.Get("Share_From"), Texts.Get("Share_FromPlaceholder"), () => _from, d => _from = d);
+        _toButton = DateButton(Texts.Get("Share_To"), Texts.Get("Share_ToPlaceholder"), () => _to, d => _to = d);
         FromHost.Content = _fromButton;
         ToHost.Content = _toButton;
     }
@@ -211,9 +211,18 @@ public sealed partial class PlanShareWindow : Window
         Outline.Show(outline, Today);
         CodeBox.Text = Output.Replace("\n", "\r", StringComparison.Ordinal);
 
-        var span = outline.Span is { } s ? $" · {DateText.Long(s.Start)}〜{DateText.Long(s.End)}" : "";
-        var skipped = outline.Unscheduled > 0 ? $" · 予定のないタスク {outline.Unscheduled} 件は含めません" : "";
-        SummaryText.Text = $"{ProjectDisplay.Name(_project)} · {outline.ItemCount} 件{span}{skipped}";
+        List<string> parts = [ProjectDisplay.Name(_project), Texts.Count("Share_Items", outline.ItemCount)];
+        if (outline.Span is { } s)
+        {
+            parts.Add(Texts.Format("Date_Range", DateText.Long(s.Start), DateText.Long(s.End)));
+        }
+
+        if (outline.Unscheduled > 0)
+        {
+            parts.Add(Texts.Count("Share_Unscheduled", outline.Unscheduled));
+        }
+
+        SummaryText.Text = string.Join(" · ", parts);
         CopyButton.IsEnabled = CopyImageButton.IsEnabled = SaveButton.IsEnabled = HasItems;
     }
 
@@ -238,7 +247,7 @@ public sealed partial class PlanShareWindow : Window
         var package = new DataPackage();
         package.SetText(Output);
         Clipboard.SetContent(package);
-        ShowBadge(Markdown ? "Mermaid を Markdown としてコピーしました" : "Mermaid のコードをコピーしました");
+        ShowBadge(Markdown ? Texts.Get("Share_CopiedMarkdown") : Texts.Get("Share_CopiedCode"));
     }
 
     private async void OnCopyImage(object sender, RoutedEventArgs e) => await CopyImageAsync();
@@ -253,7 +262,7 @@ public sealed partial class PlanShareWindow : Window
         var package = new DataPackage();
         package.SetBitmap(RandomAccessStreamReference.CreateFromStream(png));
         Clipboard.SetContent(package);
-        ShowBadge("画像をコピーしました");
+        ShowBadge(Texts.Get("Share_CopiedImage"));
     }
 
     private async void OnSave(object sender, RoutedEventArgs e) => await SaveAsync();
@@ -266,9 +275,9 @@ public sealed partial class PlanShareWindow : Window
         }
 
         var picker = new FileSavePicker { SuggestedFileName = FileName(), SuggestedStartLocation = PickerLocationId.DocumentsLibrary };
-        picker.FileTypeChoices.Add("Markdown（Mermaid の図）", [".md"]);
+        picker.FileTypeChoices.Add(Texts.Get("Share_FileMarkdown"), [".md"]);
         picker.FileTypeChoices.Add("Mermaid", [".mmd"]);
-        picker.FileTypeChoices.Add("画像（PNG）", [".png"]);
+        picker.FileTypeChoices.Add(Texts.Get("Share_FilePng"), [".png"]);
         WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(this));
         if (await picker.PickSaveFileAsync() is not { } file)
         {
@@ -300,7 +309,7 @@ public sealed partial class PlanShareWindow : Window
                 break;
         }
 
-        ShowBadge($"{file.Name} に書き出しました");
+        ShowBadge(Texts.Format("Share_Exported", file.Name));
     }
 
     private string FileName()

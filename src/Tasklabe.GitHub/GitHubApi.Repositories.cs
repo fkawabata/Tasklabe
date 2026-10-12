@@ -1,4 +1,5 @@
 using System.Text.Json.Nodes;
+using Tasklabe.GitHub.Resources;
 
 namespace Tasklabe.GitHub;
 
@@ -123,15 +124,15 @@ public sealed partial class GitHubApi
     {
         var (owner, name) = Split(repositoryNameWithOwner);
         var data = await QueryAsync(DefaultBranchQuery, new JsonObject { ["owner"] = owner, ["name"] = name }, ct).ConfigureAwait(false);
-        var repository = data["repository"] ?? throw new GitHubException($"リポジトリ {repositoryNameWithOwner} が見つかりません。");
-        var repositoryId = repository["id"]?.GetValue<string>() ?? throw new GitHubException($"リポジトリ {repositoryNameWithOwner} が見つかりません。");
+        var repository = data["repository"] ?? throw new GitHubException(Strings.RepositoryNotFound(repositoryNameWithOwner));
+        var repositoryId = repository["id"]?.GetValue<string>() ?? throw new GitHubException(Strings.RepositoryNotFound(repositoryNameWithOwner));
         var oid = repository["defaultBranchRef"]?["target"]?["oid"]?.GetValue<string>()
-            ?? throw new GitHubException($"{repositoryNameWithOwner} にはまだコミットがないため、ブランチを作れません。");
+            ?? throw new GitHubException(Strings.RepositoryHasNoCommits(repositoryNameWithOwner));
 
         var created = await QueryAsync(CreateLinkedBranchMutation,
             new JsonObject { ["issueId"] = issueId, ["repositoryId"] = repositoryId, ["oid"] = oid, ["name"] = branchName }, ct).ConfigureAwait(false);
         var createdName = created["createLinkedBranch"]?["linkedBranch"]?["ref"]?["name"]?.GetValue<string>()
-            ?? throw new GitHubException("ブランチを作れませんでした。同じ名前のブランチが既にないか確かめてください。");
+            ?? throw new GitHubException(Strings.BranchCreateFailed);
         return new LinkedBranch(repositoryNameWithOwner, createdName, $"https://{_host.Name}/{repositoryNameWithOwner}/tree/{createdName}");
     }
 
@@ -143,7 +144,7 @@ public sealed partial class GitHubApi
     {
         var (owner, name) = Split(repositoryNameWithOwner);
         var data = await QueryAsync(BranchesQuery, new JsonObject { ["owner"] = owner, ["name"] = name }, ct).ConfigureAwait(false);
-        var repository = data["repository"] ?? throw new GitHubException($"リポジトリ {repositoryNameWithOwner} が見つかりません。");
+        var repository = data["repository"] ?? throw new GitHubException(Strings.RepositoryNotFound(repositoryNameWithOwner));
         var defaultBranch = repository["defaultBranchRef"]?["name"]?.GetValue<string>();
         return new RepositoryBranches(defaultBranch, [.. (repository["refs"]?["nodes"]?.AsArray() ?? [])
             .Select(n => n?["name"]?.GetValue<string>())

@@ -121,7 +121,7 @@ public sealed partial class MainWindow : Window
         {
             AppLog.Info($"認証が無効になったため、再サインインを求めます: {reason}");
             _services.InvalidateToken();
-            ShowSignIn("GitHub の認証が無効になりました。もう一度サインインしてください。この PC の送信待ちの変更は保持されています。");
+            ShowSignIn(Texts.Get("SignIn_Expired"));
         });
     }
 
@@ -680,7 +680,7 @@ public sealed partial class MainWindow : Window
         _navProjects.Clear();
 
         // 個人・チームとも、プロジェクトがあるときだけ見出しを付けて並べる
-        foreach (var (isTeam, title) in ((bool, string)[])[(false, "個人"), (true, "チーム")])
+        foreach (var (isTeam, title) in ((bool, string)[])[(false, Texts.Get("Common_Personal")), (true, Texts.Get("Common_Team"))])
         {
             var items = ViewModel.Projects.Where(p => p.IsTeam == isTeam).ToList();
             if (items.Count == 0)
@@ -920,7 +920,7 @@ public sealed partial class MainWindow : Window
         }
 
         var details = StatusChip.Details(ViewModel.SyncProblems, _syncDetails.Hide);
-        var sync = new HyperlinkButton { Content = KeyHints.Tip("app.sync", "今すぐ同期"), HorizontalAlignment = HorizontalAlignment.Left, Padding = new Thickness(0) };
+        var sync = new HyperlinkButton { Content = KeyHints.Tip("app.sync"), HorizontalAlignment = HorizontalAlignment.Left, Padding = new Thickness(0) };
         sync.Click += (_, _) =>
         {
             _syncDetails.Hide();

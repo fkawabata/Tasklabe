@@ -3,6 +3,7 @@ using Tasklabe.Core.Domain;
 using Tasklabe.Core.Settings;
 using Tasklabe.GitHub.GraphQL;
 using F = Tasklabe.Core.Domain.ProjectConventions.Fields;
+using Tasklabe.GitHub.Resources;
 
 namespace Tasklabe.GitHub;
 
@@ -26,7 +27,7 @@ internal static class ProjectSchema
         ]),
         new(F.Schedule, "SINGLE_SELECT",
         [
-            Option(null, ProjectConventions.ScheduleOptions.NonBlocking, "GRAY", "後続の開始を待たせない（Tasklabe の依存関係の計算から外す）"),
+            Option(null, ProjectConventions.ScheduleOptions.NonBlocking, "GRAY", Strings.NonBlockingOptionDescription),
         ]),
         new(F.Repositories, "TEXT"),
         new(F.Branches, "TEXT"),

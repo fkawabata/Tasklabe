@@ -70,7 +70,7 @@ internal sealed partial class RangeMonth : Grid
 
         var title = new TextBlock
         {
-            Text = _month.ToString("yyyy年M月", DateText.Japanese),
+            Text = _month.ToString(Texts.Get("Date_MonthTitle"), DateText.Culture),
             Style = AppResources.Style("Text.BodyStrong"),
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
@@ -84,7 +84,7 @@ internal sealed partial class RangeMonth : Grid
             weekdays.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(Cell) });
             var label = new TextBlock
             {
-                Text = _firstCell.AddDays(col).ToString("ddd", DateText.Japanese),
+                Text = _firstCell.AddDays(col).ToString("ddd", DateText.Culture),
                 Style = AppResources.Style("Text.Caption"),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
@@ -140,7 +140,7 @@ internal sealed partial class RangeMonth : Grid
         for (var date = _month; date.Month == _month.Month; date = date.AddDays(1))
         {
             var day = date;
-            var number = new TextBlock { Text = day.Day.ToString(DateText.Japanese), HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+            var number = new TextBlock { Text = day.Day.ToString(DateText.Culture), HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
             var content = new Grid { Width = Cell, Height = Cell, Children = { number } };
             if (day == today)
             {
@@ -150,7 +150,8 @@ internal sealed partial class RangeMonth : Grid
             }
 
             var button = new Button { Style = dayStyle, Content = content, CornerRadius = new CornerRadius(Cell / 2) };
-            AutomationProperties.SetName(button, day.ToString("yyyy年M月d日 dddd", DateText.Japanese) + (day == today ? "（今日）" : ""));
+            var full = day.ToString(Texts.Get("Date_Full"), DateText.Culture);
+            AutomationProperties.SetName(button, day == today ? Texts.Format("Date_TodayName", full) : full);
             button.Click += (_, _) => pick(day);
             button.PointerEntered += (_, _) => hover(day);
             button.KeyDown += (_, e) => key(day, e);

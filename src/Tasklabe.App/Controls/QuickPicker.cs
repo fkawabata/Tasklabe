@@ -141,7 +141,7 @@ public sealed class QuickPicker
         // 候補が多いときは、入力欄を絞り込みに使う
         if (input is null && (search || options.Count > FilterThreshold))
         {
-            input = "文字を入力して絞り込む";
+            input = Texts.Get("Picker_FilterInput");
             filterable = true;
         }
 
@@ -374,7 +374,7 @@ public sealed class QuickPicker
             MinHeight = 0,
             IsTabStop = false,
         };
-        AutomationProperties.SetName(lid, _title + "を閉じる");
+        AutomationProperties.SetName(lid, Texts.Format("Picker_CloseName", _title));
         lid.Click += (_, _) => Dismiss();
         return lid;
 
@@ -485,7 +485,7 @@ public sealed class QuickPicker
         {
             _items.Children.Add(new TextBlock
             {
-                Text = query.Length > 0 ? "一致する候補はありません" : "選べる候補はありません",
+                Text = query.Length > 0 ? Texts.Get("Picker_NoMatch") : Texts.Get("Picker_NoOptions"),
                 Style = AppResources.Style("Text.Caption"),
                 Margin = new Thickness(8, 4, 8, 4),
             });
@@ -630,10 +630,15 @@ public sealed class QuickPicker
     private string AccessibleName(int index)
     {
         var option = _options[index];
-        var state = _multiple
-            ? _states[index] switch { PickState.Checked => "、選択中", PickState.Mixed => "、一部のタスクで選択中", _ => "" }
-            : option.IsSelected ? "、いまの値" : option.IsMixed ? "、一部のタスクの値" : "";
-        return option.Label + (option.Detail is { Length: > 0 } d ? $"、{d}" : "") + state;
+        var name = option.Detail is { Length: > 0 } d ? Texts.Format("Picker_OptionDetailName", option.Label, d) : option.Label;
+        return _multiple
+            ? _states[index] switch
+            {
+                PickState.Checked => Texts.Format("Picker_CheckedName", name),
+                PickState.Mixed => Texts.Format("Picker_MixedCheckedName", name),
+                _ => name,
+            }
+            : option.IsSelected ? Texts.Format("Picker_CurrentName", name) : option.IsMixed ? Texts.Format("Picker_MixedName", name) : name;
     }
 
     /// <summary>いまいる行の下へ印を滑らせる。初めて出すときは、その場に現す。</summary>
@@ -663,21 +668,21 @@ public sealed class QuickPicker
         // ヒントを出さない設定でも、選んでいる件数は残す
         if (!Hints.Shown)
         {
-            _footer.Text = _multiple ? $"{Checked.Count} 件を選択中" : "";
+            _footer.Text = _multiple ? Texts.Format("SelectionBar_Count", Checked.Count) : "";
             _footerHost.Visibility = _multiple ? Visibility.Visible : Visibility.Collapsed;
             return;
         }
 
         _footerHost.Visibility = Visibility.Visible;
         _footer.Text = _multiple
-            ? $"{Checked.Count} 件を選択中　Space で選ぶ・外す"
+            ? Texts.Format("Picker_MultipleHint", Checked.Count)
             : _filterable
                 ? StartsInInput
-                    ? "文字で絞り込み　↓ で候補へ　Enter で先頭を選ぶ　Esc で閉じる"
-                    : "数字キーで選ぶ　文字で絞り込み　Esc で閉じる"
+                    ? Texts.Get("Picker_FilterHint")
+                    : Texts.Get("Picker_FilterableHint")
                 : _input is not null
-                    ? "数字キーか Enter で決定　Tab で入力　Esc で閉じる"
-                    : "数字キーか Enter で決定　Esc で閉じる";
+                    ? Texts.Get("Picker_InputHint")
+                    : Texts.Get("Picker_Hint");
     }
 
     private void FocusInitial()

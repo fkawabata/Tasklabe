@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using Tasklabe.Core.Resources;
 
 namespace Tasklabe.Core.Calendar;
 
@@ -10,72 +11,76 @@ public static class JapaneseHolidays
 {
     private static readonly ConcurrentDictionary<int, IReadOnlyDictionary<DateOnly, string>> Cache = new();
 
-    public static bool IsHoliday(DateOnly date) => ForYear(date.Year).ContainsKey(date);
+    public static bool IsHoliday(DateOnly date) => Ids(date.Year).ContainsKey(date);
 
-    public static string? NameOf(DateOnly date) => ForYear(date.Year).GetValueOrDefault(date);
+    /// <summary>祝日の名前（表示の言語の文言）。祝日でなければ null。</summary>
+    public static string? NameOf(DateOnly date) => Ids(date.Year).GetValueOrDefault(date) is { } id ? Strings.Holiday(id) : null;
 
-    /// <summary>その年の祝日（振替休日・国民の休日を含む）。</summary>
-    public static IReadOnlyDictionary<DateOnly, string> ForYear(int year) => Cache.GetOrAdd(year, Compute);
+    /// <summary>その年の祝日（振替休日・国民の休日を含む）と名前。</summary>
+    public static IReadOnlyDictionary<DateOnly, string> ForYear(int year) => Ids(year).ToDictionary(p => p.Key, p => Strings.Holiday(p.Value));
+
+    /// <summary>その年の祝日と、名前の文言を引く ID。名前は言語で変わるため、ID で覚える。</summary>
+    private static IReadOnlyDictionary<DateOnly, string> Ids(int year) => Cache.GetOrAdd(year, Compute);
 
     private static IReadOnlyDictionary<DateOnly, string> Compute(int year)
     {
         var days = new SortedDictionary<DateOnly, string>();
-        void Add(int month, int day, string name) => days[new DateOnly(year, month, day)] = name;
-        void AddMonday(int month, int week, string name) => days[NthMonday(year, month, week)] = name;
+        void Add(int month, int day, string id) => days[new DateOnly(year, month, day)] = id;
+        void AddMonday(int month, int week, string id) => days[NthMonday(year, month, week)] = id;
 
-        Add(1, 1, "元日");
-        AddMonday(1, 2, "成人の日");
-        Add(2, 11, "建国記念の日");
+        Add(1, 1, "NewYear");
+        AddMonday(1, 2, "ComingOfAge");
+        Add(2, 11, "Foundation");
         if (year >= 2020)
         {
-            Add(2, 23, "天皇誕生日");
+            Add(2, 23, "EmperorsBirthday");
         }
 
-        Add(3, EquinoxDay(year, 20.8431), "春分の日");
-        Add(4, 29, "昭和の日");
-        Add(5, 3, "憲法記念日");
-        Add(5, 4, "みどりの日");
-        Add(5, 5, "こどもの日");
+        Add(3, EquinoxDay(year, 20.8431), "VernalEquinox");
+        Add(4, 29, "Showa");
+        Add(5, 3, "Constitution");
+        Add(5, 4, "Greenery");
+        Add(5, 5, "Children");
 
         switch (year)
         {
             case 2020:
-                Add(7, 23, "海の日");
-                Add(7, 24, "スポーツの日");
-                Add(8, 10, "山の日");
+                Add(7, 23, "Marine");
+                Add(7, 24, "Sports");
+                Add(8, 10, "Mountain");
                 break;
             case 2021:
-                Add(7, 22, "海の日");
-                Add(7, 23, "スポーツの日");
-                Add(8, 8, "山の日");
+                Add(7, 22, "Marine");
+                Add(7, 23, "Sports");
+                Add(8, 8, "Mountain");
                 break;
             default:
-                AddMonday(7, 3, "海の日");
+                AddMonday(7, 3, "Marine");
                 if (year >= 2016)
                 {
-                    Add(8, 11, "山の日");
+                    Add(8, 11, "Mountain");
                 }
 
-                AddMonday(10, 2, year >= 2020 ? "スポーツの日" : "体育の日");
+                AddMonday(10, 2, year >= 2020 ? "Sports" : "HealthAndSports");
                 break;
         }
 
-        AddMonday(9, 3, "敬老の日");
-        Add(9, EquinoxDay(year, 23.2488), "秋分の日");
-        Add(11, 3, "文化の日");
-        Add(11, 23, "勤労感謝の日");
+        AddMonday(9, 3, "RespectForTheAged");
+        Add(9, EquinoxDay(year, 23.2488), "AutumnalEquinox");
+        Add(11, 3, "Culture");
+        Add(11, 23, "LaborThanksgiving");
 
         if (year <= 2018)
         {
-            Add(12, 23, "天皇誕生日");
+            Add(12, 23, "EmperorsBirthday");
         }
 
         if (year == 2019)
         {
-            Add(4, 30, "国民の休日");
-            Add(5, 1, "天皇の即位の日");
-            Add(5, 2, "国民の休日");
-            Add(10, 22, "即位礼正殿の儀の行われる日");
+            Add(4, 30, "Citizens");
+            Add(5, 1, "Enthronement");
+            Add(5, 2, "Citizens");
+            Add(10, 22, "EnthronementCeremony");
         }
 
         // 国民の休日: 前日と翌日が祝日である平日（日曜以外）
@@ -85,7 +90,7 @@ public static class JapaneseHolidays
             var next = d.AddDays(1);
             if (days.ContainsKey(d.AddDays(2)) && !days.ContainsKey(next) && next.DayOfWeek != DayOfWeek.Sunday)
             {
-                days[next] = "国民の休日";
+                days[next] = "Citizens";
             }
         }
 
@@ -100,7 +105,7 @@ public static class JapaneseHolidays
 
             if (substitute.Year == year)
             {
-                days[substitute] = "振替休日";
+                days[substitute] = "Substitute";
             }
         }
 

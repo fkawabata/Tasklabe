@@ -109,8 +109,8 @@ public sealed class DateRangePicker
         _error = new TextBlock { Style = caption, Foreground = ThemeResources.Brush("Viz.Delay"), Visibility = Visibility.Collapsed, TextWrapping = TextWrapping.Wrap };
         if (_keyboard)
         {
-            _input = new TextBox { PlaceholderText = single ? "日付を入力（9/25、+3、t など）" : "範囲を入力（10/5-10/9、t〜+4、〜10/9 など）" };
-            AutomationProperties.SetName(_input, title + "を入力");
+            _input = new TextBox { PlaceholderText = single ? Texts.Get("DatePicker_DateInput") : Texts.Get("DatePicker_RangeInput") };
+            AutomationProperties.SetName(_input, Texts.Format("DatePicker_InputName", title));
             _input.TextChanged += (_, _) => OnInputChanged();
             _input.KeyDown += OnInputKeyDown;
             inputArea.Children.Add(_input);
@@ -149,7 +149,7 @@ public sealed class DateRangePicker
         }
 
         presetList.KeyDown += OnRailKeyDown;
-        AutomationProperties.SetName(presetList, "候補");
+        AutomationProperties.SetName(presetList, Texts.Get("DatePicker_Presets"));
         _railMark = new Border
         {
             Height = PresetHeight,
@@ -161,8 +161,8 @@ public sealed class DateRangePicker
         var rail = new Grid { Width = single ? 112 : RailWidth, Children = { _railMark, presetList } };
 
         // 暦。前後の月へのボタンを、月の見出しの両脇に重ねる
-        var prev = NavButton("\uE76B", "前の月", -1);
-        var next = NavButton("\uE76C", "次の月", 1);
+        var prev = NavButton("\uE76B", Texts.Get("DatePicker_PreviousMonth"), -1);
+        var next = NavButton("\uE76C", Texts.Get("DatePicker_NextMonth"), 1);
         next.HorizontalAlignment = HorizontalAlignment.Right;
         _viewport.Width = RangeMonth.Cell * 7 * _monthCount + MonthGap * (_monthCount - 1);
         var calendars = new Grid { Children = { _viewport, prev, next } };
@@ -196,15 +196,15 @@ public sealed class DateRangePicker
             summaryArea.Children.Add(_count);
         }
 
-        var clear = new Button { Content = "クリア", Style = AppResources.Style("SubtleButtonStyle") };
+        var clear = new Button { Content = Texts.Get("DatePicker_Clear"), Style = AppResources.Style("SubtleButtonStyle") };
         clear.Click += (_, _) => Clear();
         var actions = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 6, VerticalAlignment = VerticalAlignment.Center, Children = { clear } };
         if (!single)
         {
-            var cancel = new Button { Content = "キャンセル" };
+            var cancel = new Button { Content = Texts.Get("Common_Cancel") };
             cancel.Click += (_, _) => Close(null);
-            var apply = _apply = new Button { Content = "適用", Style = AppResources.Style("AccentButtonStyle"), MinWidth = 76 };
-            ToolTipService.SetToolTip(apply, "Ctrl + Enter");
+            var apply = _apply = new Button { Content = Texts.Get("DatePicker_Apply"), Style = AppResources.Style("AccentButtonStyle"), MinWidth = 76 };
+            ToolTipService.SetToolTip(apply, Texts.Format("Common_WithKey", Texts.Get("DatePicker_Apply"), "Ctrl + Enter"));
             AutomationProperties.SetAcceleratorKey(apply, "Ctrl+Enter");
             apply.Click += (_, _) => Apply();
             actions.Children.Add(cancel);
@@ -329,7 +329,7 @@ public sealed class DateRangePicker
     private static DateOnly Max(DateOnly a, DateOnly b) => a > b ? a : b;
 
     private static string SummaryOf(DateOnly? start, DateOnly? end, bool mixed) =>
-        mixed ? "複数の値" : DateText.Range(start, end) ?? "日付なし";
+        mixed ? Texts.Get("DatePicker_Mixed") : DateText.Range(start, end) ?? Texts.Get("DatePicker_NoDate");
 
     // ---------------------------------------------------------------- 開く・閉じる
 
@@ -466,10 +466,10 @@ public sealed class DateRangePicker
 
         string count = (_anchor, start, end) switch
         {
-            ({ } a, _, _) when _hover is null || _hover == a => "終了日を選んでください",
-            (_, { } s, { } e) => $"{e.DayNumber - s.DayNumber + 1} 日間",
-            (_, { }, null) => "終了日なし",
-            (_, null, { }) => "開始日なし",
+            ({ } a, _, _) when _hover is null || _hover == a => Texts.Get("DatePicker_ChooseEnd"),
+            (_, { } s, { } e) => Texts.Count("DatePicker_Days", e.DayNumber - s.DayNumber + 1),
+            (_, { }, null) => Texts.Get("DatePicker_NoEnd"),
+            (_, null, { }) => Texts.Get("DatePicker_NoStart"),
             _ => "",
         };
         _count.SetText(count, direction, animate);
@@ -739,8 +739,8 @@ public sealed class DateRangePicker
         else
         {
             _error.Text = _single
-                ? "日付として読み取れません（例: 9/25、2026/9/25、+3、t）"
-                : "範囲として読み取れません（例: 10/5-10/9、t〜+4、〜10/9）";
+                ? Texts.Get("DatePicker_InvalidDate")
+                : Texts.Get("DatePicker_InvalidRange");
             _error.Visibility = Visibility.Visible;
         }
     }

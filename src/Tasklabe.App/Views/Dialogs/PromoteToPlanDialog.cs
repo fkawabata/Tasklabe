@@ -31,10 +31,10 @@ public static class PromoteToPlanDialog
         DateOnly? target = single ? first.Target : null;
         double? estimate = single ? first.EstimateHours : null;
 
-        var parentButton = new PickerButton("置き場所");
-        var startButton = new PickerButton("予定開始日");
-        var targetButton = new PickerButton("期日（予定終了日）");
-        var estimateButton = new PickerButton("想定工数");
+        var parentButton = new PickerButton(Texts.Get("Picker_Parent"));
+        var startButton = new PickerButton(Texts.Get("Promote_Start"));
+        var targetButton = new PickerButton(Texts.Get("Picker_Due"));
+        var estimateButton = new PickerButton(Texts.Get("Field_Estimate"));
         var chainBox = new CheckBox { IsChecked = false };
 
         TaskNode? Previous()
@@ -45,14 +45,14 @@ public static class PromoteToPlanDialog
 
         void Refresh()
         {
-            parentButton.SetValue(parent?.Task.Title ?? "（最上位に置く）", "\uE8FD");
+            parentButton.SetValue(parent?.Task.Title ?? Texts.Get("Picker_TopLevel"), "\uE8FD");
             startButton.SetValue(start is { } s ? DateText.Short(s) : null, "\uE787");
             targetButton.SetValue(target is { } t ? DateText.Short(t) : null, "\uE787");
             estimateButton.SetValue(EffortText.Of(estimate), "\uE916");
 
             // 置き場所の直前（末尾）のタスクの後につなぐ（要件 F-DEP-09。既定はつながない）
             var previous = Previous();
-            chainBox.Content = previous is null ? "直前のタスクの後につなぐ（置き場所にタスクがありません）" : $"直前のタスク「{previous.Task.Title}」の後につなぐ";
+            chainBox.Content = previous is null ? Texts.Get("Promote_ChainNone") : Texts.Format("Promote_Chain", previous.Task.Title);
             chainBox.IsEnabled = previous is not null;
             if (previous is null)
             {
@@ -70,7 +70,7 @@ public static class PromoteToPlanDialog
         };
         startButton.Pick = async b =>
         {
-            if (await ValuePickers.DateAsync(b, null, "予定開始日", [start]) is { } picked)
+            if (await ValuePickers.DateAsync(b, null, Texts.Get("Promote_Start"), [start]) is { } picked)
             {
                 start = picked.Value;
                 Refresh();
@@ -78,7 +78,7 @@ public static class PromoteToPlanDialog
         };
         targetButton.Pick = async b =>
         {
-            if (await ValuePickers.DateAsync(b, null, "期日（予定終了日）", [target]) is { } picked)
+            if (await ValuePickers.DateAsync(b, null, Texts.Get("Picker_Due"), [target]) is { } picked)
             {
                 target = picked.Value;
                 Refresh();
@@ -97,26 +97,26 @@ public static class PromoteToPlanDialog
         var panel = new StackPanel { Spacing = 12, Width = 420 };
         panel.Children.Add(new TextBlock
         {
-            Text = single ? first.Title : $"{tasks.Count} 件の課題（{string.Join("、", tasks.Take(3).Select(t => t.Title))}{(tasks.Count > 3 ? " ほか" : "")}）",
+            Text = single ? first.Title : Texts.Format("Promote_ManyHeading", tasks.Count, string.Join(Texts.Get("Common_ListSeparator"), tasks.Take(3).Select(t => t.Title)) + (tasks.Count > 3 ? Texts.Get("Promote_AndMore") : "")),
             Style = AppResources.Style("Text.BodyStrong"),
             TextWrapping = TextWrapping.Wrap,
         });
-        panel.Children.Add(PickerButton.Labeled("置き場所", parentButton));
+        panel.Children.Add(PickerButton.Labeled(Texts.Get("Picker_Parent"), parentButton));
         if (single)
         {
             var dates = new Grid { ColumnSpacing = 8 };
             dates.ColumnDefinitions.Add(new ColumnDefinition());
             dates.ColumnDefinitions.Add(new ColumnDefinition());
-            var targetPanel = PickerButton.Labeled("期日（予定終了日）", targetButton);
+            var targetPanel = PickerButton.Labeled(Texts.Get("Picker_Due"), targetButton);
             Grid.SetColumn(targetPanel, 1);
-            dates.Children.Add(PickerButton.Labeled("予定開始日", startButton));
+            dates.Children.Add(PickerButton.Labeled(Texts.Get("Promote_Start"), startButton));
             dates.Children.Add(targetPanel);
             panel.Children.Add(dates);
-            panel.Children.Add(PickerButton.Labeled("想定工数", estimateButton));
+            panel.Children.Add(PickerButton.Labeled(Texts.Get("Field_Estimate"), estimateButton));
             panel.Children.Add(chainBox);
             panel.Children.Add(new TextBlock
             {
-                Text = "置き場所の親に張った依存関係は、つながなくても受け継ぎます。",
+                Text = Texts.Get("Promote_InheritNote"),
                 Style = style,
                 TextWrapping = TextWrapping.Wrap,
             });
@@ -125,13 +125,13 @@ public static class PromoteToPlanDialog
         panel.Children.Add(new TextBlock
         {
             Text = single
-                ? "同じ Issue のまま、計画の中へ移します。日程は後から計画の表やガントでも変えられます。"
-                : "同じ Issue のまま、置き場所の末尾へ移します。日程は後から計画の表やガントで決めます。",
+                ? Texts.Get("Promote_SingleNote")
+                : Texts.Get("Promote_ManyNote"),
             Style = style,
             TextWrapping = TextWrapping.Wrap,
         });
 
-        var dialog = AppDialog.Create(root, "計画に移す", panel, "移す");
+        var dialog = AppDialog.Create(root, Texts.Get("Promote_Title"), panel, Texts.Get("Promote_Confirm"));
         dialog.Opened += (_, _) => parentButton.Focus(FocusState.Programmatic);
         if (await dialog.ShowAsync() != ContentDialogResult.Primary)
         {
@@ -161,6 +161,6 @@ public static class PromoteToPlanDialog
             order += WbsOperations.Spacing;
         }
 
-        await TaskCommands.ApplyAsync(edits, single ? $"「{first.Title}」を計画に移しました" : $"{tasks.Count} 件を計画に移しました");
+        await TaskCommands.ApplyAsync(edits, single ? Texts.Format("Promote_DoneOne", first.Title) : Texts.Format("Promote_DoneMany", tasks.Count));
     }
 }

@@ -57,10 +57,10 @@
                         x:Name="DetailButton"
                         Grid.Column="1"
                         Click="OnDetail"
-                        AutomationProperties.Name="詳細を入力">
+                        x:Uid="Quick_DetailButton">
                         <StackPanel Orientation="Horizontal" Spacing="6">
                             <FontIcon FontSize="12" Glyph="&#xE8A7;" />
-                            <TextBlock Text="詳細" />
+                            <TextBlock x:Uid="Quick_DetailText" />
                         </StackPanel>
                     </Button>
                     <!-- 「追加」のすぐ後ろに、確定のキーを小さなキーの形で添える（Enter では追加しないため。中身はコードで作る） -->
@@ -71,7 +71,7 @@
                         Click="OnAdd"
                         IsEnabled="False"
                         Style="{StaticResource AccentButtonStyle}"
-                        AutomationProperties.Name="追加">
+                        x:Uid="Quick_AddButton">
                         <Grid>
                             <ContentControl x:Name="AddLabel" IsTabStop="False" />
                             <FontIcon
@@ -98,17 +98,17 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock VerticalAlignment="Center" Text="入力中のタスクを破棄しますか？" />
+                    <TextBlock VerticalAlignment="Center" x:Uid="Quick_DiscardQuestion" />
                     <Button
                         x:Name="DiscardButton"
                         Grid.Column="1"
                         Click="OnDiscard"
-                        Content="破棄" />
+                        x:Uid="Quick_Discard" />
                     <Button
                         x:Name="ContinueButton"
                         Grid.Column="2"
                         Click="OnContinue"
-                        Content="続ける"
+                        x:Uid="Quick_Continue"
                         Style="{StaticResource AccentButtonStyle}" />
                 </Grid>
             </Grid>

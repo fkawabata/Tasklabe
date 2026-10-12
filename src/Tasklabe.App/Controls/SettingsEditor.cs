@@ -18,10 +18,11 @@ namespace Tasklabe.App.Controls;
 /// </summary>
 public sealed partial class SettingsEditor : UserControl
 {
-    private static readonly (DayOfWeek Day, string Label)[] Weekdays =
+    /// <summary>休む曜日の並び（日曜から）。曜日の名前は表示の言語の書式から引く。</summary>
+    private static readonly DayOfWeek[] Weekdays =
     [
-        (DayOfWeek.Sunday, "日"), (DayOfWeek.Monday, "月"), (DayOfWeek.Tuesday, "火"), (DayOfWeek.Wednesday, "水"),
-        (DayOfWeek.Thursday, "木"), (DayOfWeek.Friday, "金"), (DayOfWeek.Saturday, "土"),
+        DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday,
+        DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday,
     ];
 
     private readonly StackPanel _root = new() { Spacing = 8 };
@@ -90,9 +91,7 @@ public sealed partial class SettingsEditor : UserControl
 
     private bool IsProject => _project is not null;
 
-    private string DefaultsName => _team ? "チームのプロジェクトの既定" : "個人のプロジェクトの既定";
-
-    // ================================================================ 描画
+        // ================================================================ 描画
 
     private void Render()
     {
@@ -111,18 +110,18 @@ public sealed partial class SettingsEditor : UserControl
 
         var effort = Resolved;
         AddSection(
-            "工数",
-            "工数の入力は常に時間で行い、表示だけを切り替えます。",
+            Texts.Get("SettingsEditor_Effort"),
+            Texts.Get("SettingsEditor_EffortDescription"),
             IsProject ? nameof(ProjectSettings.EffortUnit) : null,
             _overrides.EffortUnit is not null || _overrides.HoursPerDay is not null,
             enabled => [
-                Row("\uE916", "表示の単位", null, EffortUnitBox(effort.EffortUnit, enabled)),
-                Row("\uE787", "1 日の稼働時間", "人日の換算と、状況の画面で担当者の負荷の上限に使います。", HoursPerDayBox(effort.HoursPerDay, enabled)),
+                Row("\uE916", Texts.Get("SettingsEditor_EffortUnit"), null, EffortUnitBox(effort.EffortUnit, enabled)),
+                Row("\uE787", Texts.Get("SettingsEditor_HoursPerDay"), Texts.Get("SettingsEditor_HoursPerDayDescription"), HoursPerDayBox(effort.HoursPerDay, enabled)),
             ]);
 
         AddSection(
-            "稼働日",
-            "ガントの休日の表示、稼働日数、遅れや日程の調整の計算に使います。",
+            Texts.Get("SettingsEditor_WorkDays"),
+            Texts.Get("SettingsEditor_WorkDaysDescription"),
             IsProject ? nameof(ProjectSettings.Calendar) : null,
             _overrides.Calendar is not null,
             enabled => [CalendarCard(effort.Calendar, enabled)]);
@@ -130,11 +129,11 @@ public sealed partial class SettingsEditor : UserControl
         if (_team)
         {
             AddSection(
-                "新しいタスク",
+                Texts.Get("SettingsEditor_NewTask"),
                 null,
                 IsProject ? nameof(ProjectSettings.NewTaskKind) : null,
                 _overrides.NewTaskKind is not null,
-                enabled => [Row("\uE7C1", "区分の既定", "N キーや ＋ で追加したタスクを、課題とタスクのどちらとして入れるか。", KindBox(effort.NewTaskKind, enabled))]);
+                enabled => [Row("\uE7C1", Texts.Get("SettingsEditor_DefaultKind"), Texts.Get("SettingsEditor_DefaultKindDescription"), KindBox(effort.NewTaskKind, enabled))]);
         }
 
         AddStatusSection();
@@ -162,12 +161,12 @@ public sealed partial class SettingsEditor : UserControl
             var toggle = new ToggleSwitch
             {
                 IsOn = overridden,
-                OnContent = "このプロジェクトで設定する",
-                OffContent = "既定に従う",
+                OnContent = Texts.Get("SettingsEditor_Override"),
+                OffContent = Texts.Get("SettingsEditor_UseDefault"),
                 IsEnabled = _canEdit && !_busy,
                 MinWidth = 0,
             };
-            AutomationProperties.SetName(toggle, $"{title}をこのプロジェクトで設定する");
+            AutomationProperties.SetName(toggle, Texts.Format("SettingsEditor_OverrideName", title));
             toggle.Toggled += (_, _) => SetOverride(overrideKey, toggle.IsOn);
             Grid.SetColumn(toggle, 1);
             header.Children.Add(toggle);
@@ -178,11 +177,11 @@ public sealed partial class SettingsEditor : UserControl
         var note = description;
         if (overrideKey is not null && !overridden)
         {
-            note = $"{DefaultsName}（全体の設定）に従っています。" + (_team ? "メンバーそれぞれの PC の既定が使われるため、全員でそろえるには、このプロジェクトで設定してください。" : "");
+            note = _team ? Texts.Get("SettingsEditor_FollowsTeamDefaults") : Texts.Get("SettingsEditor_FollowsPersonalDefaults");
         }
         else if (overrideKey == nameof(ProjectSettings.Calendar) && _legacyCalendar)
         {
-            note = "この PC にだけ保存されていた設定です。変えると GitHub に保存し、メンバーと共有します。";
+            note = Texts.Get("SettingsEditor_LegacyCalendar");
         }
 
         if (note is not null)
@@ -233,7 +232,7 @@ public sealed partial class SettingsEditor : UserControl
     private void AddKeySection()
     {
         var header = new Grid { Margin = new Thickness(0, 16, 0, 0) };
-        var heading = new TextBlock { Text = "番号", Style = Res("Text.BodyStrong") };
+        var heading = new TextBlock { Text = Texts.Get("SettingsEditor_Numbers"), Style = Res("Text.BodyStrong") };
         AutomationProperties.SetHeadingLevel(heading, Microsoft.UI.Xaml.Automation.Peers.AutomationHeadingLevel.Level2);
         header.Children.Add(heading);
         _root.Children.Add(header);
@@ -244,7 +243,7 @@ public sealed partial class SettingsEditor : UserControl
         var current = saved ?? _keys.GetValueOrDefault(project.Id) ?? ProjectKey.Fallback;
         _root.Children.Add(new TextBlock
         {
-            Text = $"キーは GitHub のリポジトリの自動リンクにも登録し、コミットやコメントに書いた {ProjectKey.Format(current, 123)} が Issue へのリンクになります。",
+            Text = Texts.Format("SettingsEditor_KeyDescription", ProjectKey.Format(current, 123)),
             Style = Res("Text.Caption"),
             TextWrapping = TextWrapping.Wrap,
         });
@@ -258,9 +257,9 @@ public sealed partial class SettingsEditor : UserControl
             Width = 120,
             IsEnabled = enabled,
         };
-        AutomationProperties.SetName(box, "番号のキー");
-        var decide = new Button { Content = "決める", IsEnabled = enabled, Style = Res("AccentButtonStyle"), Visibility = saved is null ? Visibility.Visible : Visibility.Collapsed };
-        AutomationProperties.SetName(decide, "このキーに決める");
+        AutomationProperties.SetName(box, Texts.Get("SettingsEditor_KeyField"));
+        var decide = new Button { Content = Texts.Get("SettingsEditor_Decide"), IsEnabled = enabled, Style = Res("AccentButtonStyle"), Visibility = saved is null ? Visibility.Visible : Visibility.Collapsed };
+        AutomationProperties.SetName(decide, Texts.Get("SettingsEditor_DecideName"));
 
         async void Commit()
         {
@@ -286,7 +285,7 @@ public sealed partial class SettingsEditor : UserControl
 
             if (problem is not null)
             {
-                ShowNotice(InfoBarSeverity.Warning, "キーを変更できません", problem);
+                ShowNotice(InfoBarSeverity.Warning, Texts.Get("SettingsEditor_KeyProblem"), problem);
                 box.Text = current;
                 return;
             }
@@ -310,10 +309,10 @@ public sealed partial class SettingsEditor : UserControl
         control.Children.Add(decide);
         _root.Children.Add(Row(
             "\uE8EC",
-            "キー",
-            inbox ? $"未分類のタスクは {Example(current)} のように呼びます。"
-                : saved is null ? "名前から提案したキーです。決めると、プロジェクトの名前を変えても番号が変わらず、メンバーとも同じ番号になります。"
-                : $"このプロジェクトのタスクは {Example(saved)} のように呼びます。キーを変えても、前のキーの自動リンクは残ります。",
+            Texts.Get("SettingsEditor_Key"),
+            inbox ? Texts.Format("SettingsEditor_InboxKey", Example(current))
+                : saved is null ? Texts.Get("SettingsEditor_SuggestedKey")
+                : Texts.Format("SettingsEditor_SavedKey", Example(saved)),
             control));
 
         AddNumberingRows(current);
@@ -327,9 +326,8 @@ public sealed partial class SettingsEditor : UserControl
     {
         bool enabled = _canEdit && !_busy;
         var levels = _overrides.OutlineLevels;
-        var plan = _team ? "計画のタスク" : "タスク";
 
-        var kinds = PickerButton.ForChoices("番号の振り方", ["通し番号", "階層番号"], levels is null ? 0 : 1, i =>
+        var kinds = PickerButton.ForChoices(Texts.Get("SettingsEditor_Numbering"), [Texts.Get("SettingsEditor_Sequential"), Texts.Get("SettingsEditor_Outline")], levels is null ? 0 : 1, i =>
         {
             int? next = i == 0 ? null : levels ?? 1;
             if (next != levels)
@@ -342,11 +340,11 @@ public sealed partial class SettingsEditor : UserControl
         kinds.IsEnabled = enabled;
         _root.Children.Add(Row(
             "\uE8FD",
-            "振り方",
+            Texts.Get("SettingsEditor_NumberingRow"),
             levels is null
-                ? $"Issue の番号を使います（{ProjectKey.Format(key, 123)}）。" + (_team ? "課題を計画へ移しても変わりません。" : "")
-                : $"{plan}を、計画の中の位置で呼びます（{ProjectKey.FormatOutline(key, [1, 2], 1)}）。並べ替えると番号も変わります。"
-                    + (_team ? $"課題は {ProjectKey.Format(key, 123)} のように呼びます。" : ""),
+                ? _team ? Texts.Format("SettingsEditor_SequentialTeam", ProjectKey.Format(key, 123)) : Texts.Format("SettingsEditor_SequentialPersonal", ProjectKey.Format(key, 123))
+                : _team ? Texts.Format("SettingsEditor_OutlineTeam", ProjectKey.FormatOutline(key, [1, 2], 1), ProjectKey.Format(key, 123))
+                : Texts.Format("SettingsEditor_OutlinePersonal", ProjectKey.FormatOutline(key, [1, 2], 1)),
             kinds));
 
         if (levels is not { } current)
@@ -355,7 +353,7 @@ public sealed partial class SettingsEditor : UserControl
         }
 
         var counts = Enumerable.Range(1, ProjectKey.MaxOutlineLevels).ToArray();
-        var depth = PickerButton.ForChoices("あらかじめ用意する段", [.. counts.Select(n => $"{n} 段（{ProjectKey.FormatOutline(key, [1], n)}）")], current - 1, i =>
+        var depth = PickerButton.ForChoices(Texts.Get("SettingsEditor_Levels"), [.. counts.Select(n => Texts.Format("SettingsEditor_LevelOption", n, ProjectKey.FormatOutline(key, [1], n)))], current - 1, i =>
         {
             if (counts[i] != current)
             {
@@ -367,9 +365,9 @@ public sealed partial class SettingsEditor : UserControl
         depth.IsEnabled = enabled;
         _root.Children.Add(Row(
             "\uE9D5",
-            "あらかじめ用意する段",
-            $"段に満たないタスクは後ろを 0 で埋めます（{ProjectKey.FormatOutline(key, [1, 2], current)}）。"
-                + $"それより深いタスクは段を足します（{ProjectKey.FormatOutline(key, [.. Enumerable.Repeat(1, current + 1)], current)}）。",
+            Texts.Get("SettingsEditor_Levels"),
+            Texts.Format("SettingsEditor_LevelsDescription", ProjectKey.FormatOutline(key, [1, 2], current),
+                ProjectKey.FormatOutline(key, [.. Enumerable.Repeat(1, current + 1)], current)),
             depth));
     }
 
@@ -400,7 +398,7 @@ public sealed partial class SettingsEditor : UserControl
         catch (Exception ex) when (ex is GitHubException or HttpRequestException)
         {
             _overrides = _overrides with { Key = project.Settings.Key };
-            ShowNotice(InfoBarSeverity.Error, "キーを GitHub に保存できませんでした", Data.SyncEngine.Describe(ex));
+            ShowNotice(InfoBarSeverity.Error, Texts.Get("SettingsEditor_KeySaveFailed"), Data.SyncEngine.Describe(ex));
             _busy = false;
             Render();
             return;
@@ -412,21 +410,19 @@ public sealed partial class SettingsEditor : UserControl
             var result = await App.Current.Services.Workspace.RegisterKeyAsync(project.RepositoryNameWithOwner, key);
             if (result == AutolinkResult.NotPermitted)
             {
-                ShowNotice(InfoBarSeverity.Warning, "キーを保存しました",
-                    $"リポジトリの管理者でないため、GitHub の自動リンクは登録できませんでした。番号はアプリの中で使えます。"
-                    + $"コミットやコメントでもリンクにするには、リポジトリの管理者にこの画面でキーを決め直してもらうか、リポジトリの設定の Autolink references に「{key}-」を登録してもらってください。");
+                ShowNotice(InfoBarSeverity.Warning, Texts.Get("SettingsEditor_KeySaved"), Texts.Format("SettingsEditor_AutolinkNotPermitted", key));
             }
             else
             {
-                ShowNotice(InfoBarSeverity.Success, "キーを保存しました",
+                ShowNotice(InfoBarSeverity.Success, Texts.Get("SettingsEditor_KeySaved"),
                     result is null
-                        ? $"このプロジェクトのタスクは {ProjectKey.Format(key, 123)} のように呼びます。"
-                        : $"GitHub のリポジトリの自動リンクにも登録しました。コミットやコメントに書いた {ProjectKey.Format(key, 123)} が Issue へのリンクになります。");
+                        ? Texts.Format("SettingsEditor_KeySavedExample", ProjectKey.Format(key, 123))
+                        : Texts.Format("SettingsEditor_AutolinkRegistered", ProjectKey.Format(key, 123)));
             }
         }
         catch (Exception ex) when (ex is GitHubException or HttpRequestException)
         {
-            ShowNotice(InfoBarSeverity.Warning, "キーを保存しました", "GitHub の自動リンクは登録できませんでした。" + Data.SyncEngine.Describe(ex));
+            ShowNotice(InfoBarSeverity.Warning, Texts.Get("SettingsEditor_KeySaved"), Texts.Format("Common_TwoSentences", Texts.Get("SettingsEditor_AutolinkFailed"), Data.SyncEngine.Describe(ex)));
         }
         finally
         {
@@ -443,13 +439,13 @@ public sealed partial class SettingsEditor : UserControl
     private void AddGuestSection()
     {
         var header = new Grid { Margin = new Thickness(0, 16, 0, 0) };
-        var heading = new TextBlock { Text = "GitHub を使わないメンバー", Style = Res("Text.BodyStrong") };
+        var heading = new TextBlock { Text = Texts.Get("SettingsEditor_Guests"), Style = Res("Text.BodyStrong") };
         AutomationProperties.SetHeadingLevel(heading, Microsoft.UI.Xaml.Automation.Peers.AutomationHeadingLevel.Level2);
         header.Children.Add(heading);
         _root.Children.Add(header);
         _root.Children.Add(new TextBlock
         {
-            Text = "名前で担当者にできます。外しても、割り当て済みのタスクの担当者は残ります。",
+            Text = Texts.Get("SettingsEditor_GuestsDescription"),
             Style = Res("Text.Caption"),
             TextWrapping = TextWrapping.Wrap,
         });
@@ -467,7 +463,7 @@ public sealed partial class SettingsEditor : UserControl
             var name = new TextBlock { Text = guest, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis };
             Grid.SetColumn(name, 1);
             row.Children.Add(name);
-            var remove = SubtleIconButton("\uE711", $"{guest} をメンバーから外す");
+            var remove = SubtleIconButton("\uE711", Texts.Format("SettingsEditor_RemoveGuest", guest));
             remove.IsEnabled = enabled;
             remove.Click += (_, _) => Update(d => d, o => o with
             {
@@ -478,17 +474,17 @@ public sealed partial class SettingsEditor : UserControl
             editor.Children.Add(row);
         }
 
-        var box = new TextBox { PlaceholderText = "名前", MaxLength = People.MaxGuestNameLength, IsEnabled = enabled };
-        AutomationProperties.SetName(box, "GitHub を使わないメンバーの名前");
-        var add = new Button { Content = "追加", IsEnabled = false };
+        var box = new TextBox { PlaceholderText = Texts.Get("SettingsEditor_GuestPlaceholder"), MaxLength = People.MaxGuestNameLength, IsEnabled = enabled };
+        AutomationProperties.SetName(box, Texts.Get("SettingsEditor_GuestNameField"));
+        var add = new Button { Content = Texts.Get("Common_Add"), IsEnabled = false };
         void Add()
         {
             var name = People.NormalizeGuestName(box.Text);
             var problem = People.GuestNameProblem(name)
-                ?? (guests.Contains(name, StringComparer.OrdinalIgnoreCase) ? $"{name} は既にいます" : null);
+                ?? (guests.Contains(name, StringComparer.OrdinalIgnoreCase) ? Texts.Format("SettingsEditor_GuestExists", name) : null);
             if (problem is not null)
             {
-                ShowNotice(InfoBarSeverity.Warning, "メンバーを追加できません", problem);
+                ShowNotice(InfoBarSeverity.Warning, Texts.Get("SettingsEditor_GuestProblem"), problem);
                 return;
             }
 
@@ -522,7 +518,7 @@ public sealed partial class SettingsEditor : UserControl
     private PickerButton EffortUnitBox(EffortUnit unit, bool enabled)
     {
         EffortUnit[] units = [EffortUnit.Hours, EffortUnit.Days];
-        var box = PickerButton.ForChoices("工数の表示の単位", ["時間 (h)", "人日"], unit == EffortUnit.Days ? 1 : 0, i =>
+        var box = PickerButton.ForChoices(Texts.Get("SettingsEditor_EffortUnitPicker"), [Texts.Get("SettingsEditor_Hours"), Texts.Get("SettingsEditor_PersonDays")], unit == EffortUnit.Days ? 1 : 0, i =>
             Update(d => d with { EffortUnit = units[i] }, o => o with { EffortUnit = units[i] }));
         box.MinWidth = 160;
         box.HorizontalAlignment = HorizontalAlignment.Right;
@@ -542,7 +538,7 @@ public sealed partial class SettingsEditor : UserControl
             SpinButtonPlacementMode = NumberBoxSpinButtonPlacementMode.Compact,
             IsEnabled = enabled,
         };
-        AutomationProperties.SetName(box, "1 日の稼働時間（時間）");
+        AutomationProperties.SetName(box, Texts.Get("SettingsEditor_HoursPerDayField"));
         box.ValueChanged += (_, e) =>
         {
             if (!double.IsNaN(e.NewValue) && e.NewValue is >= 1 and <= 24 && Math.Abs(e.NewValue - e.OldValue) > 0.001)
@@ -556,7 +552,7 @@ public sealed partial class SettingsEditor : UserControl
     private PickerButton KindBox(TaskKind kind, bool enabled)
     {
         TaskKind[] kinds = [TaskKind.Issue, TaskKind.Task];
-        var box = PickerButton.ForChoices("新しいタスクの区分の既定", [.. kinds.Select(KindVisuals.Name)], kind == TaskKind.Issue ? 0 : 1, i =>
+        var box = PickerButton.ForChoices(Texts.Get("SettingsEditor_DefaultKindPicker"), [.. kinds.Select(KindVisuals.Name)], kind == TaskKind.Issue ? 0 : 1, i =>
             Update(d => d with { NewTaskKind = kinds[i] }, o => o with { NewTaskKind = kinds[i] }),
             tips: [.. kinds.Select(k => (string?)KindVisuals.Description(k))]);
         box.MinWidth = 160;
@@ -578,10 +574,11 @@ public sealed partial class SettingsEditor : UserControl
 
         // 休む曜日
         var days = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 4 };
-        foreach (var (day, label) in Weekdays)
+        var names = DateText.Culture.DateTimeFormat;
+        foreach (var day in Weekdays)
         {
-            var toggle = new ToggleButton { Content = label, Width = 40, IsChecked = rules.DaysOff.Contains(day), IsEnabled = enabled };
-            AutomationProperties.SetName(toggle, $"{label}曜日を休む");
+            var toggle = new ToggleButton { Content = names.GetShortestDayName(day), Width = 40, IsChecked = rules.DaysOff.Contains(day), IsEnabled = enabled };
+            AutomationProperties.SetName(toggle, Texts.Format("SettingsEditor_DayOffName", names.GetDayName(day)));
             toggle.Click += (_, _) =>
             {
                 var off = new HashSet<DayOfWeek>(rules.DaysOff);
@@ -607,13 +604,13 @@ public sealed partial class SettingsEditor : UserControl
         }
 
         var daysRow = new StackPanel { Spacing = 4 };
-        daysRow.Children.Add(new TextBlock { Text = "休む曜日", Style = Res("Text.Body") });
+        daysRow.Children.Add(new TextBlock { Text = Texts.Get("SettingsEditor_DaysOff"), Style = Res("Text.Body") });
         daysRow.Children.Add(days);
         editor.Children.Add(daysRow);
 
         var holidays = new ToggleSwitch
         {
-            Header = "日本の祝日を休む",
+            Header = Texts.Get("SettingsEditor_JapaneseHolidays"),
             IsOn = rules.JapaneseHolidaysOff,
             IsEnabled = enabled,
         };
@@ -628,14 +625,14 @@ public sealed partial class SettingsEditor : UserControl
 
         // 独自の休日（夏季休業、年末年始など）
         var extraRow = new StackPanel { Spacing = 4 };
-        extraRow.Children.Add(new TextBlock { Text = "独自の休日", Style = Res("Text.Body") });
-        extraRow.Children.Add(new TextBlock { Text = "夏季休業や年末年始など、会社やチームで決めた休みを足します。", Style = Res("Text.Caption"), TextWrapping = TextWrapping.Wrap });
+        extraRow.Children.Add(new TextBlock { Text = Texts.Get("SettingsEditor_ExtraHolidays"), Style = Res("Text.Body") });
+        extraRow.Children.Add(new TextBlock { Text = Texts.Get("SettingsEditor_ExtraHolidaysDescription"), Style = Res("Text.Caption"), TextWrapping = TextWrapping.Wrap });
         // 日付は、ほかの日付と同じピッカー（候補と入力欄）で選ぶ（UX 規約 UX-02、UX-30）
-        var picker = new PickerButton("独自の休日に足す日付") { MinWidth = 160, HorizontalAlignment = HorizontalAlignment.Left, IsEnabled = enabled };
-        picker.SetValue(null, "\uE787", placeholder: "日付を足す…");
+        var picker = new PickerButton(Texts.Get("SettingsEditor_AddHoliday")) { MinWidth = 160, HorizontalAlignment = HorizontalAlignment.Left, IsEnabled = enabled };
+        picker.SetValue(null, "\uE787", placeholder: Texts.Get("SettingsEditor_AddDate"));
         picker.Pick = async b =>
         {
-            if (await ValuePickers.DateAsync(b, null, "独自の休日に足す日付", [null]) is { Value: { } date })
+            if (await ValuePickers.DateAsync(b, null, Texts.Get("SettingsEditor_AddHoliday"), [null]) is { Value: { } date })
             {
                 Save(rules with { ExtraHolidays = new HashSet<DateOnly>(rules.ExtraHolidays) { date } });
             }
@@ -646,7 +643,7 @@ public sealed partial class SettingsEditor : UserControl
         {
             var chip = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
             chip.Children.Add(new TextBlock { Text = DateText.Long(date), VerticalAlignment = VerticalAlignment.Center });
-            var remove = SubtleIconButton("\uE711", $"{DateText.Long(date)} を独自の休日から外す");
+            var remove = SubtleIconButton("\uE711", Texts.Format("SettingsEditor_RemoveHoliday", DateText.Long(date)));
             remove.IsEnabled = enabled;
             remove.Click += (_, _) =>
             {
@@ -662,7 +659,7 @@ public sealed partial class SettingsEditor : UserControl
 
         if (enabled && !rules.IsStandard)
         {
-            var reset = new HyperlinkButton { Content = "標準（土日と祝日が休み）に戻す", Padding = new Thickness(0) };
+            var reset = new HyperlinkButton { Content = Texts.Get("SettingsEditor_ResetCalendar"), Padding = new Thickness(0) };
             reset.Click += (_, _) => Save(WorkCalendarRules.Standard);
             editor.Children.Add(reset);
         }
@@ -679,15 +676,15 @@ public sealed partial class SettingsEditor : UserControl
     private void AddStatusSection()
     {
         var header = new Grid { Margin = new Thickness(0, 16, 0, 0) };
-        var heading = new TextBlock { Text = "ステータス", Style = Res("Text.BodyStrong") };
+        var heading = new TextBlock { Text = Texts.Get("SettingsEditor_Statuses"), Style = Res("Text.BodyStrong") };
         AutomationProperties.SetHeadingLevel(heading, Microsoft.UI.Xaml.Automation.Peers.AutomationHeadingLevel.Level2);
         header.Children.Add(heading);
         _root.Children.Add(header);
         _root.Children.Add(new TextBlock
         {
             Text = IsProject
-                ? "このプロジェクトのステータスの名前・カテゴリ・並びです。変更はすぐに GitHub の Project に反映します。タスクがあるステータスは外せません。"
-                : "新しいプロジェクトを作るときの、ステータスの名前・カテゴリ・並びです。作った後は、プロジェクトの設定で変えられます。",
+                ? Texts.Get("SettingsEditor_ProjectStatusesDescription")
+                : Texts.Get("SettingsEditor_DefaultStatusesDescription"),
             Style = Res("Text.Caption"),
             TextWrapping = TextWrapping.Wrap,
         });
@@ -706,9 +703,9 @@ public sealed partial class SettingsEditor : UserControl
         {
             Orientation = Orientation.Horizontal,
             Spacing = 8,
-            Children = { new FontIcon { Glyph = "\uE710", FontSize = 12 }, new TextBlock { Text = "ステータスを追加" } },
+            Children = { new FontIcon { Glyph = "\uE710", FontSize = 12 }, new TextBlock { Text = Texts.Get("SettingsEditor_AddStatus") } },
         };
-        AutomationProperties.SetName(add, "ステータスを追加");
+        AutomationProperties.SetName(add, Texts.Get("SettingsEditor_AddStatus"));
         add.Click += (_, _) =>
         {
             var name = NextName(rows);
@@ -718,11 +715,11 @@ public sealed partial class SettingsEditor : UserControl
 
         if (IsProject && _project!.Url is { } url)
         {
-            footer.Children.Add(new HyperlinkButton { Content = "色や説明を GitHub で編集", NavigateUri = new Uri(url + "/settings") });
+            footer.Children.Add(new HyperlinkButton { Content = Texts.Get("SettingsEditor_EditOnGitHub"), NavigateUri = new Uri(url + "/settings") });
         }
         else if (!IsProject && !_defaults.Statuses.SequenceEqual(DefaultSettings.StandardStatuses))
         {
-            var reset = new HyperlinkButton { Content = "標準の 6 種に戻す" };
+            var reset = new HyperlinkButton { Content = Texts.Get("SettingsEditor_ResetStatuses") };
             reset.Click += (_, _) => ApplyStatuses([.. DefaultSettings.StandardStatuses.Select(s => new StatusOptionEdit(null, s.Name, s.Color, s.Category))]);
             footer.Children.Add(reset);
         }
@@ -753,7 +750,7 @@ public sealed partial class SettingsEditor : UserControl
         });
 
         var name = new TextBox { Text = row.Name, IsEnabled = enabled };
-        AutomationProperties.SetName(name, $"{index + 1} 番目のステータスの名前");
+        AutomationProperties.SetName(name, Texts.Format("SettingsEditor_StatusNameField", index + 1));
         void Rename()
         {
             var text = name.Text.Trim();
@@ -776,7 +773,7 @@ public sealed partial class SettingsEditor : UserControl
         grid.Children.Add(name);
 
         var categories = StatusCategories.All.ToArray();
-        var category = PickerButton.ForChoices($"{row.Name} のカテゴリ", [.. categories.Select(StatusVisuals.Name)], Array.IndexOf(categories, row.Category), i =>
+        var category = PickerButton.ForChoices(Texts.Format("SettingsEditor_StatusCategory", row.Name), [.. categories.Select(StatusVisuals.Name)], Array.IndexOf(categories, row.Category), i =>
         {
             if (categories[i] != row.Category)
             {
@@ -791,7 +788,7 @@ public sealed partial class SettingsEditor : UserControl
         int used = row.Id is null ? 0 : _usage.GetValueOrDefault(row.Id);
         var usage = new TextBlock
         {
-            Text = IsProject ? $"{used} 件" : "",
+            Text = IsProject ? Texts.Format("SettingsEditor_Usage", used) : "",
             Style = Res("Text.Caption"),
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Center,
@@ -799,23 +796,23 @@ public sealed partial class SettingsEditor : UserControl
         Grid.SetColumn(usage, 3);
         grid.Children.Add(usage);
 
-        var up = SubtleIconButton("\uE70E", $"{row.Name} を上へ");
+        var up = SubtleIconButton("\uE70E", Texts.Format("SettingsEditor_MoveUp", row.Name));
         up.IsEnabled = enabled && index > 0;
         up.Click += (_, _) => ApplyStatuses(Swap(rows, index, index - 1));
         Grid.SetColumn(up, 4);
         grid.Children.Add(up);
 
-        var down = SubtleIconButton("\uE70D", $"{row.Name} を下へ");
+        var down = SubtleIconButton("\uE70D", Texts.Format("SettingsEditor_MoveDown", row.Name));
         down.IsEnabled = enabled && index < rows.Count - 1;
         down.Click += (_, _) => ApplyStatuses(Swap(rows, index, index + 1));
         Grid.SetColumn(down, 5);
         grid.Children.Add(down);
 
-        var remove = SubtleIconButton("\uE74D", $"{row.Name} を外す");
+        var remove = SubtleIconButton("\uE74D", Texts.Format("SettingsEditor_RemoveStatus", row.Name));
         remove.IsEnabled = enabled && used == 0 && rows.Count > 1;
         if (used > 0)
         {
-            ToolTipService.SetToolTip(remove, $"タスクが {used} 件あるため外せません。先に別のステータスへ移してください");
+            ToolTipService.SetToolTip(remove, Texts.Count("SettingsEditor_StatusInUse", used));
         }
 
         remove.Click += (_, _) => ApplyStatuses([.. rows.Where((_, i) => i != index)]);
@@ -835,7 +832,7 @@ public sealed partial class SettingsEditor : UserControl
     {
         for (int n = 1; ; n++)
         {
-            var name = n == 1 ? "新しいステータス" : $"新しいステータス {n}";
+            var name = n == 1 ? Texts.Get("SettingsEditor_NewStatus") : Texts.Format("SettingsEditor_NewStatusNumbered", n);
             if (!rows.Any(r => string.Equals(r.Name, name, StringComparison.OrdinalIgnoreCase)))
             {
                 return name;
@@ -849,7 +846,7 @@ public sealed partial class SettingsEditor : UserControl
         var templates = rows.Select(r => new StatusTemplate(r.Name.Trim(), r.Color, r.Category)).ToList();
         if (StatusTemplates.Problem(templates) is { } problem)
         {
-            ShowNotice(InfoBarSeverity.Warning, "ステータスを変更できません", problem);
+            ShowNotice(InfoBarSeverity.Warning, Texts.Get("SettingsEditor_StatusProblem"), problem);
             Render();
             return;
         }
@@ -872,12 +869,12 @@ public sealed partial class SettingsEditor : UserControl
             await App.Current.Services.Workspace.UpdateStatusOptionsAsync(project, rows);
             _project = await App.Current.Services.Store.GetProjectAsync(project.Id) ?? project;
             _usage = await App.Current.Services.Workspace.StatusUsageAsync(project.Id);
-            ShowNotice(InfoBarSeverity.Success, "GitHub に反映しました", "ステータスの変更を Project に保存しました。");
+            ShowNotice(InfoBarSeverity.Success, Texts.Get("SettingsEditor_Applied"), Texts.Get("SettingsEditor_StatusesSaved"));
             Changed?.Invoke(this, EventArgs.Empty);
         }
         catch (Exception ex) when (ex is GitHubException or HttpRequestException or InvalidOperationException)
         {
-            ShowNotice(InfoBarSeverity.Error, "ステータスを GitHub に反映できませんでした", ex is InvalidOperationException ? ex.Message : Data.SyncEngine.Describe(ex));
+            ShowNotice(InfoBarSeverity.Error, Texts.Get("SettingsEditor_StatusesFailed"), ex is InvalidOperationException ? ex.Message : Data.SyncEngine.Describe(ex));
         }
         finally
         {
@@ -947,14 +944,14 @@ public sealed partial class SettingsEditor : UserControl
             await App.Current.Services.Workspace.SaveProjectSettingsAsync(project, _overrides);
             ProjectPreferences.ForgetLegacy(project);
             _project = await App.Current.Services.Store.GetProjectAsync(project.Id) ?? project;
-            ShowNotice(InfoBarSeverity.Success, "GitHub に保存しました", "このプロジェクトのメンバー全員に同じ設定が使われます。");
+            ShowNotice(InfoBarSeverity.Success, Texts.Get("SettingsEditor_Saved"), Texts.Get("SettingsEditor_SavedMessage"));
             Changed?.Invoke(this, EventArgs.Empty);
         }
         catch (Exception ex) when (ex is GitHubException or HttpRequestException)
         {
-            var retry = new Button { Content = "もう一度保存" };
+            var retry = new Button { Content = Texts.Get("SettingsEditor_Retry") };
             retry.Click += async (_, _) => await SaveOverridesAsync();
-            ShowNotice(InfoBarSeverity.Error, "設定を GitHub に保存できませんでした", Data.SyncEngine.Describe(ex), retry);
+            ShowNotice(InfoBarSeverity.Error, Texts.Get("SettingsEditor_SaveFailed"), Data.SyncEngine.Describe(ex), retry);
         }
     }
 

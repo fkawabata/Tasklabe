@@ -14,10 +14,10 @@ public static class ShortcutHelpDialog
     /// <summary>階層（見出し、説明、含める範囲）。</summary>
     private static readonly (string Title, string Description, string[] Categories, bool AreaKeys)[] Layers =
     [
-        ("アプリ", "どこでも効く（文字を入力しているときを除く）", [ShortcutCatalog.Global], false),
-        ("選んでいるタスク", "一覧・計画の表・カンバン・ガントで選んでいるタスクに効く。複数を選んでいれば、すべてに効く", [ShortcutCatalog.Task], false),
-        ("画面の中", "フォーカスのある一覧・表・カンバン・ガントの中で効く", [ShortcutCatalog.Wbs, ShortcutCatalog.Kanban, ShortcutCatalog.Gantt], true),
-        ("開いている層", "ピッカー・ダイアログ・詳細パネルが開いているあいだは、ここのキーだけが効く", [ShortcutCatalog.Layer, ShortcutCatalog.Composer], false),
+        (Texts.Get("Keys_App"), Texts.Get("Keys_AppDescription"), [ShortcutCatalog.Global], false),
+        (Texts.Get("Keys_Task"), Texts.Get("Keys_TaskDescription"), [ShortcutCatalog.Task], false),
+        (Texts.Get("Keys_View"), Texts.Get("Keys_ViewDescription"), [ShortcutCatalog.Wbs, ShortcutCatalog.Kanban, ShortcutCatalog.Gantt], true),
+        (Texts.Get("Keys_Layer"), Texts.Get("Keys_LayerDescription"), [ShortcutCatalog.Layer, ShortcutCatalog.Composer], false),
     ];
 
     public static async Task ShowAsync(XamlRoot root)
@@ -27,8 +27,7 @@ public static class ShortcutHelpDialog
         var panel = new StackPanel { Spacing = 20, Width = 480, Margin = new Thickness(0, 0, 16, 0) };
         panel.Children.Add(new TextBlock
         {
-            Text = "修飾キーのない 1 文字は、文字を入力していないときに働きます。割り当ては［設定］の［キーボード］で変えられ、画面に示すキーも合わせて変わります。"
-                + "キーを覚えていなくても、コマンドパレット（" + keymap.Display("app.palette") + "）から名前で探して実行できます。",
+            Text = Texts.Format("Keys_Intro", keymap.Display("app.palette")),
             Style = caption,
             TextWrapping = TextWrapping.Wrap,
         });
@@ -43,7 +42,7 @@ public static class ShortcutHelpDialog
             if (areaKeys)
             {
                 // 移動・選択のキー（変えられない）は、選んでいるタスクの範囲の定義から、画面の中の階層に並べる
-                rows.AddRange(ShortcutCatalog.Fixed.Where(f => f.Category == ShortcutCatalog.Task).Select(f => ((string?)"一覧・表・カンバン", f.Keys, f.Label)));
+                rows.AddRange(ShortcutCatalog.Fixed.Where(f => f.Category == ShortcutCatalog.Task).Select(f => ((string?)Texts.Get("Keys_ListsHeading"), f.Keys, f.Label)));
             }
 
             foreach (var category in categories)
@@ -69,7 +68,7 @@ public static class ShortcutHelpDialog
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
                 grid.Children.Add(new TextBlock { Text = label, TextWrapping = TextWrapping.Wrap });
-                var key = KeyCaps(keys.Length > 0 ? keys : "割り当てなし");
+                var key = KeyCaps(keys.Length > 0 ? keys : Texts.Get("Settings_NoShortcut"));
                 Grid.SetColumn(key, 1);
                 grid.Children.Add(key);
                 section.Children.Add(grid);
@@ -78,7 +77,7 @@ public static class ShortcutHelpDialog
             panel.Children.Add(section);
         }
 
-        var dialog = AppDialog.Info(root, "キーの一覧", new ScrollViewer { Content = panel, MaxHeight = 560 });
+        var dialog = AppDialog.Info(root, Texts.Get("Keys_Title"), new ScrollViewer { Content = panel, MaxHeight = 560 });
         await dialog.ShowAsync();
     }
 

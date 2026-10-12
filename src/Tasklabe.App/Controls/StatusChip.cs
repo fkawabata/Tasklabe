@@ -61,7 +61,7 @@ public sealed class StatusChip : Button
         _text.Text = text ?? "";
         _text.Visibility = text is null ? Visibility.Collapsed : Visibility.Visible;
         Background = ThemeResources.Brush(severity == ChipSeverity.Critical ? "SystemFillColorCriticalBackgroundBrush" : "SystemFillColorCautionBackgroundBrush");
-        AutomationProperties.SetName(this, $"{name}。押すと詳しく表示します");
+        AutomationProperties.SetName(this, name);
         ToolTipService.SetToolTip(this, name);
         Visibility = Visibility.Visible;
     }
@@ -111,7 +111,7 @@ public sealed class StatusChip : Button
             panel.Children.Add(new TextBlock { Text = section.Message, TextWrapping = TextWrapping.Wrap });
             foreach (var detail in section.Details)
             {
-                panel.Children.Add(new TextBlock { Text = "・" + detail, Style = caption, TextWrapping = TextWrapping.Wrap });
+                panel.Children.Add(new TextBlock { Text = Texts.Format("Common_Bullet", detail), Style = caption, TextWrapping = TextWrapping.Wrap });
             }
 
             if (section.Actions.Count > 0)

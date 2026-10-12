@@ -157,7 +157,7 @@ public sealed partial class ShellViewModel : ObservableObject
     /// <summary>
     /// 画面の外へ影響が及ぶ変更（別のプロジェクトへ移す、計画に移す、一括の変更など）を、下端に「元に戻す」を添えて知らせる。
     /// </summary>
-    public void ShowUndoable(string message, Func<Task> undo) => ShowToast(message, "元に戻す", undo);
+    public void ShowUndoable(string message, Func<Task> undo) => ShowToast(message, Texts.Get("Common_Undo"), undo);
 
     /// <summary>下端に短いあいだだけ知らせる。操作を添えるときは、その操作のボタンを置く。</summary>
     public void ShowToast(string message, string? actionText = null, Func<Task>? action = null) =>
@@ -327,37 +327,38 @@ public sealed partial class ShellViewModel : ObservableObject
         var lines = new List<string>();
         foreach (var entry in failed.Take(5))
         {
-            var taskTitle = (await _services.Store.GetTaskAsync(entry.ItemId))?.Title ?? "（削除したタスク）";
-            var what = entry.Kind switch
+            var taskTitle = (await _services.Store.GetTaskAsync(entry.ItemId))?.Title ?? Texts.Get("Failure_DeletedTask");
+            lines.Add(entry.Kind switch
             {
-                OutboxKind.Create => "作成",
-                OutboxKind.Delete => "削除",
-                OutboxKind.Move => "別のプロジェクトへの移動",
-                _ => entry.Field is { } field ? FieldLabels.Of(field) + "の変更" : "変更",
-            };
-            lines.Add($"「{taskTitle}」の{what}: {entry.LastError}");
+                OutboxKind.Create => Texts.Format("Failure_Create", taskTitle, entry.LastError),
+                OutboxKind.Delete => Texts.Format("Failure_Delete", taskTitle, entry.LastError),
+                OutboxKind.Move => Texts.Format("Failure_Move", taskTitle, entry.LastError),
+                _ => entry.Field is { } field
+                    ? Texts.Format("Failure_Field", taskTitle, FieldLabels.Of(field), entry.LastError)
+                    : Texts.Format("Failure_Change", taskTitle, entry.LastError),
+            });
         }
 
         if (failed.Count > lines.Count)
         {
-            lines.Add($"ほか {failed.Count - lines.Count} 件");
+            lines.Add(Texts.Format("Delete_More", failed.Count - lines.Count));
         }
 
-        var title = $"{failed.Count} 件の変更を GitHub に送信できませんでした";
+        var title = Texts.Count("Failure_Title", failed.Count);
         _failureSections =
         [
             new Controls.ChipSection(Controls.ChipSeverity.Critical, title,
-                "権限や招待が原因のときは、解決してから再送してください。不要なら、変更を破棄して GitHub の内容に戻せます。",
+                Texts.Get("Failure_Message"),
                 lines,
                 [
-                    new Controls.ChipAction("変更を破棄", () => _ = DiscardFailedAsync()),
-                    new Controls.ChipAction("再送する", () => _ = RetryFailedAsync(), Primary: true),
+                    new Controls.ChipAction(Texts.Get("Failure_Discard"), () => _ = DiscardFailedAsync()),
+                    new Controls.ChipAction(Texts.Get("Failure_Retry"), () => _ = RetryFailedAsync(), Primary: true),
                 ]),
         ];
         UpdateSyncProblems();
         if (announce)
         {
-            ShowToast(title, "", InfoBarSeverity.Error, "詳しく見る", RequestSyncDetails);
+            ShowToast(title, "", InfoBarSeverity.Error, Texts.Get("Common_Details"), RequestSyncDetails);
         }
     }
 
@@ -372,10 +373,9 @@ public sealed partial class ShellViewModel : ObservableObject
     {
         AppLog.Info($"競合: {conflict.ItemId} {conflict.Field} GitHub={conflict.RemoteValue ?? "(null)"} この PC={conflict.LocalValue ?? "(null)"}");
         var message = conflict.Field is TaskField.Status or TaskField.Body or TaskField.Parent or TaskField.BlockedBy
-            ? $"「{conflict.TaskTitle}」の{FieldLabels.Of(conflict.Field)}は GitHub 上で変更されていましたが、この PC での変更で上書きしました。"
-            : $"「{conflict.TaskTitle}」の{FieldLabels.Of(conflict.Field)}は GitHub 上で「{Display(conflict.RemoteValue)}」に変更されていましたが、"
-                + $"この PC での変更「{Display(conflict.LocalValue)}」で上書きしました。";
-        ShowToast("他の変更を上書きしました", message, InfoBarSeverity.Warning);
+            ? Texts.Format("Conflict_Overwritten", conflict.TaskTitle, FieldLabels.Of(conflict.Field))
+            : Texts.Format("Conflict_OverwrittenValues", conflict.TaskTitle, FieldLabels.Of(conflict.Field), Display(conflict.RemoteValue), Display(conflict.LocalValue));
+        ShowToast(Texts.Get("Conflict_OverwrittenTitle"), message, InfoBarSeverity.Warning);
     }
 
     /// <summary>
@@ -387,14 +387,14 @@ public sealed partial class ShellViewModel : ObservableObject
         var outcome = redo ? await _services.Edits.RedoAsync() : await _services.Edits.UndoAsync();
         if (outcome is null)
         {
-            ShowToast(redo ? "やり直せる操作はありません" : "元に戻せる操作はありません");
+            ShowToast(redo ? Texts.Get("Undo_NothingToRedo") : Texts.Get("Undo_NothingToUndo"));
             return;
         }
 
         // 操作の結果は下端に知らせ、反対の操作をその場で選べるようにする（UX 規約 UX-26）
         ShowToast(
-            (redo ? "やり直しました: " : "元に戻しました: ") + outcome.Description,
-            redo ? "元に戻す" : "やり直す",
+            redo ? Texts.Format("Undo_Redone", outcome.Description) : Texts.Format("Undo_Undone", outcome.Description),
+            redo ? Texts.Get("Common_Undo") : Texts.Get("Common_Redo"),
             () => UndoAsync(!redo));
     }
 
@@ -407,7 +407,7 @@ public sealed partial class ShellViewModel : ObservableObject
     /// </summary>
     private void ShowOrganizationProblem(Organization org)
     {
-        var title = $"{org.DisplayName} のプロジェクトを取得できません";
+        var title = Texts.Format("Org_FetchFailed", org.DisplayName);
         List<Controls.ChipAction> actions = [];
         if (Views.Dialogs.NewProjectDialog.ActionUrl(org) is { } url)
         {
@@ -420,7 +420,7 @@ public sealed partial class ShellViewModel : ObservableObject
         UpdateSyncProblems();
         if (!known)
         {
-            ShowToast(title, "", InfoBarSeverity.Warning, "詳しく見る", RequestSyncDetails);
+            ShowToast(title, "", InfoBarSeverity.Warning, Texts.Get("Common_Details"), RequestSyncDetails);
         }
     }
 
@@ -456,19 +456,19 @@ public sealed partial class ShellViewModel : ObservableObject
         _failedCount = status.Failed;
         (SyncStatusGlyph, SyncStatusText) = status switch
         {
-            { Failed: > 0 } => ("\uE7BA", $"送信失敗 {status.Failed} 件"),
-            { State: SyncState.Syncing } => ("\uE895", "同期中"),
-            { State: SyncState.Offline, Pending: > 0 } => ("\uF384", $"オフライン・送信待ち {status.Pending} 件"),
-            { State: SyncState.Offline } => ("\uF384", "オフライン"),
-            { State: SyncState.Error } => ("\uE7BA", "同期できません"),
-            { Pending: > 0 } => ("\uE895", $"送信待ち {status.Pending} 件"),
+            { Failed: > 0 } => ("\uE7BA", Texts.Format("Sync_Failed", status.Failed)),
+            { State: SyncState.Syncing } => ("\uE895", Texts.Get("Sync_Syncing")),
+            { State: SyncState.Offline, Pending: > 0 } => ("\uF384", Texts.Format("Sync_OfflinePending", status.Pending)),
+            { State: SyncState.Offline } => ("\uF384", Texts.Get("Sync_Offline")),
+            { State: SyncState.Error } => ("\uE7BA", Texts.Get("Sync_Error")),
+            { Pending: > 0 } => ("\uE895", Texts.Format("Sync_Pending", status.Pending)),
             // 一部のプロジェクトを取り込めなかった: 同期は続いているのでエラーにはせず、理由はツールチップで示す
-            { State: SyncState.Idle, Message: not null, LastSyncedAt: { } partial } => ("\uE7BA", $"同期済み {partial.ToLocalTime():HH:mm}（一部取得できず）"),
-            { LastSyncedAt: { } at } => ("\uE73E", $"同期済み {at.ToLocalTime():HH:mm}"),
-            _ => ("\uE895", "同期前"),
+            { State: SyncState.Idle, Message: not null, LastSyncedAt: { } partial } => ("\uE7BA", Texts.Format("Sync_SyncedPartial", partial.ToLocalTime())),
+            { LastSyncedAt: { } at } => ("\uE73E", Texts.Format("Sync_Synced", at.ToLocalTime())),
+            _ => ("\uE895", Texts.Get("Sync_NotYet")),
         };
-        SyncStatusDetail = status.Message ?? Controls.KeyHints.Tip("app.sync", "今すぐ同期");
+        SyncStatusDetail = status.Message ?? Controls.KeyHints.Tip("app.sync");
     }
 
-    private static string Display(string? value) => string.IsNullOrEmpty(value) ? "（なし）" : value.Length > 30 ? value[..30] + "…" : value;
+    private static string Display(string? value) => string.IsNullOrEmpty(value) ? Texts.Get("Conflict_Empty") : value.Length > 30 ? value[..30] + "…" : value;
 }

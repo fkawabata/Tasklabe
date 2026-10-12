@@ -28,35 +28,35 @@
                 </Grid.ColumnDefinitions>
                 <Border Style="{StaticResource Card}">
                     <StackPanel Spacing="{StaticResource Space.XS}">
-                        <TextBlock Style="{StaticResource Text.Caption}" Text="進捗" />
+                        <TextBlock Style="{StaticResource Text.Caption}" x:Uid="Status_ProgressLabel" />
                         <TextBlock x:Name="ProgressMetric" Style="{StaticResource Text.Metric}" />
                         <TextBlock x:Name="ProgressCaption" Style="{StaticResource Text.Caption}" />
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource Card}">
                     <StackPanel Spacing="{StaticResource Space.XS}">
-                        <TextBlock Style="{StaticResource Text.Caption}" Text="予定比" />
+                        <TextBlock Style="{StaticResource Text.Caption}" x:Uid="Status_ScheduleLabel" />
                         <TextBlock x:Name="ScheduleMetric" Style="{StaticResource Text.Metric}" />
                         <TextBlock x:Name="ScheduleCaption" Style="{StaticResource Text.Caption}" />
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="2" Style="{StaticResource Card}">
                     <StackPanel Spacing="{StaticResource Space.XS}">
-                        <TextBlock Style="{StaticResource Text.Caption}" Text="遅延タスク" />
+                        <TextBlock Style="{StaticResource Text.Caption}" x:Uid="Status_DelayedLabel" />
                         <TextBlock x:Name="DelayedMetric" Style="{StaticResource Text.Metric}" />
                         <TextBlock x:Name="DelayedCaption" Style="{StaticResource Text.Caption}" />
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="3" Style="{StaticResource Card}">
                     <StackPanel Spacing="{StaticResource Space.XS}">
-                        <TextBlock Style="{StaticResource Text.Caption}" Text="残工数" />
+                        <TextBlock Style="{StaticResource Text.Caption}" x:Uid="Status_RemainingLabel" />
                         <TextBlock x:Name="RemainingMetric" Style="{StaticResource Text.Metric}" />
                         <TextBlock x:Name="RemainingCaption" Style="{StaticResource Text.Caption}" />
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="4" Style="{StaticResource Card}">
                     <StackPanel Spacing="{StaticResource Space.XS}">
-                        <TextBlock Style="{StaticResource Text.Caption}" Text="課題" />
+                        <TextBlock Style="{StaticResource Text.Caption}" x:Uid="Status_IssuesLabel" />
                         <TextBlock x:Name="IssueMetric" Style="{StaticResource Text.Metric}" />
                         <TextBlock x:Name="IssueCaption" Style="{StaticResource Text.Caption}" />
                     </StackPanel>
@@ -69,7 +69,7 @@
                     <TextBlock
                         AutomationProperties.HeadingLevel="Level2"
                         Style="{StaticResource Text.Subtitle}"
-                        Text="マイルストーン" />
+                        x:Uid="Status_MilestonesHeading" />
                     <StackPanel x:Name="MilestoneRows" Spacing="{StaticResource Space.S}" />
                 </StackPanel>
             </Border>
@@ -80,14 +80,14 @@
                     <TextBlock
                         AutomationProperties.HeadingLevel="Level2"
                         Style="{StaticResource Text.Subtitle}"
-                        Text="注意が必要なタスク" />
+                        x:Uid="Status_AttentionHeading" />
                     <SelectorBar x:Name="AttentionSelector" controls:TabIndicator.Slides="True" SelectionChanged="OnAttentionTabChanged">
-                        <SelectorBarItem x:Name="DelayedTab" Text="遅延" IsSelected="True" />
-                        <SelectorBarItem x:Name="SoonTab" Text="期日が近い" />
-                        <SelectorBarItem x:Name="UnestimatedTab" Text="未見積り" />
+                        <SelectorBarItem x:Name="DelayedTab" x:Uid="Status_DelayedTab" IsSelected="True" />
+                        <SelectorBarItem x:Name="SoonTab" x:Uid="Status_SoonTab" />
+                        <SelectorBarItem x:Name="UnestimatedTab" x:Uid="Status_UnestimatedTab" />
                     </SelectorBar>
                     <StackPanel x:Name="AttentionRows" Spacing="2" />
-                    <TextBlock x:Name="AttentionEmpty" Style="{StaticResource Text.Caption}" Text="該当するタスクはありません。" />
+                    <TextBlock x:Name="AttentionEmpty" Style="{StaticResource Text.Caption}" x:Uid="Status_AttentionEmpty" />
                 </StackPanel>
             </Border>
 
@@ -98,7 +98,7 @@
                         <TextBlock
                             AutomationProperties.HeadingLevel="Level2"
                             Style="{StaticResource Text.Subtitle}"
-                            Text="担当者別の負荷（今後 2 週間）" />
+                            x:Uid="Status_WorkloadHeading" />
                         <TextBlock
                             HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"
@@ -111,7 +111,7 @@
                     <TextBlock
                         x:Name="WorkloadEmpty"
                         Style="{StaticResource Text.Caption}"
-                        Text="割り当てられた残作業がありません。"
+                        x:Uid="Status_WorkloadEmpty"
                         Visibility="Collapsed" />
                 </StackPanel>
             </Border>

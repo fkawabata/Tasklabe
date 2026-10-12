@@ -1,5 +1,6 @@
 using System.Globalization;
 using Tasklabe.Core.Domain;
+using Tasklabe.Core.Resources;
 
 namespace Tasklabe.Core.Kanban;
 
@@ -166,7 +167,7 @@ public static class KanbanLayout
         List<KanbanColumn> all = [.. columns];
         if (visible.Any(t => columnKeyOf(t) is not { } k || !keys.Contains(k)))
         {
-            all.Insert(0, new KanbanColumn(UnsetKey, "未設定", null));
+            all.Insert(0, new KanbanColumn(UnsetKey, Strings.KanbanUnsetColumn, null));
         }
 
         int ColumnIndex(TaskItem t) =>

@@ -84,7 +84,7 @@ public sealed partial class ProjectViewModel(AppServices services) : ObservableO
             Issues.Add(new TaskGroupViewModel(
                 MyTaskGroupKind.Open,
                 [.. openIssues.Select(t => new TaskRowViewModel(t, Project.Title, today, isTeam: Project.IsTeam))],
-                "課題"));
+                Texts.Get("Kind_Issue")));
         }
 
         if (closedIssues.Count > 0)
@@ -92,7 +92,7 @@ public sealed partial class ProjectViewModel(AppServices services) : ObservableO
             Issues.Add(new TaskGroupViewModel(
                 MyTaskGroupKind.Done,
                 [.. closedIssues.Select(t => new TaskRowViewModel(t, Project.Title, today, isTeam: Project.IsTeam))],
-                "完了・中止"));
+                Texts.Get("MyTasks_DoneOrCanceled")));
         }
 
         if (Project.IsTeam && Project.RepositoryNameWithOwner is { } repo)
@@ -112,9 +112,12 @@ public sealed partial class ProjectViewModel(AppServices services) : ObservableO
         SummaryText = planned.Count == 0
             ? ""
             : Project.IsTeam
-                ? $"進捗 {summary.ProgressPercent:0}%   残 {EffortText.Of(summary.RemainingHours)} / {EffortText.Of(summary.EstimateHours)}"
-                    + (summary.UnestimatedCount > 0 ? $"   未見積り {summary.UnestimatedCount} 件" : "")
-                : $"未完了 {open} 件" + (summary.RemainingHours > 0 ? $"   残 {EffortText.Of(summary.RemainingHours)}" : "");
+                ? summary.UnestimatedCount > 0
+                    ? Texts.Format("Project_TeamSummaryUnestimated", summary.ProgressPercent, EffortText.Of(summary.RemainingHours), EffortText.Of(summary.EstimateHours), summary.UnestimatedCount)
+                    : Texts.Format("Project_TeamSummary", summary.ProgressPercent, EffortText.Of(summary.RemainingHours), EffortText.Of(summary.EstimateHours))
+                : summary.RemainingHours > 0
+                    ? Texts.Format("Project_PersonalSummaryRemaining", open, EffortText.Of(summary.RemainingHours))
+                    : Texts.Format("Project_PersonalSummary", open);
         IsEmpty = planned.Count == 0;
     }
 
