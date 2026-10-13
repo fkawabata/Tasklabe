@@ -1,3 +1,4 @@
+using Tasklabe.App.Services;
 using Tasklabe.Core.Domain;
 using Tasklabe.Core.Scheduling;
 
@@ -15,11 +16,11 @@ public static class DependencyLinks
         return check switch
         {
             LinkCheck.Hierarchy =>
-                $"「{predecessor.Title}」と「{successor.Title}」は親子の関係です。親タスクの中の順序は、中の作業どうしをつないでください。",
+                Texts.Format("Link_Hierarchy", predecessor.Title, successor.Title),
             LinkCheck.Cycle =>
-                $"「{successor.Title}」は「{predecessor.Title}」より前に行う必要があるため、依存関係が循環します。",
+                Texts.Format("Link_Cycle", successor.Title, predecessor.Title),
             LinkCheck.NotPlanned =>
-                "課題とは依存関係を張れません。先に「計画に移す」でタスクにしてください。",
+                Texts.Get("Link_NotPlanned"),
             _ => null,
         };
     }

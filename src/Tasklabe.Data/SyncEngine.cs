@@ -3,6 +3,7 @@ using System.Text.Json;
 using Tasklabe.Core.Abstractions;
 using Tasklabe.Core.Domain;
 using Tasklabe.Core.Editing;
+using Tasklabe.Data.Resources;
 using Tasklabe.GitHub;
 
 namespace Tasklabe.Data;
@@ -98,7 +99,7 @@ public sealed class SyncEngine(GitHubApi api, SqliteTaskStore store, TimeProvide
 
                 var (pending, failed) = await store.GetOutboxCountsAsync(ct).ConfigureAwait(false);
                 // 一部のプロジェクトを取り込めなかったときは、エラーにはせず理由だけを添える
-                var note = _pullProblems.Count > 0 ? $"次のプロジェクトを取得できませんでした: {string.Join("、", _pullProblems)}" : null;
+                var note = _pullProblems.Count > 0 ? Strings.PullProblems(string.Join(Strings.ListSeparator, _pullProblems)) : null;
                 SetStatus(new SyncStatus(SyncState.Idle, time.GetUtcNow(), note, pending, failed));
 
                 if (changed)
@@ -127,7 +128,7 @@ public sealed class SyncEngine(GitHubApi api, SqliteTaskStore store, TimeProvide
         }
         catch (Exception ex)
         {
-            await SetStateWithCountsAsync(SyncState.Error, "同期中に予期しないエラーが発生しました。").ConfigureAwait(false);
+            await SetStateWithCountsAsync(SyncState.Error, Strings.SyncUnexpectedError).ConfigureAwait(false);
             UnexpectedError?.Invoke(this, ex);
         }
         finally
@@ -171,7 +172,7 @@ public sealed class SyncEngine(GitHubApi api, SqliteTaskStore store, TimeProvide
                 // 再送しても成功しない、または想定外の応答: 失敗として残し、利用者に再送か破棄を選んでもらう。
                 // 1 件の失敗で後ろの変更まで止めないよう、送信は続ける
                 var message = ex is GitHubHttpException { StatusCode: var status } && IsTransient(status)
-                    ? $"GitHub が応答しない状態が続いたため、変更を反映できませんでした（{ex.Message}）。"
+                    ? Strings.GitHubNotResponding(ex.Message)
                     : Describe(ex);
                 await store.FailOutboxAsync(entry, message, ct).ConfigureAwait(false);
                 Diagnostic?.Invoke(this, $"送信に失敗しました（{entry.Kind} {entry.ItemId} {entry.Field}）: {ex}");
@@ -187,15 +188,15 @@ public sealed class SyncEngine(GitHubApi api, SqliteTaskStore store, TimeProvide
     public static string Describe(Exception ex) => ex switch
     {
         GitHubAccessException { Problem: OrganizationAccessProblem.OAuthAppNotApproved } =>
-            "組織が Tasklabe の利用を承認していないため、変更を反映できませんでした。",
+            Strings.OrganizationNotApproved,
         GitHubAccessException { Problem: OrganizationAccessProblem.SamlSsoRequired } =>
-            "組織のシングルサインオン（SAML）の承認が必要なため、変更を反映できませんでした。",
+            Strings.SamlRequired,
         GitHubGraphQLException g when g.ErrorTypes.Contains("FORBIDDEN") =>
-            "このプロジェクトまたはリポジトリを編集する権限がないため、変更を反映できませんでした。",
+            Strings.NoEditPermission,
         GitHubGraphQLException g when g.ErrorTypes.Contains("NOT_FOUND") =>
-            "対象のタスクまたはプロジェクトが GitHub 上に見つかりません。削除された可能性があります。",
+            Strings.NotFoundOnGitHub,
         GitHubException => ex.Message,
-        _ => "GitHub から想定外の応答が返ったため、変更を反映できませんでした。",
+        _ => Strings.UnexpectedResponse,
     };
 
     /// <summary>対象（タスク・Issue・アイテム）が GitHub 上にもう無いことを示すエラーか。</summary>
@@ -233,8 +234,8 @@ public sealed class SyncEngine(GitHubApi api, SqliteTaskStore store, TimeProvide
     {
         var project = await RequireProjectAsync(e.ProjectId, ct).ConfigureAwait(false);
         var payload = JsonSerializer.Deserialize(e.Payload ?? "{}", OutboxJsonContext.Default.NewTaskPayload)
-            ?? throw new GitHubException("作成するタスクの内容を読み取れません。");
-        var repositoryId = project.RepositoryId ?? throw new GitHubException("プロジェクトにリポジトリがリンクされていません。");
+            ?? throw new GitHubException(Strings.NewTaskUnreadable);
+        var repositoryId = project.RepositoryId ?? throw new GitHubException(Strings.ProjectHasNoRepository);
 
         // 前回の送信で Issue まで作れていれば、作り直さずに続きから行う（重複を作らない）
         CreatedIssue issue;
@@ -265,7 +266,7 @@ public sealed class SyncEngine(GitHubApi api, SqliteTaskStore store, TimeProvide
     {
         var project = await RequireProjectAsync(e.ProjectId, ct).ConfigureAwait(false);
         var task = await store.GetTaskAsync(e.ItemId, ct).ConfigureAwait(false);
-        var issueId = e.IssueId ?? task?.IssueId ?? throw new GitHubException("タスクの Issue が見つかりません。");
+        var issueId = e.IssueId ?? task?.IssueId ?? throw new GitHubException(Strings.IssueNotFound);
 
         await DetectConflictAsync(e, field, task, ct).ConfigureAwait(false);
 
@@ -349,7 +350,7 @@ public sealed class SyncEngine(GitHubApi api, SqliteTaskStore store, TimeProvide
     /// <summary>手元で削除したタスクの Issue を消す。</summary>
     private async Task SendDeleteAsync(OutboxEntry e, CancellationToken ct)
     {
-        var issueId = e.IssueId ?? throw new GitHubException("タスクの Issue が見つかりません。");
+        var issueId = e.IssueId ?? throw new GitHubException(Strings.IssueNotFound);
         await DiscardIssueAsync(e.ProjectId, e.ItemId, issueId, ct).ConfigureAwait(false);
     }
 
@@ -358,7 +359,7 @@ public sealed class SyncEngine(GitHubApi api, SqliteTaskStore store, TimeProvide
     {
         var target = await RequireProjectAsync(e.ProjectId, ct).ConfigureAwait(false);
         var task = await store.GetTaskAsync(e.ItemId, ct).ConfigureAwait(false);
-        var issueId = e.IssueId ?? throw new GitHubException("タスクの Issue が見つかりません。");
+        var issueId = e.IssueId ?? throw new GitHubException(Strings.IssueNotFound);
 
         // リポジトリが異なる場合: 所有者が同じなら Issue を転送し（履歴を保つ）、
         // 所有者が異なる場合は GitHub が転送を許さないため、移動先に複製して元の Issue を削除する
@@ -538,7 +539,7 @@ public sealed class SyncEngine(GitHubApi api, SqliteTaskStore store, TimeProvide
             return [];
         }
 
-        var repo = task?.RepositoryNameWithOwner ?? throw new GitHubException("タスクのリポジトリが見つかりません。");
+        var repo = task?.RepositoryNameWithOwner ?? throw new GitHubException(Strings.TaskRepositoryNotFound);
         var users = await store.GetAssignableUsersAsync(repo, ct).ConfigureAwait(false);
         if (logins.Any(l => !users.Any(u => string.Equals(u.Login, l, StringComparison.OrdinalIgnoreCase))))
         {
@@ -547,7 +548,7 @@ public sealed class SyncEngine(GitHubApi api, SqliteTaskStore store, TimeProvide
         }
 
         return logins.Select(l => users.FirstOrDefault(u => string.Equals(u.Login, l, StringComparison.OrdinalIgnoreCase))?.Id
-            ?? throw new GitHubException($"@{l} はこのリポジトリのタスクに割り当てられません。")).ToList();
+            ?? throw new GitHubException(Strings.CannotAssign(l))).ToList();
     }
 
     private static bool SameValue(string? a, string? b) =>
@@ -556,7 +557,7 @@ public sealed class SyncEngine(GitHubApi api, SqliteTaskStore store, TimeProvide
 
     private async Task<Project> RequireProjectAsync(string projectId, CancellationToken ct) =>
         await store.GetProjectAsync(projectId, ct).ConfigureAwait(false)
-            ?? throw new GitHubException("プロジェクトが見つかりません。");
+            ?? throw new GitHubException(Strings.ProjectNotFound);
 
     // ================================================================ 取得（技術設計書 3.2 節）
 

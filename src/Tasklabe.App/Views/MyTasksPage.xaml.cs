@@ -13,8 +13,8 @@ public sealed partial class MyTasksPage : Page, IKeyboardContent, ITaskSequence,
 {
     private const string Screen = "mytasks";
 
-    private readonly ViewOptionButton _orderingButton = new("並び順", ViewOptions.OrderingGlyph, "view.sort");
-    private readonly ViewOptionButton _groupingButton = new("グループ", ViewOptions.GroupingGlyph, "view.group");
+    private readonly ViewOptionButton _orderingButton = new(Texts.Get("View_Ordering"), ViewOptions.OrderingGlyph, "view.sort");
+    private readonly ViewOptionButton _groupingButton = new(Texts.Get("View_Grouping"), ViewOptions.GroupingGlyph, "view.group");
 
     public MyTasksPage()
     {
@@ -56,8 +56,8 @@ public sealed partial class MyTasksPage : Page, IKeyboardContent, ITaskSequence,
         ListItem.IsSelected = !KanbanItem.IsSelected;
 
         App.Current.Shell!.DataChanged += OnDataChanged;
-        ToolTipService.SetToolTip(AddButton, KeyHints.Tip("task.new", "タスクを追加"));
-        Empty.ActionToolTip = KeyHints.Tip("task.new", "タスクを追加");
+        ToolTipService.SetToolTip(AddButton, KeyHints.Tip("task.new"));
+        Empty.ActionToolTip = KeyHints.Tip("task.new");
         _focusAfterLoad = true;
         await ReloadAsync();
     }
@@ -83,10 +83,10 @@ public sealed partial class MyTasksPage : Page, IKeyboardContent, ITaskSequence,
 
         // 初めての同期が済むまでは、空ではなく読み込み中として示す
         Empty.IsLoading = ViewModel.IsLoading;
-        Empty.Title = ViewModel.IsLoading ? "GitHub から読み込んでいます" : "タスクはありません";
+        Empty.Title = ViewModel.IsLoading ? Texts.Get("MyTasks_Loading") : Texts.Get("Empty_ListTitle");
         Empty.Message = ViewModel.IsLoading
-            ? "初めての同期には少し時間がかかります。"
-            : "自分のタスクが、期日の近い順にここへ集まります。";
+            ? Texts.Get("MyTasks_LoadingMessage")
+            : Texts.Get("MyTasks_EmptyMessage");
 
         // キーボードで続けて操作できるよう、作り直した一覧でもフォーカスを保つ
         if (_focusAfterLoad)
@@ -192,7 +192,7 @@ public sealed partial class MyTasksPage : Page, IKeyboardContent, ITaskSequence,
     {
         if (!IsKanban)
         {
-            App.Current.Shell?.ShowToast("リストにはグループがありません。カンバン（Ctrl + 2）で選べます");
+            App.Current.Shell?.ShowToast(Texts.Get("MyTasks_NoGrouping"));
             return Task.CompletedTask;
         }
 
@@ -207,7 +207,7 @@ public sealed partial class MyTasksPage : Page, IKeyboardContent, ITaskSequence,
             return;
         }
 
-        if (await ViewOptions.PickAsync(anchor, "並び順", ViewOptions.Orderings(hasPlanOrder: false), ListOrdering) is { } picked
+        if (await ViewOptions.PickAsync(anchor, Texts.Get("View_Ordering"), ViewOptions.Orderings(hasPlanOrder: false), ListOrdering) is { } picked
             && picked.Value != ListOrdering)
         {
             ListOrdering = picked.Value;
@@ -222,7 +222,7 @@ public sealed partial class MyTasksPage : Page, IKeyboardContent, ITaskSequence,
     {
         if (Kanban.Visibility != Visibility.Visible)
         {
-            App.Current.Shell?.ShowToast("リストで絞り込める条件はありません。カンバン（Ctrl + 2）では完了・中止のカードを絞り込めます");
+            App.Current.Shell?.ShowToast(Texts.Get("MyTasks_NoFilter"));
             return;
         }
 
@@ -233,7 +233,7 @@ public sealed partial class MyTasksPage : Page, IKeyboardContent, ITaskSequence,
     {
         var options = KanbanView.CompletedOptions;
         int current = options.ToList().FindIndex(o => o.Value == Kanban.Display.Completed);
-        if (await ValuePickers.ChoiceAsync(anchor, "完了・中止のカード", [.. options.Select(o => o.Label)], current) is { } index)
+        if (await ValuePickers.ChoiceAsync(anchor, Texts.Get("Filter_CompletedCards"), [.. options.Select(o => o.Label)], current) is { } index)
         {
             Kanban.SetDisplay(Kanban.Display with { Completed = options[index].Value });
         }
@@ -247,7 +247,7 @@ public sealed partial class MyTasksPage : Page, IKeyboardContent, ITaskSequence,
             if (Kanban.Display.Completed != KanbanCompleted.All)
             {
                 var label = KanbanView.CompletedOptions.First(o => o.Value == Kanban.Display.Completed).Label;
-                chips.Add(new FilterChip($"完了・中止: {label}", PickCompletedAsync, () => Kanban.SetDisplay(Kanban.Display with { Completed = KanbanCompleted.All })));
+                chips.Add(new FilterChip(Texts.Format("Filter_CompletedChip", label), PickCompletedAsync, () => Kanban.SetDisplay(Kanban.Display with { Completed = KanbanCompleted.All })));
             }
         }
 
@@ -261,22 +261,22 @@ public sealed partial class MyTasksPage : Page, IKeyboardContent, ITaskSequence,
 
     public IEnumerable<PaletteCommand> Commands()
     {
-        yield return new PaletteCommand("ビュー: リスト", "Ctrl+1", () =>
+        yield return new PaletteCommand(Texts.Format("Palette_View", Texts.Get("Project_ViewListName")), "Ctrl+1", () =>
         {
             ViewSelector.SelectedItem = ListItem;
             return Task.CompletedTask;
-        }, "マイタスク");
-        yield return new PaletteCommand("ビュー: カンバン", "Ctrl+2", () =>
+        }, Texts.Get("Nav_MyTasks"));
+        yield return new PaletteCommand(Texts.Format("Palette_View", Texts.Get("Project_ViewKanbanName")), "Ctrl+2", () =>
         {
             ViewSelector.SelectedItem = KanbanItem;
             return Task.CompletedTask;
-        }, "マイタスク");
+        }, Texts.Get("Nav_MyTasks"));
         var keymap = App.Current.Services.Keymap;
-        yield return new PaletteCommand("並び順を選ぶ…", keymap.Display("view.sort"), OpenOrderingAsync, "マイタスク");
+        yield return new PaletteCommand(Texts.Format("Common_Ellipsis", KeyHints.Name("view.sort")), keymap.Display("view.sort"), OpenOrderingAsync, Texts.Get("Nav_MyTasks"));
         if (Kanban.Visibility == Visibility.Visible)
         {
-            yield return new PaletteCommand("グループを選ぶ…", keymap.Display("view.group"), OpenGroupingAsync, "マイタスク");
-            yield return new PaletteCommand("絞り込む…", keymap.Display("view.filter"), OpenFilterAsync, "マイタスク");
+            yield return new PaletteCommand(Texts.Format("Common_Ellipsis", KeyHints.Name("view.group")), keymap.Display("view.group"), OpenGroupingAsync, Texts.Get("Nav_MyTasks"));
+            yield return new PaletteCommand(Texts.Format("Common_Ellipsis", KeyHints.Name("view.filter")), keymap.Display("view.filter"), OpenFilterAsync, Texts.Get("Nav_MyTasks"));
         }
     }
 

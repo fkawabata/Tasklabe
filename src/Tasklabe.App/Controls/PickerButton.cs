@@ -87,7 +87,7 @@ public sealed partial class PickerButton : Button, IPickerTrigger
             _icon.ClearValue(IconElement.ForegroundProperty);
         }
 
-        AutomationProperties.SetName(this, $"{_name}: {(empty ? "なし" : text + (isAuto ? "（自動）" : ""))}。押すと変更できます");
+        AutomationProperties.SetName(this, Texts.Format("PickerButton_Name", _name, empty ? Texts.Get("Common_None") : isAuto ? Texts.Format("PickerButton_Auto", text) : text));
     }
 
     /// <summary>アイコンを直接変える（区分の ◆ のようにフォントの違うもの）。</summary>

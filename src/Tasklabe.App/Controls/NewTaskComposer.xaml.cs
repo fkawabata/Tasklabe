@@ -14,12 +14,12 @@ namespace Tasklabe.App.Controls;
 /// </summary>
 public sealed partial class NewTaskComposer : UserControl
 {
-    private readonly PickerButton _project = Pill("追加先");
-    private readonly PickerButton _status = Pill("ステータス");
-    private readonly PickerButton _assignee = Pill("担当者");
-    private readonly PickerButton _due = Pill("期日");
-    private readonly PickerButton _estimate = Pill("工数");
-    private readonly PickerButton _kind = Pill("区分");
+    private readonly PickerButton _project = Pill(Texts.Get("Composer_Project"));
+    private readonly PickerButton _status = Pill(Texts.Get("Field_Status"));
+    private readonly PickerButton _assignee = Pill(Texts.Get("Field_Assignee"));
+    private readonly PickerButton _due = Pill(Texts.Get("SelectionBar_Due"));
+    private readonly PickerButton _estimate = Pill(Texts.Get("SelectionBar_Estimate"));
+    private readonly PickerButton _kind = Pill(Texts.Get("Field_Kind"));
 
     public NewTaskComposer()
     {
@@ -56,7 +56,7 @@ public sealed partial class NewTaskComposer : UserControl
 
         _project.Pick = async b =>
         {
-            if (await ValuePickers.ProjectAsync(b, null, "追加先", Draft.Project is { } p ? [p.Id] : [], excludeCurrent: false) is { } picked)
+            if (await ValuePickers.ProjectAsync(b, null, Texts.Get("Composer_Project"), Draft.Project is { } p ? [p.Id] : [], excludeCurrent: false) is { } picked)
             {
                 TaskDetailPane.SetDraftProject(Draft, picked.Value, keepValues: true);
                 ShowValues();
@@ -87,7 +87,7 @@ public sealed partial class NewTaskComposer : UserControl
         };
         _due.Pick = async b =>
         {
-            if (await ValuePickers.DateAsync(b, null, "期日（予定終了日）", [Draft.Target]) is { } picked)
+            if (await ValuePickers.DateAsync(b, null, Texts.Get("Picker_Due"), [Draft.Target]) is { } picked)
             {
                 Draft.Target = picked.Value;
                 ShowValues();
@@ -215,16 +215,16 @@ public sealed partial class NewTaskComposer : UserControl
             project?.Kind switch { ProjectKind.Inbox => "\uE7C3", ProjectKind.Team => "\uE716", _ => "\uE77B" });
 
         var status = project?.StatusOptions.FirstOrDefault(o => o.Id == draft.StatusOptionId);
-        _status.SetValue(status?.Name, StatusVisuals.Glyph(status?.Category ?? StatusCategory.Todo), StatusVisuals.BrushKey(status?.Category ?? StatusCategory.Todo), "ステータス");
+        _status.SetValue(status?.Name, StatusVisuals.Glyph(status?.Category ?? StatusCategory.Todo), StatusVisuals.BrushKey(status?.Category ?? StatusCategory.Todo), Texts.Get("Field_Status"));
         _assignee.Visibility = team ? Visibility.Visible : Visibility.Collapsed;
         _assignee.SetValue(draft.Assignees.Count switch
         {
             0 => null,
             1 => People.Display(draft.Assignees[0]),
             var n => $"{People.Display(draft.Assignees[0])} +{n - 1}",
-        }, "\uE77B", placeholder: "担当");
-        _due.SetValue(draft.Target is { } due ? DateText.Short(due) : null, "\uE787", placeholder: "期日");
-        _estimate.SetValue(EffortText.Of(draft.EstimateHours), "\uE916", placeholder: "工数");
+        }, "\uE77B", placeholder: Texts.Get("List_ColumnAssigneeName"));
+        _due.SetValue(draft.Target is { } due ? DateText.Short(due) : null, "\uE787", placeholder: Texts.Get("SelectionBar_Due"));
+        _estimate.SetValue(EffortText.Of(draft.EstimateHours), "\uE916", placeholder: Texts.Get("SelectionBar_Estimate"));
         _kind.Visibility = team ? Visibility.Visible : Visibility.Collapsed;
         _kind.SetValue(KindVisuals.Name(draft.Kind));
         KindVisuals.Apply(_kind.Icon, draft.Kind);
@@ -237,14 +237,14 @@ public sealed partial class NewTaskComposer : UserControl
     /// <summary>各項目のツールチップに、いまのキーの割り当てを示す。</summary>
     private void UpdateKeyHints()
     {
-        foreach (var (pill, id, name) in ((PickerButton, string, string)[])
-            [(_project, "composer.project", "追加先"), (_status, "composer.status", "ステータス"), (_assignee, "composer.assign", "担当者"),
-             (_due, "composer.due", "期日"), (_estimate, "composer.estimate", "工数"), (_kind, "composer.kind", "区分")])
+        foreach (var (pill, id) in ((PickerButton, string)[])
+            [(_project, "composer.project"), (_status, "composer.status"), (_assignee, "composer.assign"),
+             (_due, "composer.due"), (_estimate, "composer.estimate"), (_kind, "composer.kind")])
         {
-            ToolTipService.SetToolTip(pill, KeyHints.Tip(id, name));
+            ToolTipService.SetToolTip(pill, KeyHints.Tip(id));
         }
 
-        ToolTipService.SetToolTip(DetailButton, KeyHints.Tip("composer.detail", "詳細パネルで入力を続ける"));
+        ToolTipService.SetToolTip(DetailButton, KeyHints.Tip("composer.detail"));
     }
 
     /// <summary>下端の案内。追加できないときは、その理由を示す（UX-27）。</summary>
@@ -253,8 +253,9 @@ public sealed partial class NewTaskComposer : UserControl
         var keymap = App.Current.Services.Keymap;
         var submit = keymap.Display("composer.submit");
         var detail = keymap.Display("composer.detail");
-        HintText.Text = (Draft.Title.Trim().Length == 0 ? "タスク名を入力すると追加できます　" : $"{submit} で追加　")
-            + $"{detail} で詳細　Tab で項目を移動　Alt + S などで項目を選ぶ";
+        HintText.Text = Draft.Title.Trim().Length == 0
+            ? Texts.Format("Composer_HintNeedTitle", detail)
+            : Texts.Format("Composer_Hint", submit, detail);
         HintText.Visibility = Hints.Shown ? Visibility.Visible : Visibility.Collapsed;
     }
 

@@ -24,11 +24,11 @@
                     <TextBlock
                         AutomationProperties.HeadingLevel="Level1"
                         Style="{StaticResource Text.Title}"
-                        Text="Tasklabe へようこそ" />
+                        x:Uid="SignIn_Welcome" />
                     <TextBlock
                         Style="{StaticResource Text.Body}"
                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                        Text="タスクとプロジェクトは GitHub に保存されます。GitHub アカウントでサインインしてください。"
+                        x:Uid="SignIn_Intro"
                         TextWrapping="Wrap" />
                 </StackPanel>
 
@@ -49,11 +49,11 @@
                     <Button
                         HorizontalAlignment="Stretch"
                         Command="{x:Bind ViewModel.SignInCommand}"
-                        Content="GitHub でサインイン"
+                        x:Uid="SignIn_Button"
                         Style="{StaticResource AccentButtonStyle}" />
-                    <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="詳細設定">
+                    <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" x:Uid="SignIn_Advanced">
                         <TextBox
-                            Header="個人用リポジトリ"
+                            x:Uid="SignIn_Repository"
                             PlaceholderText="tasklabe-personal"
                             Text="{x:Bind ViewModel.RepositoryName, Mode=TwoWay}" />
                     </Expander>
@@ -63,7 +63,7 @@
                 <StackPanel Spacing="{StaticResource Space.M}" Visibility="{x:Bind ViewModel.IsWaiting, Mode=OneWay}">
                     <TextBlock
                         Style="{StaticResource Text.Body}"
-                        Text="ブラウザで次のコードを入力し、Tasklabe を承認してください。コードはクリップボードにコピーしてあります。"
+                        x:Uid="SignIn_EnterCode"
                         TextWrapping="Wrap" />
                     <Border
                         Padding="16"
@@ -76,15 +76,15 @@
                             CharacterSpacing="200"
                             IsTextSelectionEnabled="True"
                             Text="{x:Bind ViewModel.UserCode, Mode=OneWay}"
-                            AutomationProperties.Name="確認コード" />
+                            x:Uid="SignIn_Code" />
                     </Border>
                     <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.S}">
                         <ProgressRing Width="16" Height="16" IsActive="{x:Bind ViewModel.IsWaiting, Mode=OneWay}" />
-                        <TextBlock Style="{StaticResource Text.Caption}" Text="承認されると自動的に続行します" />
+                        <TextBlock Style="{StaticResource Text.Caption}" x:Uid="SignIn_Waiting" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.S}">
-                        <Button Command="{x:Bind ViewModel.CopyCodeAndOpenBrowserCommand}" Content="もう一度ブラウザを開く" />
-                        <Button Command="{x:Bind ViewModel.CancelCommand}" Content="キャンセル" />
+                        <Button Command="{x:Bind ViewModel.CopyCodeAndOpenBrowserCommand}" x:Uid="SignIn_OpenAgain" />
+                        <Button Command="{x:Bind ViewModel.CancelCommand}" x:Uid="SignIn_Cancel" />
                     </StackPanel>
                 </StackPanel>
 

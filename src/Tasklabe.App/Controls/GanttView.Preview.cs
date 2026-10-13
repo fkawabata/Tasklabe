@@ -1,4 +1,5 @@
 using Microsoft.UI.Xaml;
+using Tasklabe.App.Services;
 using Tasklabe.Core.Domain;
 using Tasklabe.Core.Editing;
 using Tasklabe.Core.Gantt;
@@ -128,18 +129,20 @@ public sealed partial class GanttView
         int moved = _shifts.Count;
         int adjusted = _pinned!.Count;
         var cause = _shifts.FirstOrDefault()?.Cause;
-        string reason = _shifts.Any(s => s.CauseDelayed) ? "先行タスクの遅れ" : "先行タスクの予定";
+        bool delayed = _shifts.Any(s => s.CauseDelayed);
         if (_pendingLink is { } link && RealTask(link.Predecessor) is { } pred && RealTask(link.Successor) is { } succ)
         {
-            PreviewBar.Message = $"「{pred.Title}」→「{succ.Title}」の依存関係を張ると、後続 {moved} 件を後ろへずらします。確定で依存関係と合わせて保存します。";
+            PreviewBar.Message = Texts.Count("Gantt_PreviewLink", moved, pred.Title, succ.Title);
             return;
         }
 
         PreviewBar.Message = (moved, adjusted) switch
         {
-            (0, _) => $"動かしたバー {adjusted} 件の予定を保存します。後続との食い違いはありません。",
-            (_, 0) => $"{reason}に合わせて、後続 {moved} 件を後ろへずらします（「{cause!.Title}」の後）。バーをドラッグして調整できます。",
-            _ => $"{reason}に合わせて、後続 {moved} 件を後ろへずらします（「{cause!.Title}」の後）。動かしたバー {adjusted} 件と合わせて保存します。",
+            (0, _) => Texts.Count("Gantt_PreviewAdjusted", adjusted),
+            (_, 0) => delayed ? Texts.Count("Gantt_PreviewShiftDelayed", moved, cause!.Title) : Texts.Count("Gantt_PreviewShiftPlan", moved, cause!.Title),
+            _ => delayed
+                ? Texts.Format("Common_TwoSentences", Texts.Count("Gantt_PreviewShiftDelayedOnly", moved, cause!.Title), Texts.Count("Gantt_PreviewWithAdjusted", adjusted))
+                : Texts.Format("Common_TwoSentences", Texts.Count("Gantt_PreviewShiftPlanOnly", moved, cause!.Title), Texts.Count("Gantt_PreviewWithAdjusted", adjusted)),
         };
     }
 

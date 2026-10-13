@@ -1,4 +1,5 @@
 using Tasklabe.Core.Domain;
+using Tasklabe.Core.Resources;
 
 namespace Tasklabe.Core.Editing;
 
@@ -16,11 +17,11 @@ public sealed record EditStep(IReadOnlyList<TaskEdit> Edits)
     public string Description => Edits switch
     {
         [var one] when one.Changes.Any(c => c.Field == TaskField.BlockedBy) && one.Changes.Any(c => c.Field is TaskField.Start or TaskField.Target)
-            => $"「{one.Title}」の先行タスクと予定の変更",
-        [var one] => $"「{one.Title}」の{FieldLabels.Of(PrimaryField(one.Changes))}の変更",
+            => Strings.UndoPredecessorAndSchedule(one.Title),
+        [var one] => Strings.UndoField(one.Title, FieldLabels.Of(PrimaryField(one.Changes))),
         _ when Edits.FirstOrDefault(e => e.Changes.Any(c => c.Field == TaskField.BlockedBy)) is { } link
-            => $"「{link.Title}」の先行タスクの変更と、{Edits.Count(e => e.Changes.Any(c => c.Field is TaskField.Start or TaskField.Target))} 件の予定の変更",
-        _ => $"{Edits.Count} 件のタスクの変更",
+            => Strings.UndoPredecessorAndOthers(link.Title, Edits.Count(e => e.Changes.Any(c => c.Field is TaskField.Start or TaskField.Target))),
+        _ => Strings.UndoTasks(Edits.Count),
     };
 
     /// <summary>
@@ -179,27 +180,6 @@ public sealed class EditHistory(int capacity = 100)
 /// <summary>画面に出す項目の呼び名。</summary>
 public static class FieldLabels
 {
-    public static string Of(TaskField field) => field switch
-    {
-        TaskField.Title => "タイトル",
-        TaskField.Body => "説明",
-        TaskField.Status => "ステータス",
-        TaskField.Start => "予定開始日",
-        TaskField.Target => "予定終了日",
-        TaskField.ActualStart => "実績開始日",
-        TaskField.ActualEnd => "実績終了日",
-        TaskField.Estimate => "想定工数",
-        TaskField.Progress => "進捗率",
-        TaskField.Kind => "区分",
-        TaskField.State => "状態",
-        TaskField.Assignees => "担当者",
-        TaskField.Parent => "親タスク",
-        TaskField.SortOrder => "並び順",
-        TaskField.BlockedBy => "先行タスク",
-        TaskField.Schedule => "後続を待たせない設定",
-        TaskField.Repositories => "リポジトリ",
-        TaskField.Branches => "ブランチ",
-        TaskField.Milestone => "マイルストーン",
-        _ => "項目",
-    };
+    public static string Of(TaskField field) =>
+        Enum.IsDefined(field) ? Strings.Field(field.ToString()) : Strings.Field("Other");
 }

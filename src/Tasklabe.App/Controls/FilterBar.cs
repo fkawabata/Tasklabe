@@ -19,7 +19,7 @@ public sealed record FilterChip(string Label, Func<FrameworkElement, Task> Chang
 public sealed partial class FilterBar : UserControl
 {
     private readonly StackPanel _chips = new() { Orientation = Orientation.Horizontal, Spacing = 6, VerticalAlignment = VerticalAlignment.Center };
-    private readonly HyperlinkButton _clearAll = new() { Content = "すべて解除", Padding = new Thickness(4, 2, 4, 2) };
+    private readonly HyperlinkButton _clearAll = new() { Content = Texts.Get("Filter_ClearAll"), Padding = new Thickness(4, 2, 4, 2) };
     private readonly TextBlock _count = new() { VerticalAlignment = VerticalAlignment.Center };
     private Action? _clearAllAction;
 
@@ -45,7 +45,7 @@ public sealed partial class FilterBar : UserControl
         Content = grid;
         Margin = new Thickness(0, 0, 0, 8);
         Visibility = Visibility.Collapsed;
-        AutomationProperties.SetName(this, "絞り込みの条件");
+        AutomationProperties.SetName(this, Texts.Get("Filter_Name"));
         _clearAll.Click += (_, _) => _clearAllAction?.Invoke();
     }
 
@@ -61,8 +61,8 @@ public sealed partial class FilterBar : UserControl
         }
 
         _clearAll.Visibility = chips.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
-        _count.Text = $"{total} 件中 {shown} 件を表示";
-        AutomationProperties.SetName(this, $"絞り込みの条件: {string.Join("、", chips.Select(c => c.Label))}。{_count.Text}");
+        _count.Text = Texts.Format("Filter_Count", total, shown);
+        AutomationProperties.SetName(this, Texts.Format("Filter_FullName", string.Join(Texts.Get("Common_ListSeparator"), chips.Select(c => c.Label)), _count.Text));
     }
 
     private static Button CreateChip(FilterChip chip)
@@ -81,8 +81,7 @@ public sealed partial class FilterBar : UserControl
             MinHeight = 0,
         };
         Pill.SetIsEnabled(button, true);
-        AutomationProperties.SetName(button, $"{chip.Label}。押すと条件を変えます。Delete で解除");
-        ToolTipService.SetToolTip(button, "押すと条件を変えます。✕ か Delete で解除");
+        AutomationProperties.SetName(button, Texts.Format("Filter_ChipName", chip.Label));
 
         // ✕ の上を押したときは解除、それ以外は条件を変える
         bool onClose = false;

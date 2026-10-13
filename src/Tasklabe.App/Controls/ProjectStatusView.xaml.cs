@@ -37,7 +37,7 @@ public sealed partial class ProjectStatusView : UserControl
             AppClock.Today,
             new Dictionary<string, int> { [project.Id] = issueCount },
             ProjectPreferences.Resolve(project).HoursPerDay);
-        CapacityText.Text = $"1 日 {ProjectPreferences.Resolve(project).HoursPerDay:0.#}h を超える日を強調します";
+        CapacityText.Text = Texts.Format("Status_Capacity", ProjectPreferences.Resolve(project).HoursPerDay);
         _milestones = project.IsTeam ? Tasklabe.Core.Milestones.MilestonePlan.Summarize(tree, project.Milestones) : [];
         Render();
         RenderMilestones();
@@ -66,12 +66,12 @@ public sealed partial class ProjectStatusView : UserControl
             name.Children.Add(Services.MilestoneVisuals.Icon(12));
             name.Children.Add(new TextBlock { Text = s.Milestone.Title, TextTrimming = TextTrimming.CharacterEllipsis });
             grid.Children.Add(name);
-            Add(grid, new TextBlock { Text = s.Milestone.Due is { } d ? Services.DateText.Short(d) : "期日なし", Style = caption, VerticalAlignment = VerticalAlignment.Center }, 1);
+            Add(grid, new TextBlock { Text = s.Milestone.Due is { } d ? Services.DateText.Short(d) : Texts.Get("Status_NoDue"), Style = caption, VerticalAlignment = VerticalAlignment.Center }, 1);
             Add(grid, new ProgressBar { Value = s.Progress.ProgressPercent, Maximum = 100, VerticalAlignment = VerticalAlignment.Center }, 2);
             Add(grid, new TextBlock { Text = s.Total == 0 ? "—" : $"{s.Progress.ProgressPercent:0}%", VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Right }, 3);
             var counts = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
-            counts.Children.Add(new TextBlock { Text = s.Total == 0 ? "タスクなし" : $"完了 {s.Done} / {s.Total} 件", Style = caption });
-            string? late = s.Late > 0 && s.LateEnd is { } lateEnd ? $"⚠ 期日超え {s.Late} 件（{Services.DateText.Short(lateEnd)}・▲{s.LateDays}日）" : null;
+            counts.Children.Add(new TextBlock { Text = s.Total == 0 ? Texts.Get("Status_NoTasks") : Texts.Format("Status_DoneCount", s.Done, s.Total), Style = caption });
+            string? late = s.Late > 0 && s.LateEnd is { } lateEnd ? Texts.Format("Status_Late", s.Late, Services.DateText.Short(lateEnd), s.LateDays) : null;
             if (late is not null)
             {
                 counts.Children.Add(new TextBlock { Text = late, Style = caption, Foreground = Services.ThemeResources.Brush("Viz.Delay"), TextTrimming = TextTrimming.CharacterEllipsis });
@@ -79,8 +79,14 @@ public sealed partial class ProjectStatusView : UserControl
 
             Add(grid, counts, 4);
             Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(grid,
-                $"{s.Milestone.Title}、期日 {(s.Milestone.Due is { } due ? Services.DateText.Short(due) : "なし")}、進捗 {s.Progress.ProgressPercent:0}%、完了 {s.Done} / {s.Total} 件"
-                + (late is not null ? "、" + late.TrimStart('⚠', ' ') : ""));
+                string.Join(Texts.Get("Common_ListSeparator"), new[]
+                {
+                    s.Milestone.Title,
+                    Texts.Format("Card_Due", s.Milestone.Due is { } due ? Services.DateText.Short(due) : Texts.Get("Common_None")),
+                    Texts.Format("Card_Progress", s.Progress.ProgressPercent),
+                    Texts.Format("Status_DoneCount", s.Done, s.Total),
+                    late?.TrimStart('⚠', ' '),
+                }.OfType<string>()));
             MilestoneRows.Children.Add(grid);
         }
 
@@ -98,30 +104,30 @@ public sealed partial class ProjectStatusView : UserControl
 
         ProgressMetric.Text = $"{summary.ProgressPercent:0}%";
         ProgressCaption.Text = summary.EstimateHours > 0
-            ? $"想定 {Services.EffortText.Of(summary.EstimateHours)}"
-            : "計画のタスクがありません";
+            ? Texts.Format("Status_Estimated", Services.EffortText.Of(summary.EstimateHours))
+            : Texts.Get("Status_NoPlanTasks");
 
         ScheduleMetric.Text = ScheduleText(schedule);
         ScheduleMetric.Foreground = Brush(schedule <= -1 ? "Viz.Delay" : "TextFillColorPrimaryBrush");
         ScheduleCaption.Text = schedule switch
         {
-            <= -1 => "予定より遅れています",
-            >= 1 => "予定より進んでいます",
-            _ => "予定どおりです",
+            <= -1 => Texts.Get("Status_Behind"),
+            >= 1 => Texts.Get("Status_Ahead"),
+            _ => Texts.Get("Status_OnTrack"),
         };
 
         DelayedMetric.Text = $"{_view.DelayedCount}";
         DelayedMetric.Foreground = Brush(_view.DelayedCount > 0 ? "Viz.Delay" : "TextFillColorPrimaryBrush");
         var worst = _view.Attention.FirstOrDefault(a => a.Attention == TaskAttention.Delayed);
-        DelayedCaption.Text = worst is null ? "遅れているタスクはありません" : $"最大 {worst.DelayDays} 日の遅れ";
+        DelayedCaption.Text = worst is null ? Texts.Get("Status_NoDelays") : Texts.Count("Status_MaxDelay", worst.DelayDays);
 
         RemainingMetric.Text = Services.EffortText.Of(summary.RemainingHours);
         RemainingCaption.Text = _view.UnestimatedCount > 0
-            ? $"未見積り {_view.UnestimatedCount} 件を除く"
-            : $"今週が期日 {_view.DueThisWeekCount} 件";
+            ? Texts.Format("Status_ExcludingUnestimated", _view.UnestimatedCount)
+            : Texts.Format("Status_DueThisWeek", _view.DueThisWeekCount);
 
         IssueMetric.Text = $"{_view.IssueCount}";
-        IssueCaption.Text = _view.IssueCount > 0 ? "計画に入っていない" : "すべて計画に入っています";
+        IssueCaption.Text = _view.IssueCount > 0 ? Texts.Get("Status_NotInPlan") : Texts.Get("Status_AllInPlan");
 
         BuildAttention();
         BuildWorkload();
@@ -133,9 +139,9 @@ public sealed partial class ProjectStatusView : UserControl
     /// </summary>
     private static string ScheduleText(double days) => days switch
     {
-        <= -1 => $"▲{Math.Abs(days):0.#}日",
-        >= 1 => $"+{days:0.#}日",
-        _ => "±0日",
+        <= -1 => Texts.Format("Status_DaysBehind", Math.Abs(days)),
+        >= 1 => Texts.Format("Status_DaysAhead", days),
+        _ => Texts.Get("Status_DaysEven"),
     };
 
     // ---------------------------------------------------------------- 注意が必要なタスク
@@ -184,9 +190,9 @@ public sealed partial class ProjectStatusView : UserControl
 
             string badge = item.Attention switch
             {
-                TaskAttention.Delayed => $"▲{item.DelayDays}日",
-                TaskAttention.DueSoon => "期日が近い",
-                _ => "未見積り",
+                TaskAttention.Delayed => Texts.Format("Status_DaysBehind", item.DelayDays),
+                TaskAttention.DueSoon => Texts.Get("Status_DueSoon"),
+                _ => Texts.Get("Status_Unestimated"),
             };
             Add(grid, Right(badge, "Text.Caption", item.Attention == TaskAttention.Delayed ? "Viz.Delay" : null), 1);
 
@@ -229,7 +235,7 @@ public sealed partial class ProjectStatusView : UserControl
         for (int i = 0; i < _view.WorkloadDates.Count; i++)
         {
             var date = _view.WorkloadDates[i];
-            var label = Center($"{date.Month}/{date.Day}\n{date.ToString("ddd", DateText.Japanese)}", "Text.Caption");
+            var label = Center($"{date.Month}/{date.Day}\n{date.ToString("ddd", DateText.Culture)}", "Text.Caption");
             label.Opacity = WorkCalendar.IsHoliday(date) ? 0.5 : 1;
             Add(WorkloadGrid, label, i + 1, 0);
         }
@@ -239,7 +245,7 @@ public sealed partial class ProjectStatusView : UserControl
             var row = _view.Workload[r];
             WorkloadGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(28) });
 
-            var name = Text(row.Login.Length == 0 ? "担当者なし" : People.Name(row.Login), "Text.Body");
+            var name = Text(row.Login.Length == 0 ? Texts.Get("Filter_NoAssignee") : People.Name(row.Login), "Text.Body");
             name.VerticalAlignment = VerticalAlignment.Center;
             Add(WorkloadGrid, name, 0, r + 1);
 
@@ -277,12 +283,14 @@ public sealed partial class ProjectStatusView : UserControl
                 .Select(e => $"{e.Task.Title}　{EffortText.Of(e.Hours)}");
             ToolTipService.SetToolTip(border, new ToolTip
             {
-                Content = $"{DateText.Short(date)}　{EffortText.Of(cell.Hours)} / {EffortText.Of(cell.Capacity)}\n{string.Join('\n', lines)}",
+                Content = Texts.Format("Status_CellTip", DateText.Short(date), EffortText.Of(cell.Hours), EffortText.Of(cell.Capacity), string.Join('\n', lines)),
             });
         }
 
         AutomationProperties.SetName(border,
-            $"{(login.Length == 0 ? "担当者なし" : login)} {DateText.Short(date)} {EffortText.Of(cell.Hours)}{(cell.IsOverloaded ? "、過負荷" : "")}");
+            cell.IsOverloaded
+                ? Texts.Format("Status_CellOverloadedName", login.Length == 0 ? Texts.Get("Filter_NoAssignee") : login, DateText.Short(date), EffortText.Of(cell.Hours))
+                : Texts.Format("Status_CellName", login.Length == 0 ? Texts.Get("Filter_NoAssignee") : login, DateText.Short(date), EffortText.Of(cell.Hours)));
         return border;
     }
 

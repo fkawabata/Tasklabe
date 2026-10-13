@@ -12,15 +12,15 @@ public static class KindVisuals
 {
     public static string Name(TaskKind kind) => kind switch
     {
-        TaskKind.Issue => "課題",
-        _ => "タスク",
+        TaskKind.Issue => Texts.Get("Kind_Issue"),
+        _ => Texts.Get("Kind_Task"),
     };
 
     /// <summary>区分の意味（ツールチップや選択肢の説明に使う）。</summary>
     public static string Description(TaskKind kind) => kind switch
     {
-        TaskKind.Issue => "計画に入れる前の検討事項。日程は持たず、「計画に移す」でタスクになる",
-        _ => "計画の中の作業。日程・工数・進捗率を持つ",
+        TaskKind.Issue => Texts.Get("Kind_IssueDescription"),
+        _ => Texts.Get("Kind_TaskDescription"),
     };
 
     public static string Glyph(TaskKind kind) => kind switch

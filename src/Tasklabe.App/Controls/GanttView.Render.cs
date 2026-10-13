@@ -5,6 +5,7 @@ using Microsoft.Graphics.Canvas.Text;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using Tasklabe.App.Services;
 using Tasklabe.Core.Calendar;
 using Tasklabe.Core.Gantt;
 using Tasklabe.Core.Wbs;
@@ -18,6 +19,11 @@ namespace Tasklabe.App.Controls;
 /// </summary>
 public sealed partial class GanttView
 {
+    // 目盛りの年・月の書式（表示の言語の文言から、初めて描くときに一度だけ引く）
+    private static readonly string YearFormat = Texts.Get("Gantt_YearFormat");
+    private static readonly string MonthTitleFormat = Texts.Get("Date_MonthTitle");
+    private static readonly string MonthShortFormat = Texts.Get("Date_MonthShort");
+
     private sealed class ChartColors
     {
         public Color Progress, ProgressRemain, Delay, Today, Holiday, Grid, Plan, Done, Milestone, Accent, Text, TextSecondary, TextTertiary, Divider, Selection, Hover, OnAccent, SurfaceBase, SurfaceLayer;
@@ -840,7 +846,7 @@ public sealed partial class GanttView
         ds.DrawRoundedRectangle(left - 0.5f, cy - BarHeight / 2 - 2.5f, right - left + 1, BarHeight + 5, 5, 5, c.Accent, 2);
 
         // 変更後の日付と稼働日数
-        var label = $"{FormatDate(drag.NewStart)} 〜 {FormatDate(drag.NewEnd)}  {WorkCalendar.CountWorkingDays(drag.NewStart, drag.NewEnd)} 稼働日";
+        var label = Texts.Count("Gantt_DragLabel", WorkCalendar.CountWorkingDays(drag.NewStart, drag.NewEnd), FormatDate(drag.NewStart), FormatDate(drag.NewEnd));
         using var layout = new CanvasTextLayout(ds, label, _labelFormat, 400, 20);
         var bounds = layout.LayoutBounds;
         float lx = Math.Clamp(left, 4, Math.Max((float)Chart.ActualWidth - (float)bounds.Width - 16, 4));
@@ -868,7 +874,7 @@ public sealed partial class GanttView
         {
             if (d == first || (monthScale ? d.DayOfYear == 1 : d.Day == 1))
             {
-                boundaries.Add((X(d), monthScale ? $"{d.Year}年" : $"{d.Year}年{d.Month}月"));
+                boundaries.Add((X(d), monthScale ? d.ToString(YearFormat, DateText.Culture) : d.ToString(MonthTitleFormat, DateText.Culture)));
             }
         }
 
@@ -913,7 +919,7 @@ public sealed partial class GanttView
             }
             else if (monthScale && d.Day == 1 && dayWidth * 28 >= 24)
             {
-                ds.DrawTextLayout(TextLayout(ds, $"{d.Month}月", _captionFormat), x + 3, tier1 + 1, c.TextSecondary);
+                ds.DrawTextLayout(TextLayout(ds, d.ToString(MonthShortFormat, DateText.Culture), _captionFormat), x + 3, tier1 + 1, c.TextSecondary);
             }
         }
 

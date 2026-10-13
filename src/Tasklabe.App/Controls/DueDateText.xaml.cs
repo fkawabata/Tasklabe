@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
+using Tasklabe.App.Services;
 
 namespace Tasklabe.App.Controls;
 
@@ -46,7 +47,7 @@ public sealed partial class DueDateText : UserControl
         Label.Text = Text;
         bool overdue = IsOverdue && !string.IsNullOrEmpty(Text);
         VisualStateManager.GoToState(this, overdue ? "Overdue" : "Normal", false);
-        AutomationProperties.SetName(this, overdue ? $"{Text}（期日超過）" : Text);
-        ToolTipService.SetToolTip(this, overdue ? "予定終了日を過ぎています" : null);
+        AutomationProperties.SetName(this, overdue ? Texts.Format("DueDate_OverdueName", Text) : Text);
+        ToolTipService.SetToolTip(this, overdue ? Texts.Get("DueDate_OverdueTip") : null);
     }
 }

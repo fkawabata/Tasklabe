@@ -40,7 +40,7 @@
                 <Button x:Name="DeleteButton" Click="OnDelete">
                     <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.S}">
                         <FontIcon FontSize="14" Foreground="{ThemeResource Viz.Delay}" Glyph="&#xE74D;" />
-                        <TextBlock Text="削除…" />
+                        <TextBlock x:Uid="Detail_DeleteText" />
                     </StackPanel>
                 </Button>
                 <!-- 計画と課題の行き来（要件 F-TSK-09、F-TSK-10）。チームプロジェクトでだけ意味を持つ -->
@@ -64,13 +64,13 @@
                     x:Name="CreateButton"
                     HorizontalAlignment="Stretch"
                     Click="OnCreate"
-                    Content="追加"
+                    x:Uid="Detail_CreateButton"
                     Style="{StaticResource AccentButtonStyle}" />
                 <Button
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
                     Click="OnDiscard"
-                    Content="破棄" />
+                    x:Uid="Detail_DiscardButton" />
             </Grid>
             <TextBlock
                 x:Name="HintText"

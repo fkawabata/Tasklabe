@@ -23,7 +23,7 @@ public static class DateInput
             return true;
         }
 
-        if (s is "t" or "T" or "今日" or "きょう")
+        if (s is "t" or "T" or "今日" or "きょう" || s.Equals("today", StringComparison.OrdinalIgnoreCase))
         {
             date = today;
             return true;

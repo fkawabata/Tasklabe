@@ -34,7 +34,7 @@ public static class TaskCommands
     /// <inheritdoc cref="DemoteAsync(TaskItem)"/>
     public static Task DemoteAsync(IReadOnlyList<TaskItem> tasks) =>
         ApplyAsync([.. tasks.Select(t => (t, TaskRules.DemoteToIssue(t)))],
-            tasks.Count == 1 ? $"「{tasks[0].Title}」を課題へ戻しました" : $"{tasks.Count} 件を課題へ戻しました");
+            tasks.Count == 1 ? Texts.Format("Toast_MovedToTriageOne", tasks[0].Title) : Texts.Format("Toast_MovedToTriageMany", tasks.Count));
 
     /// <summary>
     /// 親タスクの配下を、予定の順に依存関係でつなぐ（要件 F-DEP-08）。張る前に、つなぐ組み合わせを一覧で確かめる。
@@ -46,15 +46,14 @@ public static class TaskCommands
         var links = DependencyPlanner.ChainChildren(tree, parent);
         if (links.Count == 0)
         {
-            App.Current.Shell?.ShowInfo("つなぐ依存関係はありません",
-                "配下のタスクに予定がないか、すでに順番につながっています。予定期間が重なるタスクどうしは並列とみなしてつなぎません。");
+            App.Current.Shell?.ShowInfo(Texts.Get("Chain_NothingTitle"), Texts.Get("Chain_NothingMessage"));
             return;
         }
 
         var list = new StackPanel { Spacing = 4 };
         list.Children.Add(new TextBlock
         {
-            Text = $"「{parent.Title}」の配下を予定の順につなぎます。予定期間が重なるタスクは並列とみなし、互いにはつなぎません。",
+            Text = Texts.Format("Chain_Message", parent.Title),
             TextWrapping = TextWrapping.Wrap,
             Margin = new Thickness(0, 0, 0, 8),
         });
@@ -67,7 +66,7 @@ public static class TaskCommands
             });
         }
 
-        var dialog = AppDialog.Create(root, $"依存関係を {links.Count} 本追加", new ScrollViewer { Content = list, MaxHeight = 420 }, "追加");
+        var dialog = AppDialog.Create(root, Texts.Count("Chain_Title", links.Count), new ScrollViewer { Content = list, MaxHeight = 420 }, Texts.Get("Common_Add"));
         if (await dialog.ShowAsync() != ContentDialogResult.Primary)
         {
             return;
@@ -82,7 +81,7 @@ public static class TaskCommands
                 return (successor, TaskRules.Set(successor, TaskField.BlockedBy, TaskValues.IssueIds(ids)));
             })
             .ToList();
-        await ApplyAsync(edits, $"依存関係を {links.Count} 本追加しました");
+        await ApplyAsync(edits, Texts.Count("Chain_Done", links.Count));
     }
 
     /// <summary>取り消せない削除を、安全な側（キャンセル）を既定にして確かめてから行う（UX 規約 UX-11）。</summary>
@@ -99,14 +98,14 @@ public static class TaskCommands
         {
             var task = tasks[0];
             message = task.IsLocal
-                ? $"「{task.Title}」を削除します。この操作は元に戻せません。"
-                : $"「{task.Title}」（{TaskKeys.Of(task)}）と GitHub の Issue を削除します。この操作は元に戻せません。";
+                ? Texts.Format("Delete_LocalMessage", task.Title)
+                : Texts.Format("Delete_Message", task.Title, TaskKeys.Of(task));
         }
         else
         {
-            var names = string.Join("\n", tasks.Take(5).Select(t => $"・{t.Title}"));
-            var more = tasks.Count > 5 ? $"\nほか {tasks.Count - 5} 件" : "";
-            message = $"次の {tasks.Count} 件のタスクと、GitHub の Issue を削除します。この操作は元に戻せません。\n{names}{more}";
+            var names = string.Join("\n", tasks.Take(5).Select(t => Texts.Format("Common_Bullet", t.Title)));
+            var more = tasks.Count > 5 ? "\n" + Texts.Format("Delete_More", tasks.Count - 5) : "";
+            message = Texts.Format("Delete_ManyMessage", tasks.Count) + "\n" + names + more;
         }
 
         // 確認のあいだに GitHub への作成が済むと、タスクの ID が付け替わる。付け替わった先を追い、押した時点のタスクを消す
@@ -124,7 +123,7 @@ public static class TaskCommands
         ContentDialogResult result;
         try
         {
-            var dialog = AppDialog.Confirm(root, tasks.Count == 1 ? "タスクを削除しますか？" : $"{tasks.Count} 件のタスクを削除しますか？", message, "削除");
+            var dialog = AppDialog.Confirm(root, tasks.Count == 1 ? Texts.Get("Delete_Title") : Texts.Format("Delete_ManyTitle", tasks.Count), message, Texts.Get("Common_Delete"));
             result = await dialog.ShowAsync();
         }
         finally
@@ -189,7 +188,7 @@ public static class TaskCommands
 
         var name = Services.ProjectDisplay.Name(target);
         App.Current.Shell?.ShowUndoable(
-            moved.Count == 1 ? $"「{moved[0].Before.Title}」を{name}へ移しました" : $"{moved.Count} 件を{name}へ移しました",
+            moved.Count == 1 ? Texts.Format("Toast_MovedOne", moved[0].Before.Title, name) : Texts.Format("Toast_MovedMany", moved.Count, name),
             () => UndoMoveAsync(moved));
         return [.. moved.Select(m => m.After)];
     }

@@ -38,7 +38,7 @@ internal static class CommandPalette
                 continue;
             }
 
-            entries.Add(new Entry(d.Id, new PickerOption(d.Label, keymap.Display(d.Id), Group: "操作"), () => window.RunGlobalCommandAsync(d.Id)));
+            entries.Add(new Entry(d.Id, new PickerOption(d.Label, keymap.Display(d.Id), Group: Texts.Get("Palette_Actions")), () => window.RunGlobalCommandAsync(d.Id)));
         }
 
         // 選んでいるタスクへの操作（使えないものは出さない）
@@ -46,7 +46,7 @@ internal static class CommandPalette
         {
             var project = await services.Store.GetProjectAsync(target.Task.ProjectId);
             bool team = project?.IsTeam == true;
-            string subject = target.IsMultiple ? $"{target.Tasks.Count} 件" : $"「{Shorten(target.Task.Title)}」";
+            string group = target.IsMultiple ? Texts.Format("Palette_ActionsForMany", target.Tasks.Count) : Texts.Format("Palette_ActionsForOne", Shorten(target.Task.Title));
             foreach (var d in ShortcutCatalog.All.Where(d => d.Scope == ShortcutScope.Task))
             {
                 bool usable = d.Id switch
@@ -64,7 +64,7 @@ internal static class CommandPalette
                 };
                 if (usable)
                 {
-                    entries.Add(new Entry(d.Id, new PickerOption(d.Label, keymap.Display(d.Id), Group: $"{subject}への操作"),
+                    entries.Add(new Entry(d.Id, new PickerOption(d.Label, keymap.Display(d.Id), Group: group),
                         () => TaskShortcuts.RunAsync(d.Id, target)));
                 }
             }
@@ -75,12 +75,12 @@ internal static class CommandPalette
         {
             foreach (var c in source.Commands())
             {
-                entries.Add(new Entry("page:" + c.Label, new PickerOption(c.Label, c.Keys, Group: c.Group), c.Run));
+                entries.Add(new Entry("page:" + c.Label, new PickerOption(c.Label, c.Keys, Group: c.Group ?? Texts.Get("Palette_Actions")), c.Run));
             }
         }
 
         // 画面へ移る
-        entries.Add(new Entry("nav:my", new PickerOption("マイタスク", Glyph: "\uE73A", Group: "画面"), () =>
+        entries.Add(new Entry("nav:my", new PickerOption(Texts.Get("Nav_MyTasks"), Glyph: "\uE73A", Group: Texts.Get("Palette_Pages")), () =>
         {
             window.GoToMyTasks();
             return Task.CompletedTask;
@@ -88,16 +88,16 @@ internal static class CommandPalette
         var projects = (await services.Store.GetProjectsAsync()).Where(p => !p.Closed && p.Kind != ProjectKind.Inbox).ToList();
         foreach (var p in projects.OrderBy(p => p.IsTeam).ThenBy(p => p.Title, StringComparer.CurrentCulture))
         {
-            entries.Add(new Entry("nav:" + p.Id, new PickerOption(p.Title, p.IsTeam ? "チーム" : "個人", p.IsTeam ? "\uE716" : "\uE77B", Group: "画面"), () =>
+            entries.Add(new Entry("nav:" + p.Id, new PickerOption(p.Title, p.IsTeam ? Texts.Get("Common_Team") : Texts.Get("Common_Personal"), p.IsTeam ? "\uE716" : "\uE77B", Group: Texts.Get("Palette_Pages")), () =>
             {
                 window.OpenProject(p.Id);
                 return Task.CompletedTask;
             }));
         }
 
-        foreach (var (tab, label) in ((string, string)[])[("general", "設定: 全般"), ("personal", "設定: 個人のプロジェクトの既定"), ("team", "設定: チームのプロジェクトの既定")])
+        foreach (var (tab, label) in ((string, string)[])[("general", Texts.Get("Palette_SettingsGeneral")), ("personal", Texts.Get("Palette_SettingsPersonal")), ("team", Texts.Get("Palette_SettingsTeam"))])
         {
-            entries.Add(new Entry("settings:" + tab, new PickerOption(label, Glyph: "\uE713", Group: "画面"), () =>
+            entries.Add(new Entry("settings:" + tab, new PickerOption(label, Glyph: "\uE713", Group: Texts.Get("Palette_Pages")), () =>
             {
                 window.OpenSettings(tab);
                 return Task.CompletedTask;
@@ -110,7 +110,7 @@ internal static class CommandPalette
         {
             var where = byProject.TryGetValue(t.ProjectId, out var p) ? p.Title : ProjectDisplay.DefaultPersonalName;
             entries.Add(new Entry("task:" + t.ItemId, new PickerOption(TaskKeys.Has(t) ? $"{TaskKeys.Of(t)} {t.Title}" : t.Title, where,
-                StatusVisuals.Glyph(t.Category), GlyphBrushKey: StatusVisuals.BrushKey(t.Category), Group: "タスク", OnlyWhenSearching: true, Keywords: TaskKeys.IssueKeyOf(t)), () =>
+                StatusVisuals.Glyph(t.Category), GlyphBrushKey: StatusVisuals.BrushKey(t.Category), Group: Texts.Get("Palette_Tasks"), OnlyWhenSearching: true, Keywords: TaskKeys.IssueKeyOf(t)), () =>
             {
                 App.Current.Shell?.SelectTask(t);
                 return Task.CompletedTask;
@@ -119,12 +119,12 @@ internal static class CommandPalette
 
         // 何も入力していないときは、最近使った操作を先頭に並べる
         var recent = Recent.Select(k => entries.FirstOrDefault(e => e.Key == k)).OfType<Entry>().Take(5)
-            .Select(e => e with { Option = e.Option with { Group = "最近使った操作" } })
+            .Select(e => e with { Option = e.Option with { Group = Texts.Get("Palette_Recent") } })
             .ToList();
         var ordered = recent.Concat(entries).ToList();
 
-        var picker = new QuickPicker("コマンドパレット", [.. ordered.Select(e => e.Option)],
-            input: "操作・画面・タスク（名前か番号）を探す", filterable: true, width: 480, search: true);
+        var picker = new QuickPicker(Texts.Get("Palette_Title"), [.. ordered.Select(e => e.Option)],
+            input: Texts.Get("Palette_Input"), filterable: true, width: 480, search: true);
         double left = Math.Max(16, (root.ActualWidth - 480) / 2);
         if (await picker.ShowAsync(root, new Point(left, 48)) is { Index: >= 0 } r)
         {

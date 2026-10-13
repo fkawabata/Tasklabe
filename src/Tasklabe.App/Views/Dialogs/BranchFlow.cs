@@ -21,7 +21,7 @@ public static class BranchFlow
     {
         if (task.IsLocal)
         {
-            App.Current.Shell?.ShowInfo("まだブランチを扱えません", "GitHub にタスクを送り終えてから作る・選べます。");
+            App.Current.Shell?.ShowInfo(Texts.Get("Branch_NotYetTitle"), Texts.Get("Branch_NotYetChooseMessage"));
             return;
         }
 
@@ -48,14 +48,14 @@ public static class BranchFlow
         }
         catch (Exception ex) when (ex is GitHubException or HttpRequestException)
         {
-            App.Current.Shell?.ShowInfo($"{repository} のブランチを取れませんでした", SyncEngine.Describe(ex));
+            App.Current.Shell?.ShowInfo(Texts.Format("Branch_LoadFailed", repository), SyncEngine.Describe(ex));
             return;
         }
 
         // 空のリポジトリにはブランチを作る元（既定のブランチ）がないため、作る・選ぶの候補を出さずに知らせる
         if (list.IsEmpty)
         {
-            App.Current.Shell?.ShowInfo($"{repository} にはまだコミットがありません", "最初のコミットを push すると、ブランチを作れるようになります。");
+            App.Current.Shell?.ShowInfo(Texts.Format("Branch_NoCommits", repository), Texts.Get("Branch_NoCommitsMessage"));
             return;
         }
 
@@ -66,12 +66,12 @@ public static class BranchFlow
             .Select(b => b.Branch)
             .Concat((LinkedBranches.Cached(task.IssueId) ?? []).Where(b => string.Equals(b.RepositoryNameWithOwner, repository, StringComparison.OrdinalIgnoreCase)).Select(b => b.Name))
             .ToHashSet(StringComparer.Ordinal);
-        var options = new List<PickerOption> { new("新しいブランチを作る…", Glyph: "\uE710") };
-        options.AddRange(branches.Select(b => new PickerOption(b, chosen.Contains(b) ? "このタスクのブランチ" : null, Group: "既存のブランチ")));
+        var options = new List<PickerOption> { new(Texts.Get("Branch_New"), Glyph: "\uE710") };
+        options.AddRange(branches.Select(b => new PickerOption(b, chosen.Contains(b) ? Texts.Get("Branch_ThisTask") : null, Group: Texts.Get("Branch_Existing"))));
 
-        var picker = new QuickPicker($"{repository} のブランチ", options, filterable: branches.Count > 0, width: 400,
-            input: branches.Count > 0 ? "ブランチ名で絞り込む" : null,
-            note: branches.Count == 0 ? $"既定のブランチ（{list.DefaultBranch}）のほかにブランチはありません。" : $"既定のブランチ（{list.DefaultBranch}）は除いて、最近コミットした順に並べています。");
+        var picker = new QuickPicker(Texts.Format("Branch_PickerTitle", repository), options, filterable: branches.Count > 0, width: 400,
+            input: branches.Count > 0 ? Texts.Get("Branch_Filter") : null,
+            note: branches.Count == 0 ? Texts.Format("Branch_NoOthers", list.DefaultBranch) : Texts.Format("Branch_Order", list.DefaultBranch));
         if (await picker.ShowAsync(anchor, position) is not { Index: >= 0 } result)
         {
             return;
@@ -96,7 +96,7 @@ public static class BranchFlow
             await TaskCommands.ApplyAsync([(task, changes)]);
         }
 
-        CopySwitchCommand(branch, $"{branch} を選び、切り替えるコマンドをコピーしました");
+        CopySwitchCommand(branch, Texts.Format("Branch_ChosenCopied", branch));
     }
 
     /// <summary>ブランチのあるリポジトリは作業するリポジトリでもあるため、まだなら加える変更。</summary>

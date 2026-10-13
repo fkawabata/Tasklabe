@@ -9,6 +9,9 @@ public sealed class AppSettings
     /// <summary>Default / Light / Dark。</summary>
     public string Theme { get; set; } = "Default";
 
+    /// <summary>表示の言語（要件 F-SET-08）。system（Windows の表示言語に合わせる）/ ja / en。</summary>
+    public string Language { get; set; } = "system";
+
     public string? UserId { get; set; }
 
     public string? UserLogin { get; set; }

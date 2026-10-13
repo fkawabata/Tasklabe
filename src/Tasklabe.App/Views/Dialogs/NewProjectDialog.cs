@@ -31,35 +31,34 @@ public static partial class NewProjectDialog
         Project? created = null;
 
         var caption = AppResources.Style("Text.Caption");
-        var name = new TextBox { Header = "プロジェクト名", PlaceholderText = "例: Web サイトのリニューアル" };
+        var name = new TextBox { Header = Texts.Get("Project_NameField"), PlaceholderText = Texts.Get("NewProject_NamePlaceholder") };
 
         // 候補から選ぶ項目は、ドロップダウンではなくピッカーで選ぶ（UX 規約 UX-02）
         bool team = false;
         Organization? org = null;
         var repositories = new List<(string Label, object? Tag)>();
         int repoIndex = -1;
-        var kind = PickerButton.ForChoices("種類", ["個人", "チーム"], 0, _ => { },
-            ["自分だけが使うプロジェクト", usableOrgs.Count > 0 ? "Organization で共有するプロジェクト" : "使える Organization がありません"]);
+        var kind = PickerButton.ForChoices(Texts.Get("NewProject_Kind"), [Texts.Get("Common_Personal"), Texts.Get("Common_Team")], 0, _ => { },
+            [Texts.Get("NewProject_PersonalTip"), usableOrgs.Count > 0 ? Texts.Get("NewProject_TeamTip") : Texts.Get("NewProject_NoOrganizations")]);
         var orgButton = PickerButton.ForChoices("Organization", [.. usableOrgs.Select(o => o.DisplayName)], -1, _ => { });
-        var repoButton = PickerButton.ForChoices("タスクを作成するリポジトリ", [], -1, _ => { });
+        var repoButton = PickerButton.ForChoices(Texts.Get("NewProject_Repository"), [], -1, _ => { });
         repoButton.IsEnabled = false;
 
         var orgHint = new TextBlock { Style = caption, TextWrapping = TextWrapping.Wrap, Visibility = Visibility.Collapsed };
         var orgLink = new HyperlinkButton { Padding = new Thickness(0), Visibility = Visibility.Collapsed };
-        var repoName = new TextBox { Header = "新しいリポジトリの名前", PlaceholderText = "例: web-renewal", Visibility = Visibility.Collapsed };
+        var repoName = new TextBox { Header = Texts.Get("NewProject_RepositoryName"), PlaceholderText = Texts.Get("NewProject_RepositoryNamePlaceholder"), Visibility = Visibility.Collapsed };
         var repoLoading = new ProgressRing { Width = 16, Height = 16, IsActive = false, HorizontalAlignment = HorizontalAlignment.Left };
         // 外部アプリの利用を制限している組織は、所属自体が Tasklabe に見えないことがある
         var hiddenHint = new TextBlock
         {
             Style = caption,
             TextWrapping = TextWrapping.Wrap,
-            Text = "所属している Organization が一覧にない場合は、その組織が外部アプリの利用を制限している可能性があります。"
-                + "GitHub の Tasklabe の設定ページから、組織へのアクセスをリクエストしてください。",
+            Text = Texts.Get("NewProject_HiddenOrganizations"),
         };
         var hiddenLink = new HyperlinkButton
         {
             Padding = new Thickness(0),
-            Content = "GitHub で Tasklabe の組織アクセスを確認する",
+            Content = Texts.Get("NewProject_ReviewAccess"),
             NavigateUri = ApplicationSettingsUrl,
         };
         var teamPanel = new StackPanel
@@ -69,14 +68,14 @@ public static partial class NewProjectDialog
             Children =
             {
                 PickerButton.Labeled("Organization", orgButton), orgHint, orgLink,
-                PickerButton.Labeled("タスクを作成するリポジトリ", repoButton), repoLoading, repoName, hiddenHint, hiddenLink,
+                PickerButton.Labeled(Texts.Get("NewProject_Repository"), repoButton), repoLoading, repoName, hiddenHint, hiddenLink,
             },
         };
 
         var problems = organizations.Where(o => !(o.IsAccessible && o.CanCreateProjects)).ToList();
         if (problems.Count > 0)
         {
-            orgHint.Text = "選択できない Organization があります。" + string.Join(" ", problems.Select(p => $"{p.Login}: {ProblemLabel(p)}。{ProblemAdvice(p)}"));
+            orgHint.Text = Texts.Format("NewProject_UnavailableOrganizations", string.Join(" ", problems.Select(p => Texts.Format("NewProject_OrganizationProblem", p.Login, ProblemLabel(p), ProblemAdvice(p)))));
             orgHint.Visibility = Visibility.Visible;
             if (problems.FirstOrDefault(p => ActionUrl(p) is not null) is { } first)
             {
@@ -92,12 +91,12 @@ public static partial class NewProjectDialog
             .ThenBy(p => p.Title, StringComparer.CurrentCulture)
             .ToList();
         Project? source = null;
-        var sourceButton = PickerButton.ForChoices("設定の引き継ぎ元", [], 0, i => source = i == 0 ? null : existing[i - 1]);
+        var sourceButton = PickerButton.ForChoices(Texts.Get("NewProject_Source"), [], 0, i => source = i == 0 ? null : existing[i - 1]);
         var sourceHint = new TextBlock
         {
             Style = caption,
             TextWrapping = TextWrapping.Wrap,
-            Text = "ステータスの名前・カテゴリ・並びと、工数・稼働日などの設定を引き継ぎます。作った後も、プロジェクトの設定で変えられます。",
+            Text = Texts.Get("NewProject_SourceDescription"),
         };
 
         var error = new InfoBar { Severity = InfoBarSeverity.Error, IsClosable = false };
@@ -105,7 +104,7 @@ public static partial class NewProjectDialog
         // 作成できないあいだは、その理由をその場に示す（UX 規約 UX-27）
         var reason = new TextBlock { Style = caption, TextWrapping = TextWrapping.Wrap, Foreground = ThemeResources.Brush("Viz.Delay") };
 
-        var dialog = AppDialog.Create(root, "新しいプロジェクト", new ScrollViewer
+        var dialog = AppDialog.Create(root, Texts.Get("NewProject_Title"), new ScrollViewer
         {
             MaxHeight = 520,
             Content = new StackPanel
@@ -115,24 +114,24 @@ public static partial class NewProjectDialog
                 Children =
                 {
                     name,
-                    PickerButton.Labeled("種類", kind),
+                    PickerButton.Labeled(Texts.Get("NewProject_Kind"), kind),
                     teamPanel,
-                    new StackPanel { Spacing = 4, Children = { PickerButton.Labeled("設定の引き継ぎ元", sourceButton), sourceHint } },
+                    new StackPanel { Spacing = 4, Children = { PickerButton.Labeled(Texts.Get("NewProject_Source"), sourceButton), sourceHint } },
                     reason,
                     error,
                 },
             },
-        }, "作成");
+        }, Texts.Get("Common_Create"));
         dialog.IsPrimaryButtonEnabled = false;
         dialog.Opened += (_, _) => name.Focus(FocusState.Programmatic);
 
         void FillSources()
         {
             // 引き継ぎ元の候補は種類によって既定の名前が変わる。選んでいたプロジェクトは選んだままにする
-            var labels = new List<string> { team ? "チームのプロジェクトの既定" : "個人のプロジェクトの既定" };
+            var labels = new List<string> { team ? Texts.Get("NewProject_TeamDefaults") : Texts.Get("NewProject_PersonalDefaults") };
             labels.AddRange(existing.Select(p => ProjectDisplay.Name(p)));
             var details = new List<string?> { null };
-            details.AddRange(existing.Select(p => (string?)(p.IsTeam ? "チーム" : "個人")));
+            details.AddRange(existing.Select(p => (string?)(p.IsTeam ? Texts.Get("Common_Team") : Texts.Get("Common_Personal"))));
             sourceButton.SetChoices(labels, source is null ? 0 : existing.IndexOf(source) + 1, details);
         }
 
@@ -141,10 +140,10 @@ public static partial class NewProjectDialog
 
         void Validate()
         {
-            string? problem = string.IsNullOrWhiteSpace(name.Text) ? "プロジェクト名を入力すると作成できます"
-                : team && org is null ? "Organization を選ぶと作成できます"
-                : team && repoIndex < 0 ? "タスクを作成するリポジトリを選ぶと作成できます"
-                : team && IsNewRepository() && !RepositoryNamePattern().IsMatch(repoName.Text.Trim()) ? "新しいリポジトリの名前は、英数字と . _ - で入力してください（例: web-renewal）"
+            string? problem = string.IsNullOrWhiteSpace(name.Text) ? Texts.Get("NewProject_NeedName")
+                : team && org is null ? Texts.Get("NewProject_NeedOrganization")
+                : team && repoIndex < 0 ? Texts.Get("NewProject_NeedRepository")
+                : team && IsNewRepository() && !RepositoryNamePattern().IsMatch(repoName.Text.Trim()) ? Texts.Get("NewProject_InvalidRepositoryName")
                 : null;
             reason.Text = problem is null ? "" : "⚠ " + problem;
             reason.Visibility = problem is null ? Visibility.Collapsed : Visibility.Visible;
@@ -156,12 +155,12 @@ public static partial class NewProjectDialog
         Validate();
         kind.Pick = async b =>
         {
-            if (await ValuePickers.ChoiceAsync(b, "種類", ["個人", "チーム"], team ? 1 : 0,
-                ["自分だけが使うプロジェクト", "Organization で共有するプロジェクト"]) is { } index)
+            if (await ValuePickers.ChoiceAsync(b, Texts.Get("NewProject_Kind"), [Texts.Get("Common_Personal"), Texts.Get("Common_Team")], team ? 1 : 0,
+                [Texts.Get("NewProject_PersonalTip"), Texts.Get("NewProject_TeamTip")]) is { } index)
             {
                 if (index == 1 && usableOrgs.Count == 0)
                 {
-                    error.Message = "チームのプロジェクトを作れる Organization がありません。" + orgHint.Text;
+                    error.Message = Texts.Format("Common_TwoSentences", Texts.Get("NewProject_NoTeamOrganizations"), orgHint.Text);
                     error.IsOpen = true;
                     return;
                 }
@@ -195,7 +194,7 @@ public static partial class NewProjectDialog
                 var repos = await services.Api.ListOrganizationRepositoriesAsync(org.Login);
                 if (org.CanCreateRepositories)
                 {
-                    repositories.Add(("新しいリポジトリを作成する", NewRepositoryTag));
+                    repositories.Add((Texts.Get("NewProject_NewRepository"), NewRepositoryTag));
                 }
 
                 repositories.AddRange(repos.Where(r => r.CanWrite).Select(r => (r.NameWithOwner, (object?)r)));
@@ -218,7 +217,7 @@ public static partial class NewProjectDialog
 
         repoButton.Pick = async b =>
         {
-            if (await ValuePickers.ChoiceAsync(b, "タスクを作成するリポジトリ", [.. repositories.Select(r => r.Label)], repoIndex) is { } index)
+            if (await ValuePickers.ChoiceAsync(b, Texts.Get("NewProject_Repository"), [.. repositories.Select(r => r.Label)], repoIndex) is { } index)
             {
                 repoIndex = index;
                 repoButton.SelectedIndex = index;
@@ -273,7 +272,7 @@ public static partial class NewProjectDialog
             }
         };
 
-        AutomationProperties.SetName(repoName, "新しいリポジトリの名前");
+        AutomationProperties.SetName(repoName, Texts.Get("NewProject_RepositoryName"));
 
         await dialog.ShowAsync();
         return created;
@@ -310,20 +309,18 @@ public static partial class NewProjectDialog
 
     private static string ProblemLabel(Organization org) => org.Problem switch
     {
-        OrganizationAccessProblem.OAuthAppNotApproved => "Tasklabe が未承認",
-        OrganizationAccessProblem.SamlSsoRequired => "SSO の承認が必要",
-        OrganizationAccessProblem.Forbidden => "アクセス権がありません",
-        _ => "プロジェクトを作成する権限がありません",
+        OrganizationAccessProblem.OAuthAppNotApproved => Texts.Get("Org_NotApproved"),
+        OrganizationAccessProblem.SamlSsoRequired => Texts.Get("Org_SsoRequired"),
+        OrganizationAccessProblem.Forbidden => Texts.Get("Org_Forbidden"),
+        _ => Texts.Get("Org_CannotCreate"),
     };
 
     public static string ProblemAdvice(Organization org) => org.Problem switch
     {
-        OrganizationAccessProblem.OAuthAppNotApproved =>
-            "組織が外部アプリの利用を制限しています。組織の管理者に Tasklabe の承認を依頼してください。",
-        OrganizationAccessProblem.SamlSsoRequired =>
-            "組織がシングルサインオン（SAML）を利用しています。GitHub でトークンの SSO 承認を行ってください。",
-        OrganizationAccessProblem.Forbidden => "組織のプロジェクトを参照する権限がありません。",
-        _ => "組織でプロジェクトを作成する権限がありません。",
+        OrganizationAccessProblem.OAuthAppNotApproved => Texts.Get("Org_NotApprovedAdvice"),
+        OrganizationAccessProblem.SamlSsoRequired => Texts.Get("Org_SsoRequiredAdvice"),
+        OrganizationAccessProblem.Forbidden => Texts.Get("Org_ForbiddenAdvice"),
+        _ => Texts.Get("Org_CannotCreateAdvice"),
     };
 
     /// <summary>GitHub 上の Tasklabe の認可設定ページ。組織へのアクセスをリクエストできる。</summary>
@@ -339,8 +336,8 @@ public static partial class NewProjectDialog
 
     public static string ActionLabel(Organization org) => org.Problem switch
     {
-        OrganizationAccessProblem.OAuthAppNotApproved => $"{org.Login} への承認をリクエストする",
-        OrganizationAccessProblem.SamlSsoRequired => $"{org.Login} の SSO を承認する",
+        OrganizationAccessProblem.OAuthAppNotApproved => Texts.Format("Org_RequestApproval", org.Login),
+        OrganizationAccessProblem.SamlSsoRequired => Texts.Format("Org_AuthorizeSso", org.Login),
         _ => "",
     };
 }

@@ -38,38 +38,38 @@ internal static class TaskMenu
 
         if (many)
         {
-            menu.Add(new MenuHeader($"{tasks.Count} 件を選択中"));
+            menu.Add(new MenuHeader(Texts.Format("SelectionBar_Count", tasks.Count)));
             menu.Add(MenuSeparator.Instance);
         }
 
         // 値を変える
         var status = StatusSubmenu(tasks, projects);
         menu.Add(status with { IsEnabled = !isParent && status.Items.Count > 0 });
-        menu.Add(Item("進捗率…", "\uE9D2", "task.progress", target, enabled: !isParent && tasks.Any(t => !t.IsDone)));
+        menu.Add(Item(Texts.Get("Menu_Progress"), "\uE9D2", "task.progress", target, enabled: !isParent && tasks.Any(t => !t.IsDone)));
         if (anyTeam)
         {
-            menu.Add(Item("担当者…", "\uE77B", "task.assign", target));
+            menu.Add(Item(Texts.Get("Menu_Assignee"), "\uE77B", "task.assign", target));
         }
 
-        menu.Add(Item("期日…", "\uE787", "task.due", target));
-        menu.Add(Item("想定工数…", "\uE916", "task.estimate", target, enabled: !isParent));
+        menu.Add(Item(Texts.Get("Menu_Due"), "\uE787", "task.due", target));
+        menu.Add(Item(Texts.Get("Menu_Estimate"), "\uE916", "task.estimate", target, enabled: !isParent));
         menu.Add(MenuSeparator.Instance);
 
         // タスクを扱う（1 件にしか効かない操作は、複数を選んでいるときは無効にする）
-        menu.Add(Item("詳細を開く", "\uE8A7", "task.detail", target, enabled: !many));
-        menu.Add(Item("子タスクを追加", "\uE710", "task.addChild", target, enabled: !many && TaskShortcuts.CanHaveChildren(task)));
+        menu.Add(Item(KeyHints.Name("task.detail"), "\uE8A7", "task.detail", target, enabled: !many));
+        menu.Add(Item(KeyHints.Name("task.addChild"), "\uE710", "task.addChild", target, enabled: !many && TaskShortcuts.CanHaveChildren(task)));
         if (anyTeam)
         {
             bool issue = task.Kind == TaskKind.Issue;
-            menu.Add(Item(issue ? "計画に移す…" : "課題へ戻す", issue ? "\uE8DE" : "\uE7C1", "task.plan", target));
+            menu.Add(Item(issue ? Texts.Get("Menu_MoveToPlan") : Texts.Get("Menu_MoveToTriage"), issue ? "\uE8DE" : "\uE7C1", "task.plan", target));
         }
 
-        menu.Add(Item("別のプロジェクトへ移す…", "\uE8DE", "task.project", target));
-        menu.Add(Item("作業するリポジトリ…", "\uE8B7", "task.repository", target));
-        menu.Add(Item("ブランチを作る・選ぶ…", "\uE8D4", "task.branch", target, enabled: !many && !task.IsLocal));
-        menu.Add(Item("GitHub で開く", "\uE774", "task.openInBrowser", target, enabled: !many && task.Url is not null));
-        menu.Add(Item(many || !TaskKeys.Has(task) ? "番号をコピー" : $"{TaskKeys.Of(task)} をコピー", "\uE8C8", "task.copyKey", target, enabled: tasks.Any(TaskKeys.Has)));
-        menu.Add(Item("Issue の URL をコピー", "\uE8C8", "task.copyUrl", target, enabled: !many && task.Url is not null));
+        menu.Add(Item(Texts.Format("Common_Ellipsis", KeyHints.Name("task.project")), "\uE8DE", "task.project", target));
+        menu.Add(Item(Texts.Get("Menu_Repository"), "\uE8B7", "task.repository", target));
+        menu.Add(Item(Texts.Format("Common_Ellipsis", KeyHints.Name("task.branch")), "\uE8D4", "task.branch", target, enabled: !many && !task.IsLocal));
+        menu.Add(Item(KeyHints.Name("task.openInBrowser"), "\uE774", "task.openInBrowser", target, enabled: !many && task.Url is not null));
+        menu.Add(Item(many || !TaskKeys.Has(task) ? KeyHints.Name("task.copyKey") : Texts.Format("Menu_CopyKeyOf", TaskKeys.Of(task)), "\uE8C8", "task.copyKey", target, enabled: tasks.Any(TaskKeys.Has)));
+        menu.Add(Item(KeyHints.Name("task.copyUrl"), "\uE8C8", "task.copyUrl", target, enabled: !many && task.Url is not null));
 
         // 画面に固有の操作
         if (extras is { Count: > 0 })
@@ -80,7 +80,7 @@ internal static class TaskMenu
 
         // 取り消せない操作は末尾に分ける
         menu.Add(MenuSeparator.Instance);
-        menu.Add(Item("削除…", "\uE74D", "task.delete", target) with { IsDestructive = true });
+        menu.Add(Item(Texts.Format("Common_Ellipsis", KeyHints.Name("task.delete")), "\uE74D", "task.delete", target) with { IsDestructive = true });
         return menu;
     }
 
@@ -88,7 +88,7 @@ internal static class TaskMenu
     /// 依存関係の操作（要件 F-DEP-07、08）。計画の表とガントチャートで、画面に固有の操作として同じ項目を同じ順に並べる。
     /// 1 件にしか効かないため、複数を選んでいるときは無効にする。
     /// </summary>
-    /// <param name="hasChildren">配下を持つタスクか（「配下を予定の順につなぐ…」を使える）。</param>
+    /// <param name="hasChildren">配下を持つタスクか（「配下を予定の順に接続…」を使える）。</param>
     /// <param name="plan">先行タスクの名前を引くタスク（同じプロジェクトの計画）。</param>
     public static IReadOnlyList<MenuEntry> DependencyEntries(TaskTarget target, bool hasChildren, IEnumerable<TaskItem> plan)
     {
@@ -104,22 +104,21 @@ internal static class TaskMenu
         }
 
         var predecessors = task.BlockedBy.Select(id => (MenuEntry)new MenuCommand(
-            byIssue.TryGetValue(id, out var pred) ? $"{TaskKeys.Of(pred)} {pred.Title}" : "（このプロジェクトにないタスク）", null,
+            byIssue.TryGetValue(id, out var pred) ? $"{TaskKeys.Of(pred)} {pred.Title}" : Texts.Get("Menu_ExternalTask"), null,
             () => App.Current.Services.Edits.SetBlockedByAsync(task, task.BlockedBy.Where(b => b != id)))).ToList();
 
         return
         [
-            new MenuCommand("配下を予定の順につなぐ…", "\uE71B", () => TaskCommands.ChainChildrenAsync(target.Anchor.XamlRoot, task))
+            new MenuCommand(Texts.Get("Menu_ChainChildren"), "\uE71B", () => TaskCommands.ChainChildrenAsync(target.Anchor.XamlRoot, task))
             {
                 IsEnabled = single && hasChildren,
             },
-            Item("先行タスクを追加…", "\uE71B", "task.predecessor", target, enabled: single),
-            new MenuSubmenu("先行タスクを解除", "\uE711", predecessors) { IsEnabled = single && predecessors.Count > 0 },
-            new MenuCommand("後続を待たせない", null, () => App.Current.Services.Edits.SetNonBlockingAsync(task, !task.NonBlocking))
+            Item(Texts.Format("Common_Ellipsis", KeyHints.Name("task.predecessor")), "\uE71B", "task.predecessor", target, enabled: single),
+            new MenuSubmenu(Texts.Get("Menu_RemovePredecessor"), "\uE711", predecessors) { IsEnabled = single && predecessors.Count > 0 },
+            new MenuCommand(Texts.Get("Menu_NonBlocking"), null, () => App.Current.Services.Edits.SetNonBlockingAsync(task, !task.NonBlocking))
             {
                 IsEnabled = single,
                 IsChecked = task.NonBlocking,
-                ToolTip = "このタスクの終わりを待たずに、後続（親の後続を含む）を始められるようにします",
             },
         ];
     }
@@ -129,7 +128,7 @@ internal static class TaskMenu
         IReadOnlyList<MenuEntry>? extras = null, bool isParent = false)
     {
         var items = await BuildAsync(target, extras, isParent);
-        new MorphMenu("タスクのメニュー", items).Show((FrameworkElement)placementTarget, position);
+        new MorphMenu(Texts.Get("Menu_TaskMenuName"), items).Show((FrameworkElement)placementTarget, position);
     }
 
     /// <summary>ステータスのサブメニュー。選んだものは、選んでいるすべてのタスクに効く。</summary>
@@ -152,7 +151,7 @@ internal static class TaskMenu
             });
         }
 
-        return new MenuSubmenu("ステータス", StatusVisuals.Glyph(tasks[0].Category), items)
+        return new MenuSubmenu(Texts.Get("Menu_Status"), StatusVisuals.Glyph(tasks[0].Category), items)
         {
             GlyphBrushKey = StatusVisuals.BrushKey(tasks[0].Category),
         };

@@ -55,7 +55,7 @@ public sealed partial class TaskListView : UserControl
             IssueHeader.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
             TaskHeader.Visibility = value ? Visibility.Collapsed : Visibility.Visible;
             List.ItemTemplate = (DataTemplate)Resources[value ? "IssueRow" : "TaskRow"];
-            AutomationProperties.SetName(List, value ? "課題の一覧" : "タスクの一覧");
+            AutomationProperties.SetName(List, value ? Texts.Get("List_IssuesName") : Texts.Get("List_TasksName"));
             UpdateColumns();
         }
     }

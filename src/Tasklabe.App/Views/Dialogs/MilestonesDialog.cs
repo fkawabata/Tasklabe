@@ -40,7 +40,7 @@ public static class MilestonesDialog
         var summaries = MilestonePlan.Summarize(plan, project.Milestones).ToDictionary(s => s.Milestone.Id, StringComparer.Ordinal);
         var rows = new List<Row>();
         var list = new StackPanel { Spacing = 8 };
-        var error = new InfoBar { Severity = InfoBarSeverity.Error, IsClosable = false, IsOpen = false, Title = "保存できませんでした" };
+        var error = new InfoBar { Severity = InfoBarSeverity.Error, IsClosable = false, IsOpen = false, Title = Texts.Get("Milestones_SaveFailed") };
         var today = AppClock.Today;
 
         Row AddRow(Milestone? source, DateOnly? due)
@@ -48,15 +48,15 @@ public static class MilestonesDialog
             var row = new Row
             {
                 Source = source,
-                Title = new TextBox { Text = source?.Title ?? "", PlaceholderText = "名前（リリース、設計完了 など）" },
-                Due = new PickerButton("期日"),
+                Title = new TextBox { Text = source?.Title ?? "", PlaceholderText = Texts.Get("Milestones_NamePlaceholder") },
+                Due = new PickerButton(Texts.Get("SelectionBar_Due")),
                 DueValue = due,
             };
-            AutomationProperties.SetName(row.Title, "マイルストーンの名前");
-            void ShowDue() => row.Due.SetValue(row.DueValue is { } d ? DateText.Short(d, today) : null, "\uE787", placeholder: "期日を選ぶ…");
+            AutomationProperties.SetName(row.Title, Texts.Get("Milestones_NameField"));
+            void ShowDue() => row.Due.SetValue(row.DueValue is { } d ? DateText.Short(d, today) : null, "\uE787", placeholder: Texts.Get("Bulk_ChooseDue"));
             row.Due.Pick = async b =>
             {
-                if (await ValuePickers.DateAsync(b, null, "期日", [row.DueValue]) is { } picked)
+                if (await ValuePickers.DateAsync(b, null, Texts.Get("SelectionBar_Due"), [row.DueValue]) is { } picked)
                 {
                     row.DueValue = picked.Value;
                     ShowDue();
@@ -79,21 +79,23 @@ public static class MilestonesDialog
             var count = new TextBlock { Style = caption, VerticalAlignment = VerticalAlignment.Center };
             if (source is not null && summaries.GetValueOrDefault(source.Id) is { } s)
             {
-                count.Text = s.Total == 0 ? "タスクなし" : $"進捗 {s.Progress.ProgressPercent:0}%・完了 {s.Done} / {s.Total} 件";
+                count.Text = s.Total == 0 ? Texts.Get("Status_NoTasks") : Texts.Format("Milestones_Progress", s.Progress.ProgressPercent, s.Done, s.Total);
             }
 
             Place(grid, count, 3);
 
             var remove = new Button { Content = new FontIcon { Glyph = "\uE74D", FontSize = 14 }, Style = AppResources.Style("SubtleButtonStyle") };
-            AutomationProperties.SetName(remove, "このマイルストーンを消す");
-            ToolTipService.SetToolTip(remove, "消す（タスクは残り、期日から次のマイルストーンに入ります）");
+            AutomationProperties.SetName(remove, Texts.Get("Milestones_Delete"));
+            ToolTipService.SetToolTip(remove, Texts.Get("Milestones_Delete"));
             remove.Click += (_, _) =>
             {
                 row.Deleted = !row.Deleted;
                 grid.Opacity = row.Deleted ? 0.4 : 1;
                 row.Title.IsEnabled = row.Due.IsEnabled = !row.Deleted;
                 remove.Content = new FontIcon { Glyph = row.Deleted ? "\uE7A7" : "\uE74D", FontSize = 14 };
-                AutomationProperties.SetName(remove, row.Deleted ? "消すのを取りやめる" : "このマイルストーンを消す");
+                var label = row.Deleted ? Texts.Get("Milestones_Restore") : Texts.Get("Milestones_Delete");
+                AutomationProperties.SetName(remove, label);
+                ToolTipService.SetToolTip(remove, label);
             };
             Place(grid, remove, 4);
 
@@ -111,14 +113,14 @@ public static class MilestonesDialog
 
         var addText = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
         addText.Children.Add(new FontIcon { Glyph = "\uE710", FontSize = 12 });
-        addText.Children.Add(new TextBlock { Text = "マイルストーンを追加" });
+        addText.Children.Add(new TextBlock { Text = Texts.Get("Milestones_Add") });
         var add = new Button { Content = addText, Style = AppResources.Style("SubtleButtonStyle") };
         add.Click += (_, _) => AddRow(null, null).Title.Focus(FocusState.Keyboard);
 
         var panel = new StackPanel { Spacing = 12, Width = 720 };
         panel.Children.Add(new TextBlock
         {
-            Text = "プロジェクトの期限です。期日までのタスクが自動で入り、ガントの区切りと集計に使います。GitHub ではリポジトリの Milestone になります。",
+            Text = Texts.Get("Milestones_Description"),
             Style = caption,
             TextWrapping = TextWrapping.Wrap,
         });
@@ -126,15 +128,15 @@ public static class MilestonesDialog
         panel.Children.Add(new ScrollViewer { Content = list, MaxHeight = 360, VerticalScrollBarVisibility = ScrollBarVisibility.Auto, Padding = new Thickness(0, 0, 12, 0) });
         panel.Children.Add(add);
 
-        var dialog = AppDialog.Create(root, "マイルストーン", panel, "保存");
+        var dialog = AppDialog.Create(root, Texts.Get("Field_Milestone"), panel, Texts.Get("Common_Save"));
         dialog.Resources["ContentDialogMaxWidth"] = 800.0;
         dialog.Opened += (_, _) => (focusRow?.Title ?? rows.FirstOrDefault()?.Title)?.Focus(FocusState.Programmatic);
         dialog.PrimaryButtonClick += async (d, args) =>
         {
             if (rows.FirstOrDefault(r => !r.Deleted && r.Source is not null && string.IsNullOrWhiteSpace(r.Title.Text)) is { } blank)
             {
-                error.Title = "名前を入れてください";
-                error.Message = "名前のないマイルストーンは保存できません。消すときは、ごみ箱のボタンを押します。";
+                error.Title = Texts.Get("Milestones_NeedName");
+                error.Message = Texts.Get("Milestones_NeedNameMessage");
                 error.IsOpen = true;
                 args.Cancel = true;
                 blank.Title.Focus(FocusState.Keyboard);
@@ -149,7 +151,7 @@ public static class MilestonesDialog
             }
             catch (Exception ex) when (ex is GitHubException or HttpRequestException or InvalidOperationException)
             {
-                error.Title = "保存できませんでした";
+                error.Title = Texts.Get("Milestones_SaveFailed");
                 error.Message = ex is InvalidOperationException ? ex.Message : SyncEngine.Describe(ex);
                 error.IsOpen = true;
                 args.Cancel = true;
@@ -198,7 +200,7 @@ public static class MilestonesDialog
         {
             await services.Edits.ReassignMilestonesAsync(project.Id, tasksBefore, before);
             App.Current.Shell?.NotifyDataChanged();
-            App.Current.Shell?.ShowToast("マイルストーンを保存しました");
+            App.Current.Shell?.ShowToast(Texts.Get("Milestones_Saved"));
         }
     }
 

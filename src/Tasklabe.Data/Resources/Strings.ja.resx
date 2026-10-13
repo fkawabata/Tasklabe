@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CannotAssign" xml:space="preserve">
+    <value>@{0} はこのリポジトリのタスクに割り当てられません。</value>
+  </data>
+  <data name="GitHubNotResponding" xml:space="preserve">
+    <value>GitHub が応答しない状態が続いたため、変更を反映できませんでした（{0}）。</value>
+  </data>
+  <data name="IssueNotFound" xml:space="preserve">
+    <value>タスクの Issue が見つかりません。</value>
+  </data>
+  <data name="ListSeparator" xml:space="preserve">
+    <value>、</value>
+  </data>
+  <data name="MilestonesNeedRepository" xml:space="preserve">
+    <value>プロジェクトにリポジトリがつながっていないため、マイルストーンを扱えません。</value>
+  </data>
+  <data name="NewTaskUnreadable" xml:space="preserve">
+    <value>作成するタスクの内容を読み取れません。</value>
+  </data>
+  <data name="NoEditPermission" xml:space="preserve">
+    <value>このプロジェクトまたはリポジトリを編集する権限がないため、変更を反映できませんでした。</value>
+  </data>
+  <data name="NotFoundOnGitHub" xml:space="preserve">
+    <value>対象のタスクまたはプロジェクトが GitHub 上に見つかりません。削除された可能性があります。</value>
+  </data>
+  <data name="OrganizationNotApproved" xml:space="preserve">
+    <value>組織が Tasklabe の利用を承認していないため、変更を反映できませんでした。</value>
+  </data>
+  <data name="PersonalRepositoryDescription" xml:space="preserve">
+    <value>Tasklabe の個人タスク</value>
+  </data>
+  <data name="PreparingInbox" xml:space="preserve">
+    <value>Inbox を準備しています</value>
+  </data>
+  <data name="PreparingPersonalRepository" xml:space="preserve">
+    <value>個人用リポジトリを準備しています</value>
+  </data>
+  <data name="ProjectHasNoRepository" xml:space="preserve">
+    <value>プロジェクトにリポジトリがリンクされていません。</value>
+  </data>
+  <data name="ProjectNotFound" xml:space="preserve">
+    <value>プロジェクトが見つかりません。</value>
+  </data>
+  <data name="PullProblems" xml:space="preserve">
+    <value>次のプロジェクトを取得できませんでした: {0}</value>
+  </data>
+  <data name="SamlRequired" xml:space="preserve">
+    <value>組織のシングルサインオン（SAML）の承認が必要なため、変更を反映できませんでした。</value>
+  </data>
+  <data name="StatusInUse_One" xml:space="preserve">
+    <value>「{0}」のタスクが {1} 件あるため、外せません。先に別のステータスへ移してください。</value>
+  </data>
+  <data name="StatusInUse_Other" xml:space="preserve">
+    <value>「{0}」のタスクが {1} 件あるため、外せません。先に別のステータスへ移してください。</value>
+  </data>
+  <data name="SyncUnexpectedError" xml:space="preserve">
+    <value>同期中に予期しないエラーが発生しました。</value>
+  </data>
+  <data name="TaskRepositoryNotFound" xml:space="preserve">
+    <value>タスクのリポジトリが見つかりません。</value>
+  </data>
+  <data name="TeamRepositoryDescription" xml:space="preserve">
+    <value>Tasklabe のチームプロジェクト「{0}」</value>
+  </data>
+  <data name="UnexpectedResponse" xml:space="preserve">
+    <value>GitHub から想定外の応答が返ったため、変更を反映できませんでした。</value>
+  </data>
+</root>

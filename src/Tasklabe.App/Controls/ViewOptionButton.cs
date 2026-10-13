@@ -21,12 +21,12 @@ internal static class ViewOptions
     public static IReadOnlyList<ViewOption<TaskOrdering>> Orderings(bool hasPlanOrder)
     {
         List<ViewOption<TaskOrdering>> list = hasPlanOrder
-            ? [new(TaskOrdering.Default, "計画の順", null, "\uE8FD"), new(TaskOrdering.Due, "期日", "早い順", "\uE787")]
-            : [new(TaskOrdering.Default, "期日", "早い順", "\uE787")];
-        list.Add(new(TaskOrdering.Updated, "更新", "新しい順", "\uE81C"));
-        list.Add(new(TaskOrdering.Created, "作成", "新しい順", "\uE710"));
-        list.Add(new(TaskOrdering.Estimate, "工数", "大きい順", "\uE916"));
-        list.Add(new(TaskOrdering.Title, "タイトル", "名前の順", "\uE8D2"));
+            ? [new(TaskOrdering.Default, Texts.Get("Order_Plan"), null, "\uE8FD"), new(TaskOrdering.Due, Texts.Get("Order_Due"), Texts.Get("Order_Earliest"), "\uE787")]
+            : [new(TaskOrdering.Default, Texts.Get("Order_Due"), Texts.Get("Order_Earliest"), "\uE787")];
+        list.Add(new(TaskOrdering.Updated, Texts.Get("Order_Updated"), Texts.Get("Order_Newest"), "\uE81C"));
+        list.Add(new(TaskOrdering.Created, Texts.Get("Order_Created"), Texts.Get("Order_Newest"), "\uE710"));
+        list.Add(new(TaskOrdering.Estimate, Texts.Get("Order_Estimate"), Texts.Get("Order_Largest"), "\uE916"));
+        list.Add(new(TaskOrdering.Title, Texts.Get("Order_Title"), Texts.Get("Order_Alphabetical"), "\uE8D2"));
         return list;
     }
 
@@ -113,7 +113,7 @@ public sealed partial class ViewOptionButton : Button, IPickerTrigger
         _valueIcon.Glyph = glyph;
         var text = $"{_name}: {label}";
         ToolTipService.SetToolTip(this, KeyHints.Tip(_actionId, text));
-        AutomationProperties.SetName(this, $"{text}。押すと変更できます");
+        AutomationProperties.SetName(this, text);
     }
 
     /// <summary>狭いときの形（種類のアイコンと値のアイコンだけ）。この形では、ボタンの形の起点として扱わない。</summary>

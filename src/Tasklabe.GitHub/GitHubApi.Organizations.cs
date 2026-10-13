@@ -1,6 +1,7 @@
 using System.Text.Json.Nodes;
 using Tasklabe.Core.Domain;
 using Tasklabe.GitHub.GraphQL;
+using Tasklabe.GitHub.Resources;
 
 namespace Tasklabe.GitHub;
 
@@ -87,7 +88,7 @@ public sealed partial class GitHubApi
         var data = await _client.SendAsync(Queries.CreateOwnedRepository,
             new JsonObject { ["ownerId"] = organizationId, ["name"] = name, ["description"] = description },
             GitHubJsonContext.Default.GraphQLResponseCreateRepositoryData, ct).ConfigureAwait(false);
-        var r = data.CreateRepository?.Repository ?? throw new GitHubException("リポジトリを作成できませんでした。");
+        var r = data.CreateRepository?.Repository ?? throw new GitHubException(Strings.RepositoryCreateFailed);
         return new RepositoryInfo(r.Id, r.NameWithOwner);
     }
 
@@ -117,7 +118,7 @@ public sealed partial class GitHubApi
     {
         var data = await _client.SendAsync(Queries.TransferIssue, new JsonObject { ["issueId"] = issueId, ["repositoryId"] = repositoryId },
             GitHubJsonContext.Default.GraphQLResponseTransferIssueData, ct).ConfigureAwait(false);
-        var issue = data.TransferIssue?.Issue ?? throw new GitHubException("Issue を移動できませんでした。");
+        var issue = data.TransferIssue?.Issue ?? throw new GitHubException(Strings.IssueTransferFailed);
         return new CreatedIssue(issue.Id!, issue.Number, issue.Url);
     }
 

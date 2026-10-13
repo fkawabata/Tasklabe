@@ -33,13 +33,13 @@ public sealed partial class ProjectSettingsPage : Page
         }
 
         _project = project;
-        TitleText.Text = $"{ProjectDisplay.Name(project)} の設定";
+        TitleText.Text = Texts.Format("ProjectSettings_Title", ProjectDisplay.Name(project));
         KindIcon.Glyph = project.IsTeam ? "\uE716" : "\uE77B";
-        KindText.Text = project.IsTeam ? "チーム" : "個人";
+        KindText.Text = project.IsTeam ? Texts.Get("Common_Team") : Texts.Get("Common_Personal");
         IntroText.Text = project.IsTeam
-            ? "このプロジェクトだけの設定です。GitHub の Project に保存し、メンバー全員で同じ設定を使います。ショートカットキーなどアプリ全体の設定は、左下の「設定」で変えます。"
-            : "このプロジェクトだけの設定です。設定しない項目は、個人のプロジェクトの既定に従います。";
-        DefaultsLink.Content = project.IsTeam ? "チームのプロジェクトの既定を開く" : "個人のプロジェクトの既定を開く";
+            ? Texts.Get("ProjectSettings_TeamIntro")
+            : Texts.Get("ProjectSettings_PersonalIntro");
+        DefaultsLink.Content = project.IsTeam ? Texts.Get("ProjectSettings_OpenTeamDefaults") : Texts.Get("ProjectSettings_OpenPersonalDefaults");
 
         // チームのプロジェクトは、Project を編集できる人だけが設定を変えられる
         bool canEdit = true;
@@ -58,8 +58,8 @@ public sealed partial class ProjectSettingsPage : Page
 
             if (!canEdit)
             {
-                AccessChip.Show("\uE72E", "表示のみ", "表示のみ", new ChipSection(ChipSeverity.Caution, "表示のみ",
-                    "この Project を編集する権限がないため、設定は表示だけです。変えたいときは、Project の管理者に依頼してください。", [], []));
+                var readOnly = Texts.Get("ProjectSettings_ReadOnly");
+                AccessChip.Show("\uE72E", readOnly, readOnly, new ChipSection(ChipSeverity.Caution, readOnly, Texts.Get("ProjectSettings_ReadOnlyMessage"), [], []));
             }
         }
 

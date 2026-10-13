@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddToProjectFailed" xml:space="preserve">
+    <value>Couldn't add the task to the project.</value>
+  </data>
+  <data name="AuthenticationInvalid" xml:space="preserve">
+    <value>Your GitHub sign-in is no longer valid (401).</value>
+  </data>
+  <data name="AuthenticationInvalidDetail" xml:space="preserve">
+    <value>Your GitHub sign-in is no longer valid (401, request-id: {0}, {1}).</value>
+  </data>
+  <data name="BranchCreateFailed" xml:space="preserve">
+    <value>Couldn't create the branch. Check that no branch with the same name exists.</value>
+  </data>
+  <data name="CannotConnect" xml:space="preserve">
+    <value>Can't connect to GitHub.</value>
+  </data>
+  <data name="CodeExpired" xml:space="preserve">
+    <value>The code expired. Try again.</value>
+  </data>
+  <data name="DeviceCodeFailed" xml:space="preserve">
+    <value>Couldn't get a device code.</value>
+  </data>
+  <data name="EmptyResponse" xml:space="preserve">
+    <value>GitHub returned an empty response.</value>
+  </data>
+  <data name="FieldAddFailed" xml:space="preserve">
+    <value>Couldn't add the “{0}” field to the project.</value>
+  </data>
+  <data name="FieldMissing" xml:space="preserve">
+    <value>The project has no “{0}” field.</value>
+  </data>
+  <data name="HttpError" xml:space="preserve">
+    <value>GitHub returned an error ({0}).</value>
+  </data>
+  <data name="IssueCreateFailed" xml:space="preserve">
+    <value>Couldn't create the issue.</value>
+  </data>
+  <data name="IssueTransferFailed" xml:space="preserve">
+    <value>Couldn't move the issue.</value>
+  </data>
+  <data name="KindOptionMissing" xml:space="preserve">
+    <value>The type field has no “{0}” option.</value>
+  </data>
+  <data name="MilestoneCreateFailed" xml:space="preserve">
+    <value>Couldn't create the milestone.</value>
+  </data>
+  <data name="MilestoneIdUnreadable" xml:space="preserve">
+    <value>Couldn't read the milestone ID.</value>
+  </data>
+  <data name="MilestonePermission" xml:space="preserve">
+    <value>You don't have permission to change milestones in this repository (Write access or higher is required).</value>
+  </data>
+  <data name="MilestoneUpdateFailed" xml:space="preserve">
+    <value>Couldn't update the milestone.</value>
+  </data>
+  <data name="NonBlockingOptionDescription" xml:space="preserve">
+    <value>Don't block successors (excluded from Tasklabe's dependency scheduling)</value>
+  </data>
+  <data name="NotSignedIn" xml:space="preserve">
+    <value>You're not signed in.</value>
+  </data>
+  <data name="ProjectCreateFailed" xml:space="preserve">
+    <value>Couldn't create the project.</value>
+  </data>
+  <data name="ProjectNotFound" xml:space="preserve">
+    <value>Project not found.</value>
+  </data>
+  <data name="RepositoryCreateFailed" xml:space="preserve">
+    <value>Couldn't create the repository.</value>
+  </data>
+  <data name="RepositoryHasNoCommits" xml:space="preserve">
+    <value>{0} has no commits yet, so a branch can't be created.</value>
+  </data>
+  <data name="RepositoryNotFound" xml:space="preserve">
+    <value>Repository {0} not found.</value>
+  </data>
+  <data name="ScheduleOptionMissing" xml:space="preserve">
+    <value>The schedule field has no “{0}” option.</value>
+  </data>
+  <data name="SignInCanceled" xml:space="preserve">
+    <value>Sign-in was canceled.</value>
+  </data>
+  <data name="SignInFailed" xml:space="preserve">
+    <value>Sign-in failed.</value>
+  </data>
+  <data name="StatusFieldMissing" xml:space="preserve">
+    <value>The project has no Status field.</value>
+  </data>
+  <data name="TaskNotFound" xml:space="preserve">
+    <value>Task not found.</value>
+  </data>
+  <data name="ViewerFailed" xml:space="preserve">
+    <value>Couldn't get your user information.</value>
+  </data>
+</root>

@@ -13,7 +13,7 @@ public sealed class TaskGroupViewModel(MyTaskGroupKind kind, IReadOnlyList<TaskR
 
     public string Header => $"{label ?? Label} ({Count})";
 
-    private string Label => Kind == MyTaskGroupKind.Open ? "タスク" : "完了";
+    private string Label => Kind == MyTaskGroupKind.Open ? Texts.Get("MyTasks_Open") : Texts.Get("MyTasks_Done");
 }
 
 /// <param name="isTeam">チームのプロジェクトのタスクか（担当者を変えられるのはチームだけ）。</param>
@@ -67,7 +67,7 @@ public sealed class TaskRowViewModel(TaskItem task, string projectName, DateOnly
         {
             var local = Task.UpdatedAt.ToLocalTime();
             var day = DateOnly.FromDateTime(local.DateTime);
-            return day == today ? local.ToString("HH:mm", Services.DateText.Japanese)
+            return day == today ? local.ToString("HH:mm", Services.DateText.Culture)
                 : DateText.Short(day, today);
         }
     }
@@ -78,7 +78,11 @@ public sealed class TaskRowViewModel(TaskItem task, string projectName, DateOnly
     public bool HasIssueNumber => IssueNumberText.Length > 0;
 
     public string IssueAutomationName =>
-        $"{Title}、{StatusText}、更新 {UpdatedText}" + (AssigneeText.Length > 0 ? $"、担当 {AssigneeText}" : "");
+        string.Join(Texts.Get("Common_ListSeparator"), new[]
+        {
+            Title, StatusText, Texts.Format("Card_Updated", UpdatedText),
+            AssigneeText.Length > 0 ? Texts.Format("Card_Assignee", AssigneeText) : null,
+        }.OfType<string>());
 
     public string AssigneeText => string.Join(", ", Task.Assignees.Select(People.Display));
 
@@ -93,20 +97,23 @@ public sealed class TaskRowViewModel(TaskItem task, string projectName, DateOnly
     /// <summary>完了・中止したタスクの進捗率は変えられない。</summary>
     public bool CanChangeProgress => !Task.IsDone;
 
-    public string StatusButtonName => $"{Title} のステータス: {StatusText}。押すとステータスを変更できます";
+    public string StatusButtonName => Texts.Format("Row_ValueName", Title, Texts.Get("Field_Status"), StatusText);
 
-    public string AssigneeButtonName => $"{Title} の担当者: {(AssigneeText.Length > 0 ? AssigneeText : "なし")}。押すと変更できます";
+    public string AssigneeButtonName => Texts.Format("Row_ValueName", Title, Texts.Get("Field_Assignee"), AssigneeText.Length > 0 ? AssigneeText : Texts.Get("Common_None"));
 
-    public string DueButtonName => $"{Title} の期日: {(TargetText.Length > 0 ? TargetText : "なし")}。押すと変更できます";
+    public string DueButtonName => Texts.Format("Row_ValueName", Title, Texts.Get("SelectionBar_Due"), TargetText.Length > 0 ? TargetText : Texts.Get("Common_None"));
 
-    public string EstimateButtonName => $"{Title} の想定工数: {EstimateText}。押すと変更できます";
+    public string EstimateButtonName => Texts.Format("Row_ValueName", Title, Texts.Get("Field_Estimate"), EstimateText);
 
-    public string ProgressButtonName => $"{Title} の進捗率: {ProgressText}。押すと変更できます";
+    public string ProgressButtonName => Texts.Format("Row_ValueName", Title, Texts.Get("Field_Progress"), ProgressText);
 
     public string AutomationName =>
-        $"{Title}、{StatusText}、進捗 {ProgressText}、想定工数 {EstimateText}"
-        + (TargetText.Length > 0 ? $"、期日 {TargetText}" + (IsOverdue ? "（期日超過）" : "") : "")
-        + (AssigneeText.Length > 0 ? $"、担当 {AssigneeText}" : "");
+        string.Join(Texts.Get("Common_ListSeparator"), new[]
+        {
+            Title, StatusText, Texts.Format("Card_ProgressText", ProgressText), Texts.Format("Card_Estimate", EstimateText),
+            TargetText.Length > 0 ? Texts.Format("Card_Due", IsOverdue ? Texts.Format("DueDate_OverdueName", TargetText) : TargetText) : null,
+            AssigneeText.Length > 0 ? Texts.Format("Card_Assignee", AssigneeText) : null,
+        }.OfType<string>());
 }
 
 /// <summary>マイタスク（要件 F-UI-MY-01、02、05、07、UI デザイン設計書 3.4 節）。</summary>
@@ -185,7 +192,7 @@ public sealed partial class MyTasksViewModel(AppServices services) : ObservableO
         var remaining = groups.Where(g => g.Kind != MyTaskGroupKind.Done)
             .SelectMany(g => g.Tasks)
             .Sum(t => t.RemainingHours ?? 0);
-        SummaryText = $"残工数 {EffortText.Of(remaining)}";
+        SummaryText = Texts.Format("MyTasks_Remaining", EffortText.Of(remaining));
         IsEmpty = Groups.Count == 0;
         IsLoading = projects.Count == 0 && services.Sync.Status.State is not (Core.Abstractions.SyncState.Offline or Core.Abstractions.SyncState.Error);
     }

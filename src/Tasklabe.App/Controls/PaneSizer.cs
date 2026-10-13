@@ -36,7 +36,7 @@ public sealed partial class PaneSizer : Grid
         CornerRadius = AppResources.CornerRadius("Radius.Control");
         BackgroundTransition = new BrushTransition { Duration = TimeSpan.FromMilliseconds(83) };
         ProtectedCursor = InputSystemCursor.Create(InputSystemCursorShape.SizeWestEast);
-        ToolTipService.SetToolTip(this, "ドラッグで幅を変える。ダブルクリックで元の幅に戻す");
+        ToolTipService.SetToolTip(this, Texts.Get("PaneSizer_Tip"));
         Children.Add(_thumb);
         UpdateVisual();
         ActualThemeChanged += (_, _) => UpdateVisual();

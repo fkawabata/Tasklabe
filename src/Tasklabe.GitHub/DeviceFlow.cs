@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
+using Tasklabe.GitHub.Resources;
 
 namespace Tasklabe.GitHub;
 
@@ -18,7 +19,7 @@ public sealed class DeviceFlow(HttpClient http, GitHubHost host)
 
         if (response.DeviceCode is null || response.UserCode is null || response.VerificationUri is null)
         {
-            throw new GitHubException(response.ErrorDescription ?? response.Error ?? "デバイスコードを取得できませんでした。");
+            throw new GitHubException(response.ErrorDescription ?? response.Error ?? Strings.DeviceCodeFailed);
         }
 
         return new DeviceCode(
@@ -58,15 +59,15 @@ public sealed class DeviceFlow(HttpClient http, GitHubHost host)
                     interval += TimeSpan.FromSeconds(5);
                     continue;
                 case "access_denied":
-                    throw new GitHubAuthenticationException("サインインがキャンセルされました。");
+                    throw new GitHubAuthenticationException(Strings.SignInCanceled);
                 case "expired_token":
-                    throw new GitHubAuthenticationException("コードの有効期限が切れました。もう一度お試しください。");
+                    throw new GitHubAuthenticationException(Strings.CodeExpired);
                 default:
-                    throw new GitHubAuthenticationException(response.ErrorDescription ?? response.Error ?? "サインインに失敗しました。");
+                    throw new GitHubAuthenticationException(response.ErrorDescription ?? response.Error ?? Strings.SignInFailed);
             }
         }
 
-        throw new GitHubAuthenticationException("コードの有効期限が切れました。もう一度お試しください。");
+        throw new GitHubAuthenticationException(Strings.CodeExpired);
     }
 
     private async Task<OAuthResponse> PostAsync(Uri uri, Dictionary<string, string> form, CancellationToken cancellationToken)
@@ -78,11 +79,11 @@ public sealed class DeviceFlow(HttpClient http, GitHubHost host)
         {
             using var response = await http.SendAsync(request, cancellationToken).ConfigureAwait(false);
             return await response.Content.ReadFromJsonAsync(GitHubJsonContext.Default.OAuthResponse, cancellationToken).ConfigureAwait(false)
-                ?? throw new GitHubException("GitHub から空の応答が返されました。");
+                ?? throw new GitHubException(Strings.EmptyResponse);
         }
         catch (HttpRequestException ex)
         {
-            throw new GitHubUnavailableException("GitHub に接続できません。", ex);
+            throw new GitHubUnavailableException(Strings.CannotConnect, ex);
         }
     }
 }

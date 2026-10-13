@@ -38,9 +38,9 @@ public static class NewTaskDialog
             XamlRoot = root,
             Content = composer,
             // Enter では追加しない（急いでいるときの誤った確定を防ぐ）。既定のボタンは置かず、確定のキーをボタンに添える（開いたときに差し替える）
-            PrimaryButtonText = "追加",
+            PrimaryButtonText = Texts.Get("Common_Add"),
             PrimaryButtonStyle = AppResources.Style("AccentButtonStyle"),
-            CloseButtonText = "キャンセル",
+            CloseButtonText = Texts.Get("Common_Cancel"),
             DefaultButton = ContentDialogButton.None,
             IsPrimaryButtonEnabled = false,
         };
@@ -67,7 +67,7 @@ public static class NewTaskDialog
         {
             if (VisualTree.Descendants<Button>(dialog).FirstOrDefault(b => b.Name == "PrimaryButton") is { } primary)
             {
-                primary.Content = KeyCaps.Content("追加", "composer.submit");
+                primary.Content = KeyCaps.Content(Texts.Get("Common_Add"), "composer.submit");
             }
 
             composer.FocusTitle();
@@ -112,7 +112,7 @@ public static class NewTaskDialog
         // 作ったものが、いまの表示の条件に合わず見えないときは知らせる（UX-12）
         if (context.IsShown is { } isShown && !isShown(created))
         {
-            App.Current.Shell?.ShowToast($"「{created.Title}」を追加しました。表示の条件に合わないため、一覧には表示されません", "表示する", () =>
+            App.Current.Shell?.ShowToast(Texts.Format("Toast_AddedHidden", created.Title), Texts.Get("Toast_ShowAll"), () =>
             {
                 context.ShowAll?.Invoke();
                 return Task.CompletedTask;
@@ -121,7 +121,7 @@ public static class NewTaskDialog
     }
 
     /// <summary>入力中のタスクを破棄してよいかを確かめるダイアログ（UX 規約 UX-11、UX-14）。</summary>
-    public static ContentDialog ConfirmDiscard(XamlRoot root, TaskDraft draft) => AppDialog.Confirm(root, "入力中のタスクを破棄しますか？",
-        $"「{(draft.Title.Trim().Length > 0 ? draft.Title.Trim() : "（タスク名なし）")}」はまだ追加していません。破棄すると入力した内容は戻せません。",
-        "破棄");
+    public static ContentDialog ConfirmDiscard(XamlRoot root, TaskDraft draft) => AppDialog.Confirm(root, Texts.Get("Discard_Title"),
+        Texts.Format("Discard_Message", draft.Title.Trim().Length > 0 ? draft.Title.Trim() : Texts.Get("Discard_NoTitle")),
+        Texts.Get("Discard_Confirm"));
 }

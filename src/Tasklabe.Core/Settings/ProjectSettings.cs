@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using Tasklabe.Core.Calendar;
 using Tasklabe.Core.Domain;
+using Tasklabe.Core.Resources;
 
 namespace Tasklabe.Core.Settings;
 
@@ -28,7 +29,7 @@ public sealed record ResolvedSettings(EffortUnit EffortUnit, double HoursPerDay,
 {
     /// <summary>工数を、設定に従って「12.5h」または「1.6 人日」の形で表す。</summary>
     public string FormatEffort(double hours) => EffortUnit == EffortUnit.Days
-        ? string.Create(CultureInfo.InvariantCulture, $"{hours / (HoursPerDay > 0 ? HoursPerDay : 8):0.#} 人日")
+        ? Strings.EffortDays(hours / (HoursPerDay > 0 ? HoursPerDay : 8))
         : string.Create(CultureInfo.InvariantCulture, $"{hours:0.#}h");
 }
 
@@ -141,20 +142,20 @@ public static class StatusTemplates
         ArgumentNullException.ThrowIfNull(statuses);
         if (statuses.Any(s => string.IsNullOrWhiteSpace(s.Name)))
         {
-            return "名前が空のステータスがあります。";
+            return Strings.StatusNameEmpty;
         }
 
         if (statuses.GroupBy(s => s.Name.Trim(), StringComparer.OrdinalIgnoreCase).Any(g => g.Count() > 1))
         {
-            return "同じ名前のステータスがあります。";
+            return Strings.StatusNameDuplicate;
         }
 
         if (!statuses.Any(s => StatusCategories.IsNotStarted(s.Category)))
         {
-            return "カテゴリが Backlog か Todo のステータスが 1 つ以上必要です。";
+            return Strings.StatusNeedsNotStarted;
         }
 
-        return statuses.Any(s => s.Category == StatusCategory.Done) ? null : "カテゴリが Done のステータスが 1 つ以上必要です。";
+        return statuses.Any(s => s.Category == StatusCategory.Done) ? null : Strings.StatusNeedsDone;
     }
 }
 

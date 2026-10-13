@@ -87,7 +87,7 @@ public sealed class KanbanCard
 
     public string AssigneeText => string.Join(", ", Task.Assignees.Select(People.Display));
 
-    public string AssigneeTip => Controls.KeyHints.Tip("task.assign", HasAssignee ? $"担当: {AssigneeText}" : "担当者なし");
+    public string AssigneeTip => Controls.KeyHints.Tip("task.assign", HasAssignee ? Texts.Format("Filter_AssigneeChip", AssigneeText) : Texts.Get("Filter_NoAssignee"));
 
     public string StatusTip => Controls.KeyHints.Tip("task.status", StatusText);
 
@@ -111,18 +111,41 @@ public sealed class KanbanCard
 
     public bool HasChips => HasStatusName || IsIssue || HasTarget || HasEstimate;
 
-    public string StatusButtonName => $"ステータス: {StatusText}。押すと変更できます";
+    public string StatusButtonName => Texts.Format("PickerButton_Name", Texts.Get("Field_Status"), StatusText);
 
-    public string AssigneeButtonName => $"担当者: {(HasAssignee ? AssigneeText : "なし")}。押すと変更できます";
+    public string AssigneeButtonName => Texts.Format("PickerButton_Name", Texts.Get("Field_Assignee"), HasAssignee ? AssigneeText : Texts.Get("Common_None"));
 
-    public string DueButtonName => $"期日: {TargetText}{(IsOverdue ? "（期日超過）" : "")}。押すと変更できます";
+    public string DueButtonName => Texts.Format("PickerButton_Name", Texts.Get("SelectionBar_Due"), IsOverdue ? Texts.Format("DueDate_OverdueName", TargetText) : TargetText);
 
-    public string EstimateButtonName => $"想定工数: {EstimateText}。押すと変更できます";
+    public string EstimateButtonName => Texts.Format("PickerButton_Name", Texts.Get("Field_Estimate"), EstimateText);
 
-    public string AutomationName => $"{NumberText} {Title}、{StatusText}、進捗 {Progress:0}%".TrimStart()
-        + (TargetText.Length > 0 ? $"、期日 {TargetText}" + (IsOverdue ? "（期日超過）" : "") : "")
-        + (HasAssignee ? $"、担当 {AssigneeText}" : "")
-        + (IsIssue ? "、課題" : "");
+    /// <summary>読み上げの名前。タイトルのあとに、値を言語の区切りでつないで並べる。</summary>
+    public string AutomationName
+    {
+        get
+        {
+            List<string> parts = [$"{NumberText} {Title}".TrimStart(), StatusText, Texts.Format("Card_Progress", Progress)];
+            if (TargetText.Length > 0)
+            {
+                parts.Add(Texts.Format("Card_Due", IsOverdue ? Texts.Format("DueDate_OverdueName", TargetText) : TargetText));
+            }
+
+            if (HasAssignee)
+            {
+                parts.Add(Texts.Format("Card_Assignee", AssigneeText));
+            }
+
+            if (IsIssue)
+            {
+                parts.Add(Texts.Get("Kind_Issue"));
+            }
+
+            return string.Join(Texts.Get("Common_ListSeparator"), parts);
+        }
+    }
+
+    /// <summary>課題のチップのツールチップ。押すと計画へ移す。</summary>
+    public string PlanTip => Controls.KeyHints.Tip("task.plan", Texts.Get("Menu_MoveToPlan").TrimEnd('…'));
 }
 
 /// <summary>
@@ -147,10 +170,10 @@ public sealed partial class KanbanView : UserControl
 
     private static readonly (KanbanCompleted Value, string Label)[] CompletedChoices =
     [
-        (KanbanCompleted.All, "すべて"),
-        (KanbanCompleted.PastWeek, "直近 1 週間"),
-        (KanbanCompleted.PastMonth, "直近 1 か月"),
-        (KanbanCompleted.None, "表示しない"),
+        (KanbanCompleted.All, Texts.Get("Filter_All")),
+        (KanbanCompleted.PastWeek, Texts.Get("Kanban_PastWeek")),
+        (KanbanCompleted.PastMonth, Texts.Get("Kanban_PastMonth")),
+        (KanbanCompleted.None, Texts.Get("Kanban_Hide")),
     ];
 
     private Source? _source;
@@ -184,16 +207,16 @@ public sealed partial class KanbanView : UserControl
         List<TaskItem> tasks = [.. leaves.Select(n => n.Task), .. issues ?? []];
         _projects = new Dictionary<string, Project>(StringComparer.Ordinal) { [project.Id] = project };
 
-        List<(KanbanGrouping, string)> groupings = [(KanbanGrouping.None, "なし")];
+        List<(KanbanGrouping, string)> groupings = [(KanbanGrouping.None, Texts.Get("Common_None"))];
         if (project.IsTeam)
         {
-            groupings.Add((KanbanGrouping.Assignee, "担当者"));
+            groupings.Add((KanbanGrouping.Assignee, Texts.Get("Field_Assignee")));
         }
 
-        groupings.Add((KanbanGrouping.Parent, "親タスク"));
+        groupings.Add((KanbanGrouping.Parent, Texts.Get("Bulk_Parent")));
         if (project.IsTeam)
         {
-            groupings.Add((KanbanGrouping.Kind, "区分"));
+            groupings.Add((KanbanGrouping.Kind, Texts.Get("Field_Kind")));
         }
 
         string ParentTitle(TaskItem t) => parents.GetValueOrDefault(t.ItemId)?.Task.Title ?? "";
@@ -203,7 +226,7 @@ public sealed partial class KanbanView : UserControl
             KanbanGrouping.Assignee => t => AssigneeLane(t),
             KanbanGrouping.Parent => t => parents.GetValueOrDefault(t.ItemId) is { } parent
                 ? new KanbanLaneKey(parent.Task.ItemId, parent.Task.Title, order.GetValueOrDefault(parent.Task.ItemId))
-                : new KanbanLaneKey("", "親タスクなし", double.MaxValue),
+                : new KanbanLaneKey("", Texts.Get("Kanban_NoParent"), double.MaxValue),
             KanbanGrouping.Kind => t => t.Kind == TaskKind.Issue
                 ? new KanbanLaneKey("issue", KindVisuals.Name(TaskKind.Issue), 1)
                 : new KanbanLaneKey("plan", KindVisuals.Name(TaskKind.Task), 0),
@@ -263,7 +286,7 @@ public sealed partial class KanbanView : UserControl
             columns,
             t => KanbanLayout.CategoryKey(t.Category),
             (p, column) => column.Category is { } category ? ProjectConventions.DefaultStatus(p.StatusOptions, category) : null,
-            [(KanbanGrouping.None, "なし"), (KanbanGrouping.Project, "プロジェクト")],
+            [(KanbanGrouping.None, Texts.Get("Common_None")), (KanbanGrouping.Project, Texts.Get("Field_Project"))],
             LaneOf,
             Caption));
     }
@@ -289,7 +312,7 @@ public sealed partial class KanbanView : UserControl
         var assignees = task.Assignees.Order(StringComparer.OrdinalIgnoreCase).ToList();
         if (assignees.Count == 0)
         {
-            return new KanbanLaneKey("", "担当者なし", double.MaxValue);
+            return new KanbanLaneKey("", Texts.Get("Filter_NoAssignee"), double.MaxValue);
         }
 
         // 自分の担当を先頭に置く
@@ -364,12 +387,12 @@ public sealed partial class KanbanView : UserControl
 
     /// <summary>いまのグループ。</summary>
     public (string Label, string Glyph) GroupingValue =>
-        GroupingChoices.FirstOrDefault(g => g.Value == _display.Grouping) is { } g ? (g.Label, g.Glyph) : ("なし", ViewOptions.GlyphOf(KanbanGrouping.None));
+        GroupingChoices.FirstOrDefault(g => g.Value == _display.Grouping) is { } g ? (g.Label, g.Glyph) : (Texts.Get("Common_None"), ViewOptions.GlyphOf(KanbanGrouping.None));
 
     /// <summary>並び順をピッカーで選ぶ（Y キーまたはボタン）。</summary>
     public async Task PickOrderingAsync(FrameworkElement anchor)
     {
-        if (await ViewOptions.PickAsync(anchor, "並び順", OrderingChoices, _display.Ordering) is { } picked)
+        if (await ViewOptions.PickAsync(anchor, Texts.Get("View_Ordering"), OrderingChoices, _display.Ordering) is { } picked)
         {
             ChangeDisplay(_display with { Ordering = picked.Value });
         }
@@ -378,7 +401,7 @@ public sealed partial class KanbanView : UserControl
     /// <summary>グループをピッカーで選ぶ（G キーまたはボタン）。</summary>
     public async Task PickGroupingAsync(FrameworkElement anchor)
     {
-        if (await ViewOptions.PickAsync(anchor, "グループ", GroupingChoices, _display.Grouping) is { } picked)
+        if (await ViewOptions.PickAsync(anchor, Texts.Get("View_Grouping"), GroupingChoices, _display.Grouping) is { } picked)
         {
             ChangeDisplay(_display with { Grouping = picked.Value });
         }
@@ -484,7 +507,7 @@ public sealed partial class KanbanView : UserControl
             var title = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
             title.Children.Add(chevron);
             title.Children.Add(new TextBlock { Text = lane.Key.Title, Style = AppResources.Style("Text.BodyStrong") });
-            title.Children.Add(new TextBlock { Text = $"{lane.Count} 件", Style = AppResources.Style("Text.Caption"), VerticalAlignment = VerticalAlignment.Center });
+            title.Children.Add(new TextBlock { Text = Texts.Format("Kanban_Count", lane.Count), Style = AppResources.Style("Text.Caption"), VerticalAlignment = VerticalAlignment.Center });
             var toggle = new Button
             {
                 Content = title,
@@ -492,7 +515,7 @@ public sealed partial class KanbanView : UserControl
                 BorderThickness = new Thickness(0),
                 Padding = new Thickness(4, 2, 8, 2),
             };
-            AutomationProperties.SetName(toggle, $"{lane.Key.Title}（{lane.Count} 件）を{(collapsed ? "展開" : "折りたたむ")}");
+            AutomationProperties.SetName(toggle, collapsed ? Texts.Format("Kanban_ExpandLane", lane.Key.Title, lane.Count) : Texts.Format("Kanban_CollapseLane", lane.Key.Title, lane.Count));
             toggle.Click += (_, _) =>
             {
                 bool nowCollapsed = cells.Visibility == Visibility.Visible;
@@ -520,7 +543,7 @@ public sealed partial class KanbanView : UserControl
         {
             lanes.Children.Add(new TextBlock
             {
-                Text = "表示するカードはありません",
+                Text = Texts.Get("Kanban_NoCards"),
                 Style = AppResources.Style("Text.Caption"),
                 Margin = new Thickness(4, 8, 0, 0),
             });
@@ -631,8 +654,8 @@ public sealed partial class KanbanView : UserControl
                 Padding = new Thickness(0),
                 VerticalAlignment = VerticalAlignment.Center,
             };
-            ToolTipService.SetToolTip(add, $"「{column.Name}」にタスクを追加");
-            AutomationProperties.SetName(add, $"「{column.Name}」にタスクを追加");
+            ToolTipService.SetToolTip(add, Texts.Format("Kanban_AddTo", column.Name));
+            AutomationProperties.SetName(add, Texts.Format("Kanban_AddTo", column.Name));
             add.Click += async (_, _) => await App.Current.MainWindow!.AddTaskAsync(new NewTaskContext { Status = p => source.StatusIn(p, column) });
             Grid.SetColumn(add, 3);
             header.Children.Add(add);
@@ -655,7 +678,7 @@ public sealed partial class KanbanView : UserControl
         header.Children.Add(heading);
         var summary = new TextBlock
         {
-            Text = hours > 0 ? $"{cards.Count} 件 · {EffortText.Of(hours)}" : $"{cards.Count} 件",
+            Text = hours > 0 ? Texts.Format("Kanban_CountWithEffort", cards.Count, EffortText.Of(hours)) : Texts.Format("Kanban_Count", cards.Count),
             Style = caption,
             VerticalAlignment = VerticalAlignment.Center,
         };
@@ -849,20 +872,19 @@ public sealed partial class KanbanView : UserControl
         var substituted = column.Category is { } category
             ? targets.Select(x => x.Option?.Category).OfType<StatusCategory>().Where(c => c != category).Distinct().ToList()
             : [];
-        var note = substituted.Count > 0
-            ? $"（{column.Name} のないプロジェクトは {string.Join("・", substituted.Select(StatusVisuals.Name))}）"
-            : "";
+        var note = substituted.Count > 0 ? string.Join(Texts.Get("Common_NameSeparator"), substituted.Select(StatusVisuals.Name)) : "";
         if (edits.All(e => e.Item2.Count == 0))
         {
             if (note.Length > 0)
             {
-                App.Current.Shell?.ShowToast($"{column.Name} のステータスがないため、移しませんでした");
+                App.Current.Shell?.ShowToast(Texts.Format("Kanban_NoStatus", column.Name));
             }
 
             return;
         }
 
-        await TaskCommands.ApplyAsync(edits, edits.Count > 1 || note.Length > 0 ? $"{edits.Count} 件を「{column.Name}」へ移しました{note}" : null);
+        await TaskCommands.ApplyAsync(edits, note.Length > 0 ? Texts.Count("Kanban_MovedSubstituted", edits.Count, column.Name, note)
+            : edits.Count > 1 ? Texts.Count("Kanban_Moved", edits.Count, column.Name) : null);
     }
 
     /// <summary>指定したタスクのカードの、同じ列の上下のカードを選ぶ（詳細パネルの ↑↓。UX-10）。</summary>

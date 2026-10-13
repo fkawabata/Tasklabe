@@ -1,0 +1,2917 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Access_OpenProject" xml:space="preserve">
+    <value>Open project</value>
+  </data>
+  <data name="Access_OpenRepository" xml:space="preserve">
+    <value>Open repository</value>
+  </data>
+  <data name="Access_ProjectMessage" xml:space="preserve">
+    <value>You can't edit this project, so changes to status, schedule, and so on can't be sent to GitHub. Ask a project admin to invite you with Write access or higher.</value>
+  </data>
+  <data name="Access_RepositoryMessage" xml:space="preserve">
+    <value>You don't have write access to {0}, so new or changed tasks can't be sent to GitHub. Ask a repository admin to invite you as a collaborator (Write or higher).</value>
+  </data>
+  <data name="Access_Title" xml:space="preserve">
+    <value>Invitation needed</value>
+  </data>
+  <data name="Archive_Confirm" xml:space="preserve">
+    <value>Archive</value>
+  </data>
+  <data name="Archive_Message" xml:space="preserve">
+    <value>“{0}” will be removed from the list. Its tasks stay on GitHub, and you can restore it there.</value>
+  </data>
+  <data name="Archive_Title" xml:space="preserve">
+    <value>Archive project?</value>
+  </data>
+  <data name="Branch_ChosenCopied" xml:space="preserve">
+    <value>Chose {0} and copied the command to switch to it</value>
+  </data>
+  <data name="Branch_CreatedCopied" xml:space="preserve">
+    <value>Created {0} and copied the command to switch to it</value>
+  </data>
+  <data name="Branch_CreateDescription" xml:space="preserve">
+    <value>Created from the repository's default branch and linked to the issue's Development section on GitHub, so its pull requests link to the issue. After it's created, the command to switch to it is copied.</value>
+  </data>
+  <data name="Branch_CreateTitle" xml:space="preserve">
+    <value>Create branch</value>
+  </data>
+  <data name="Branch_Existing" xml:space="preserve">
+    <value>Existing branches</value>
+  </data>
+  <data name="Branch_Filter" xml:space="preserve">
+    <value>Filter by branch name</value>
+  </data>
+  <data name="Branch_LoadFailed" xml:space="preserve">
+    <value>Couldn't load branches of {0}</value>
+  </data>
+  <data name="Branch_Name" xml:space="preserve">
+    <value>Branch name</value>
+  </data>
+  <data name="Branch_NeedRepository" xml:space="preserve">
+    <value>Choose a repository.</value>
+  </data>
+  <data name="Branch_New" xml:space="preserve">
+    <value>Create new branch…</value>
+  </data>
+  <data name="Branch_NoCommits" xml:space="preserve">
+    <value>{0} has no commits yet</value>
+  </data>
+  <data name="Branch_NoCommitsMessage" xml:space="preserve">
+    <value>Push the first commit to be able to create branches.</value>
+  </data>
+  <data name="Branch_NoOthers" xml:space="preserve">
+    <value>No branches other than the default ({0}).</value>
+  </data>
+  <data name="Branch_NotYetChooseMessage" xml:space="preserve">
+    <value>You can create or choose one after the task is sent to GitHub.</value>
+  </data>
+  <data name="Branch_NotYetMessage" xml:space="preserve">
+    <value>You can create one after the task is sent to GitHub.</value>
+  </data>
+  <data name="Branch_NotYetTitle" xml:space="preserve">
+    <value>Branches aren't available yet</value>
+  </data>
+  <data name="Branch_Order" xml:space="preserve">
+    <value>Most recently committed first, excluding the default branch ({0}).</value>
+  </data>
+  <data name="Branch_PickerTitle" xml:space="preserve">
+    <value>Branches in {0}</value>
+  </data>
+  <data name="Branch_Repository" xml:space="preserve">
+    <value>Repository</value>
+  </data>
+  <data name="Branch_ThisTask" xml:space="preserve">
+    <value>This task's branch</value>
+  </data>
+  <data name="Bulk_Both" xml:space="preserve">
+    <value>{0} and {1}</value>
+  </data>
+  <data name="Bulk_ChooseDue" xml:space="preserve">
+    <value>Choose due date…</value>
+  </data>
+  <data name="Bulk_ChoosePlan" xml:space="preserve">
+    <value>Choose dates…</value>
+  </data>
+  <data name="Bulk_ColumnDates" xml:space="preserve">
+    <value>Dates</value>
+  </data>
+  <data name="Bulk_ColumnDays" xml:space="preserve">
+    <value>Days</value>
+  </data>
+  <data name="Bulk_ColumnKind" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Bulk_ColumnName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Bulk_ColumnPredecessor" xml:space="preserve">
+    <value>After</value>
+  </data>
+  <data name="Bulk_CreateCounts" xml:space="preserve">
+    <value>Create {0}</value>
+  </data>
+  <data name="Bulk_Created" xml:space="preserve">
+    <value>Created {0} in the plan</value>
+  </data>
+  <data name="Bulk_Days_One" xml:space="preserve">
+    <value>{0} day</value>
+  </data>
+  <data name="Bulk_Days_Other" xml:space="preserve">
+    <value>{0} days</value>
+  </data>
+  <data name="Bulk_Dependencies" xml:space="preserve">
+    <value>Dependencies</value>
+  </data>
+  <data name="Bulk_Hint" xml:space="preserve">
+    <value>Enter: Next row    Tab: Next field</value>
+  </data>
+  <data name="Bulk_LinkAfterAbove" xml:space="preserve">
+    <value>Link after the row above</value>
+  </data>
+  <data name="Bulk_LinkAfterAboveTip" xml:space="preserve">
+    <value>Starts after the row above finishes (remove per row with ✕)</value>
+  </data>
+  <data name="Bulk_MilestoneDeleteFailed" xml:space="preserve">
+    <value>Couldn't delete milestones</value>
+  </data>
+  <data name="Bulk_MilestoneFailedMessage" xml:space="preserve">
+    <value>{0} No tasks were created either.</value>
+  </data>
+  <data name="Bulk_MilestoneFailedTitle" xml:space="preserve">
+    <value>Couldn't create milestones</value>
+  </data>
+  <data name="Bulk_Milestones_One" xml:space="preserve">
+    <value>{0} milestone</value>
+  </data>
+  <data name="Bulk_Milestones_Other" xml:space="preserve">
+    <value>{0} milestones</value>
+  </data>
+  <data name="Bulk_NamePlaceholderHint" xml:space="preserve">
+    <value>Name (Enter for next row)</value>
+  </data>
+  <data name="Bulk_NoLink" xml:space="preserve">
+    <value>Don't link</value>
+  </data>
+  <data name="Bulk_OneMonth" xml:space="preserve">
+    <value>1 month</value>
+  </data>
+  <data name="Bulk_OneWeek" xml:space="preserve">
+    <value>1 week</value>
+  </data>
+  <data name="Bulk_Parent" xml:space="preserve">
+    <value>Parent task</value>
+  </data>
+  <data name="Bulk_Parents_One" xml:space="preserve">
+    <value>{0} parent task</value>
+  </data>
+  <data name="Bulk_Parents_Other" xml:space="preserve">
+    <value>{0} parent tasks</value>
+  </data>
+  <data name="Bulk_Relink" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="Bulk_RowProblem" xml:space="preserve">
+    <value>Row {0}: {1}</value>
+  </data>
+  <data name="Bulk_SameAsPrevious_One" xml:space="preserve">
+    <value>Same as previous row ({0} day)</value>
+  </data>
+  <data name="Bulk_SameAsPrevious_Other" xml:space="preserve">
+    <value>Same as previous row ({0} days)</value>
+  </data>
+  <data name="Bulk_Start" xml:space="preserve">
+    <value>Start date</value>
+  </data>
+  <data name="Bulk_StartAfterPrevious" xml:space="preserve">
+    <value>Next working day after the previous row</value>
+  </data>
+  <data name="Bulk_StartAfterPreviousTip" xml:space="preserve">
+    <value>Fill in the working day after the previous row ends (or its due date for a milestone)</value>
+  </data>
+  <data name="Bulk_StartEmpty" xml:space="preserve">
+    <value>Leave empty</value>
+  </data>
+  <data name="Bulk_SummaryEmpty" xml:space="preserve">
+    <value>Rows with a name will be created.</value>
+  </data>
+  <data name="Bulk_SummaryWithDates" xml:space="preserve">
+    <value>{0}    {1}</value>
+  </data>
+  <data name="Bulk_TopLevel" xml:space="preserve">
+    <value>(Top level)</value>
+  </data>
+  <data name="Bulk_TwoWeeks" xml:space="preserve">
+    <value>2 weeks</value>
+  </data>
+  <data name="Bulk_Undone" xml:space="preserve">
+    <value>Undid creating {0}</value>
+  </data>
+  <data name="Bulk_UnlinkName" xml:space="preserve">
+    <value>Unlink from “{0}”</value>
+  </data>
+  <data name="Card_Assignee" xml:space="preserve">
+    <value>assigned to {0}</value>
+  </data>
+  <data name="Card_Due" xml:space="preserve">
+    <value>due {0}</value>
+  </data>
+  <data name="Card_Estimate" xml:space="preserve">
+    <value>effort {0}</value>
+  </data>
+  <data name="Card_Progress" xml:space="preserve">
+    <value>{0:0}% done</value>
+  </data>
+  <data name="Card_ProgressText" xml:space="preserve">
+    <value>{0} done</value>
+  </data>
+  <data name="Card_Updated" xml:space="preserve">
+    <value>updated {0}</value>
+  </data>
+  <data name="Chain_Done_One" xml:space="preserve">
+    <value>Added {0} dependency</value>
+  </data>
+  <data name="Chain_Done_Other" xml:space="preserve">
+    <value>Added {0} dependencies</value>
+  </data>
+  <data name="Chain_Message" xml:space="preserve">
+    <value>Links the subtasks of “{0}” in schedule order. Tasks with overlapping schedules are treated as parallel and aren't linked to each other.</value>
+  </data>
+  <data name="Chain_NothingMessage" xml:space="preserve">
+    <value>The subtasks have no schedule or are already linked in order. Tasks with overlapping schedules are treated as parallel and aren't linked.</value>
+  </data>
+  <data name="Chain_NothingTitle" xml:space="preserve">
+    <value>Nothing to link</value>
+  </data>
+  <data name="Chain_Title_One" xml:space="preserve">
+    <value>Add {0} dependency</value>
+  </data>
+  <data name="Chain_Title_Other" xml:space="preserve">
+    <value>Add {0} dependencies</value>
+  </data>
+  <data name="Common_Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Common_Bullet" xml:space="preserve">
+    <value>• {0}</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Common_Change" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="Common_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Common_Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Common_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Common_Details" xml:space="preserve">
+    <value>Show details</value>
+  </data>
+  <data name="Common_Ellipsis" xml:space="preserve">
+    <value>{0}…</value>
+  </data>
+  <data name="Common_HintSeparator" xml:space="preserve">
+    <value>    </value>
+  </data>
+  <data name="Common_ListSeparator" xml:space="preserve">
+    <value>, </value>
+  </data>
+  <data name="Common_NameSeparator" xml:space="preserve">
+    <value>, </value>
+  </data>
+  <data name="Common_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Common_Personal" xml:space="preserve">
+    <value>Personal</value>
+  </data>
+  <data name="Common_Redo" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="Common_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Common_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Common_Team" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="Common_TwoSentences" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="Common_Undo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="Common_WithKey" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Composer_Body.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Composer_Body.PlaceholderText" xml:space="preserve">
+    <value>Add a description…</value>
+  </data>
+  <data name="Composer_DetailButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Continue in details panel</value>
+  </data>
+  <data name="Composer_DetailText.Text" xml:space="preserve">
+    <value>More details…</value>
+  </data>
+  <data name="Composer_Hint" xml:space="preserve">
+    <value>{0}: Add    {1}: Details    Tab: Next field    Alt + S etc.: Choose field</value>
+  </data>
+  <data name="Composer_HintNeedTitle" xml:space="preserve">
+    <value>Enter a task name to add it    {0}: Details    Tab: Next field    Alt + S etc.: Choose field</value>
+  </data>
+  <data name="Composer_Project" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="Composer_Title.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Task name</value>
+  </data>
+  <data name="Composer_Title.PlaceholderText" xml:space="preserve">
+    <value>Task name</value>
+  </data>
+  <data name="Conflict_Chip_One" xml:space="preserve">
+    <value>Affects {0} successor</value>
+  </data>
+  <data name="Conflict_Chip_Other" xml:space="preserve">
+    <value>Affects {0} successors</value>
+  </data>
+  <data name="Conflict_DelayedMessage_One" xml:space="preserve">
+    <value>At the current pace, {0} successor is scheduled to start before its predecessor finishes.</value>
+  </data>
+  <data name="Conflict_DelayedMessage_Other" xml:space="preserve">
+    <value>At the current pace, {0} successors are scheduled to start before their predecessors finish.</value>
+  </data>
+  <data name="Conflict_DelayedTitle" xml:space="preserve">
+    <value>A predecessor is running late</value>
+  </data>
+  <data name="Conflict_Dismiss" xml:space="preserve">
+    <value>Dismiss</value>
+  </data>
+  <data name="Conflict_Empty" xml:space="preserve">
+    <value>(none)</value>
+  </data>
+  <data name="Conflict_OverlapMessage_One" xml:space="preserve">
+    <value>{0} successor is scheduled to start before its predecessor finishes.</value>
+  </data>
+  <data name="Conflict_OverlapMessage_Other" xml:space="preserve">
+    <value>{0} successors are scheduled to start before their predecessors finish.</value>
+  </data>
+  <data name="Conflict_OverlapTitle" xml:space="preserve">
+    <value>Successors overlap their predecessors</value>
+  </data>
+  <data name="Conflict_Overwritten" xml:space="preserve">
+    <value>The {1} of “{0}” was changed on GitHub, but your change on this PC overwrote it.</value>
+  </data>
+  <data name="Conflict_OverwrittenTitle" xml:space="preserve">
+    <value>Overwrote another change</value>
+  </data>
+  <data name="Conflict_OverwrittenValues" xml:space="preserve">
+    <value>The {1} of “{0}” was changed to “{2}” on GitHub, but your change “{3}” on this PC overwrote it.</value>
+  </data>
+  <data name="Conflict_Pair" xml:space="preserve">
+    <value>“{0}” → “{1}”</value>
+  </data>
+  <data name="Conflict_Preview" xml:space="preserve">
+    <value>Preview adjustment</value>
+  </data>
+  <data name="Conflict_ShiftNote" xml:space="preserve">
+    <value>Adjusting moves {0} tasks later, including chained successors.</value>
+  </data>
+  <data name="Date_Full" xml:space="preserve">
+    <value>dddd, MMMM d, yyyy</value>
+  </data>
+  <data name="Date_MonthDay" xml:space="preserve">
+    <value>M/d</value>
+  </data>
+  <data name="Date_MonthShort" xml:space="preserve">
+    <value>MMM</value>
+  </data>
+  <data name="Date_MonthTitle" xml:space="preserve">
+    <value>MMMM yyyy</value>
+  </data>
+  <data name="Date_Range" xml:space="preserve">
+    <value>{0} – {1}</value>
+  </data>
+  <data name="Date_RangeFrom" xml:space="preserve">
+    <value>{0} –</value>
+  </data>
+  <data name="Date_RangeTo" xml:space="preserve">
+    <value>– {0}</value>
+  </data>
+  <data name="Date_Short" xml:space="preserve">
+    <value>ddd M/d</value>
+  </data>
+  <data name="Date_ShortWithYear" xml:space="preserve">
+    <value>ddd M/d/yyyy</value>
+  </data>
+  <data name="Date_TodayName" xml:space="preserve">
+    <value>{0} (today)</value>
+  </data>
+  <data name="DatePicker_Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="DatePicker_ChooseEnd" xml:space="preserve">
+    <value>Choose an end date</value>
+  </data>
+  <data name="DatePicker_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="DatePicker_DateInput" xml:space="preserve">
+    <value>Enter a date (9/25, +3, t, ...)</value>
+  </data>
+  <data name="DatePicker_Days_One" xml:space="preserve">
+    <value>{0} day</value>
+  </data>
+  <data name="DatePicker_Days_Other" xml:space="preserve">
+    <value>{0} days</value>
+  </data>
+  <data name="DatePicker_InputName" xml:space="preserve">
+    <value>{0} input</value>
+  </data>
+  <data name="DatePicker_InvalidDate" xml:space="preserve">
+    <value>Not a valid date (e.g. 9/25, 2026/9/25, +3, t)</value>
+  </data>
+  <data name="DatePicker_InvalidRange" xml:space="preserve">
+    <value>Not a valid range (e.g. 10/5-10/9, t~+4, ~10/9)</value>
+  </data>
+  <data name="DatePicker_Mixed" xml:space="preserve">
+    <value>Multiple values</value>
+  </data>
+  <data name="DatePicker_NextMonth" xml:space="preserve">
+    <value>Next month</value>
+  </data>
+  <data name="DatePicker_NoDate" xml:space="preserve">
+    <value>No date</value>
+  </data>
+  <data name="DatePicker_NoEnd" xml:space="preserve">
+    <value>No end date</value>
+  </data>
+  <data name="DatePicker_NoStart" xml:space="preserve">
+    <value>No start date</value>
+  </data>
+  <data name="DatePicker_Presets" xml:space="preserve">
+    <value>Presets</value>
+  </data>
+  <data name="DatePicker_PreviousMonth" xml:space="preserve">
+    <value>Previous month</value>
+  </data>
+  <data name="DatePicker_RangeInput" xml:space="preserve">
+    <value>Enter a range (10/5-10/9, t~+4, ~10/9, ...)</value>
+  </data>
+  <data name="Delete_LocalMessage" xml:space="preserve">
+    <value>“{0}” will be deleted. This can't be undone.</value>
+  </data>
+  <data name="Delete_ManyMessage" xml:space="preserve">
+    <value>These {0} tasks and their GitHub issues will be deleted. This can't be undone.</value>
+  </data>
+  <data name="Delete_ManyTitle" xml:space="preserve">
+    <value>Delete {0} tasks?</value>
+  </data>
+  <data name="Delete_Message" xml:space="preserve">
+    <value>“{0}” ({1}) and its GitHub issue will be deleted. This can't be undone.</value>
+  </data>
+  <data name="Delete_More" xml:space="preserve">
+    <value>and {0} more</value>
+  </data>
+  <data name="Delete_Title" xml:space="preserve">
+    <value>Delete task?</value>
+  </data>
+  <data name="Detail_AddSubtask" xml:space="preserve">
+    <value>Add subtask</value>
+  </data>
+  <data name="Detail_BodyPlaceholder" xml:space="preserve">
+    <value>Add a description… (Markdown)</value>
+  </data>
+  <data name="Detail_Branch" xml:space="preserve">
+    <value>Branch</value>
+  </data>
+  <data name="Detail_BranchFor" xml:space="preserve">
+    <value>Create or choose branch in {0}</value>
+  </data>
+  <data name="Detail_BranchOnlyRepository" xml:space="preserve">
+    <value>This repository only has a branch (it isn't a working repository)</value>
+  </data>
+  <data name="Detail_ChainNote" xml:space="preserve">
+    <value>Tasks with overlapping schedules are treated as parallel and aren't linked to each other.</value>
+  </data>
+  <data name="Detail_ChooseRepository" xml:space="preserve">
+    <value>Choose repository…</value>
+  </data>
+  <data name="Detail_CreateButton.Content" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Detail_DeleteText.Text" xml:space="preserve">
+    <value>Delete…</value>
+  </data>
+  <data name="Detail_DiscardButton.Content" xml:space="preserve">
+    <value>Discard</value>
+  </data>
+  <data name="Detail_DraftHint" xml:space="preserve">
+    <value>{0}: Add    Esc: Close    Alt + S etc.: Choose field</value>
+  </data>
+  <data name="Detail_ExternalPredecessor" xml:space="preserve">
+    <value>(Task not in this project's plan)</value>
+  </data>
+  <data name="Detail_Hint" xml:space="preserve">
+    <value>↑↓: Previous or next task    Esc: Close    Alt + S etc.: Choose field</value>
+  </data>
+  <data name="Detail_Inherited" xml:space="preserve">
+    <value>{0} (inherited from parent “{1}”)</value>
+  </data>
+  <data name="Detail_MilestoneAuto" xml:space="preserve">
+    <value>Automatic from due date</value>
+  </data>
+  <data name="Detail_MilestoneNote" xml:space="preserve">
+    <value>Create milestones from “…” → “Milestones” on the project.</value>
+  </data>
+  <data name="Detail_MilestoneOverrun" xml:space="preserve">
+    <value>Past milestone: the finish is after the milestone due date ({0})</value>
+  </data>
+  <data name="Detail_NeedTitle" xml:space="preserve">
+    <value>Enter a task name to add it</value>
+  </data>
+  <data name="Detail_NewTask" xml:space="preserve">
+    <value>New task</value>
+  </data>
+  <data name="Detail_NoMilestones" xml:space="preserve">
+    <value>None yet</value>
+  </data>
+  <data name="Detail_NonBlockingNote" xml:space="preserve">
+    <value>Successors (including the parent's successors) can start without waiting for this task to finish. Useful for wrap-up tasks at the end of a parent.</value>
+  </data>
+  <data name="Detail_NotAdded" xml:space="preserve">
+    <value>Not added yet</value>
+  </data>
+  <data name="Detail_OpenBranch" xml:space="preserve">
+    <value>Open branch {0} in GitHub</value>
+  </data>
+  <data name="Detail_OpenChosenBranch" xml:space="preserve">
+    <value>Open in GitHub (chosen branch)</value>
+  </data>
+  <data name="Detail_OpenLinkedBranch" xml:space="preserve">
+    <value>Open in GitHub (branch linked to the issue)</value>
+  </data>
+  <data name="Detail_OpenRepository" xml:space="preserve">
+    <value>Open {0} in GitHub</value>
+  </data>
+  <data name="Detail_OpenSubtask" xml:space="preserve">
+    <value>Open subtask “{0}”</value>
+  </data>
+  <data name="Detail_Predecessors" xml:space="preserve">
+    <value>Predecessors</value>
+  </data>
+  <data name="Detail_ProgressLocked" xml:space="preserve">
+    <value>Completed and canceled tasks stay at 100%</value>
+  </data>
+  <data name="Detail_RemovePredecessor" xml:space="preserve">
+    <value>Remove predecessor “{0}”</value>
+  </data>
+  <data name="Detail_RemoveRepository" xml:space="preserve">
+    <value>Remove {0} from working repositories</value>
+  </data>
+  <data name="Detail_Section" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Detail_StartsAfter" xml:space="preserve">
+    <value>Starts after these finish</value>
+  </data>
+  <data name="Detail_Subtasks" xml:space="preserve">
+    <value>Subtasks</value>
+  </data>
+  <data name="Detail_SubtaskSummary" xml:space="preserve">
+    <value>{0} of {1} done</value>
+  </data>
+  <data name="Detail_UnlinkBranch" xml:space="preserve">
+    <value>Remove branch {0}</value>
+  </data>
+  <data name="Detail_UnlinkBranchTip" xml:space="preserve">
+    <value>Remove (the branch isn't deleted)</value>
+  </data>
+  <data name="Dialog_ConfirmHint" xml:space="preserve">
+    <value>Enter: Cancel    Tab to “{0}”, then Enter: {0}</value>
+  </data>
+  <data name="Dialog_Hint" xml:space="preserve">
+    <value>{0}: {1}    Esc: Cancel</value>
+  </data>
+  <data name="Dialog_InfoHint" xml:space="preserve">
+    <value>Enter or Esc: Close</value>
+  </data>
+  <data name="Discard_Confirm" xml:space="preserve">
+    <value>Discard</value>
+  </data>
+  <data name="Discard_Message" xml:space="preserve">
+    <value>“{0}” hasn't been added yet. If you discard it, what you entered can't be recovered.</value>
+  </data>
+  <data name="Discard_NoTitle" xml:space="preserve">
+    <value>(No name)</value>
+  </data>
+  <data name="Discard_Title" xml:space="preserve">
+    <value>Discard this task?</value>
+  </data>
+  <data name="DueDate_OverdueName" xml:space="preserve">
+    <value>{0} (overdue)</value>
+  </data>
+  <data name="DueDate_OverdueTip" xml:space="preserve">
+    <value>Past due</value>
+  </data>
+  <data name="Empty_AddIssue" xml:space="preserve">
+    <value>Add to Triage</value>
+  </data>
+  <data name="Empty_FilteredMessage" xml:space="preserve">
+    <value>Change or clear the filters.</value>
+  </data>
+  <data name="Empty_FilteredTitle" xml:space="preserve">
+    <value>No tasks match the filters</value>
+  </data>
+  <data name="Empty_IssuesMessage" xml:space="preserve">
+    <value>Issues added to this project on GitHub and items added here appear in Triage. Use “Move to plan” to add them to the plan.</value>
+  </data>
+  <data name="Empty_IssuesTitle" xml:space="preserve">
+    <value>Nothing in Triage</value>
+  </data>
+  <data name="Empty_ListMessage" xml:space="preserve">
+    <value>Tasks in this project appear here.</value>
+  </data>
+  <data name="Empty_ListTitle" xml:space="preserve">
+    <value>No tasks</value>
+  </data>
+  <data name="Empty_OtherPersonalMessage" xml:space="preserve">
+    <value>Tasks you add also appear here.</value>
+  </data>
+  <data name="Empty_OtherTeamMessage" xml:space="preserve">
+    <value>Tasks added to the plan also appear here.</value>
+  </data>
+  <data name="Empty_PlanMessage" xml:space="preserve">
+    <value>Build the plan by adding parent tasks and work.</value>
+  </data>
+  <data name="Empty_PlanMessageWithKeys" xml:space="preserve">
+    <value>Build the plan by adding parent tasks and work. In the table, Insert adds a row below and Shift + Insert adds a child row.</value>
+  </data>
+  <data name="Empty_PlanTitle" xml:space="preserve">
+    <value>No tasks in the plan</value>
+  </data>
+  <data name="Failure_Change" xml:space="preserve">
+    <value>Change to “{0}”: {1}</value>
+  </data>
+  <data name="Failure_Create" xml:space="preserve">
+    <value>Creating “{0}”: {1}</value>
+  </data>
+  <data name="Failure_Delete" xml:space="preserve">
+    <value>Deleting “{0}”: {1}</value>
+  </data>
+  <data name="Failure_DeletedTask" xml:space="preserve">
+    <value>(Deleted task)</value>
+  </data>
+  <data name="Failure_Discard" xml:space="preserve">
+    <value>Discard changes</value>
+  </data>
+  <data name="Failure_Field" xml:space="preserve">
+    <value>Change to {1} of “{0}”: {2}</value>
+  </data>
+  <data name="Failure_Message" xml:space="preserve">
+    <value>If permissions or invitations are the cause, fix them and resend. If you don't need the changes, discard them to go back to what's on GitHub.</value>
+  </data>
+  <data name="Failure_Move" xml:space="preserve">
+    <value>Moving “{0}” to another project: {1}</value>
+  </data>
+  <data name="Failure_Retry" xml:space="preserve">
+    <value>Resend</value>
+  </data>
+  <data name="Failure_Title_One" xml:space="preserve">
+    <value>{0} change couldn't be sent to GitHub</value>
+  </data>
+  <data name="Failure_Title_Other" xml:space="preserve">
+    <value>{0} changes couldn't be sent to GitHub</value>
+  </data>
+  <data name="Field_Actual" xml:space="preserve">
+    <value>Actual</value>
+  </data>
+  <data name="Field_Assignee" xml:space="preserve">
+    <value>Assignee</value>
+  </data>
+  <data name="Field_Body" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Field_Estimate" xml:space="preserve">
+    <value>Estimate</value>
+  </data>
+  <data name="Field_Kind" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Field_Milestone" xml:space="preserve">
+    <value>Milestone</value>
+  </data>
+  <data name="Field_Plan" xml:space="preserve">
+    <value>Planned</value>
+  </data>
+  <data name="Field_Progress" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="Field_Project" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="Field_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Field_Title" xml:space="preserve">
+    <value>Task name</value>
+  </data>
+  <data name="Filter_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Filter_Assignee" xml:space="preserve">
+    <value>Assignee</value>
+  </data>
+  <data name="Filter_AssigneeChip" xml:space="preserve">
+    <value>Assignee: {0}</value>
+  </data>
+  <data name="Filter_AssigneeMe" xml:space="preserve">
+    <value>Assignee: You</value>
+  </data>
+  <data name="Filter_ByAssignee" xml:space="preserve">
+    <value>Filter by assignee</value>
+  </data>
+  <data name="Filter_ChipName" xml:space="preserve">
+    <value>{0} (Delete to remove)</value>
+  </data>
+  <data name="Filter_ChooseKind" xml:space="preserve">
+    <value>Filter by</value>
+  </data>
+  <data name="Filter_ClearAll" xml:space="preserve">
+    <value>Clear all</value>
+  </data>
+  <data name="Filter_CompletedCards" xml:space="preserve">
+    <value>Completed and canceled cards</value>
+  </data>
+  <data name="Filter_CompletedChip" xml:space="preserve">
+    <value>Completed and canceled: {0}</value>
+  </data>
+  <data name="Filter_Count" xml:space="preserve">
+    <value>Showing {1} of {0}</value>
+  </data>
+  <data name="Filter_FullName" xml:space="preserve">
+    <value>Filters: {0}. {1}</value>
+  </data>
+  <data name="Filter_Name" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="Filter_NoAssignee" xml:space="preserve">
+    <value>No assignee</value>
+  </data>
+  <data name="Filter_NothingToFilter" xml:space="preserve">
+    <value>Nothing to filter in this view</value>
+  </data>
+  <data name="Gantt_Actual" xml:space="preserve">
+    <value>Actual    {0} – {1}</value>
+  </data>
+  <data name="Gantt_ActualForecast" xml:space="preserve">
+    <value>Actual    {0} – (expected finish {1})</value>
+  </data>
+  <data name="Gantt_Before" xml:space="preserve">
+    <value>Before    {0} – {1}</value>
+  </data>
+  <data name="Gantt_CancelPreview.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Cancel schedule changes</value>
+  </data>
+  <data name="Gantt_CancelPreview.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Cancel (Esc)</value>
+  </data>
+  <data name="Gantt_CancelPreview.Content" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Gantt_ClearPlan" xml:space="preserve">
+    <value>Clear schedule</value>
+  </data>
+  <data name="Gantt_ColumnTask.Text" xml:space="preserve">
+    <value>Task</value>
+  </data>
+  <data name="Gantt_Confirm.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Confirm schedule changes</value>
+  </data>
+  <data name="Gantt_Confirm.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Save the previewed schedule</value>
+  </data>
+  <data name="Gantt_Confirm.Content" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Gantt_Delay_One" xml:space="preserve">
+    <value>{0} day late</value>
+  </data>
+  <data name="Gantt_Delay_Other" xml:space="preserve">
+    <value>{0} days late</value>
+  </data>
+  <data name="Gantt_DragLabel_One" xml:space="preserve">
+    <value>{1} – {2}  {0} working day</value>
+  </data>
+  <data name="Gantt_DragLabel_Other" xml:space="preserve">
+    <value>{1} – {2}  {0} working days</value>
+  </data>
+  <data name="Gantt_EditingName" xml:space="preserve">
+    <value>Gantt chart (edit mode)</value>
+  </data>
+  <data name="Gantt_ForecastLate" xml:space="preserve">
+    <value>Forecast    “{0}” runs until {1}, later than planned (bar color)</value>
+  </data>
+  <data name="Gantt_ForecastOnTrack" xml:space="preserve">
+    <value>Forecast    Within plan (bar color)</value>
+  </data>
+  <data name="Gantt_FrameEarly_One" xml:space="preserve">
+    <value>Outside frame    Subtasks start {0} working day before the frame ({1} –)</value>
+  </data>
+  <data name="Gantt_FrameEarly_Other" xml:space="preserve">
+    <value>Outside frame    Subtasks start {0} working days before the frame ({1} –)</value>
+  </data>
+  <data name="Gantt_FrameOverrun_One" xml:space="preserve">
+    <value>Outside frame    Subtasks run {0} working day past the frame (– {1})</value>
+  </data>
+  <data name="Gantt_FrameOverrun_Other" xml:space="preserve">
+    <value>Outside frame    Subtasks run {0} working days past the frame (– {1})</value>
+  </data>
+  <data name="Gantt_LinkProblem" xml:space="preserve">
+    <value>Can't add dependency</value>
+  </data>
+  <data name="Gantt_MilestoneEmpty" xml:space="preserve">
+    <value>No tasks in this milestone</value>
+  </data>
+  <data name="Gantt_MilestoneLate" xml:space="preserve">
+    <value>⚠ {0} past milestone (latest finish {1}, ▲{2}d)</value>
+  </data>
+  <data name="Gantt_MilestoneName" xml:space="preserve">
+    <value>Milestone {0}</value>
+  </data>
+  <data name="Gantt_MilestoneProgress" xml:space="preserve">
+    <value>{0:0}% done    {1} of {2} done</value>
+  </data>
+  <data name="Gantt_Name" xml:space="preserve">
+    <value>Gantt chart</value>
+  </data>
+  <data name="Gantt_NoPlan" xml:space="preserve">
+    <value>Planned    —</value>
+  </data>
+  <data name="Gantt_NoPlanName" xml:space="preserve">
+    <value>no schedule</value>
+  </data>
+  <data name="Gantt_PaceAhead_One" xml:space="preserve">
+    <value>Work done    About {0} day ahead (progress line)</value>
+  </data>
+  <data name="Gantt_PaceAhead_Other" xml:space="preserve">
+    <value>Work done    About {0} days ahead (progress line)</value>
+  </data>
+  <data name="Gantt_PaceBehind_One" xml:space="preserve">
+    <value>Work done    About {0} day behind (progress line)</value>
+  </data>
+  <data name="Gantt_PaceBehind_Other" xml:space="preserve">
+    <value>Work done    About {0} days behind (progress line)</value>
+  </data>
+  <data name="Gantt_PaceOnTrack" xml:space="preserve">
+    <value>Work done    On plan (progress line)</value>
+  </data>
+  <data name="Gantt_Plan_One" xml:space="preserve">
+    <value>Planned    {1} – {2} ({0} working day)</value>
+  </data>
+  <data name="Gantt_Plan_Other" xml:space="preserve">
+    <value>Planned    {1} – {2} ({0} working days)</value>
+  </data>
+  <data name="Gantt_PlanName" xml:space="preserve">
+    <value>planned {0} to {1}</value>
+  </data>
+  <data name="Gantt_PreviewAdjusted_One" xml:space="preserve">
+    <value>Saves the schedule of {0} moved bar. No conflicts with successors.</value>
+  </data>
+  <data name="Gantt_PreviewAdjusted_Other" xml:space="preserve">
+    <value>Saves the schedule of {0} moved bars. No conflicts with successors.</value>
+  </data>
+  <data name="Gantt_PreviewBar.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Schedule change preview</value>
+  </data>
+  <data name="Gantt_PreviewBar.Title" xml:space="preserve">
+    <value>Review schedule changes</value>
+  </data>
+  <data name="Gantt_PreviewLink_One" xml:space="preserve">
+    <value>Linking “{1}” → “{2}” moves {0} successor later. Confirm to save it with the dependency.</value>
+  </data>
+  <data name="Gantt_PreviewLink_Other" xml:space="preserve">
+    <value>Linking “{1}” → “{2}” moves {0} successors later. Confirm to save them with the dependency.</value>
+  </data>
+  <data name="Gantt_PreviewShiftDelayed_One" xml:space="preserve">
+    <value>Moves {0} successor later to follow the delayed predecessor (after “{1}”). Drag bars to adjust.</value>
+  </data>
+  <data name="Gantt_PreviewShiftDelayed_Other" xml:space="preserve">
+    <value>Moves {0} successors later to follow the delayed predecessor (after “{1}”). Drag bars to adjust.</value>
+  </data>
+  <data name="Gantt_PreviewShiftDelayedOnly_One" xml:space="preserve">
+    <value>Moves {0} successor later to follow the delayed predecessor (after “{1}”).</value>
+  </data>
+  <data name="Gantt_PreviewShiftDelayedOnly_Other" xml:space="preserve">
+    <value>Moves {0} successors later to follow the delayed predecessor (after “{1}”).</value>
+  </data>
+  <data name="Gantt_PreviewShiftPlan_One" xml:space="preserve">
+    <value>Moves {0} successor later to follow the predecessor's schedule (after “{1}”). Drag bars to adjust.</value>
+  </data>
+  <data name="Gantt_PreviewShiftPlan_Other" xml:space="preserve">
+    <value>Moves {0} successors later to follow the predecessor's schedule (after “{1}”). Drag bars to adjust.</value>
+  </data>
+  <data name="Gantt_PreviewShiftPlanOnly_One" xml:space="preserve">
+    <value>Moves {0} successor later to follow the predecessor's schedule (after “{1}”).</value>
+  </data>
+  <data name="Gantt_PreviewShiftPlanOnly_Other" xml:space="preserve">
+    <value>Moves {0} successors later to follow the predecessor's schedule (after “{1}”).</value>
+  </data>
+  <data name="Gantt_PreviewWithAdjusted_One" xml:space="preserve">
+    <value>Saves it with {0} moved bar.</value>
+  </data>
+  <data name="Gantt_PreviewWithAdjusted_Other" xml:space="preserve">
+    <value>Saves them with {0} moved bars.</value>
+  </data>
+  <data name="Gantt_ProgressEffort" xml:space="preserve">
+    <value>Progress    {0:0}%    Effort    {1}</value>
+  </data>
+  <data name="Gantt_Splitter.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Column width</value>
+  </data>
+  <data name="Gantt_TodayJump.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Go to today</value>
+  </data>
+  <data name="Gantt_TodayJumpText.Text" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="Gantt_TodayJumpTip" xml:space="preserve">
+    <value>Go to today ({0})</value>
+  </data>
+  <data name="Gantt_YearFormat" xml:space="preserve">
+    <value>yyyy</value>
+  </data>
+  <data name="Kanban_AddTo" xml:space="preserve">
+    <value>Add task to “{0}”</value>
+  </data>
+  <data name="Kanban_CollapseLane" xml:space="preserve">
+    <value>Collapse {0} ({1})</value>
+  </data>
+  <data name="Kanban_Count" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="Kanban_CountWithEffort" xml:space="preserve">
+    <value>{0} · {1}</value>
+  </data>
+  <data name="Kanban_ExpandLane" xml:space="preserve">
+    <value>Expand {0} ({1})</value>
+  </data>
+  <data name="Kanban_Hide" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="Kanban_IssueChip.Text" xml:space="preserve">
+    <value>Triage</value>
+  </data>
+  <data name="Kanban_Moved_One" xml:space="preserve">
+    <value>Moved {0} task to “{1}”</value>
+  </data>
+  <data name="Kanban_Moved_Other" xml:space="preserve">
+    <value>Moved {0} tasks to “{1}”</value>
+  </data>
+  <data name="Kanban_MovedSubstituted_One" xml:space="preserve">
+    <value>Moved {0} task to “{1}” (projects without {1} use {2})</value>
+  </data>
+  <data name="Kanban_MovedSubstituted_Other" xml:space="preserve">
+    <value>Moved {0} tasks to “{1}” (projects without {1} use {2})</value>
+  </data>
+  <data name="Kanban_NoAssigneeIcon.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>No assignee</value>
+  </data>
+  <data name="Kanban_NoCards" xml:space="preserve">
+    <value>No cards to show</value>
+  </data>
+  <data name="Kanban_NoParent" xml:space="preserve">
+    <value>No parent</value>
+  </data>
+  <data name="Kanban_NoStatus" xml:space="preserve">
+    <value>Not moved because there's no {0} status</value>
+  </data>
+  <data name="Kanban_PastMonth" xml:space="preserve">
+    <value>Past month</value>
+  </data>
+  <data name="Kanban_PastWeek" xml:space="preserve">
+    <value>Past week</value>
+  </data>
+  <data name="Keys_App" xml:space="preserve">
+    <value>App</value>
+  </data>
+  <data name="Keys_AppDescription" xml:space="preserve">
+    <value>Work anywhere (except while typing)</value>
+  </data>
+  <data name="Keys_Intro" xml:space="preserve">
+    <value>Single keys without modifiers work when you aren't typing. You can change them in Settings &gt; Keyboard, and the keys shown on screen change too. Without remembering keys, you can search for actions by name in the command palette ({0}).</value>
+  </data>
+  <data name="Keys_Layer" xml:space="preserve">
+    <value>Open layer</value>
+  </data>
+  <data name="Keys_LayerDescription" xml:space="preserve">
+    <value>While a picker, dialog, or details panel is open, only these keys work</value>
+  </data>
+  <data name="Keys_ListsHeading" xml:space="preserve">
+    <value>Lists, tables, and board</value>
+  </data>
+  <data name="Keys_Task" xml:space="preserve">
+    <value>Selected tasks</value>
+  </data>
+  <data name="Keys_TaskDescription" xml:space="preserve">
+    <value>Apply to the tasks selected in lists, the plan table, the board, or the Gantt chart. With several selected, they apply to all</value>
+  </data>
+  <data name="Keys_Title" xml:space="preserve">
+    <value>Keyboard shortcuts</value>
+  </data>
+  <data name="Keys_View" xml:space="preserve">
+    <value>In the view</value>
+  </data>
+  <data name="Keys_ViewDescription" xml:space="preserve">
+    <value>Work inside the focused list, table, board, or Gantt chart</value>
+  </data>
+  <data name="Kind_Issue" xml:space="preserve">
+    <value>Triage</value>
+  </data>
+  <data name="Kind_IssueDescription" xml:space="preserve">
+    <value>Something to consider before planning. Has no schedule; becomes a task with “Move to plan”</value>
+  </data>
+  <data name="Kind_Task" xml:space="preserve">
+    <value>Task</value>
+  </data>
+  <data name="Kind_TaskDescription" xml:space="preserve">
+    <value>Work in the plan, with schedule, estimate, and progress</value>
+  </data>
+  <data name="Link_Cycle" xml:space="preserve">
+    <value>“{0}” must come before “{1}”, so this would create a loop.</value>
+  </data>
+  <data name="Link_Hierarchy" xml:space="preserve">
+    <value>“{0}” and “{1}” are parent and child. To order work inside a parent, link the work items to each other.</value>
+  </data>
+  <data name="Link_NotPlanned" xml:space="preserve">
+    <value>Triage items can't have dependencies. Use “Move to plan” to make it a task first.</value>
+  </data>
+  <data name="List_ColumnAssignee.Text" xml:space="preserve">
+    <value>Assignee</value>
+  </data>
+  <data name="List_ColumnAssigneeName" xml:space="preserve">
+    <value>Assignee</value>
+  </data>
+  <data name="List_ColumnDue.Text" xml:space="preserve">
+    <value>Due</value>
+  </data>
+  <data name="List_ColumnEstimate.Text" xml:space="preserve">
+    <value>Effort</value>
+  </data>
+  <data name="List_ColumnIssue.Text" xml:space="preserve">
+    <value>Triage</value>
+  </data>
+  <data name="List_ColumnProgress.Text" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="List_ColumnProject.Text" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="List_ColumnStatus.Text" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="List_ColumnTask.Text" xml:space="preserve">
+    <value>Task</value>
+  </data>
+  <data name="List_ColumnUpdated.Text" xml:space="preserve">
+    <value>Updated</value>
+  </data>
+  <data name="List_IssuesName" xml:space="preserve">
+    <value>Triage list</value>
+  </data>
+  <data name="List_List.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Task list</value>
+  </data>
+  <data name="List_NotSent.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Not synced to GitHub</value>
+  </data>
+  <data name="List_TasksName" xml:space="preserve">
+    <value>Task list</value>
+  </data>
+  <data name="Menu_Assignee" xml:space="preserve">
+    <value>Assignee…</value>
+  </data>
+  <data name="Menu_BackName" xml:space="preserve">
+    <value>{0}, back</value>
+  </data>
+  <data name="Menu_ChainChildren" xml:space="preserve">
+    <value>Link subtasks in schedule order…</value>
+  </data>
+  <data name="Menu_CheckedName" xml:space="preserve">
+    <value>{0}, selected</value>
+  </data>
+  <data name="Menu_CopyKeyOf" xml:space="preserve">
+    <value>Copy {0}</value>
+  </data>
+  <data name="Menu_Due" xml:space="preserve">
+    <value>Due date…</value>
+  </data>
+  <data name="Menu_Estimate" xml:space="preserve">
+    <value>Estimate…</value>
+  </data>
+  <data name="Menu_ExternalTask" xml:space="preserve">
+    <value>(Task outside this project)</value>
+  </data>
+  <data name="Menu_MoveToPlan" xml:space="preserve">
+    <value>Move to plan…</value>
+  </data>
+  <data name="Menu_MoveToTriage" xml:space="preserve">
+    <value>Move to Triage</value>
+  </data>
+  <data name="Menu_NonBlocking" xml:space="preserve">
+    <value>Don't block successors</value>
+  </data>
+  <data name="Menu_Progress" xml:space="preserve">
+    <value>Progress…</value>
+  </data>
+  <data name="Menu_RemovePredecessor" xml:space="preserve">
+    <value>Remove predecessor</value>
+  </data>
+  <data name="Menu_Repository" xml:space="preserve">
+    <value>Working repository…</value>
+  </data>
+  <data name="Menu_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Menu_SubmenuName" xml:space="preserve">
+    <value>{0}, submenu</value>
+  </data>
+  <data name="Menu_TaskMenuName" xml:space="preserve">
+    <value>Task menu</value>
+  </data>
+  <data name="Milestones_Add" xml:space="preserve">
+    <value>Add milestone</value>
+  </data>
+  <data name="Milestones_Delete" xml:space="preserve">
+    <value>Delete this milestone</value>
+  </data>
+  <data name="Milestones_Description" xml:space="preserve">
+    <value>Deadlines for the project. Tasks due by the date are added automatically and used for Gantt sections and totals. On GitHub, they become repository milestones. Deleting one keeps its tasks, which move to the next milestone by due date.</value>
+  </data>
+  <data name="Milestones_NameField" xml:space="preserve">
+    <value>Milestone name</value>
+  </data>
+  <data name="Milestones_NamePlaceholder" xml:space="preserve">
+    <value>Name (Release, Design done, ...)</value>
+  </data>
+  <data name="Milestones_NeedName" xml:space="preserve">
+    <value>Enter a name</value>
+  </data>
+  <data name="Milestones_NeedNameMessage" xml:space="preserve">
+    <value>Milestones need a name. To delete one, use the trash button.</value>
+  </data>
+  <data name="Milestones_Progress" xml:space="preserve">
+    <value>{0:0}% done, {1} of {2} done</value>
+  </data>
+  <data name="Milestones_Restore" xml:space="preserve">
+    <value>Undo delete</value>
+  </data>
+  <data name="Milestones_Saved" xml:space="preserve">
+    <value>Milestones saved</value>
+  </data>
+  <data name="Milestones_SaveFailed" xml:space="preserve">
+    <value>Couldn't save</value>
+  </data>
+  <data name="MyTasks_Done" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="MyTasks_DoneOrCanceled" xml:space="preserve">
+    <value>Done or canceled</value>
+  </data>
+  <data name="MyTasks_EmptyMessage" xml:space="preserve">
+    <value>Your tasks gather here, soonest due first.</value>
+  </data>
+  <data name="MyTasks_Loading" xml:space="preserve">
+    <value>Loading from GitHub</value>
+  </data>
+  <data name="MyTasks_LoadingMessage" xml:space="preserve">
+    <value>The first sync takes a little while.</value>
+  </data>
+  <data name="MyTasks_NoFilter" xml:space="preserve">
+    <value>Nothing to filter in the list. On the board (Ctrl + 2), you can filter completed and canceled cards</value>
+  </data>
+  <data name="MyTasks_NoGrouping" xml:space="preserve">
+    <value>The list has no grouping. It's available on the board (Ctrl + 2)</value>
+  </data>
+  <data name="MyTasks_Open" xml:space="preserve">
+    <value>Tasks</value>
+  </data>
+  <data name="MyTasks_Remaining" xml:space="preserve">
+    <value>Remaining {0}</value>
+  </data>
+  <data name="MyTasks_Title.Text" xml:space="preserve">
+    <value>My tasks</value>
+  </data>
+  <data name="MyTasks_ViewList.Text" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="Nav_MyTasks" xml:space="preserve">
+    <value>My tasks</value>
+  </data>
+  <data name="Nav_MyTasksItem.Content" xml:space="preserve">
+    <value>My tasks</value>
+  </data>
+  <data name="Nav_NewProject.Content" xml:space="preserve">
+    <value>New project</value>
+  </data>
+  <data name="NewProject_HiddenOrganizations" xml:space="preserve">
+    <value>If an organization you belong to isn't listed, it may restrict third-party apps. Request access from Tasklabe's settings page on GitHub.</value>
+  </data>
+  <data name="NewProject_InvalidRepositoryName" xml:space="preserve">
+    <value>Use letters, digits, and . _ - for the repository name (e.g. website-redesign)</value>
+  </data>
+  <data name="NewProject_Kind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
+  <data name="NewProject_NamePlaceholder" xml:space="preserve">
+    <value>e.g. Website redesign</value>
+  </data>
+  <data name="NewProject_NeedName" xml:space="preserve">
+    <value>Enter a project name to create it</value>
+  </data>
+  <data name="NewProject_NeedOrganization" xml:space="preserve">
+    <value>Choose an organization to create it</value>
+  </data>
+  <data name="NewProject_NeedRepository" xml:space="preserve">
+    <value>Choose a repository for tasks to create it</value>
+  </data>
+  <data name="NewProject_NewRepository" xml:space="preserve">
+    <value>Create a new repository</value>
+  </data>
+  <data name="NewProject_NoOrganizations" xml:space="preserve">
+    <value>No organizations available</value>
+  </data>
+  <data name="NewProject_NoTeamOrganizations" xml:space="preserve">
+    <value>No organization can host a team project.</value>
+  </data>
+  <data name="NewProject_OrganizationProblem" xml:space="preserve">
+    <value>{0}: {1}. {2}</value>
+  </data>
+  <data name="NewProject_PersonalDefaults" xml:space="preserve">
+    <value>Personal project defaults</value>
+  </data>
+  <data name="NewProject_PersonalTip" xml:space="preserve">
+    <value>A project only you use</value>
+  </data>
+  <data name="NewProject_Repository" xml:space="preserve">
+    <value>Repository for tasks</value>
+  </data>
+  <data name="NewProject_RepositoryName" xml:space="preserve">
+    <value>New repository name</value>
+  </data>
+  <data name="NewProject_RepositoryNamePlaceholder" xml:space="preserve">
+    <value>e.g. website-redesign</value>
+  </data>
+  <data name="NewProject_ReviewAccess" xml:space="preserve">
+    <value>Review Tasklabe's organization access on GitHub</value>
+  </data>
+  <data name="NewProject_Source" xml:space="preserve">
+    <value>Copy settings from</value>
+  </data>
+  <data name="NewProject_SourceDescription" xml:space="preserve">
+    <value>Copies status names, categories, and order, plus settings such as effort and working days. You can change them later in project settings.</value>
+  </data>
+  <data name="NewProject_TeamDefaults" xml:space="preserve">
+    <value>Team project defaults</value>
+  </data>
+  <data name="NewProject_TeamTip" xml:space="preserve">
+    <value>A project shared in an organization</value>
+  </data>
+  <data name="NewProject_Title" xml:space="preserve">
+    <value>New project</value>
+  </data>
+  <data name="NewProject_UnavailableOrganizations" xml:space="preserve">
+    <value>Some organizations can't be selected. {0}</value>
+  </data>
+  <data name="Order_Alphabetical" xml:space="preserve">
+    <value>A to Z</value>
+  </data>
+  <data name="Order_Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="Order_Due" xml:space="preserve">
+    <value>Due date</value>
+  </data>
+  <data name="Order_Earliest" xml:space="preserve">
+    <value>Earliest first</value>
+  </data>
+  <data name="Order_Estimate" xml:space="preserve">
+    <value>Estimate</value>
+  </data>
+  <data name="Order_Largest" xml:space="preserve">
+    <value>Largest first</value>
+  </data>
+  <data name="Order_Newest" xml:space="preserve">
+    <value>Newest first</value>
+  </data>
+  <data name="Order_Plan" xml:space="preserve">
+    <value>Plan order</value>
+  </data>
+  <data name="Order_Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="Order_Updated" xml:space="preserve">
+    <value>Updated</value>
+  </data>
+  <data name="Org_AuthorizeSso" xml:space="preserve">
+    <value>Authorize SSO for {0}</value>
+  </data>
+  <data name="Org_CannotCreate" xml:space="preserve">
+    <value>Can't create projects</value>
+  </data>
+  <data name="Org_CannotCreateAdvice" xml:space="preserve">
+    <value>You don't have permission to create projects in the organization.</value>
+  </data>
+  <data name="Org_FetchFailed" xml:space="preserve">
+    <value>Can't fetch projects from {0}</value>
+  </data>
+  <data name="Org_Forbidden" xml:space="preserve">
+    <value>No access</value>
+  </data>
+  <data name="Org_ForbiddenAdvice" xml:space="preserve">
+    <value>You don't have permission to view the organization's projects.</value>
+  </data>
+  <data name="Org_NotApproved" xml:space="preserve">
+    <value>Tasklabe not approved</value>
+  </data>
+  <data name="Org_NotApprovedAdvice" xml:space="preserve">
+    <value>The organization restricts third-party apps. Ask an organization admin to approve Tasklabe.</value>
+  </data>
+  <data name="Org_RequestApproval" xml:space="preserve">
+    <value>Request approval for {0}</value>
+  </data>
+  <data name="Org_SsoRequired" xml:space="preserve">
+    <value>SSO authorization required</value>
+  </data>
+  <data name="Org_SsoRequiredAdvice" xml:space="preserve">
+    <value>The organization uses SAML single sign-on. Authorize your token for SSO on GitHub.</value>
+  </data>
+  <data name="Outline_Empty" xml:space="preserve">
+    <value>No tasks to show. Review the period and what's included.</value>
+  </data>
+  <data name="Outline_EmptyName" xml:space="preserve">
+    <value>Share view: no tasks to show</value>
+  </data>
+  <data name="Outline_Name_One" xml:space="preserve">
+    <value>Share view: {1}, {0} item (read the content in “Code”)</value>
+  </data>
+  <data name="Outline_Name_Other" xml:space="preserve">
+    <value>Share view: {1}, {0} items (read the content in “Code”)</value>
+  </data>
+  <data name="Palette_Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="Palette_ActionsForMany" xml:space="preserve">
+    <value>Actions for {0} tasks</value>
+  </data>
+  <data name="Palette_ActionsForOne" xml:space="preserve">
+    <value>Actions for “{0}”</value>
+  </data>
+  <data name="Palette_ArchiveProject" xml:space="preserve">
+    <value>Archive project…</value>
+  </data>
+  <data name="Palette_GanttDay" xml:space="preserve">
+    <value>Gantt: Scale to days</value>
+  </data>
+  <data name="Palette_GanttEndEdit" xml:space="preserve">
+    <value>Gantt: Exit edit mode</value>
+  </data>
+  <data name="Palette_GanttMonth" xml:space="preserve">
+    <value>Gantt: Scale to months</value>
+  </data>
+  <data name="Palette_GanttShare" xml:space="preserve">
+    <value>Gantt: Open share view</value>
+  </data>
+  <data name="Palette_GanttStartEdit" xml:space="preserve">
+    <value>Gantt: Enter edit mode</value>
+  </data>
+  <data name="Palette_GanttToday" xml:space="preserve">
+    <value>Gantt: Go to today</value>
+  </data>
+  <data name="Palette_GanttWeek" xml:space="preserve">
+    <value>Gantt: Scale to weeks</value>
+  </data>
+  <data name="Palette_Input" xml:space="preserve">
+    <value>Search actions, pages, and tasks (name or ID)</value>
+  </data>
+  <data name="Palette_InsertChildRow" xml:space="preserve">
+    <value>Plan table: Insert child row</value>
+  </data>
+  <data name="Palette_InsertRow" xml:space="preserve">
+    <value>Plan table: Insert row below</value>
+  </data>
+  <data name="Palette_OpenProjectInGitHub" xml:space="preserve">
+    <value>Open project in GitHub</value>
+  </data>
+  <data name="Palette_Pages" xml:space="preserve">
+    <value>Pages</value>
+  </data>
+  <data name="Palette_Recent" xml:space="preserve">
+    <value>Recent</value>
+  </data>
+  <data name="Palette_RenameProject" xml:space="preserve">
+    <value>Rename project…</value>
+  </data>
+  <data name="Palette_SettingsGeneral" xml:space="preserve">
+    <value>Settings: General</value>
+  </data>
+  <data name="Palette_SettingsPersonal" xml:space="preserve">
+    <value>Settings: Personal project defaults</value>
+  </data>
+  <data name="Palette_SettingsTeam" xml:space="preserve">
+    <value>Settings: Team project defaults</value>
+  </data>
+  <data name="Palette_ShowAccess" xml:space="preserve">
+    <value>Show why an invitation is needed</value>
+  </data>
+  <data name="Palette_ShowConflict" xml:space="preserve">
+    <value>Show schedule conflict</value>
+  </data>
+  <data name="Palette_Tasks" xml:space="preserve">
+    <value>Tasks</value>
+  </data>
+  <data name="Palette_ThisProject" xml:space="preserve">
+    <value>This project</value>
+  </data>
+  <data name="Palette_Title" xml:space="preserve">
+    <value>Command palette</value>
+  </data>
+  <data name="Palette_View" xml:space="preserve">
+    <value>View: {0}</value>
+  </data>
+  <data name="PaneSizer_Tip" xml:space="preserve">
+    <value>Resize (double-click to reset)</value>
+  </data>
+  <data name="Picker_Assignee" xml:space="preserve">
+    <value>Assignee</value>
+  </data>
+  <data name="Picker_AssigneeNote" xml:space="preserve">
+    <value>To add someone not listed, invite them to the repository (“…” → “Invite members” on the project) or add them in project settings.</value>
+  </data>
+  <data name="Picker_BranchRepository" xml:space="preserve">
+    <value>Repository for the branch</value>
+  </data>
+  <data name="Picker_CheckedName" xml:space="preserve">
+    <value>{0}, selected</value>
+  </data>
+  <data name="Picker_CloseName" xml:space="preserve">
+    <value>Close {0}</value>
+  </data>
+  <data name="Picker_CurrentName" xml:space="preserve">
+    <value>{0}, current</value>
+  </data>
+  <data name="Picker_DefaultProject" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Picker_Due" xml:space="preserve">
+    <value>Due date (finish)</value>
+  </data>
+  <data name="Picker_Estimate" xml:space="preserve">
+    <value>Estimate (hours)</value>
+  </data>
+  <data name="Picker_EstimateInput" xml:space="preserve">
+    <value>Enter hours (e.g. 6)</value>
+  </data>
+  <data name="Picker_EstimateInvalid" xml:space="preserve">
+    <value>Enter 0 or more hours (e.g. 6, 1.5)</value>
+  </data>
+  <data name="Picker_FilterableHint" xml:space="preserve">
+    <value>Number keys: Choose    Type to filter    Esc: Close</value>
+  </data>
+  <data name="Picker_FilterHint" xml:space="preserve">
+    <value>Type to filter    ↓: Options    Enter: First option    Esc: Close</value>
+  </data>
+  <data name="Picker_FilterInput" xml:space="preserve">
+    <value>Type to filter</value>
+  </data>
+  <data name="Picker_Hint" xml:space="preserve">
+    <value>Number keys or Enter: Choose    Esc: Close</value>
+  </data>
+  <data name="Picker_InputHint" xml:space="preserve">
+    <value>Number keys or Enter: Choose    Tab: Input    Esc: Close</value>
+  </data>
+  <data name="Picker_Kind" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Picker_Me" xml:space="preserve">
+    <value>You</value>
+  </data>
+  <data name="Picker_MixedCheckedName" xml:space="preserve">
+    <value>{0}, selected for some tasks</value>
+  </data>
+  <data name="Picker_MixedName" xml:space="preserve">
+    <value>{0}, value of some tasks</value>
+  </data>
+  <data name="Picker_MultipleHint" xml:space="preserve">
+    <value>{0} selected    Space: Select or clear</value>
+  </data>
+  <data name="Picker_NoGitHub" xml:space="preserve">
+    <value>No GitHub</value>
+  </data>
+  <data name="Picker_NoMatch" xml:space="preserve">
+    <value>No matches</value>
+  </data>
+  <data name="Picker_NoOptions" xml:space="preserve">
+    <value>No options</value>
+  </data>
+  <data name="Picker_OptionDetailName" xml:space="preserve">
+    <value>{0}, {1}</value>
+  </data>
+  <data name="Picker_OtherRepositories" xml:space="preserve">
+    <value>Other repositories</value>
+  </data>
+  <data name="Picker_Parent" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="Picker_Predecessor" xml:space="preserve">
+    <value>Add predecessor (starts after it finishes)</value>
+  </data>
+  <data name="Picker_Progress" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="Picker_ProgressInput" xml:space="preserve">
+    <value>A number from 0 to 100 (e.g. 60)</value>
+  </data>
+  <data name="Picker_ProgressInvalid" xml:space="preserve">
+    <value>Enter a number from 0 to 100 (e.g. 60)</value>
+  </data>
+  <data name="Picker_ReadOnly" xml:space="preserve">
+    <value>Read-only</value>
+  </data>
+  <data name="Picker_Repository" xml:space="preserve">
+    <value>Working repository</value>
+  </data>
+  <data name="Picker_RepositoryFailedMessage" xml:space="preserve">
+    <value>Check your connection to GitHub and try again.</value>
+  </data>
+  <data name="Picker_RepositoryFailedTitle" xml:space="preserve">
+    <value>Couldn't load repositories</value>
+  </data>
+  <data name="Picker_RepositoryInput" xml:space="preserve">
+    <value>Filter by owner/name</value>
+  </data>
+  <data name="Picker_RepositoryNote" xml:space="preserve">
+    <value>Repositories you own, collaborate on, or belong to through an organization, most recently pushed first.</value>
+  </data>
+  <data name="Picker_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Picker_StatusCategory" xml:space="preserve">
+    <value>Status category</value>
+  </data>
+  <data name="Picker_TaskInput" xml:space="preserve">
+    <value>Filter by task name</value>
+  </data>
+  <data name="Picker_TopLevel" xml:space="preserve">
+    <value>(Top level)</value>
+  </data>
+  <data name="PickerButton_Auto" xml:space="preserve">
+    <value>{0} (auto)</value>
+  </data>
+  <data name="PickerButton_Name" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Preset_LastWeek" xml:space="preserve">
+    <value>Last week (Mon–Fri)</value>
+  </data>
+  <data name="Preset_NextMonth" xml:space="preserve">
+    <value>Next month</value>
+  </data>
+  <data name="Preset_NextWeek" xml:space="preserve">
+    <value>Next week (Mon–Fri)</value>
+  </data>
+  <data name="Preset_NextWeekend" xml:space="preserve">
+    <value>Next weekend</value>
+  </data>
+  <data name="Preset_OneWeek" xml:space="preserve">
+    <value>1 week from today</value>
+  </data>
+  <data name="Preset_ThisMonthSoFar" xml:space="preserve">
+    <value>This month (through today)</value>
+  </data>
+  <data name="Preset_ThisWeekend" xml:space="preserve">
+    <value>This weekend</value>
+  </data>
+  <data name="Preset_ThisWeekSoFar" xml:space="preserve">
+    <value>This week (through today)</value>
+  </data>
+  <data name="Preset_Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="Preset_Tomorrow" xml:space="preserve">
+    <value>Tomorrow</value>
+  </data>
+  <data name="Preset_TwoWeeks" xml:space="preserve">
+    <value>2 weeks from today</value>
+  </data>
+  <data name="Preset_UntilMonthEnd" xml:space="preserve">
+    <value>Through end of month</value>
+  </data>
+  <data name="Preset_UntilWeekend" xml:space="preserve">
+    <value>Through this weekend</value>
+  </data>
+  <data name="Preset_Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
+  </data>
+  <data name="Preset_YesterdayToToday" xml:space="preserve">
+    <value>Yesterday to today</value>
+  </data>
+  <data name="Progress_LockedMessage" xml:space="preserve">
+    <value>Completed and canceled tasks stay at 100%.</value>
+  </data>
+  <data name="Progress_LockedTitle" xml:space="preserve">
+    <value>Can't change progress</value>
+  </data>
+  <data name="Project_AddButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Add task</value>
+  </data>
+  <data name="Project_Archive" xml:space="preserve">
+    <value>Archive…</value>
+  </data>
+  <data name="Project_BulkPlanButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Enter plan in bulk</value>
+  </data>
+  <data name="Project_BulkPlanText.Text" xml:space="preserve">
+    <value>Bulk entry</value>
+  </data>
+  <data name="Project_FilterButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Project_FilterText.Text" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Project_GanttEdit.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Edit mode</value>
+  </data>
+  <data name="Project_GanttEditText.Text" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Project_GanttToday.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Go to today</value>
+  </data>
+  <data name="Project_GanttTodayText.Text" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="Project_GroupingOnlyKanban" xml:space="preserve">
+    <value>Grouping isn't available in this view. It's available on the board</value>
+  </data>
+  <data name="Project_InazumaToggle.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Show progress line</value>
+  </data>
+  <data name="Project_InazumaToggle.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Show progress line</value>
+  </data>
+  <data name="Project_Inbox" xml:space="preserve">
+    <value>Inbox</value>
+  </data>
+  <data name="Project_Invite" xml:space="preserve">
+    <value>Invite members</value>
+  </data>
+  <data name="Project_InviteToProject" xml:space="preserve">
+    <value>Open project access settings</value>
+  </data>
+  <data name="Project_InviteToRepository" xml:space="preserve">
+    <value>Open repository access settings</value>
+  </data>
+  <data name="Project_Menu" xml:space="preserve">
+    <value>Project actions</value>
+  </data>
+  <data name="Project_MenuButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Project actions</value>
+  </data>
+  <data name="Project_MenuButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Project actions</value>
+  </data>
+  <data name="Project_Milestones" xml:space="preserve">
+    <value>Milestones…</value>
+  </data>
+  <data name="Project_NameField" xml:space="preserve">
+    <value>Project name</value>
+  </data>
+  <data name="Project_OpenInGitHub" xml:space="preserve">
+    <value>Open in GitHub</value>
+  </data>
+  <data name="Project_OrderingOnlyKanban" xml:space="preserve">
+    <value>Sort order isn't available in this view. It's available on the board</value>
+  </data>
+  <data name="Project_OtherEmpty.ActionText" xml:space="preserve">
+    <value>Add task</value>
+  </data>
+  <data name="Project_OtherEmpty.Title" xml:space="preserve">
+    <value>No tasks yet</value>
+  </data>
+  <data name="Project_PersonalSummary" xml:space="preserve">
+    <value>{0} open</value>
+  </data>
+  <data name="Project_PersonalSummaryRemaining" xml:space="preserve">
+    <value>{0} open   {1} remaining</value>
+  </data>
+  <data name="Project_Rename" xml:space="preserve">
+    <value>Rename…</value>
+  </data>
+  <data name="Project_RenameTitle" xml:space="preserve">
+    <value>Rename project</value>
+  </data>
+  <data name="Project_Scale" xml:space="preserve">
+    <value>Scale</value>
+  </data>
+  <data name="Project_ScaleDay" xml:space="preserve">
+    <value>Day</value>
+  </data>
+  <data name="Project_ScaleMonth" xml:space="preserve">
+    <value>Month</value>
+  </data>
+  <data name="Project_ScaleWeek" xml:space="preserve">
+    <value>Week</value>
+  </data>
+  <data name="Project_Settings" xml:space="preserve">
+    <value>Project settings</value>
+  </data>
+  <data name="Project_Share.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Open share view</value>
+  </data>
+  <data name="Project_Share.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Open share view</value>
+  </data>
+  <data name="Project_ShareText.Text" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="Project_StickyToggle.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Pin parent tasks to top</value>
+  </data>
+  <data name="Project_StickyToggle.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Pin parent tasks to top</value>
+  </data>
+  <data name="Project_TeamSummary" xml:space="preserve">
+    <value>{0:0}% done   {1} of {2} remaining</value>
+  </data>
+  <data name="Project_TeamSummaryUnestimated" xml:space="preserve">
+    <value>{0:0}% done   {1} of {2} remaining   {3} not estimated</value>
+  </data>
+  <data name="Project_ViewGantt.Text" xml:space="preserve">
+    <value>Gantt</value>
+  </data>
+  <data name="Project_ViewIssues.Text" xml:space="preserve">
+    <value>Triage</value>
+  </data>
+  <data name="Project_ViewKanban.Text" xml:space="preserve">
+    <value>Board</value>
+  </data>
+  <data name="Project_ViewKanbanName" xml:space="preserve">
+    <value>Board</value>
+  </data>
+  <data name="Project_ViewListName" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="Project_ViewPlan.Text" xml:space="preserve">
+    <value>Plan</value>
+  </data>
+  <data name="Project_ViewPlanName" xml:space="preserve">
+    <value>Plan</value>
+  </data>
+  <data name="Project_ViewStatus.Text" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="ProjectSettings_Back.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Back to project</value>
+  </data>
+  <data name="ProjectSettings_BackText.Text" xml:space="preserve">
+    <value>Back to project</value>
+  </data>
+  <data name="ProjectSettings_OpenPersonalDefaults" xml:space="preserve">
+    <value>Open personal project defaults</value>
+  </data>
+  <data name="ProjectSettings_OpenTeamDefaults" xml:space="preserve">
+    <value>Open team project defaults</value>
+  </data>
+  <data name="ProjectSettings_PersonalIntro" xml:space="preserve">
+    <value>Settings for this project only. Anything not set uses the personal project defaults.</value>
+  </data>
+  <data name="ProjectSettings_ReadOnly" xml:space="preserve">
+    <value>View only</value>
+  </data>
+  <data name="ProjectSettings_ReadOnlyMessage" xml:space="preserve">
+    <value>You can't edit this project, so settings are view only. Ask a project admin to change them.</value>
+  </data>
+  <data name="ProjectSettings_TeamIntro" xml:space="preserve">
+    <value>Settings for this project only. They're saved to the GitHub project and shared by all members. App-wide settings, such as keyboard shortcuts, are in Settings at the bottom left.</value>
+  </data>
+  <data name="ProjectSettings_Title" xml:space="preserve">
+    <value>{0} settings</value>
+  </data>
+  <data name="Promote_AndMore" xml:space="preserve">
+    <value>, and more</value>
+  </data>
+  <data name="Promote_Chain" xml:space="preserve">
+    <value>Link after the previous task “{0}”</value>
+  </data>
+  <data name="Promote_ChainNone" xml:space="preserve">
+    <value>Link after the previous task (the location has no tasks)</value>
+  </data>
+  <data name="Promote_Confirm" xml:space="preserve">
+    <value>Move</value>
+  </data>
+  <data name="Promote_DoneMany" xml:space="preserve">
+    <value>Moved {0} items to the plan</value>
+  </data>
+  <data name="Promote_DoneOne" xml:space="preserve">
+    <value>Moved “{0}” to the plan</value>
+  </data>
+  <data name="Promote_InheritNote" xml:space="preserve">
+    <value>Dependencies on the parent at this location are inherited even without linking.</value>
+  </data>
+  <data name="Promote_ManyHeading" xml:space="preserve">
+    <value>{0} Triage items ({1})</value>
+  </data>
+  <data name="Promote_ManyNote" xml:space="preserve">
+    <value>They stay the same issues and move to the end of the location. Set dates later in the plan table or Gantt chart.</value>
+  </data>
+  <data name="Promote_SingleNote" xml:space="preserve">
+    <value>It stays the same issue and moves into the plan. You can change dates later in the plan table or Gantt chart.</value>
+  </data>
+  <data name="Promote_Start" xml:space="preserve">
+    <value>Start date</value>
+  </data>
+  <data name="Promote_Title" xml:space="preserve">
+    <value>Move to plan</value>
+  </data>
+  <data name="Quick_AddButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Quick_AddedTo" xml:space="preserve">
+    <value>Added “{0}” to {1}</value>
+  </data>
+  <data name="Quick_AddFailed" xml:space="preserve">
+    <value>Couldn't add the task. What you entered is kept</value>
+  </data>
+  <data name="Quick_Continue.Content" xml:space="preserve">
+    <value>Keep editing</value>
+  </data>
+  <data name="Quick_DetailButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Continue in details panel</value>
+  </data>
+  <data name="Quick_DetailText.Text" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Quick_Discard.Content" xml:space="preserve">
+    <value>Discard</value>
+  </data>
+  <data name="Quick_DiscardQuestion.Text" xml:space="preserve">
+    <value>Discard this task?</value>
+  </data>
+  <data name="Quick_Hint" xml:space="preserve">
+    <value>{0}: Add    {1}: Details    Esc: Close</value>
+  </data>
+  <data name="Quick_HintNeedTitle" xml:space="preserve">
+    <value>Enter a task name to add it    {0}: Details    Esc: Close</value>
+  </data>
+  <data name="Quick_WindowTitle" xml:space="preserve">
+    <value>{0} - Tasklabe</value>
+  </data>
+  <data name="Row_ValueName" xml:space="preserve">
+    <value>{1} of {0}: {2}</value>
+  </data>
+  <data name="SelectionBar_Assignee" xml:space="preserve">
+    <value>Assignee</value>
+  </data>
+  <data name="SelectionBar_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="SelectionBar_Count" xml:space="preserve">
+    <value>{0} selected</value>
+  </data>
+  <data name="SelectionBar_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="SelectionBar_Due" xml:space="preserve">
+    <value>Due date</value>
+  </data>
+  <data name="SelectionBar_Estimate" xml:space="preserve">
+    <value>Estimate</value>
+  </data>
+  <data name="SelectionBar_Plan" xml:space="preserve">
+    <value>Plan</value>
+  </data>
+  <data name="SelectionBar_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Settings_AccountHeading.Text" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="Settings_AppearanceHeading.Text" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="Settings_Assign" xml:space="preserve">
+    <value>Assign</value>
+  </data>
+  <data name="Settings_ChangeShortcut" xml:space="preserve">
+    <value>Change…</value>
+  </data>
+  <data name="Settings_ChangeShortcutHint" xml:space="preserve">
+    <value>Press a key, then Tab to “Assign” and press Enter    Esc to cancel</value>
+  </data>
+  <data name="Settings_ChangeShortcutName" xml:space="preserve">
+    <value>Change key for {0}</value>
+  </data>
+  <data name="Settings_ChangeShortcutTitle" xml:space="preserve">
+    <value>Change key</value>
+  </data>
+  <data name="Settings_EmptyColumns.Text" xml:space="preserve">
+    <value>Empty columns</value>
+  </data>
+  <data name="Settings_EmptyColumnsDescription.Text" xml:space="preserve">
+    <value>When off, columns with no cards are hidden. Applies to all boards.</value>
+  </data>
+  <data name="Settings_EmptyColumnsSwitch.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Empty columns</value>
+  </data>
+  <data name="Settings_GeneralTab.Text" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Settings_Hints.Text" xml:space="preserve">
+    <value>Keyboard hints</value>
+  </data>
+  <data name="Settings_HintsDescription.Text" xml:space="preserve">
+    <value>Shows the available keys at the bottom of dialogs and the details panel.</value>
+  </data>
+  <data name="Settings_HintsSwitch.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Keyboard hints</value>
+  </data>
+  <data name="Settings_KanbanHeading.Text" xml:space="preserve">
+    <value>Board</value>
+  </data>
+  <data name="Settings_KeyboardDescription.Text" xml:space="preserve">
+    <value>You can change the keys for common actions. Single keys without modifiers work when you aren't typing.</value>
+  </data>
+  <data name="Settings_KeyboardHeading.Text" xml:space="preserve">
+    <value>Keyboard</value>
+  </data>
+  <data name="Settings_KeyConflict" xml:space="preserve">
+    <value>Already assigned to “{0}”. Assigning it here removes it from “{0}”.</value>
+  </data>
+  <data name="Settings_KeyReserved" xml:space="preserve">
+    <value>This key is used for basic navigation (moving, confirming, canceling) and can't be assigned.</value>
+  </data>
+  <data name="Settings_KeyTargetName" xml:space="preserve">
+    <value>Key to assign</value>
+  </data>
+  <data name="Settings_Language.Text" xml:space="preserve">
+    <value>Display language</value>
+  </data>
+  <data name="Settings_LanguageDescription.Text" xml:space="preserve">
+    <value>Restart the app to apply a new language.</value>
+  </data>
+  <data name="Settings_LanguagePicker" xml:space="preserve">
+    <value>Display language</value>
+  </data>
+  <data name="Settings_LanguageSystem" xml:space="preserve">
+    <value>Match Windows</value>
+  </data>
+  <data name="Settings_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Settings_NoOrganizations" xml:space="preserve">
+    <value>No organizations are available.</value>
+  </data>
+  <data name="Settings_NoShortcut" xml:space="preserve">
+    <value>Not assigned</value>
+  </data>
+  <data name="Settings_NumberHeading.Text" xml:space="preserve">
+    <value>Task IDs</value>
+  </data>
+  <data name="Settings_NumberInGantt.Text" xml:space="preserve">
+    <value>Gantt chart</value>
+  </data>
+  <data name="Settings_NumberInGanttSwitch.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Task IDs in Gantt chart</value>
+  </data>
+  <data name="Settings_NumberInIssues.Text" xml:space="preserve">
+    <value>Triage list</value>
+  </data>
+  <data name="Settings_NumberInIssuesSwitch.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Task IDs in Triage list</value>
+  </data>
+  <data name="Settings_NumberInPlan.Text" xml:space="preserve">
+    <value>Plan table</value>
+  </data>
+  <data name="Settings_NumberInPlanSwitch.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Task IDs in plan table</value>
+  </data>
+  <data name="Settings_OpenProjectSettings" xml:space="preserve">
+    <value>Open settings</value>
+  </data>
+  <data name="Settings_OpenProjectSettingsName" xml:space="preserve">
+    <value>Open settings for {0}</value>
+  </data>
+  <data name="Settings_OrganizationAccess.Content" xml:space="preserve">
+    <value>Review on GitHub</value>
+  </data>
+  <data name="Settings_OrganizationList" xml:space="preserve">
+    <value>Available organizations: {0}</value>
+  </data>
+  <data name="Settings_OrganizationProblem" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Settings_Organizations.Text" xml:space="preserve">
+    <value>Organization access</value>
+  </data>
+  <data name="Settings_OrganizationsNote" xml:space="preserve">
+    <value>{0} If an organization you belong to isn't listed, it may restrict third-party apps.</value>
+  </data>
+  <data name="Settings_PerProjectDescription.Text" xml:space="preserve">
+    <value>Each project can override these defaults in its settings. You can also open them from “…” on the project page.</value>
+  </data>
+  <data name="Settings_PerProjectHeading.Text" xml:space="preserve">
+    <value>Per-project settings</value>
+  </data>
+  <data name="Settings_PersonalDefaultsDescription" xml:space="preserve">
+    <value>Defaults for personal projects (including My tasks). Also used for effort in views that span projects, such as My tasks.</value>
+  </data>
+  <data name="Settings_PersonalRepository" xml:space="preserve">
+    <value>Personal repository: {0}</value>
+  </data>
+  <data name="Settings_PersonalTab.Text" xml:space="preserve">
+    <value>Personal project defaults</value>
+  </data>
+  <data name="Settings_PressKey" xml:space="preserve">
+    <value>Press a key</value>
+  </data>
+  <data name="Settings_PressKeyFor" xml:space="preserve">
+    <value>Press a key to assign to “{0}”. Current: {1}</value>
+  </data>
+  <data name="Settings_ProjectOverrides" xml:space="preserve">
+    <value>Overridden in this project</value>
+  </data>
+  <data name="Settings_ProjectUsesDefaults" xml:space="preserve">
+    <value>Uses defaults</value>
+  </data>
+  <data name="Settings_ResetAllMessage" xml:space="preserve">
+    <value>All changed keys go back to their defaults.</value>
+  </data>
+  <data name="Settings_ResetAllShortcuts.Content" xml:space="preserve">
+    <value>Reset all…</value>
+  </data>
+  <data name="Settings_ResetAllTitle" xml:space="preserve">
+    <value>Reset all keys?</value>
+  </data>
+  <data name="Settings_ResetShortcut" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Settings_ResetShortcutName" xml:space="preserve">
+    <value>Reset key for {0}</value>
+  </data>
+  <data name="Settings_ShowShortcuts.Content" xml:space="preserve">
+    <value>View all</value>
+  </data>
+  <data name="Settings_SignOut.Content" xml:space="preserve">
+    <value>Sign out…</value>
+  </data>
+  <data name="Settings_SignOutConfirm" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="Settings_SignOutMessage" xml:space="preserve">
+    <value>The access token and cache saved on this PC will be deleted. Your data on GitHub isn't affected.</value>
+  </data>
+  <data name="Settings_SignOutTitle" xml:space="preserve">
+    <value>Sign out?</value>
+  </data>
+  <data name="Settings_TeamDefaultsDescription" xml:space="preserve">
+    <value>Defaults for team projects. New team projects get these values when created, shared with all members.</value>
+  </data>
+  <data name="Settings_TeamTab.Text" xml:space="preserve">
+    <value>Team project defaults</value>
+  </data>
+  <data name="Settings_Theme.Text" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="Settings_ThemeDark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="Settings_ThemeDescription.Text" xml:space="preserve">
+    <value>High contrast follows your Windows setting.</value>
+  </data>
+  <data name="Settings_ThemeLight" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="Settings_ThemePicker" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="Settings_ThemeSystem" xml:space="preserve">
+    <value>Match Windows</value>
+  </data>
+  <data name="Settings_Title.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Settings_Unassign" xml:space="preserve">
+    <value>Remove key</value>
+  </data>
+  <data name="SettingsEditor_AddDate" xml:space="preserve">
+    <value>Add date…</value>
+  </data>
+  <data name="SettingsEditor_AddHoliday" xml:space="preserve">
+    <value>Date to add as a day off</value>
+  </data>
+  <data name="SettingsEditor_AddStatus" xml:space="preserve">
+    <value>Add status</value>
+  </data>
+  <data name="SettingsEditor_Applied" xml:space="preserve">
+    <value>Applied to GitHub</value>
+  </data>
+  <data name="SettingsEditor_AutolinkFailed" xml:space="preserve">
+    <value>The GitHub autolink couldn't be registered.</value>
+  </data>
+  <data name="SettingsEditor_AutolinkNotPermitted" xml:space="preserve">
+    <value>You aren't a repository admin, so the GitHub autolink couldn't be registered. IDs still work in the app. To link them in commits and comments, ask a repository admin to save the key on this screen or add “{0}-” to Autolink references in the repository settings.</value>
+  </data>
+  <data name="SettingsEditor_AutolinkRegistered" xml:space="preserve">
+    <value>Also registered as a repository autolink, so {0} in commits and comments links to the issue.</value>
+  </data>
+  <data name="SettingsEditor_DayOffName" xml:space="preserve">
+    <value>Day off on {0}</value>
+  </data>
+  <data name="SettingsEditor_DaysOff" xml:space="preserve">
+    <value>Days off</value>
+  </data>
+  <data name="SettingsEditor_Decide" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SettingsEditor_DecideName" xml:space="preserve">
+    <value>Use this key</value>
+  </data>
+  <data name="SettingsEditor_DefaultKind" xml:space="preserve">
+    <value>Default type</value>
+  </data>
+  <data name="SettingsEditor_DefaultKindDescription" xml:space="preserve">
+    <value>Whether tasks added with N or + go to Triage or become tasks.</value>
+  </data>
+  <data name="SettingsEditor_DefaultKindPicker" xml:space="preserve">
+    <value>Default type for new tasks</value>
+  </data>
+  <data name="SettingsEditor_DefaultStatusesDescription" xml:space="preserve">
+    <value>Names, categories, and order of statuses for new projects. You can change them later in project settings.</value>
+  </data>
+  <data name="SettingsEditor_EditOnGitHub" xml:space="preserve">
+    <value>Edit colors and descriptions on GitHub</value>
+  </data>
+  <data name="SettingsEditor_Effort" xml:space="preserve">
+    <value>Effort</value>
+  </data>
+  <data name="SettingsEditor_EffortDescription" xml:space="preserve">
+    <value>Effort is always entered in hours; only the display changes.</value>
+  </data>
+  <data name="SettingsEditor_EffortUnit" xml:space="preserve">
+    <value>Display unit</value>
+  </data>
+  <data name="SettingsEditor_EffortUnitPicker" xml:space="preserve">
+    <value>Effort display unit</value>
+  </data>
+  <data name="SettingsEditor_ExtraHolidays" xml:space="preserve">
+    <value>Custom days off</value>
+  </data>
+  <data name="SettingsEditor_ExtraHolidaysDescription" xml:space="preserve">
+    <value>Add days off set by your company or team, such as summer or year-end breaks.</value>
+  </data>
+  <data name="SettingsEditor_FollowsPersonalDefaults" xml:space="preserve">
+    <value>Uses the personal project defaults (app settings).</value>
+  </data>
+  <data name="SettingsEditor_FollowsTeamDefaults" xml:space="preserve">
+    <value>Uses the team project defaults (app settings). Each member's own defaults apply, so set it for this project to keep everyone the same.</value>
+  </data>
+  <data name="SettingsEditor_GuestExists" xml:space="preserve">
+    <value>{0} is already a member</value>
+  </data>
+  <data name="SettingsEditor_GuestNameField" xml:space="preserve">
+    <value>Name of member without GitHub</value>
+  </data>
+  <data name="SettingsEditor_GuestPlaceholder" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="SettingsEditor_GuestProblem" xml:space="preserve">
+    <value>Can't add member</value>
+  </data>
+  <data name="SettingsEditor_Guests" xml:space="preserve">
+    <value>Members without GitHub</value>
+  </data>
+  <data name="SettingsEditor_GuestsDescription" xml:space="preserve">
+    <value>They can be assigned by name. Removing someone keeps them on tasks already assigned.</value>
+  </data>
+  <data name="SettingsEditor_Hours" xml:space="preserve">
+    <value>Hours (h)</value>
+  </data>
+  <data name="SettingsEditor_HoursPerDay" xml:space="preserve">
+    <value>Working hours per day</value>
+  </data>
+  <data name="SettingsEditor_HoursPerDayDescription" xml:space="preserve">
+    <value>Used to convert to days and as each assignee's daily capacity in Overview.</value>
+  </data>
+  <data name="SettingsEditor_HoursPerDayField" xml:space="preserve">
+    <value>Working hours per day</value>
+  </data>
+  <data name="SettingsEditor_InboxKey" xml:space="preserve">
+    <value>Inbox tasks are referred to like {0}.</value>
+  </data>
+  <data name="SettingsEditor_JapaneseHolidays" xml:space="preserve">
+    <value>Japanese public holidays off</value>
+  </data>
+  <data name="SettingsEditor_Key" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="SettingsEditor_KeyDescription" xml:space="preserve">
+    <value>The key is also registered as a repository autolink, so {0} in commits and comments links to the issue.</value>
+  </data>
+  <data name="SettingsEditor_KeyField" xml:space="preserve">
+    <value>ID key</value>
+  </data>
+  <data name="SettingsEditor_KeyProblem" xml:space="preserve">
+    <value>Can't change the key</value>
+  </data>
+  <data name="SettingsEditor_KeySaved" xml:space="preserve">
+    <value>Key saved</value>
+  </data>
+  <data name="SettingsEditor_KeySavedExample" xml:space="preserve">
+    <value>Tasks in this project are referred to like {0}.</value>
+  </data>
+  <data name="SettingsEditor_KeySaveFailed" xml:space="preserve">
+    <value>Couldn't save the key to GitHub</value>
+  </data>
+  <data name="SettingsEditor_LegacyCalendar" xml:space="preserve">
+    <value>This setting was saved only on this PC. Changing it saves it to GitHub and shares it with members.</value>
+  </data>
+  <data name="SettingsEditor_LevelOption" xml:space="preserve">
+    <value>{0} levels ({1})</value>
+  </data>
+  <data name="SettingsEditor_Levels" xml:space="preserve">
+    <value>Fixed levels</value>
+  </data>
+  <data name="SettingsEditor_LevelsDescription" xml:space="preserve">
+    <value>Shallower tasks are padded with 0 ({0}). Deeper tasks add levels ({1}).</value>
+  </data>
+  <data name="SettingsEditor_MoveDown" xml:space="preserve">
+    <value>Move {0} down</value>
+  </data>
+  <data name="SettingsEditor_MoveUp" xml:space="preserve">
+    <value>Move {0} up</value>
+  </data>
+  <data name="SettingsEditor_NewStatus" xml:space="preserve">
+    <value>New status</value>
+  </data>
+  <data name="SettingsEditor_NewStatusNumbered" xml:space="preserve">
+    <value>New status {0}</value>
+  </data>
+  <data name="SettingsEditor_NewTask" xml:space="preserve">
+    <value>New tasks</value>
+  </data>
+  <data name="SettingsEditor_Numbering" xml:space="preserve">
+    <value>Numbering</value>
+  </data>
+  <data name="SettingsEditor_NumberingRow" xml:space="preserve">
+    <value>Numbering</value>
+  </data>
+  <data name="SettingsEditor_Numbers" xml:space="preserve">
+    <value>Task IDs</value>
+  </data>
+  <data name="SettingsEditor_Outline" xml:space="preserve">
+    <value>Outline</value>
+  </data>
+  <data name="SettingsEditor_OutlinePersonal" xml:space="preserve">
+    <value>Tasks are numbered by their position in the plan ({0}). Reordering changes the numbers.</value>
+  </data>
+  <data name="SettingsEditor_OutlineTeam" xml:space="preserve">
+    <value>Plan tasks are numbered by their position in the plan ({0}). Reordering changes the numbers. Triage items are referred to like {1}.</value>
+  </data>
+  <data name="SettingsEditor_Override" xml:space="preserve">
+    <value>Set for this project</value>
+  </data>
+  <data name="SettingsEditor_OverrideName" xml:space="preserve">
+    <value>Set {0} for this project</value>
+  </data>
+  <data name="SettingsEditor_PersonDays" xml:space="preserve">
+    <value>Days (d)</value>
+  </data>
+  <data name="SettingsEditor_ProjectStatusesDescription" xml:space="preserve">
+    <value>Names, categories, and order of this project's statuses. Changes are applied to the GitHub project right away. Statuses with tasks can't be removed.</value>
+  </data>
+  <data name="SettingsEditor_RemoveGuest" xml:space="preserve">
+    <value>Remove {0} from members</value>
+  </data>
+  <data name="SettingsEditor_RemoveHoliday" xml:space="preserve">
+    <value>Remove {0} from custom days off</value>
+  </data>
+  <data name="SettingsEditor_RemoveStatus" xml:space="preserve">
+    <value>Remove {0}</value>
+  </data>
+  <data name="SettingsEditor_ResetCalendar" xml:space="preserve">
+    <value>Reset to standard (weekends and holidays off)</value>
+  </data>
+  <data name="SettingsEditor_ResetStatuses" xml:space="preserve">
+    <value>Reset to the standard six</value>
+  </data>
+  <data name="SettingsEditor_Retry" xml:space="preserve">
+    <value>Save again</value>
+  </data>
+  <data name="SettingsEditor_Saved" xml:space="preserve">
+    <value>Saved to GitHub</value>
+  </data>
+  <data name="SettingsEditor_SavedKey" xml:space="preserve">
+    <value>Tasks in this project are referred to like {0}. Changing the key keeps autolinks for the previous key.</value>
+  </data>
+  <data name="SettingsEditor_SavedMessage" xml:space="preserve">
+    <value>All members of this project use the same settings.</value>
+  </data>
+  <data name="SettingsEditor_SaveFailed" xml:space="preserve">
+    <value>Couldn't save settings to GitHub</value>
+  </data>
+  <data name="SettingsEditor_Sequential" xml:space="preserve">
+    <value>Sequential</value>
+  </data>
+  <data name="SettingsEditor_SequentialPersonal" xml:space="preserve">
+    <value>Uses the issue number ({0}).</value>
+  </data>
+  <data name="SettingsEditor_SequentialTeam" xml:space="preserve">
+    <value>Uses the issue number ({0}). It stays the same when moving from Triage to the plan.</value>
+  </data>
+  <data name="SettingsEditor_StatusCategory" xml:space="preserve">
+    <value>Category of {0}</value>
+  </data>
+  <data name="SettingsEditor_Statuses" xml:space="preserve">
+    <value>Statuses</value>
+  </data>
+  <data name="SettingsEditor_StatusesFailed" xml:space="preserve">
+    <value>Couldn't apply statuses to GitHub</value>
+  </data>
+  <data name="SettingsEditor_StatusesSaved" xml:space="preserve">
+    <value>Status changes were saved to the project.</value>
+  </data>
+  <data name="SettingsEditor_StatusInUse_One" xml:space="preserve">
+    <value>Can't remove: {0} task uses it</value>
+  </data>
+  <data name="SettingsEditor_StatusInUse_Other" xml:space="preserve">
+    <value>Can't remove: {0} tasks use it</value>
+  </data>
+  <data name="SettingsEditor_StatusNameField" xml:space="preserve">
+    <value>Name of status {0}</value>
+  </data>
+  <data name="SettingsEditor_StatusProblem" xml:space="preserve">
+    <value>Can't change statuses</value>
+  </data>
+  <data name="SettingsEditor_SuggestedKey" xml:space="preserve">
+    <value>Suggested from the project name. Once saved, IDs stay the same even if the project is renamed, and match for all members.</value>
+  </data>
+  <data name="SettingsEditor_Usage" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="SettingsEditor_UseDefault" xml:space="preserve">
+    <value>Use default</value>
+  </data>
+  <data name="SettingsEditor_WorkDays" xml:space="preserve">
+    <value>Working days</value>
+  </data>
+  <data name="SettingsEditor_WorkDaysDescription" xml:space="preserve">
+    <value>Used for days off in the Gantt chart, working-day counts, and delay and schedule calculations.</value>
+  </data>
+  <data name="Share_Assignees.Content" xml:space="preserve">
+    <value>Show assignee after name</value>
+  </data>
+  <data name="Share_ByAssignee" xml:space="preserve">
+    <value>By assignee</value>
+  </data>
+  <data name="Share_ByTopParent" xml:space="preserve">
+    <value>By top-level parent</value>
+  </data>
+  <data name="Share_Canceled.Content" xml:space="preserve">
+    <value>Canceled tasks</value>
+  </data>
+  <data name="Share_CodeBox.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Mermaid code</value>
+  </data>
+  <data name="Share_CodeTab.Text" xml:space="preserve">
+    <value>Mermaid code</value>
+  </data>
+  <data name="Share_Completed.Content" xml:space="preserve">
+    <value>Completed tasks</value>
+  </data>
+  <data name="Share_CopiedCode" xml:space="preserve">
+    <value>Copied Mermaid code</value>
+  </data>
+  <data name="Share_CopiedImage" xml:space="preserve">
+    <value>Copied image</value>
+  </data>
+  <data name="Share_CopiedMarkdown" xml:space="preserve">
+    <value>Copied Mermaid as Markdown</value>
+  </data>
+  <data name="Share_CopyImage.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Copy image</value>
+  </data>
+  <data name="Share_CopyImage.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Copy image (Ctrl + Shift + C)</value>
+  </data>
+  <data name="Share_CopyImageText.Text" xml:space="preserve">
+    <value>Copy image</value>
+  </data>
+  <data name="Share_CopyMermaid.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Copy Mermaid</value>
+  </data>
+  <data name="Share_CopyMermaid.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Copy Mermaid (Ctrl + C)</value>
+  </data>
+  <data name="Share_CopyMermaidText.Text" xml:space="preserve">
+    <value>Copy Mermaid</value>
+  </data>
+  <data name="Share_Display.Text" xml:space="preserve">
+    <value>Display</value>
+  </data>
+  <data name="Share_Export.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Export to file</value>
+  </data>
+  <data name="Share_Export.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Export to file (Ctrl + S)</value>
+  </data>
+  <data name="Share_Exported" xml:space="preserve">
+    <value>Exported to {0}</value>
+  </data>
+  <data name="Share_ExportText.Text" xml:space="preserve">
+    <value>Export…</value>
+  </data>
+  <data name="Share_FileMarkdown" xml:space="preserve">
+    <value>Markdown (Mermaid chart)</value>
+  </data>
+  <data name="Share_FilePng" xml:space="preserve">
+    <value>Image (PNG)</value>
+  </data>
+  <data name="Share_FilterNote" xml:space="preserve">
+    <value>Follows the assignee filter on the page ({0}).</value>
+  </data>
+  <data name="Share_Format" xml:space="preserve">
+    <value>Mermaid format</value>
+  </data>
+  <data name="Share_FormatCode" xml:space="preserve">
+    <value>Mermaid code only</value>
+  </data>
+  <data name="Share_FormatCodeTip" xml:space="preserve">
+    <value>For pasting into Mermaid Live Editor or other tools</value>
+  </data>
+  <data name="Share_FormatMarkdown" xml:space="preserve">
+    <value>Markdown (wrapped in ```mermaid)</value>
+  </data>
+  <data name="Share_FormatMarkdownTip" xml:space="preserve">
+    <value>Renders as a chart when pasted into a GitHub issue or README</value>
+  </data>
+  <data name="Share_From" xml:space="preserve">
+    <value>Period start</value>
+  </data>
+  <data name="Share_FromPlaceholder" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Share_Heading.Text" xml:space="preserve">
+    <value>Share view</value>
+  </data>
+  <data name="Share_Holidays.Content" xml:space="preserve">
+    <value>Shade days off</value>
+  </data>
+  <data name="Share_Include.Text" xml:space="preserve">
+    <value>Include</value>
+  </data>
+  <data name="Share_Items_One" xml:space="preserve">
+    <value>{0} item</value>
+  </data>
+  <data name="Share_Items_Other" xml:space="preserve">
+    <value>{0} items</value>
+  </data>
+  <data name="Share_Milestones.Content" xml:space="preserve">
+    <value>Milestones</value>
+  </data>
+  <data name="Share_ParentBars.Content" xml:space="preserve">
+    <value>Parent task bars</value>
+  </data>
+  <data name="Share_Progress.Content" xml:space="preserve">
+    <value>Show progress after name</value>
+  </data>
+  <data name="Share_Range" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="Share_RangeAll" xml:space="preserve">
+    <value>All dates</value>
+  </data>
+  <data name="Share_RangeAroundToday" xml:space="preserve">
+    <value>Around today (1 week before to 4 weeks after)</value>
+  </data>
+  <data name="Share_RangeCustom" xml:space="preserve">
+    <value>Custom range</value>
+  </data>
+  <data name="Share_RangeNote.Text" xml:space="preserve">
+    <value>Shows tasks that overlap the period.</value>
+  </data>
+  <data name="Share_RangeThisMonth" xml:space="preserve">
+    <value>This month</value>
+  </data>
+  <data name="Share_StatusColors.Content" xml:space="preserve">
+    <value>Color by status (done, in progress, late)</value>
+  </data>
+  <data name="Share_TitleBox.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Chart title</value>
+  </data>
+  <data name="Share_TitleBox.Header" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="Share_To" xml:space="preserve">
+    <value>Period end</value>
+  </data>
+  <data name="Share_TodayLine.Content" xml:space="preserve">
+    <value>Today line</value>
+  </data>
+  <data name="Share_ToPlaceholder" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="Share_Unscheduled_One" xml:space="preserve">
+    <value>{0} unscheduled task not included</value>
+  </data>
+  <data name="Share_Unscheduled_Other" xml:space="preserve">
+    <value>{0} unscheduled tasks not included</value>
+  </data>
+  <data name="Share_ViewTab.Text" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="Share_WindowTitle" xml:space="preserve">
+    <value>Share view - {0}</value>
+  </data>
+  <data name="SignIn_Advanced.Header" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="SignIn_Button.Content" xml:space="preserve">
+    <value>Sign in with GitHub</value>
+  </data>
+  <data name="SignIn_Cancel.Content" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="SignIn_CheckingAccount" xml:space="preserve">
+    <value>Checking your account</value>
+  </data>
+  <data name="SignIn_Code.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Verification code</value>
+  </data>
+  <data name="SignIn_EnterCode.Text" xml:space="preserve">
+    <value>Enter this code in your browser to authorize Tasklabe. The code has been copied to the clipboard.</value>
+  </data>
+  <data name="SignIn_Expired" xml:space="preserve">
+    <value>Your GitHub sign-in is no longer valid. Sign in again. Unsynced changes on this PC are kept.</value>
+  </data>
+  <data name="SignIn_Intro.Text" xml:space="preserve">
+    <value>Your tasks and projects are stored on GitHub. Sign in with your GitHub account.</value>
+  </data>
+  <data name="SignIn_LoadingTasks" xml:space="preserve">
+    <value>Loading tasks</value>
+  </data>
+  <data name="SignIn_OpenAgain.Content" xml:space="preserve">
+    <value>Open browser again</value>
+  </data>
+  <data name="SignIn_Repository.Header" xml:space="preserve">
+    <value>Personal repository</value>
+  </data>
+  <data name="SignIn_Waiting.Text" xml:space="preserve">
+    <value>Continues automatically once authorized</value>
+  </data>
+  <data name="SignIn_Welcome.Text" xml:space="preserve">
+    <value>Welcome to Tasklabe</value>
+  </data>
+  <data name="Skipped_Done" xml:space="preserve">
+    <value>Completed and canceled tasks aren't affected by this action.</value>
+  </data>
+  <data name="Skipped_NotSent" xml:space="preserve">
+    <value>Tasks not yet sent to GitHub aren't affected by this action.</value>
+  </data>
+  <data name="Skipped_OtherKind" xml:space="preserve">
+    <value>Tasks of a different type or project aren't affected by this action.</value>
+  </data>
+  <data name="Skipped_Personal" xml:space="preserve">
+    <value>Tasks in personal projects aren't affected by this action.</value>
+  </data>
+  <data name="Skipped_Title_One" xml:space="preserve">
+    <value>{0} task wasn't changed</value>
+  </data>
+  <data name="Skipped_Title_Other" xml:space="preserve">
+    <value>{0} tasks weren't changed</value>
+  </data>
+  <data name="Status_Ahead" xml:space="preserve">
+    <value>Ahead of plan</value>
+  </data>
+  <data name="Status_AllInPlan" xml:space="preserve">
+    <value>All in the plan</value>
+  </data>
+  <data name="Status_AttentionEmpty.Text" xml:space="preserve">
+    <value>No matching tasks.</value>
+  </data>
+  <data name="Status_AttentionHeading.Text" xml:space="preserve">
+    <value>Tasks needing attention</value>
+  </data>
+  <data name="Status_Behind" xml:space="preserve">
+    <value>Behind plan</value>
+  </data>
+  <data name="Status_Capacity" xml:space="preserve">
+    <value>Days over {0:0.#}h are highlighted</value>
+  </data>
+  <data name="Status_CellName" xml:space="preserve">
+    <value>{0} {1} {2}</value>
+  </data>
+  <data name="Status_CellOverloadedName" xml:space="preserve">
+    <value>{0} {1} {2}, overloaded</value>
+  </data>
+  <data name="Status_CellTip" xml:space="preserve">
+    <value>{0}    {1} / {2}
+{3}</value>
+  </data>
+  <data name="Status_ChangedMany" xml:space="preserve">
+    <value>Set status of {0} tasks to “{1}”</value>
+  </data>
+  <data name="Status_ChangedOne" xml:space="preserve">
+    <value>Set status to “{0}”</value>
+  </data>
+  <data name="Status_DaysAhead" xml:space="preserve">
+    <value>+{0:0.#}d</value>
+  </data>
+  <data name="Status_DaysBehind" xml:space="preserve">
+    <value>▲{0:0.#}d</value>
+  </data>
+  <data name="Status_DaysEven" xml:space="preserve">
+    <value>±0d</value>
+  </data>
+  <data name="Status_DelayedLabel.Text" xml:space="preserve">
+    <value>Delayed tasks</value>
+  </data>
+  <data name="Status_DelayedTab.Text" xml:space="preserve">
+    <value>Delayed</value>
+  </data>
+  <data name="Status_DoneCount" xml:space="preserve">
+    <value>{0} of {1} done</value>
+  </data>
+  <data name="Status_DueSoon" xml:space="preserve">
+    <value>Due soon</value>
+  </data>
+  <data name="Status_DueThisWeek" xml:space="preserve">
+    <value>{0} due this week</value>
+  </data>
+  <data name="Status_Estimated" xml:space="preserve">
+    <value>Estimated {0}</value>
+  </data>
+  <data name="Status_ExcludingUnestimated" xml:space="preserve">
+    <value>Excluding {0} not estimated</value>
+  </data>
+  <data name="Status_IssuesLabel.Text" xml:space="preserve">
+    <value>Triage</value>
+  </data>
+  <data name="Status_Late" xml:space="preserve">
+    <value>⚠ {0} past milestone ({1}, ▲{2}d)</value>
+  </data>
+  <data name="Status_LockedMessage" xml:space="preserve">
+    <value>The status of a task with subtasks comes from its subtasks.</value>
+  </data>
+  <data name="Status_LockedTitle" xml:space="preserve">
+    <value>Can't change status</value>
+  </data>
+  <data name="Status_MaxDelay_One" xml:space="preserve">
+    <value>Up to {0} day late</value>
+  </data>
+  <data name="Status_MaxDelay_Other" xml:space="preserve">
+    <value>Up to {0} days late</value>
+  </data>
+  <data name="Status_MilestonesHeading.Text" xml:space="preserve">
+    <value>Milestones</value>
+  </data>
+  <data name="Status_NoDelays" xml:space="preserve">
+    <value>No delayed tasks</value>
+  </data>
+  <data name="Status_NoDue" xml:space="preserve">
+    <value>No due date</value>
+  </data>
+  <data name="Status_NoPlanTasks" xml:space="preserve">
+    <value>No tasks in the plan</value>
+  </data>
+  <data name="Status_NoTasks" xml:space="preserve">
+    <value>No tasks</value>
+  </data>
+  <data name="Status_NotInPlan" xml:space="preserve">
+    <value>Not in the plan</value>
+  </data>
+  <data name="Status_OnTrack" xml:space="preserve">
+    <value>On track</value>
+  </data>
+  <data name="Status_ProgressLabel.Text" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="Status_RemainingLabel.Text" xml:space="preserve">
+    <value>Remaining effort</value>
+  </data>
+  <data name="Status_ScheduleLabel.Text" xml:space="preserve">
+    <value>vs. plan</value>
+  </data>
+  <data name="Status_SoonTab.Text" xml:space="preserve">
+    <value>Due soon</value>
+  </data>
+  <data name="Status_Substituted" xml:space="preserve">
+    <value>{0} (projects without {1} use {2})</value>
+  </data>
+  <data name="Status_Unestimated" xml:space="preserve">
+    <value>Not estimated</value>
+  </data>
+  <data name="Status_UnestimatedTab.Text" xml:space="preserve">
+    <value>Not estimated</value>
+  </data>
+  <data name="Status_WorkloadEmpty.Text" xml:space="preserve">
+    <value>No remaining work is assigned.</value>
+  </data>
+  <data name="Status_WorkloadHeading.Text" xml:space="preserve">
+    <value>Workload by assignee (next 2 weeks)</value>
+  </data>
+  <data name="Sync_Error" xml:space="preserve">
+    <value>Can't sync</value>
+  </data>
+  <data name="Sync_Failed" xml:space="preserve">
+    <value>{0} failed</value>
+  </data>
+  <data name="Sync_NotSent" xml:space="preserve">
+    <value>Not synced to GitHub</value>
+  </data>
+  <data name="Sync_NotYet" xml:space="preserve">
+    <value>Not synced yet</value>
+  </data>
+  <data name="Sync_Offline" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="Sync_OfflinePending" xml:space="preserve">
+    <value>Offline, {0} pending</value>
+  </data>
+  <data name="Sync_Pending" xml:space="preserve">
+    <value>{0} pending</value>
+  </data>
+  <data name="Sync_Synced" xml:space="preserve">
+    <value>Synced {0:HH:mm}</value>
+  </data>
+  <data name="Sync_SyncedPartial" xml:space="preserve">
+    <value>Synced {0:HH:mm} (partly)</value>
+  </data>
+  <data name="Sync_Syncing" xml:space="preserve">
+    <value>Syncing</value>
+  </data>
+  <data name="Toast_Added" xml:space="preserve">
+    <value>Added “{0}”</value>
+  </data>
+  <data name="Toast_AddedHidden" xml:space="preserve">
+    <value>Added “{0}”. It doesn't match the current filters, so it isn't shown</value>
+  </data>
+  <data name="Toast_AssignedMe" xml:space="preserve">
+    <value>Assigned {0} tasks to you</value>
+  </data>
+  <data name="Toast_AssigneeChanged" xml:space="preserve">
+    <value>Changed assignee of {0} tasks</value>
+  </data>
+  <data name="Toast_CopiedKey" xml:space="preserve">
+    <value>Copied {0}</value>
+  </data>
+  <data name="Toast_CopiedKeys" xml:space="preserve">
+    <value>Copied {0} IDs</value>
+  </data>
+  <data name="Toast_CopiedUrl" xml:space="preserve">
+    <value>Copied issue URL</value>
+  </data>
+  <data name="Toast_DueChanged" xml:space="preserve">
+    <value>Changed due date of {0} tasks</value>
+  </data>
+  <data name="Toast_EstimateChanged" xml:space="preserve">
+    <value>Changed estimate of {0} tasks</value>
+  </data>
+  <data name="Toast_MovedMany" xml:space="preserve">
+    <value>Moved {0} tasks to {1}</value>
+  </data>
+  <data name="Toast_MovedOne" xml:space="preserve">
+    <value>Moved “{0}” to {1}</value>
+  </data>
+  <data name="Toast_MovedToTriageMany" xml:space="preserve">
+    <value>Moved {0} tasks to Triage</value>
+  </data>
+  <data name="Toast_MovedToTriageOne" xml:space="preserve">
+    <value>Moved “{0}” to Triage</value>
+  </data>
+  <data name="Toast_NoKeyYet" xml:space="preserve">
+    <value>The ID is assigned once the task is sent to GitHub</value>
+  </data>
+  <data name="Toast_PlanChanged" xml:space="preserve">
+    <value>Changed schedule of {0} tasks</value>
+  </data>
+  <data name="Toast_ProgressChanged" xml:space="preserve">
+    <value>Set progress of {0} tasks to {1:0}%</value>
+  </data>
+  <data name="Toast_RepositoryChanged" xml:space="preserve">
+    <value>Changed working repository of {0} tasks</value>
+  </data>
+  <data name="Toast_ShowAll" xml:space="preserve">
+    <value>Show all</value>
+  </data>
+  <data name="Toast_ToggledDone" xml:space="preserve">
+    <value>Toggled completion for {0} tasks</value>
+  </data>
+  <data name="Toast_UnassignedMe" xml:space="preserve">
+    <value>Unassigned you from {0} tasks</value>
+  </data>
+  <data name="Undo_NothingToRedo" xml:space="preserve">
+    <value>Nothing to redo</value>
+  </data>
+  <data name="Undo_NothingToUndo" xml:space="preserve">
+    <value>Nothing to undo</value>
+  </data>
+  <data name="Undo_Redone" xml:space="preserve">
+    <value>Redone: {0}</value>
+  </data>
+  <data name="Undo_Undone" xml:space="preserve">
+    <value>Undone: {0}</value>
+  </data>
+  <data name="View_Grouping" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="View_Ordering" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="Wbs_Chevron.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Expand or collapse</value>
+  </data>
+  <data name="Wbs_Collapsed" xml:space="preserve">
+    <value>collapsed</value>
+  </data>
+  <data name="Wbs_ColumnFinish.Text" xml:space="preserve">
+    <value>Finish</value>
+  </data>
+  <data name="Wbs_ColumnStart.Text" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Wbs_DropAfter" xml:space="preserve">
+    <value>After “{0}”</value>
+  </data>
+  <data name="Wbs_DropBefore" xml:space="preserve">
+    <value>Before “{0}”</value>
+  </data>
+  <data name="Wbs_DropInside" xml:space="preserve">
+    <value>Into “{0}”</value>
+  </data>
+  <data name="Wbs_Editor.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Edit title</value>
+  </data>
+  <data name="Wbs_Expanded" xml:space="preserve">
+    <value>expanded</value>
+  </data>
+  <data name="Wbs_FinishName" xml:space="preserve">
+    <value>finish {0}</value>
+  </data>
+  <data name="Wbs_FrameEarlyName_One" xml:space="preserve">
+    <value>starts {0} day before frame</value>
+  </data>
+  <data name="Wbs_FrameEarlyName_Other" xml:space="preserve">
+    <value>starts {0} days before frame</value>
+  </data>
+  <data name="Wbs_FrameEarlyTip" xml:space="preserve">
+    <value>Outside frame: subtasks start {0}, before this frame ({1} –)</value>
+  </data>
+  <data name="Wbs_FrameOverrunName_One" xml:space="preserve">
+    <value>{0} day past frame</value>
+  </data>
+  <data name="Wbs_FrameOverrunName_Other" xml:space="preserve">
+    <value>{0} days past frame</value>
+  </data>
+  <data name="Wbs_FrameOverrunTip" xml:space="preserve">
+    <value>Outside frame: subtasks run until {0}, past this frame ({1})</value>
+  </data>
+  <data name="Wbs_Level" xml:space="preserve">
+    <value>level {0}</value>
+  </data>
+  <data name="Wbs_List.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Plan table</value>
+  </data>
+  <data name="Wbs_StartName" xml:space="preserve">
+    <value>start {0}</value>
+  </data>
+  <data name="Wbs_StatusFromChildren" xml:space="preserve">
+    <value>Status: {0} (comes from subtasks)</value>
+  </data>
+  <data name="Wbs_StatusIcon.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Change status</value>
+  </data>
+</root>

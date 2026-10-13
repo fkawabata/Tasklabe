@@ -96,13 +96,13 @@
                 <ColumnDefinition Width="72" />
                 <ColumnDefinition Width="64" />
             </Grid.ColumnDefinitions>
-            <TextBlock Style="{StaticResource HeaderText}" Text="タスク" />
-            <TextBlock Grid.Column="1" Style="{StaticResource HeaderText}" Text="担当" />
-            <TextBlock Grid.Column="2" Style="{StaticResource HeaderText}" Text="ステータス" />
-            <TextBlock Grid.Column="3" Style="{StaticResource HeaderText}" Text="開始" />
-            <TextBlock Grid.Column="4" Style="{StaticResource HeaderText}" Text="終了" />
-            <TextBlock Grid.Column="5" HorizontalAlignment="Right" Style="{StaticResource HeaderText}" Text="工数" />
-            <TextBlock Grid.Column="6" HorizontalAlignment="Right" Style="{StaticResource HeaderText}" Text="進捗" />
+            <TextBlock Style="{StaticResource HeaderText}" x:Uid="Gantt_ColumnTask" />
+            <TextBlock Grid.Column="1" Style="{StaticResource HeaderText}" x:Uid="List_ColumnAssignee" />
+            <TextBlock Grid.Column="2" Style="{StaticResource HeaderText}" x:Uid="List_ColumnStatus" />
+            <TextBlock Grid.Column="3" Style="{StaticResource HeaderText}" x:Uid="Wbs_ColumnStart" />
+            <TextBlock Grid.Column="4" Style="{StaticResource HeaderText}" x:Uid="Wbs_ColumnFinish" />
+            <TextBlock Grid.Column="5" HorizontalAlignment="Right" Style="{StaticResource HeaderText}" x:Uid="List_ColumnEstimate" />
+            <TextBlock Grid.Column="6" HorizontalAlignment="Right" Style="{StaticResource HeaderText}" x:Uid="List_ColumnProgress" />
         </Grid>
 
         <ListView
@@ -120,7 +120,7 @@
             PreviewKeyDown="OnListPreviewKeyDown"
             SelectionChanged="OnSelectionChanged"
             SelectionMode="Extended"
-            AutomationProperties.Name="計画の表">
+            x:Uid="Wbs_List">
             <!-- 行の出し入れ・入れ替えに、ListView の既定の動きを付けない -->
             <ListView.ItemContainerTransitions>
                 <TransitionCollection />
@@ -173,7 +173,7 @@
                                 Click="OnChevronClick"
                                 Tag="{x:Bind}"
                                 Visibility="{x:Bind HasChildren}"
-                                AutomationProperties.Name="展開／折りたたみ">
+                                x:Uid="Wbs_Chevron">
                                 <FontIcon FontSize="12" Glyph="{x:Bind ChevronGlyph, Mode=OneWay}" />
                             </Button>
                             <!-- 状態アイコンは、一覧やカンバンと同じく押すとステータスのピッカーを開く -->
@@ -189,7 +189,7 @@
                                 IsTabStop="False"
                                 Tag="{x:Bind}"
                                 ToolTipService.ToolTip="{x:Bind StatusIconTip}"
-                                AutomationProperties.Name="ステータスを変える">
+                                x:Uid="Wbs_StatusIcon">
                                 <controls:StatusIcon Category="{x:Bind IconCategory}" Progress="{x:Bind Progress}" />
                             </Button>
                             <Border
@@ -218,7 +218,7 @@
                                         FontSize="12"
                                         Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                         Glyph="&#xE895;"
-                                        ToolTipService.ToolTip="GitHub へ送信待ち"
+                                        x:Uid="List_NotSent"
                                         Visibility="{x:Bind IsLocal}" />
                                 </StackPanel>
                             </Border>
@@ -350,7 +350,7 @@
                 KeyDown="OnEditorKeyDown"
                 LostFocus="OnEditorLostFocus"
                 Visibility="Collapsed"
-                AutomationProperties.Name="タイトルの編集" />
+                x:Uid="Wbs_Editor" />
         </Canvas>
 
         <!-- 複数を選んでいるときの操作バー（UX 規約 UX-07） -->

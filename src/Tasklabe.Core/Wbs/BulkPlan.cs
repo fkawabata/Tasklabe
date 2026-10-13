@@ -1,4 +1,5 @@
 using Tasklabe.Core.Calendar;
+using Tasklabe.Core.Resources;
 
 namespace Tasklabe.Core.Wbs;
 
@@ -105,7 +106,7 @@ public static class BulkPlan
             }
 
             int? days = begin is { } s && end is { } e && e >= s ? WorkCalendar.CountWorkingDays(s, e) : null;
-            string? problem = begin is { } s2 && end is { } e2 && e2 < s2 ? "終了が開始より前です" : null;
+            string? problem = begin is { } s2 && end is { } e2 && e2 < s2 ? Strings.BulkPlanEndBeforeStart : null;
             // マイルストーンは期限（GitHub の Milestone）で、依存関係を持たない
             bool canLink = previous is not null && row.Kind == BulkKind.Parent;
             int? predecessor = link && canLink && !row.Unlinked ? previous!.Index : null;

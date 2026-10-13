@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text;
 using Tasklabe.Core.Calendar;
+using Tasklabe.Core.Resources;
 
 namespace Tasklabe.Core.Export;
 
@@ -60,7 +61,7 @@ public static class MermaidGantt
 
     private static string Task(OutlineItem item, int number)
     {
-        var name = Clean(item.Name) is { Length: > 0 } n ? n : "（無題）";
+        var name = Clean(item.Name) is { Length: > 0 } n ? n : Strings.Untitled;
         var tags = new List<string>();
         if (item.Milestone)
         {

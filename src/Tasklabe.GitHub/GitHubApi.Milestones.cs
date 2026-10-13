@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json.Nodes;
 using Tasklabe.Core.Domain;
+using Tasklabe.GitHub.Resources;
 
 namespace Tasklabe.GitHub;
 
@@ -69,7 +70,7 @@ public sealed partial class GitHubApi
         }
 
         var created = await SendMilestoneAsync(HttpMethod.Post, $"repos/{owner}/{name}/milestones", body, ct).ConfigureAwait(false)
-            ?? throw new GitHubException("マイルストーンを作れませんでした。");
+            ?? throw new GitHubException(Strings.MilestoneCreateFailed);
         return ToMilestone(created);
     }
 
@@ -84,7 +85,7 @@ public sealed partial class GitHubApi
         }
 
         var updated = await SendMilestoneAsync(HttpMethod.Patch, $"repos/{owner}/{name}/milestones/{number}", body, ct).ConfigureAwait(false)
-            ?? throw new GitHubException("マイルストーンを変えられませんでした。");
+            ?? throw new GitHubException(Strings.MilestoneUpdateFailed);
         return ToMilestone(updated);
     }
 
@@ -106,7 +107,7 @@ public sealed partial class GitHubApi
     private static string? FormatDue(DateOnly? due) => due is { } d ? d.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + "T12:00:00Z" : null;
 
     private static Milestone ToMilestone(JsonObject node) => new(
-        node["node_id"]?.GetValue<string>() ?? throw new GitHubException("マイルストーンの ID を読み取れません。"),
+        node["node_id"]?.GetValue<string>() ?? throw new GitHubException(Strings.MilestoneIdUnreadable),
         node["number"]?.GetValue<int>() ?? 0,
         node["title"]?.GetValue<string>() ?? "",
         ParseDue(node["due_on"]?.GetValue<string>()),
@@ -119,17 +120,17 @@ public sealed partial class GitHubApi
         using var response = await SendRestAsync(method, path, body, ct).ConfigureAwait(false);
         if (response.StatusCode == HttpStatusCode.Unauthorized)
         {
-            throw new GitHubAuthenticationException("GitHub の認証が無効になりました（401）。");
+            throw new GitHubAuthenticationException(Strings.AuthenticationInvalid);
         }
 
         if (response.StatusCode is HttpStatusCode.Forbidden or HttpStatusCode.NotFound)
         {
-            throw new GitHubHttpException(response.StatusCode, "リポジトリのマイルストーンを変える権限がありません（Write 以上が必要です）。");
+            throw new GitHubHttpException(response.StatusCode, Strings.MilestonePermission);
         }
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new GitHubHttpException(response.StatusCode, $"GitHub がエラーを返しました（{(int)response.StatusCode}）。");
+            throw new GitHubHttpException(response.StatusCode, Strings.HttpError((int)response.StatusCode));
         }
 
         return response.StatusCode == HttpStatusCode.NoContent

@@ -30,7 +30,7 @@
             <TextBlock
                 AutomationProperties.HeadingLevel="Level1"
                 Style="{StaticResource Text.Title}"
-                Text="マイタスク" />
+                x:Uid="MyTasks_Title" />
             <TextBlock
                 Grid.Column="1"
                 Margin="0,0,0,3"
@@ -50,7 +50,7 @@
                 VerticalAlignment="Center"
                 Click="OnAddTask"
                 Style="{StaticResource AccentButtonStyle}"
-                AutomationProperties.Name="タスクを追加">
+                x:Uid="Project_AddButton">
                 <FontIcon FontSize="14" Glyph="&#xE710;" />
             </Button>
         </Grid>
@@ -64,12 +64,12 @@
             Orientation="Horizontal"
             Spacing="{StaticResource Space.S}" />
         <SelectorBar x:Name="ViewSelector" Grid.Row="1" HorizontalAlignment="Left" controls:TabIndicator.Slides="True" SelectionChanged="OnViewSelectionChanged">
-            <SelectorBarItem x:Name="ListItem" Text="リスト" Tag="list" IsSelected="True">
+            <SelectorBarItem x:Name="ListItem" x:Uid="MyTasks_ViewList" Tag="list" IsSelected="True">
                 <SelectorBarItem.Icon>
                     <FontIcon Glyph="&#xE8FD;" />
                 </SelectorBarItem.Icon>
             </SelectorBarItem>
-            <SelectorBarItem x:Name="KanbanItem" Text="カンバン" Tag="kanban">
+            <SelectorBarItem x:Name="KanbanItem" x:Uid="Project_ViewKanban" Tag="kanban">
                 <SelectorBarItem.Icon>
                     <FontIcon Glyph="&#xF0E2;" />
                 </SelectorBarItem.Icon>
@@ -87,7 +87,7 @@
             x:Name="Empty"
             Grid.Row="3"
             ActionInvoked="OnEmptyAction"
-            ActionText="タスクを追加"
+            x:Uid="Project_OtherEmpty"
             Glyph="&#xE73A;"
             Visibility="{x:Bind ViewModel.IsEmpty, Mode=OneWay}" />
     </Grid>

@@ -73,7 +73,7 @@
             PaneOpened="OnNavPaneChanged"
             SelectionChanged="OnNavSelectionChanged">
             <NavigationView.MenuItems>
-                <NavigationViewItem x:Name="MyTasksItem" Content="マイタスク" Tag="my">
+                <NavigationViewItem x:Name="MyTasksItem" x:Uid="Nav_MyTasksItem" Tag="my">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE73A;" />
                     </NavigationViewItem.Icon>
@@ -83,7 +83,7 @@
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>
-                <NavigationViewItem Content="新しいプロジェクト" Tag="project:new" SelectsOnInvoked="False">
+                <NavigationViewItem x:Uid="Nav_NewProject" Tag="project:new" SelectsOnInvoked="False">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE710;" />
                     </NavigationViewItem.Icon>

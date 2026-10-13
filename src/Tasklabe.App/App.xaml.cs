@@ -21,6 +21,9 @@ public partial class App : Application
 
     public App()
     {
+        // 文言と日付の書式は、言語を決めてから読む
+        UiLanguage.Apply(Services.CurrentSettings.Language);
+        AppLog.Info($"表示の言語: {UiLanguage.Tag}");
         InitializeComponent();
 
         UnhandledException += (_, e) => AppLog.Error("UnhandledException", e.Exception);

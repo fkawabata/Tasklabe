@@ -34,7 +34,7 @@ public sealed partial class GanttView
             _editing = value;
             Root.BorderBrush = ThemeResources.Brush(value ? "Brand.Accent" : "CardStrokeColorDefaultBrush");
             Root.BorderThickness = new Thickness(value ? 2 : 1);
-            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(this, value ? "ガントチャート（編集モード）" : "ガントチャート");
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(this, value ? Texts.Get("Gantt_EditingName") : Texts.Get("Gantt_Name"));
             EditingChanged?.Invoke(this, EventArgs.Empty);
             RequestRender();
         }
@@ -562,7 +562,7 @@ public sealed partial class GanttView
         {
             if (DependencyLinks.Explain(check, pred, succ) is { } problem)
             {
-                App.Current.Shell?.ShowInfo("依存関係を追加できません", problem);
+                App.Current.Shell?.ShowInfo(Texts.Get("Gantt_LinkProblem"), problem);
             }
 
             return;

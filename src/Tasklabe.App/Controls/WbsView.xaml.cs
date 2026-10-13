@@ -22,7 +22,8 @@ namespace Tasklabe.App.Controls;
 /// </summary>
 public sealed partial class WbsView : UserControl
 {
-    private const string NewTaskTitle = "新しいタスク";
+    /// <summary>表で足した行の仮の名前。足したときの表示の言語で書く。</summary>
+    private static string NewTaskTitle => Texts.Get("Detail_NewTask");
 
     private readonly HashSet<string> _collapsed = [];
     private Project? _project;
@@ -783,9 +784,9 @@ public sealed partial class WbsView : UserControl
         e.DragUIOverride.IsGlyphVisible = false;
         e.DragUIOverride.Caption = target.Position switch
         {
-            WbsOperations.DropPosition.Inside => $"「{target.Row.Task.Title}」の子にする",
-            WbsOperations.DropPosition.Before => $"「{target.Row.Task.Title}」の前へ",
-            _ => $"「{target.Row.Task.Title}」の後ろへ",
+            WbsOperations.DropPosition.Inside => Texts.Format("Wbs_DropInside", target.Row.Task.Title),
+            WbsOperations.DropPosition.Before => Texts.Format("Wbs_DropBefore", target.Row.Task.Title),
+            _ => Texts.Format("Wbs_DropAfter", target.Row.Task.Title),
         };
 
         ShowDropHint(target.Row, target.Position);
@@ -1082,12 +1083,12 @@ public sealed partial class WbsView : UserControl
     private async void PickPlan(WbsRowViewModel row, FrameworkElement cell)
     {
         var tasks = TargetTasks(row);
-        if (await DateRangePicker.ShowAsync(cell, "予定", row.Task.Start, row.Task.Target, ValuePickers.PlanPresets) is { } range)
+        if (await DateRangePicker.ShowAsync(cell, Texts.Get("Field_Plan"), row.Task.Start, row.Task.Target, ValuePickers.PlanPresets) is { } range)
         {
             await TaskCommands.ApplyAsync([.. tasks.Select(t => (t, (IReadOnlyList<TaskChange>)[
                 .. TaskRules.Set(t, TaskField.Start, TaskValues.Date(range.Start)),
                 .. TaskRules.Set(t, TaskField.Target, TaskValues.Date(range.End))]))],
-                tasks.Count > 1 ? $"{tasks.Count} 件の予定を変えました" : null);
+                tasks.Count > 1 ? Texts.Format("Toast_PlanChanged", tasks.Count) : null);
         }
 
         FocusCurrent(FocusState.Programmatic);

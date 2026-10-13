@@ -1,6 +1,7 @@
 using Tasklabe.Core.Domain;
 using Tasklabe.Core.Milestones;
 using Tasklabe.Core.Settings;
+using Tasklabe.Data.Resources;
 using Tasklabe.GitHub;
 
 namespace Tasklabe.Data;
@@ -21,11 +22,11 @@ public sealed class WorkspaceService(GitHubApi api, SqliteTaskStore store, TimeP
     public async Task<RepositoryInfo> EnsurePersonalWorkspaceAsync(
         GitHubUser user, string repositoryName, IProgress<string>? progress = null, CancellationToken ct = default)
     {
-        progress?.Report("個人用リポジトリを準備しています");
+        progress?.Report(Strings.PreparingPersonalRepository);
         var repository = await api.FindRepositoryAsync(user.Login, repositoryName, ct).ConfigureAwait(false)
-            ?? await api.CreatePrivateRepositoryAsync(repositoryName, "Tasklabe の個人タスク", ct).ConfigureAwait(false);
+            ?? await api.CreatePrivateRepositoryAsync(repositoryName, Strings.PersonalRepositoryDescription, ct).ConfigureAwait(false);
 
-        progress?.Report("Inbox を準備しています");
+        progress?.Report(Strings.PreparingInbox);
         var projects = await api.ListViewerProjectsAsync(ct).ConfigureAwait(false);
         if (!projects.Any(p => p.IsInbox))
         {
@@ -44,7 +45,7 @@ public sealed class WorkspaceService(GitHubApi api, SqliteTaskStore store, TimeP
         CancellationToken ct = default)
     {
         var repositoryId = repository?.Id
-            ?? (await api.CreateOrganizationRepositoryAsync(organization.Id, newRepositoryName!, $"Tasklabe のチームプロジェクト「{title}」", ct).ConfigureAwait(false)).Id;
+            ?? (await api.CreateOrganizationRepositoryAsync(organization.Id, newRepositoryName!, Strings.TeamRepositoryDescription(title), ct).ConfigureAwait(false)).Id;
 
         var id = await api.CreateProjectAsync(organization.Id, title, ProjectKind.Team, repositoryId, setup?.Statuses, setup?.Settings, ct).ConfigureAwait(false);
         var snapshot = await api.GetProjectAsync(id, ct).ConfigureAwait(false);
@@ -195,7 +196,7 @@ public sealed class WorkspaceService(GitHubApi api, SqliteTaskStore store, TimeP
         var used = await StatusUsageAsync(project.Id, ct).ConfigureAwait(false);
         if (project.StatusOptions.FirstOrDefault(o => !kept.Contains(o.Id) && used.GetValueOrDefault(o.Id) > 0) is { } removed)
         {
-            throw new InvalidOperationException($"「{removed.Name}」のタスクが {used[removed.Id]} 件あるため、外せません。先に別のステータスへ移してください。");
+            throw new InvalidOperationException(Strings.StatusInUse(removed.Name, used[removed.Id]));
         }
 
         await api.UpdateStatusOptionsAsync(project.Id, options, ct).ConfigureAwait(false);
@@ -244,7 +245,7 @@ public sealed class WorkspaceService(GitHubApi api, SqliteTaskStore store, TimeP
     }
 
     private static string RepositoryOf(Project project) =>
-        project?.RepositoryNameWithOwner ?? throw new InvalidOperationException("プロジェクトにリポジトリがつながっていないため、マイルストーンを扱えません。");
+        project?.RepositoryNameWithOwner ?? throw new InvalidOperationException(Strings.MilestonesNeedRepository);
 
     private async Task RefreshAsync(string projectId, CancellationToken ct)
     {

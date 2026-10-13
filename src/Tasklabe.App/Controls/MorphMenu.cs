@@ -147,7 +147,7 @@ internal sealed class MorphMenu
         if (parent is not null)
         {
             var back = CreateRow(parent.Text, "\uE76B", null, null, null, null, enabled: true, destructive: false, secondary: true);
-            AutomationProperties.SetName(back, parent.Text + "、戻る");
+            AutomationProperties.SetName(back, Texts.Format("Menu_BackName", parent.Text));
             back.Click += (_, _) => GoBack();
             Add(back, parent);
             _rows.Children.Add(Separator());
@@ -175,7 +175,7 @@ internal sealed class MorphMenu
                         : null;
                     var row = CreateRow(command.Text, command.Glyph, command.GlyphBrushKey, command.GlyphFontFamily,
                         command.Accelerator, trailing, command.IsEnabled, command.IsDestructive, secondary: false);
-                    AutomationProperties.SetName(row, command.Text + (command.IsChecked ? "、選択中" : ""));
+                    AutomationProperties.SetName(row, command.IsChecked ? Texts.Format("Menu_CheckedName", command.Text) : command.Text);
                     if (command.ToolTip is { } tip)
                     {
                         ToolTipService.SetToolTip(row, tip);
@@ -191,7 +191,7 @@ internal sealed class MorphMenu
                     var chevron = new FontIcon { Glyph = "\uE76C", FontSize = 12, Foreground = ThemeResources.Brush("TextFillColorTertiaryBrush") };
                     var row = CreateRow(submenu.Text, submenu.Glyph, submenu.GlyphBrushKey, null, null, chevron,
                         submenu.IsEnabled, destructive: false, secondary: false);
-                    AutomationProperties.SetName(row, submenu.Text + "、サブメニュー");
+                    AutomationProperties.SetName(row, Texts.Format("Menu_SubmenuName", submenu.Text));
                     row.Click += (_, _) => Open(submenu);
                     Add(row, submenu);
                     break;

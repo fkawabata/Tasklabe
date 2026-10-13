@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CannotAssign" xml:space="preserve">
+    <value>@{0} can't be assigned to tasks in this repository.</value>
+  </data>
+  <data name="GitHubNotResponding" xml:space="preserve">
+    <value>GitHub kept not responding, so the change couldn't be applied ({0}).</value>
+  </data>
+  <data name="IssueNotFound" xml:space="preserve">
+    <value>The task's issue wasn't found.</value>
+  </data>
+  <data name="ListSeparator" xml:space="preserve">
+    <value>, </value>
+  </data>
+  <data name="MilestonesNeedRepository" xml:space="preserve">
+    <value>The project has no linked repository, so milestones aren't available.</value>
+  </data>
+  <data name="NewTaskUnreadable" xml:space="preserve">
+    <value>Couldn't read the task to create.</value>
+  </data>
+  <data name="NoEditPermission" xml:space="preserve">
+    <value>You don't have permission to edit this project or repository, so the change couldn't be applied.</value>
+  </data>
+  <data name="NotFoundOnGitHub" xml:space="preserve">
+    <value>The task or project wasn't found on GitHub. It may have been deleted.</value>
+  </data>
+  <data name="OrganizationNotApproved" xml:space="preserve">
+    <value>The organization hasn't approved Tasklabe, so the change couldn't be applied.</value>
+  </data>
+  <data name="PersonalRepositoryDescription" xml:space="preserve">
+    <value>Personal tasks for Tasklabe</value>
+  </data>
+  <data name="PreparingInbox" xml:space="preserve">
+    <value>Preparing Inbox</value>
+  </data>
+  <data name="PreparingPersonalRepository" xml:space="preserve">
+    <value>Preparing your personal repository</value>
+  </data>
+  <data name="ProjectHasNoRepository" xml:space="preserve">
+    <value>The project has no linked repository.</value>
+  </data>
+  <data name="ProjectNotFound" xml:space="preserve">
+    <value>Project not found.</value>
+  </data>
+  <data name="PullProblems" xml:space="preserve">
+    <value>Couldn't fetch these projects: {0}</value>
+  </data>
+  <data name="SamlRequired" xml:space="preserve">
+    <value>The organization requires SAML single sign-on authorization, so the change couldn't be applied.</value>
+  </data>
+  <data name="StatusInUse_One" xml:space="preserve">
+    <value>“{0}” has {1} task, so it can't be removed. Move it to another status first.</value>
+  </data>
+  <data name="StatusInUse_Other" xml:space="preserve">
+    <value>“{0}” has {1} tasks, so it can't be removed. Move them to another status first.</value>
+  </data>
+  <data name="SyncUnexpectedError" xml:space="preserve">
+    <value>An unexpected error occurred while syncing.</value>
+  </data>
+  <data name="TaskRepositoryNotFound" xml:space="preserve">
+    <value>The task's repository wasn't found.</value>
+  </data>
+  <data name="TeamRepositoryDescription" xml:space="preserve">
+    <value>Tasklabe team project “{0}”</value>
+  </data>
+  <data name="UnexpectedResponse" xml:space="preserve">
+    <value>GitHub returned an unexpected response, so the change couldn't be applied.</value>
+  </data>
+</root>

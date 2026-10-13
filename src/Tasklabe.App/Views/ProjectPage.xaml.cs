@@ -15,7 +15,7 @@ namespace Tasklabe.App.Views;
 
 public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence, INewTaskContextSource, IFilterHost, IViewOptionsHost, ICommandSource
 {
-    private static readonly (GanttScale Value, string Label)[] Scales = [(GanttScale.Day, "表示: 日"), (GanttScale.Week, "表示: 週"), (GanttScale.Month, "表示: 月")];
+    private static readonly GanttScale[] Scales = [GanttScale.Day, GanttScale.Week, GanttScale.Month];
 
     private string? _projectId;
     private readonly Segmented _scaleButton;
@@ -34,13 +34,13 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         Gantt.EditingChanged += (_, _) => SyncGanttEditToggle();
         SyncGanttEditToggle();
 
-        _scaleButton = new Segmented("表示の単位", ["日", "週", "月"]);
-        _scaleButton.SelectionChanged += (_, i) => SetScale(Scales[i].Value);
+        _scaleButton = new Segmented(Texts.Get("Project_Scale"), [Texts.Get("Project_ScaleDay"), Texts.Get("Project_ScaleWeek"), Texts.Get("Project_ScaleMonth")]);
+        _scaleButton.SelectionChanged += (_, i) => SetScale(Scales[i]);
         GanttScaleHost.Content = _scaleButton;
 
         // Ctrl + ホイールで拡大・縮小して単位が変わったときも、切り替えの表示を合わせる
-        Gantt.TimeScaleChanged += (_, _) => _scaleButton.SelectedIndex = Array.FindIndex(Scales, s => s.Value == Gantt.TimeScale);
-        Gantt.ScaleCycleRequested += (_, _) => SetScale(Scales[(Array.FindIndex(Scales, s => s.Value == Gantt.TimeScale) + 1) % Scales.Length].Value);
+        Gantt.TimeScaleChanged += (_, _) => _scaleButton.SelectedIndex = Array.IndexOf(Scales, Gantt.TimeScale);
+        Gantt.ScaleCycleRequested += (_, _) => SetScale(Scales[(Array.IndexOf(Scales, Gantt.TimeScale) + 1) % Scales.Length]);
         Kanban.DisplayChanged += (_, _) =>
         {
             UpdateFilterBar();
@@ -55,7 +55,7 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         Wbs.BulkRequested += async (_, _) => await ShowBulkPlanAsync();
         Gantt.MilestoneInvoked += async (_, milestone) => await ShowMilestonesAsync(focus: milestone.Id);
         Gantt.MilestoneRequested += async (_, due) => await ShowMilestonesAsync(newDue: due);
-        ToolTipService.SetToolTip(BulkPlanButton, KeyHints.Tip("wbs.bulk", "親タスクとマイルストーンをまとめて入力"));
+        ToolTipService.SetToolTip(BulkPlanButton, KeyHints.Tip("wbs.bulk"));
 
         // プレビューのあいだは、プレビューの帯と同じことを知らせないよう隠す
         Gantt.PreviewStarted += (_, _) => ConflictChip.Hide();
@@ -70,7 +70,7 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         if (e.Parameter is ProjectNavItem project)
         {
             _projectId = project.Id;
-            KindText.Text = project.IsTeam ? "チーム" : "個人";
+            KindText.Text = project.IsTeam ? Texts.Get("Common_Team") : Texts.Get("Common_Personal");
             KindIcon.Glyph = project.IsTeam ? "\uE716" : "\uE77B";
             ApplyProjectKind(project.IsTeam);
             AccessChip.Hide();
@@ -94,7 +94,7 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
             PlanStickyToggle.IsChecked = Wbs.StickyParents;
             var scale = Enum.TryParse<GanttScale>(ViewState.Get($"gantt-scale:{project.Id}"), out var saved) ? saved : GanttScale.Day;
             Gantt.TimeScale = scale;
-            _scaleButton.SelectedIndex = Array.FindIndex(Scales, s => s.Value == scale);
+            _scaleButton.SelectedIndex = Array.IndexOf(Scales, scale);
         }
 
         App.Current.Shell!.DataChanged += OnDataChanged;
@@ -110,11 +110,11 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
 
         UpdateView();
         var keymap = App.Current.Services.Keymap;
-        ToolTipService.SetToolTip(AddButton, KeyHints.Tip("task.new", "タスクを追加"));
-        ToolTipService.SetToolTip(FilterButton, KeyHints.Tip("view.filter", "絞り込む"));
-        ToolTipService.SetToolTip(GanttTodayButton, KeyHints.Tip("gantt.today", "今日の位置へ移動"));
-        ToolTipService.SetToolTip(_scaleButton, KeyHints.Tip("gantt.scale", "表示の単位を切り替える"));
-        PlanEmpty.ActionToolTip = KeyHints.Tip("task.new", "タスクを追加");
+        ToolTipService.SetToolTip(AddButton, KeyHints.Tip("task.new"));
+        ToolTipService.SetToolTip(FilterButton, KeyHints.Tip("view.filter"));
+        ToolTipService.SetToolTip(GanttTodayButton, KeyHints.Tip("gantt.today"));
+        ToolTipService.SetToolTip(_scaleButton, KeyHints.Tip("gantt.scale"));
+        PlanEmpty.ActionToolTip = KeyHints.Tip("task.new");
         _ = keymap;
         _focusAfterLoad = true;
         await ReloadAsync();
@@ -200,8 +200,8 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
 
     // ---------------------------------------------------------------- 並び順とグループ（UI デザイン設計書 4.4 節）
 
-    private readonly ViewOptionButton _orderingButton = new("並び順", ViewOptions.OrderingGlyph, "view.sort");
-    private readonly ViewOptionButton _groupingButton = new("グループ", ViewOptions.GroupingGlyph, "view.group");
+    private readonly ViewOptionButton _orderingButton = new(Texts.Get("View_Ordering"), ViewOptions.OrderingGlyph, "view.sort");
+    private readonly ViewOptionButton _groupingButton = new(Texts.Get("View_Grouping"), ViewOptions.GroupingGlyph, "view.group");
 
     private void UpdateKanbanTools()
     {
@@ -216,15 +216,16 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         _groupingButton.IsCompact = compact;
     }
 
-    public Task OpenOrderingAsync() => OpenKanbanOptionAsync(Kanban.PickOrderingAsync, _orderingButton, "並び順");
+    public Task OpenOrderingAsync() => OpenKanbanOptionAsync(Kanban.PickOrderingAsync, _orderingButton, Texts.Get("Project_OrderingOnlyKanban"));
 
-    public Task OpenGroupingAsync() => OpenKanbanOptionAsync(Kanban.PickGroupingAsync, _groupingButton, "グループ");
+    public Task OpenGroupingAsync() => OpenKanbanOptionAsync(Kanban.PickGroupingAsync, _groupingButton, Texts.Get("Project_GroupingOnlyKanban"));
 
-    private Task OpenKanbanOptionAsync(Func<FrameworkElement, Task> pick, FrameworkElement anchor, string name)
+    /// <param name="unavailable">カンバン以外で押したときの知らせ。</param>
+    private Task OpenKanbanOptionAsync(Func<FrameworkElement, Task> pick, FrameworkElement anchor, string unavailable)
     {
         if (Kanban.Visibility != Visibility.Visible)
         {
-            App.Current.Shell?.ShowToast($"このビューでは{name}を選べません。カンバンで選べます");
+            App.Current.Shell?.ShowToast(unavailable);
             return Task.CompletedTask;
         }
 
@@ -239,17 +240,17 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         var kinds = new List<(string Label, Func<FrameworkElement, Task> Pick)>();
         if (ViewModel.Project?.IsTeam == true)
         {
-            kinds.Add(("担当者", PickAssigneeFilterAsync));
+            kinds.Add((Texts.Get("Filter_Assignee"), PickAssigneeFilterAsync));
         }
 
         if (Kanban.Visibility == Visibility.Visible)
         {
-            kinds.Add(("完了・中止のカード", PickCompletedAsync));
+            kinds.Add((Texts.Get("Filter_CompletedCards"), PickCompletedAsync));
         }
 
         if (kinds.Count == 0)
         {
-            App.Current.Shell?.ShowToast("このビューで絞り込める条件はありません");
+            App.Current.Shell?.ShowToast(Texts.Get("Filter_NothingToFilter"));
             return;
         }
 
@@ -259,7 +260,7 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
             return;
         }
 
-        if (await ValuePickers.ChoiceAsync(FilterButton, "絞り込む条件", [.. kinds.Select(k => k.Label)], -1) is { } index)
+        if (await ValuePickers.ChoiceAsync(FilterButton, Texts.Get("Filter_ChooseKind"), [.. kinds.Select(k => k.Label)], -1) is { } index)
         {
             await kinds[index].Pick(FilterButton);
         }
@@ -268,18 +269,18 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
     private async Task PickAssigneeFilterAsync(FrameworkElement anchor)
     {
         var me = App.Current.Services.CurrentSettings.UserLogin;
-        var values = new List<(string Label, string? Value)> { ("すべて", null) };
+        var values = new List<(string Label, string? Value)> { (Texts.Get("Filter_All"), null) };
         if (me is not null)
         {
-            values.Add(("自分", me));
+            values.Add((Texts.Get("Picker_Me"), me));
         }
 
-        values.Add(("担当者なし", ""));
+        values.Add((Texts.Get("Filter_NoAssignee"), ""));
         values.AddRange(ViewModel.AssigneeCandidates
             .Where(l => !string.Equals(l, me, StringComparison.OrdinalIgnoreCase))
             .Select(l => (People.Display(l), (string?)l)));
         int current = values.FindIndex(v => v.Value == ViewModel.AssigneeFilter);
-        if (await ValuePickers.ChoiceAsync(anchor, "担当者で絞り込む", [.. values.Select(v => v.Label)], current) is { } index)
+        if (await ValuePickers.ChoiceAsync(anchor, Texts.Get("Filter_ByAssignee"), [.. values.Select(v => v.Label)], current) is { } index)
         {
             await SetAssigneeFilterAsync(values[index].Value);
         }
@@ -289,7 +290,7 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
     {
         var options = KanbanView.CompletedOptions;
         int current = options.ToList().FindIndex(o => o.Value == Kanban.Display.Completed);
-        if (await ValuePickers.ChoiceAsync(anchor, "完了・中止のカード", [.. options.Select(o => o.Label)], current) is { } index)
+        if (await ValuePickers.ChoiceAsync(anchor, Texts.Get("Filter_CompletedCards"), [.. options.Select(o => o.Label)], current) is { } index)
         {
             Kanban.SetDisplay(Kanban.Display with { Completed = options[index].Value });
         }
@@ -309,9 +310,9 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
 
     private string AssigneeFilterLabel => ViewModel.AssigneeFilter switch
     {
-        "" => "担当者なし",
-        var login when string.Equals(login, App.Current.Services.CurrentSettings.UserLogin, StringComparison.OrdinalIgnoreCase) => "担当: 自分",
-        var login => $"担当: {People.Display(login ?? "")}",
+        "" => Texts.Get("Filter_NoAssignee"),
+        var login when string.Equals(login, App.Current.Services.CurrentSettings.UserLogin, StringComparison.OrdinalIgnoreCase) => Texts.Get("Filter_AssigneeMe"),
+        var login => Texts.Format("Filter_AssigneeChip", People.Display(login ?? "")),
     };
 
     /// <summary>効いている条件をチップで示す。表示するものを減らさない設定（並び順・グループ）はチップにしない。</summary>
@@ -327,7 +328,7 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         if (kanban && Kanban.Display.Completed != KanbanCompleted.All)
         {
             var label = KanbanView.CompletedOptions.First(o => o.Value == Kanban.Display.Completed).Label;
-            chips.Add(new FilterChip($"完了・中止: {label}", PickCompletedAsync, () => Kanban.SetDisplay(Kanban.Display with { Completed = KanbanCompleted.All })));
+            chips.Add(new FilterChip(Texts.Format("Filter_CompletedChip", label), PickCompletedAsync, () => Kanban.SetDisplay(Kanban.Display with { Completed = KanbanCompleted.All })));
         }
 
         var (shown, total) = CurrentView switch
@@ -368,9 +369,9 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
 
         foreach (var empty in (EmptyState[])[PlanEmpty, IssuesEmpty])
         {
-            empty.Title = "条件に一致するタスクはありません";
-            empty.Message = "絞り込みの条件を変えるか、解除してください。";
-            empty.ActionText = "すべて解除";
+            empty.Title = Texts.Get("Empty_FilteredTitle");
+            empty.Message = Texts.Get("Empty_FilteredMessage");
+            empty.ActionText = Texts.Get("Filter_ClearAll");
         }
 
         PlanEmpty.Visibility = CurrentView == "list" ? Visibility.Visible : Visibility.Collapsed;
@@ -471,17 +472,17 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
 
         // 空の状態の文言は、計画を持つチームと、タスクを並べるだけの個人とで変える
         bool team = project.IsTeam;
-        PlanEmpty.Title = team ? "計画にタスクはありません" : "タスクはありません";
+        PlanEmpty.Title = team ? Texts.Get("Empty_PlanTitle") : Texts.Get("Empty_ListTitle");
         PlanEmpty.Message = team
-            ? "親タスクと作業を追加して計画を組み立てます。" + (Hints.Shown ? "表では Insert キーで下に、Shift + Insert キーで子の行を追加できます。" : "")
-            : "このプロジェクトのタスクがここに並びます。";
-        PlanEmpty.ActionText = "タスクを追加";
+            ? Hints.Shown ? Texts.Get("Empty_PlanMessageWithKeys") : Texts.Get("Empty_PlanMessage")
+            : Texts.Get("Empty_ListMessage");
+        PlanEmpty.ActionText = KeyHints.Name("task.new");
         PlanEmpty.Visibility = ViewModel.IsEmpty ? Visibility.Visible : Visibility.Collapsed;
-        IssuesEmpty.Title = "課題はありません";
-        IssuesEmpty.Message = "GitHub でこのプロジェクトに追加した Issue や、ここで追加した課題が並びます。計画へ入れるときは「計画に移す」を使います。";
-        IssuesEmpty.ActionText = "課題を追加";
+        IssuesEmpty.Title = Texts.Get("Empty_IssuesTitle");
+        IssuesEmpty.Message = Texts.Get("Empty_IssuesMessage");
+        IssuesEmpty.ActionText = Texts.Get("Empty_AddIssue");
         IssuesEmpty.Visibility = ViewModel.IsIssuesEmpty ? Visibility.Visible : Visibility.Collapsed;
-        OtherViewEmptyText.Message = team ? "「計画」に追加したタスクが、ここにも表示されます。" : "追加したタスクが、ここにも表示されます。";
+        OtherViewEmptyText.Message = team ? Texts.Get("Empty_OtherTeamMessage") : Texts.Get("Empty_OtherPersonalMessage");
 
         // カンバンは課題も並べるため、課題があれば空とはしない。課題の一覧は専用の空の状態を持つ
         bool empty = ViewModel.IsEmpty
@@ -515,21 +516,18 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         Gantt.FocusContent();
     }
 
-    /// <summary>ガントの編集モード（Ctrl + E、Esc でも切り替わる）に、ボタンの状態と説明を合わせる。</summary>
+    /// <summary>ガントの編集モード（Ctrl + E、Esc でも切り替わる）に、ボタンの状態を合わせる。</summary>
     private void SyncGanttEditToggle()
     {
         GanttEditToggle.IsChecked = Gantt.IsEditing;
-        var keys = App.Current.Services.Keymap.Display("gantt.edit");
-        ToolTipService.SetToolTip(GanttEditToggle, Gantt.IsEditing
-            ? $"編集モード: バーをドラッグして日程を変えます。押すと閲覧モードに戻ります ({keys}、Esc)"
-            : $"閲覧モード: ドラッグで表示する場所を動かします。押すと、バーをドラッグして日程を変える編集モードに入ります ({keys})");
+        ToolTipService.SetToolTip(GanttEditToggle, KeyHints.Tip("gantt.edit"));
     }
 
     /// <summary>表示の単位を変え、プロジェクトごとに覚える（UX 規約 UX-23）。</summary>
     private void SetScale(GanttScale scale)
     {
         Gantt.TimeScale = scale;
-        _scaleButton.SelectedIndex = Array.FindIndex(Scales, s => s.Value == scale);
+        _scaleButton.SelectedIndex = Array.IndexOf(Scales, scale);
         if (_projectId is not null)
         {
             ViewState.Set($"gantt-scale:{_projectId}", scale == GanttScale.Day ? null : scale.ToString());
@@ -592,7 +590,7 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
     /// </summary>
     private void ApplyProjectKind(bool isTeam)
     {
-        ListItem.Text = isTeam ? "計画" : "リスト";
+        ListItem.Text = isTeam ? Texts.Get("Project_ViewPlanName") : Texts.Get("Project_ViewListName");
         GanttItem.Visibility = isTeam ? Visibility.Visible : Visibility.Collapsed;
         IssuesItem.Visibility = isTeam ? Visibility.Visible : Visibility.Collapsed;
         StatusItem.Visibility = isTeam ? Visibility.Visible : Visibility.Collapsed;
@@ -636,20 +634,21 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
     public IEnumerable<PaletteCommand> Commands()
     {
         var keymap = App.Current.Services.Keymap;
+        var here = Texts.Get("Palette_ThisProject");
         int n = 0;
         foreach (var item in Views.Where(i => i.Visibility == Visibility.Visible))
         {
             var target = item;
             n++;
-            yield return new PaletteCommand($"ビュー: {item.Text}", $"Ctrl+{n}", () =>
+            yield return new PaletteCommand(Texts.Format("Palette_View", item.Text), $"Ctrl+{n}", () =>
             {
                 ViewSelector.SelectedItem = target;
                 return Task.CompletedTask;
-            }, "このプロジェクト");
+            }, here);
         }
 
         // 見出しのチップの詳細（UX 規約 UX-31）
-        foreach (var (chip, label) in ((StatusChip, string)[])[(ConflictChip, "日程の食い違いを見る"), (AccessChip, "招待が必要な理由を見る")])
+        foreach (var (chip, label) in ((StatusChip, string)[])[(ConflictChip, Texts.Get("Palette_ShowConflict")), (AccessChip, Texts.Get("Palette_ShowAccess"))])
         {
             if (chip.IsShown)
             {
@@ -657,76 +656,82 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
                 {
                     chip.OpenDetails();
                     return Task.CompletedTask;
-                }, "このプロジェクト");
+                }, here);
             }
         }
 
         if (ListPanel.Visibility == Visibility.Visible)
         {
-            yield return new PaletteCommand("計画の表: 下に行を追加", keymap.Display("wbs.insertAfter"), () => Wbs.InsertHereAsync(false), "このプロジェクト");
-            yield return new PaletteCommand("計画の表: 子の行を追加", keymap.Display("task.addChild"), () => Wbs.InsertHereAsync(true), "このプロジェクト");
+            yield return new PaletteCommand(Texts.Get("Palette_InsertRow"), keymap.Display("wbs.insertAfter"), () => Wbs.InsertHereAsync(false), here);
+            yield return new PaletteCommand(Texts.Get("Palette_InsertChildRow"), keymap.Display("task.addChild"), () => Wbs.InsertHereAsync(true), here);
             if (ViewModel.Project?.IsTeam == true)
             {
-                yield return new PaletteCommand("計画をまとめて入力", keymap.Display("wbs.bulk"), ShowBulkPlanAsync, "このプロジェクト");
+                yield return new PaletteCommand(KeyHints.Name("wbs.bulk"), keymap.Display("wbs.bulk"), ShowBulkPlanAsync, here);
             }
         }
 
         if (ViewModel.Project?.IsTeam == true)
         {
-            yield return new PaletteCommand("マイルストーン…", null, () => ShowMilestonesAsync(), "このプロジェクト");
+            yield return new PaletteCommand(Texts.Get("Project_Milestones"), null, () => ShowMilestonesAsync(), here);
         }
 
         if (Gantt.Visibility == Visibility.Visible)
         {
-            yield return new PaletteCommand("ガント: 今日へ移動", keymap.Display("gantt.today"), () =>
+            yield return new PaletteCommand(Texts.Get("Palette_GanttToday"), keymap.Display("gantt.today"), () =>
             {
                 Gantt.ScrollToToday();
                 return Task.CompletedTask;
-            }, "このプロジェクト");
-            yield return new PaletteCommand(Gantt.IsEditing ? "ガント: 閲覧モードに戻る" : "ガント: 編集モードに入る", keymap.Display("gantt.edit"), () =>
+            }, here);
+            yield return new PaletteCommand(Gantt.IsEditing ? Texts.Get("Palette_GanttEndEdit") : Texts.Get("Palette_GanttStartEdit"), keymap.Display("gantt.edit"), () =>
             {
                 Gantt.IsEditing = !Gantt.IsEditing;
                 return Task.CompletedTask;
-            }, "このプロジェクト");
-            foreach (var (value, label) in Scales.Where(s => s.Value != Gantt.TimeScale))
+            }, here);
+            foreach (var value in Scales.Where(s => s != Gantt.TimeScale))
             {
-                yield return new PaletteCommand($"ガント: {label}", keymap.Display("gantt.scale"), () =>
+                var label = value switch
+                {
+                    GanttScale.Week => Texts.Get("Palette_GanttWeek"),
+                    GanttScale.Month => Texts.Get("Palette_GanttMonth"),
+                    _ => Texts.Get("Palette_GanttDay"),
+                };
+                yield return new PaletteCommand(label, keymap.Display("gantt.scale"), () =>
                 {
                     SetScale(value);
                     return Task.CompletedTask;
-                }, "このプロジェクト");
+                }, here);
             }
 
-            yield return new PaletteCommand("ガント: 共有ビューを開く", null, () =>
+            yield return new PaletteCommand(Texts.Get("Palette_GanttShare"), null, () =>
             {
                 OpenShareView();
                 return Task.CompletedTask;
-            }, "このプロジェクト");
+            }, here);
         }
 
         if (Kanban.Visibility == Visibility.Visible)
         {
-            yield return new PaletteCommand("並び順を選ぶ…", keymap.Display("view.sort"), OpenOrderingAsync, "このプロジェクト");
-            yield return new PaletteCommand("グループを選ぶ…", keymap.Display("view.group"), OpenGroupingAsync, "このプロジェクト");
+            yield return new PaletteCommand(Texts.Format("Common_Ellipsis", KeyHints.Name("view.sort")), keymap.Display("view.sort"), OpenOrderingAsync, here);
+            yield return new PaletteCommand(Texts.Format("Common_Ellipsis", KeyHints.Name("view.group")), keymap.Display("view.group"), OpenGroupingAsync, here);
         }
 
         if (FilterButton.Visibility == Visibility.Visible)
         {
-            yield return new PaletteCommand("絞り込む…", keymap.Display("view.filter"), OpenFilterAsync, "このプロジェクト");
+            yield return new PaletteCommand(Texts.Format("Common_Ellipsis", KeyHints.Name("view.filter")), keymap.Display("view.filter"), OpenFilterAsync, here);
         }
 
-        yield return new PaletteCommand("プロジェクトの設定", null, () =>
+        yield return new PaletteCommand(Texts.Get("Project_Settings"), null, () =>
         {
             OnOpenProjectSettings(this, new RoutedEventArgs());
             return Task.CompletedTask;
-        }, "このプロジェクト");
-        yield return new PaletteCommand("プロジェクト名を変更…", null, RenameProjectAsync, "このプロジェクト");
-        yield return new PaletteCommand("プロジェクトを GitHub で開く", null, () =>
+        }, here);
+        yield return new PaletteCommand(Texts.Get("Palette_RenameProject"), null, RenameProjectAsync, here);
+        yield return new PaletteCommand(Texts.Get("Palette_OpenProjectInGitHub"), null, () =>
         {
             OnOpenProjectInBrowser(this, new RoutedEventArgs());
             return Task.CompletedTask;
-        }, "このプロジェクト");
-        yield return new PaletteCommand("プロジェクトをアーカイブ…", null, ArchiveProjectAsync, "このプロジェクト");
+        }, here);
+        yield return new PaletteCommand(Texts.Get("Palette_ArchiveProject"), null, ArchiveProjectAsync, here);
     }
 
     // ---------------------------------------------------------------- 権限と招待（要件 F-PRJ-06）
@@ -758,14 +763,12 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         string? message = null;
         if (!access.CanWriteRepository && access.RepositoryNameWithOwner is { } repo)
         {
-            message = $"リポジトリ {repo} に書き込む権限がないため、タスクを追加・変更しても GitHub に送れません。"
-                + "リポジトリの管理者に、コラボレーター（Write 以上）として招待するよう依頼してください。";
+            message = Texts.Format("Access_RepositoryMessage", repo);
             _accessTarget = $"https://github.com/{repo}";
         }
         else if (!access.CanUpdateProject)
         {
-            message = "この Project を編集する権限がないため、ステータスや日程などの変更を GitHub に送れません。"
-                + "Project の管理者に、Write 以上の権限で招待するよう依頼してください。";
+            message = Texts.Get("Access_ProjectMessage");
             _accessTarget = ViewModel.Project?.Url;
         }
 
@@ -775,9 +778,10 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
             return;
         }
 
-        var open = target.Contains("/projects/", StringComparison.Ordinal) ? "Project を開く" : "リポジトリを開く";
-        AccessChip.Show("\uE72E", "招待が必要です", "招待が必要です",
-            new ChipSection(ChipSeverity.Caution, "招待が必要です", message, [], [new ChipAction(open, () => OpenUrl(target), Primary: true)]));
+        var open = target.Contains("/projects/", StringComparison.Ordinal) ? Texts.Get("Access_OpenProject") : Texts.Get("Access_OpenRepository");
+        var title = Texts.Get("Access_Title");
+        AccessChip.Show("\uE72E", title, title,
+            new ChipSection(ChipSeverity.Caution, title, message, [], [new ChipAction(open, () => OpenUrl(target), Primary: true)]));
     }
 
     /// <summary>Project のアクセス設定（メンバーの招待）を開く。管理者だけが変更できる。</summary>
@@ -834,21 +838,25 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
 
         bool dismissed = DismissedConflicts.GetValueOrDefault(project.Id) == _conflictSignature;
         bool delayed = shifts.Any(s => s.CauseDelayed);
-        var title = delayed ? "先行タスクが遅れています" : "後続タスクの予定が先行と重なっています";
+        var title = delayed ? Texts.Get("Conflict_DelayedTitle") : Texts.Get("Conflict_OverlapTitle");
 
         // 先行の終わりより前に始まっているもの（食い違いそのもの）と、それに押されて連鎖して動くものを分けて数える
         var overlapping = shifts.Where(s => s.Overlaps).ToList();
-        var message = (delayed
-            ? $"見込みどおりに進むと、後続 {overlapping.Count} 件が先行の終わりより前に始まる予定になっています。"
-            : $"後続 {overlapping.Count} 件が、先行タスクの終わりより前に始まる予定になっています。")
-            + (shifts.Count > overlapping.Count ? $"調整すると、連鎖する後続を含めて {shifts.Count} 件を後ろへずらします。" : "");
+        var message = delayed
+            ? Texts.Count("Conflict_DelayedMessage", overlapping.Count)
+            : Texts.Count("Conflict_OverlapMessage", overlapping.Count);
+        if (shifts.Count > overlapping.Count)
+        {
+            message = Texts.Format("Common_TwoSentences", message, Texts.Format("Conflict_ShiftNote", shifts.Count));
+        }
+
         var details = overlapping.Take(5)
-            .Select(s => $"「{s.Cause.Title}」→「{s.Task.Title}」")
-            .Concat(overlapping.Count > 5 ? [$"ほか {overlapping.Count - 5} 件"] : [])
+            .Select(s => Texts.Format("Conflict_Pair", s.Cause.Title, s.Task.Title))
+            .Concat(overlapping.Count > 5 ? [Texts.Format("Delete_More", overlapping.Count - 5)] : [])
             .ToList();
-        List<ChipAction> actions = dismissed ? [] : [new ChipAction("見送る", Dismiss)];
-        actions.Add(new ChipAction("調整をプレビュー", PreviewScheduleConflict, Primary: true));
-        ConflictChip.Show("\uE7BA", dismissed ? null : $"後続 {shifts.Count} 件に影響", title,
+        List<ChipAction> actions = dismissed ? [] : [new ChipAction(Texts.Get("Conflict_Dismiss"), Dismiss)];
+        actions.Add(new ChipAction(Texts.Get("Conflict_Preview"), PreviewScheduleConflict, Primary: true));
+        ConflictChip.Show("\uE7BA", dismissed ? null : Texts.Count("Conflict_Chip", shifts.Count), title,
             new ChipSection(ChipSeverity.Caution, title, message, details, actions));
     }
 
@@ -922,23 +930,23 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         bool team = ViewModel.Project?.IsTeam == true;
         var items = new List<MenuEntry>
         {
-            new MenuCommand("プロジェクトの設定", "\uE713", () => Run(() => OnOpenProjectSettings(this, e))),
-            new MenuCommand("名前を変更…", "\uE8AC", RenameProjectAsync),
+            new MenuCommand(Texts.Get("Project_Settings"), "\uE713", () => Run(() => OnOpenProjectSettings(this, e))),
+            new MenuCommand(Texts.Get("Project_Rename"), "\uE8AC", RenameProjectAsync),
         };
         if (team)
         {
-            items.Add(new MenuCommand("マイルストーン…", "\u25C6", () => ShowMilestonesAsync()) { GlyphFontFamily = "Segoe UI Symbol" });
-            items.Add(new MenuSubmenu("メンバーを招待", "\uE8FA",
+            items.Add(new MenuCommand(Texts.Get("Project_Milestones"), "\u25C6", () => ShowMilestonesAsync()) { GlyphFontFamily = "Segoe UI Symbol" });
+            items.Add(new MenuSubmenu(Texts.Get("Project_Invite"), "\uE8FA",
             [
-                new MenuCommand("Project のアクセス設定を開く", null, () => Run(() => OnInviteToProject(this, e))),
-                new MenuCommand("リポジトリのアクセス設定を開く", null, () => Run(() => OnInviteToRepository(this, e))),
+                new MenuCommand(Texts.Get("Project_InviteToProject"), null, () => Run(() => OnInviteToProject(this, e))),
+                new MenuCommand(Texts.Get("Project_InviteToRepository"), null, () => Run(() => OnInviteToRepository(this, e))),
             ]));
         }
 
-        items.Add(new MenuCommand("GitHub で開く", "\uE8A7", () => Run(() => OnOpenProjectInBrowser(this, e))));
+        items.Add(new MenuCommand(Texts.Get("Project_OpenInGitHub"), "\uE8A7", () => Run(() => OnOpenProjectInBrowser(this, e))));
         items.Add(MenuSeparator.Instance);
-        items.Add(new MenuCommand("アーカイブ…", "\uE7B8", ArchiveProjectAsync));
-        new MorphMenu("プロジェクトの操作", items).Show((FrameworkElement)sender, null);
+        items.Add(new MenuCommand(Texts.Get("Project_Archive"), "\uE7B8", ArchiveProjectAsync));
+        new MorphMenu(Texts.Get("Project_Menu"), items).Show((FrameworkElement)sender, null);
 
         static Task Run(Action action)
         {
@@ -973,8 +981,8 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         }
 
         var box = new TextBox { Text = project.Title, SelectionStart = project.Title.Length };
-        AutomationProperties.SetName(box, "プロジェクト名");
-        var dialog = AppDialog.Create(XamlRoot, "プロジェクト名を変更", box, "変更");
+        AutomationProperties.SetName(box, Texts.Get("Project_NameField"));
+        var dialog = AppDialog.Create(XamlRoot, Texts.Get("Project_RenameTitle"), box, Texts.Get("Common_Change"));
         dialog.Opened += (_, _) => box.Focus(FocusState.Programmatic);
 
         if (await dialog.ShowAsync() != ContentDialogResult.Primary
@@ -995,8 +1003,7 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
             return;
         }
 
-        var dialog = AppDialog.Confirm(XamlRoot, "プロジェクトをアーカイブしますか？",
-            $"「{project.Title}」を一覧から外します。タスクは GitHub に残り、GitHub 側で戻すこともできます。", "アーカイブ");
+        var dialog = AppDialog.Confirm(XamlRoot, Texts.Get("Archive_Title"), Texts.Format("Archive_Message", project.Title), Texts.Get("Archive_Confirm"));
         if (await dialog.ShowAsync() != ContentDialogResult.Primary)
         {
             return;

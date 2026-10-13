@@ -5,6 +5,7 @@ using Tasklabe.Core.Editing;
 using Tasklabe.Core.Settings;
 using Tasklabe.GitHub.GraphQL;
 using F = Tasklabe.Core.Domain.ProjectConventions.Fields;
+using Tasklabe.GitHub.Resources;
 
 namespace Tasklabe.GitHub;
 
@@ -34,7 +35,7 @@ public sealed partial class GitHubApi
         var data = await _client.SendAsync(Queries.CreateIssue,
             new JsonObject { ["repositoryId"] = repositoryId, ["title"] = title, ["body"] = body },
             GitHubJsonContext.Default.GraphQLResponseCreateIssueData, ct).ConfigureAwait(false);
-        var issue = data.CreateIssue?.Issue ?? throw new GitHubException("Issue を作成できませんでした。");
+        var issue = data.CreateIssue?.Issue ?? throw new GitHubException(Strings.IssueCreateFailed);
         return new CreatedIssue(issue.Id!, issue.Number, issue.Url);
     }
 
@@ -43,7 +44,7 @@ public sealed partial class GitHubApi
         var data = await _client.SendAsync(Queries.AddProjectItem,
             new JsonObject { ["projectId"] = projectId, ["contentId"] = contentId },
             GitHubJsonContext.Default.GraphQLResponseAddProjectItemData, ct).ConfigureAwait(false);
-        return data.AddProjectV2ItemById?.Item?.Id ?? throw new GitHubException("プロジェクトにタスクを追加できませんでした。");
+        return data.AddProjectV2ItemById?.Item?.Id ?? throw new GitHubException(Strings.AddToProjectFailed);
     }
 
     public Task DeleteProjectItemAsync(string projectId, string itemId, CancellationToken ct = default) =>
@@ -64,7 +65,7 @@ public sealed partial class GitHubApi
 
         var name = FieldName(field) ?? throw new ArgumentException($"{field} は Project のフィールドではありません。", nameof(field));
         var fieldId = project.FieldIds.GetValueOrDefault(name)
-            ?? throw new GitHubException($"プロジェクトにフィールド「{name}」がありません。");
+            ?? throw new GitHubException(Strings.FieldMissing(name));
 
         if (value is null)
         {
@@ -78,7 +79,7 @@ public sealed partial class GitHubApi
             TaskField.Kind => new JsonObject
             {
                 ["singleSelectOptionId"] = project.KindOptionIds.GetValueOrDefault(value)
-                    ?? throw new GitHubException($"種別「{value}」の選択肢がありません。"),
+                    ?? throw new GitHubException(Strings.KindOptionMissing(value)),
             },
             TaskField.Estimate or TaskField.Progress => new JsonObject
             {
@@ -105,8 +106,8 @@ public sealed partial class GitHubApi
         ArgumentNullException.ThrowIfNull(options);
         var data = await _client.SendAsync(Queries.ProjectSchema, new JsonObject { ["id"] = projectId },
             GitHubJsonContext.Default.GraphQLResponseProjectNodeData, ct).ConfigureAwait(false);
-        var dto = data.Node ?? throw new GitHubException("プロジェクトが見つかりません。");
-        var fieldId = ProjectMapper.StatusField(dto)?.Id ?? throw new GitHubException("プロジェクトに Status フィールドがありません。");
+        var dto = data.Node ?? throw new GitHubException(Strings.ProjectNotFound);
+        var fieldId = ProjectMapper.StatusField(dto)?.Id ?? throw new GitHubException(Strings.StatusFieldMissing);
         await MutateAsync(Queries.UpdateSingleSelectOptions,
             new JsonObject { ["fieldId"] = fieldId, ["options"] = ProjectSchema.StatusOptions(dto, options) }, ct).ConfigureAwait(false);
     }
@@ -126,7 +127,7 @@ public sealed partial class GitHubApi
                 return;
             }
 
-            throw new GitHubException($"プロジェクトにフィールド「{F.Schedule}」を追加できませんでした。");
+            throw new GitHubException(Strings.FieldAddFailed(F.Schedule));
         }
 
         if (value is null)
@@ -137,7 +138,7 @@ public sealed partial class GitHubApi
         }
 
         var optionId = field.Options?.FirstOrDefault(o => o.Name == value)?.Id
-            ?? throw new GitHubException($"日程の扱い「{value}」の選択肢がありません。");
+            ?? throw new GitHubException(Strings.ScheduleOptionMissing(value));
         await MutateAsync(Queries.UpdateItemField, new JsonObject
         {
             ["projectId"] = project.Id,
@@ -166,7 +167,7 @@ public sealed partial class GitHubApi
                 return;
             }
 
-            throw new GitHubException($"プロジェクトにフィールド「{name}」を追加できませんでした。");
+            throw new GitHubException(Strings.FieldAddFailed(name));
         }
 
         if (value is null)
@@ -239,7 +240,7 @@ public sealed partial class GitHubApi
         var data = await _client.SendAsync(Queries.ItemCurrentValue,
             new JsonObject { ["itemId"] = itemId, ["field"] = field == TaskField.Assignees ? F.GuestAssignees : FieldName(field) ?? F.Status },
             GitHubJsonContext.Default.GraphQLResponseItemValueData, ct).ConfigureAwait(false);
-        var node = data.Node ?? throw new GitHubGraphQLException("タスクが見つかりません。", ["NOT_FOUND"]);
+        var node = data.Node ?? throw new GitHubGraphQLException(Strings.TaskNotFound, ["NOT_FOUND"]);
         var v = node.FieldValueByName;
 
         return field switch

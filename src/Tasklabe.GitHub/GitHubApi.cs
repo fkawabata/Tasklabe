@@ -5,6 +5,7 @@ using Tasklabe.Core.Domain;
 using Tasklabe.Core.Milestones;
 using Tasklabe.Core.Settings;
 using Tasklabe.GitHub.GraphQL;
+using Tasklabe.GitHub.Resources;
 
 namespace Tasklabe.GitHub;
 
@@ -48,7 +49,7 @@ public sealed partial class GitHubApi
     public async Task<GitHubUser> GetViewerAsync(CancellationToken ct = default)
     {
         var data = await _client.SendAsync(Queries.Viewer, null, GitHubJsonContext.Default.GraphQLResponseViewerData, ct).ConfigureAwait(false);
-        var v = data.Viewer ?? throw new GitHubException("ユーザー情報を取得できませんでした。");
+        var v = data.Viewer ?? throw new GitHubException(Strings.ViewerFailed);
         return new GitHubUser(v.Id, v.Login, v.Name, v.AvatarUrl);
     }
 
@@ -72,7 +73,7 @@ public sealed partial class GitHubApi
     {
         var data = await _client.SendAsync(Queries.CreateRepository, new JsonObject { ["name"] = name, ["description"] = description },
             GitHubJsonContext.Default.GraphQLResponseCreateRepositoryData, ct).ConfigureAwait(false);
-        var r = data.CreateRepository?.Repository ?? throw new GitHubException("リポジトリを作成できませんでした。");
+        var r = data.CreateRepository?.Repository ?? throw new GitHubException(Strings.RepositoryCreateFailed);
         return new RepositoryInfo(r.Id, r.NameWithOwner);
     }
 
@@ -169,7 +170,7 @@ public sealed partial class GitHubApi
         {
             var data = await _client.SendAsync(Queries.ProjectWithItems, new JsonObject { ["id"] = projectId, ["cursor"] = cursor },
                 GitHubJsonContext.Default.GraphQLResponseProjectNodeData, ct).ConfigureAwait(false);
-            var dto = data.Node ?? throw new GitHubException("プロジェクトが見つかりません。");
+            var dto = data.Node ?? throw new GitHubException(Strings.ProjectNotFound);
             project ??= ProjectMapper.ToProject(dto);
 
             foreach (var item in dto.Items?.Nodes ?? [])
@@ -233,7 +234,7 @@ public sealed partial class GitHubApi
     {
         var data = await _client.SendAsync(Queries.ProjectAccess, new JsonObject { ["id"] = projectId },
             GitHubJsonContext.Default.GraphQLResponseProjectNodeData, ct).ConfigureAwait(false);
-        var dto = data.Node ?? throw new GitHubException("プロジェクトが見つかりません。");
+        var dto = data.Node ?? throw new GitHubException(Strings.ProjectNotFound);
         var repository = dto.Repositories?.Nodes?.FirstOrDefault();
         return new ProjectAccess(
             dto.ViewerCanUpdate ?? false,
@@ -274,7 +275,7 @@ public sealed partial class GitHubApi
     {
         var data = await _client.SendAsync(Queries.CreateProject, new JsonObject { ["ownerId"] = ownerId, ["title"] = title },
             GitHubJsonContext.Default.GraphQLResponseCreateProjectData, ct).ConfigureAwait(false);
-        var id = data.CreateProjectV2?.ProjectV2?.Id ?? throw new GitHubException("プロジェクトを作成できませんでした。");
+        var id = data.CreateProjectV2?.ProjectV2?.Id ?? throw new GitHubException(Strings.ProjectCreateFailed);
 
         var marker = kind == ProjectKind.Inbox ? ProjectConventions.InboxMarker : ProjectConventions.ProjectMarker;
         await MutateAsync(Queries.UpdateProjectDescription, new JsonObject { ["id"] = id, ["description"] = marker }, ct).ConfigureAwait(false);
@@ -330,7 +331,7 @@ public sealed partial class GitHubApi
     {
         var data = await _client.SendAsync(Queries.ProjectSchema, new JsonObject { ["id"] = projectId },
             GitHubJsonContext.Default.GraphQLResponseProjectNodeData, ct).ConfigureAwait(false);
-        var dto = data.Node ?? throw new GitHubException("プロジェクトが見つかりません。");
+        var dto = data.Node ?? throw new GitHubException(Strings.ProjectNotFound);
 
         foreach (var field in ProjectSchema.MissingFields(dto))
         {
@@ -363,7 +364,7 @@ public sealed partial class GitHubApi
     /// </summary>
     private async Task<HttpResponseMessage> SendRestAsync(HttpMethod method, string path, JsonObject? body, CancellationToken ct)
     {
-        var token = _tokenProvider() ?? throw new GitHubAuthenticationException("サインインしていません。");
+        var token = _tokenProvider() ?? throw new GitHubAuthenticationException(Strings.NotSignedIn);
         using var request = new HttpRequestMessage(method, new Uri(_host.RestEndpoint, path));
         if (body is not null)
         {
@@ -378,7 +379,7 @@ public sealed partial class GitHubApi
         }
         catch (HttpRequestException ex)
         {
-            throw new GitHubUnavailableException("GitHub に接続できません。", ex);
+            throw new GitHubUnavailableException(Strings.CannotConnect, ex);
         }
     }
 

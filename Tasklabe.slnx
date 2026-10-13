@@ -11,5 +11,6 @@
     <Project Path="tests/Tasklabe.Core.Tests/Tasklabe.Core.Tests.csproj" />
     <Project Path="tests/Tasklabe.Data.Tests/Tasklabe.Data.Tests.csproj" />
     <Project Path="tests/Tasklabe.GitHub.Tests/Tasklabe.GitHub.Tests.csproj" />
+    <Project Path="tests/Tasklabe.Texts.Tests/Tasklabe.Texts.Tests.csproj" />
   </Folder>
 </Solution>

@@ -180,7 +180,7 @@ public sealed partial class GanttView
         TodayJump.HorizontalAlignment = left ? HorizontalAlignment.Left : HorizontalAlignment.Right;
         TodayJumpLeft.Visibility = left ? Visibility.Visible : Visibility.Collapsed;
         TodayJumpRight.Visibility = right ? Visibility.Visible : Visibility.Collapsed;
-        ToolTipService.SetToolTip(TodayJump, KeyHints.Tip("gantt.today", $"今日（{DateText.Short(Today)}）の位置へ戻る"));
+        ToolTipService.SetToolTip(TodayJump, KeyHints.Tip("gantt.today", Texts.Format("Gantt_TodayJumpTip", DateText.Short(Today))));
     }
 
     // ================================================================ 閲覧モードと編集モード（UI デザイン設計書 3.3.4 節）

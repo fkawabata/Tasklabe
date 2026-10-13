@@ -75,11 +75,11 @@
                 controls:PickerTrigger.IsTrigger="True"
                 controls:PickerTrigger.ShowsChoice="False"
                 Click="OnFilterClick"
-                Style="{StaticResource MorphSelect.Trigger}"
-                AutomationProperties.Name="絞り込む">
+                x:Uid="Project_FilterButton"
+                Style="{StaticResource MorphSelect.Trigger}">
                 <StackPanel Orientation="Horizontal" Spacing="6">
                     <FontIcon VerticalAlignment="Center" FontSize="14" Glyph="&#xE71C;" />
-                    <TextBlock VerticalAlignment="Center" Text="絞り込み" />
+                    <TextBlock x:Uid="Project_FilterText" VerticalAlignment="Center" />
                     <FontIcon
                         Margin="2,0,0,0"
                         VerticalAlignment="Center"
@@ -93,16 +93,15 @@
                 x:Name="AddButton"
                 Grid.Column="5"
                 Click="OnAddTask"
-                Style="{StaticResource AccentButtonStyle}"
-                AutomationProperties.Name="タスクを追加">
+                x:Uid="Project_AddButton"
+                Style="{StaticResource AccentButtonStyle}">
                 <FontIcon FontSize="14" Glyph="&#xE710;" />
             </Button>
             <!-- プロジェクトの操作。押したボタンから育つメニュー（MorphMenu）を開く -->
             <Button
                 Grid.Column="6"
-                Click="OnProjectMenu"
-                ToolTipService.ToolTip="プロジェクトの操作"
-                AutomationProperties.Name="プロジェクトの操作">
+                x:Uid="Project_MenuButton"
+                Click="OnProjectMenu">
                 <FontIcon FontSize="14" Glyph="&#xE712;" />
             </Button>
         </Grid>
@@ -114,27 +113,27 @@
             Margin="0,0,0,12"
             controls:TabIndicator.Slides="True"
             SelectionChanged="OnViewSelectionChanged">
-            <SelectorBarItem x:Name="ListItem" Text="計画" Tag="list" IsSelected="True">
+            <SelectorBarItem x:Name="ListItem" x:Uid="Project_ViewPlan" Tag="list" IsSelected="True">
                 <SelectorBarItem.Icon>
                     <FontIcon Glyph="&#xE8FD;" />
                 </SelectorBarItem.Icon>
             </SelectorBarItem>
-            <SelectorBarItem x:Name="GanttItem" Text="ガント" Tag="gantt">
+            <SelectorBarItem x:Name="GanttItem" x:Uid="Project_ViewGantt" Tag="gantt">
                 <SelectorBarItem.Icon>
                     <FontIcon Glyph="&#xE9D9;" />
                 </SelectorBarItem.Icon>
             </SelectorBarItem>
-            <SelectorBarItem x:Name="IssuesItem" Text="課題" Tag="issues">
+            <SelectorBarItem x:Name="IssuesItem" x:Uid="Project_ViewIssues" Tag="issues">
                 <SelectorBarItem.Icon>
                     <FontIcon Glyph="&#xE7C1;" />
                 </SelectorBarItem.Icon>
             </SelectorBarItem>
-            <SelectorBarItem x:Name="KanbanItem" Text="カンバン" Tag="kanban">
+            <SelectorBarItem x:Name="KanbanItem" x:Uid="Project_ViewKanban" Tag="kanban">
                 <SelectorBarItem.Icon>
                     <FontIcon Glyph="&#xF0E2;" />
                 </SelectorBarItem.Icon>
             </SelectorBarItem>
-            <SelectorBarItem x:Name="StatusItem" Text="状況" Tag="status">
+            <SelectorBarItem x:Name="StatusItem" x:Uid="Project_ViewStatus" Tag="status">
                 <SelectorBarItem.Icon>
                     <FontIcon Glyph="&#xE9D2;" />
                 </SelectorBarItem.Icon>
@@ -156,19 +155,18 @@
             Orientation="Horizontal"
             Spacing="{StaticResource Space.S}"
             Visibility="Collapsed">
-            <!-- 親タスクを上端に残す（要件 F-UI-WBS-06）。オンのときは塗りで示す -->
+            <!-- 親タスクを上端に固定（要件 F-UI-WBS-06）。オンのときは塗りで示す -->
             <ToggleButton
                 x:Name="PlanStickyToggle"
+                x:Uid="Project_StickyToggle"
                 Click="OnPlanStickyToggled"
-                IsChecked="True"
-                ToolTipService.ToolTip="親タスクを上端に残す"
-                AutomationProperties.Name="親タスクを上端に残す">
+                IsChecked="True">
                 <FontIcon FontSize="14" Glyph="&#xE718;" />
             </ToggleButton>
-            <Button x:Name="BulkPlanButton" Click="OnBulkPlan" AutomationProperties.Name="計画をまとめて入力">
+            <Button x:Name="BulkPlanButton" x:Uid="Project_BulkPlanButton" Click="OnBulkPlan">
                 <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.S}">
                     <FontIcon FontSize="14" Glyph="&#xE8A5;" />
-                    <TextBlock Text="まとめて入力" />
+                    <TextBlock x:Uid="Project_BulkPlanText" />
                 </StackPanel>
             </Button>
         </StackPanel>
@@ -196,42 +194,45 @@
             <!-- 閲覧モード（ドラッグで表示する場所を動かす）と編集モード（ドラッグでバーを動かす）の切り替え -->
             <ToggleButton
                 x:Name="GanttEditToggle"
-                Click="OnGanttEditToggled"
-                AutomationProperties.Name="編集モード">
+                x:Uid="Project_GanttEdit"
+                Click="OnGanttEditToggled">
                 <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.S}">
                     <FontIcon FontSize="14" Glyph="&#xE70F;" />
-                    <TextBlock Text="編集" />
+                    <TextBlock x:Uid="Project_GanttEditText" />
                 </StackPanel>
             </ToggleButton>
-            <Button x:Name="GanttTodayButton" Click="OnGanttToday" Content="今日" />
+            <!-- 表示する場所を今日へ動かす。押した先が見えないため、アイコンと文字にする（UX 規約 UX-32） -->
+            <Button x:Name="GanttTodayButton" x:Uid="Project_GanttToday" Click="OnGanttToday">
+                <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.S}">
+                    <FontIcon FontSize="14" Glyph="&#xE8BF;" />
+                    <TextBlock x:Uid="Project_GanttTodayText" />
+                </StackPanel>
+            </Button>
             <!-- 表示の単位（日・週・月）。並べた切り替えにして、いまの単位がいつも見えるようにする -->
             <ContentControl x:Name="GanttScaleHost" Margin="4,0,0,0" />
             <!-- イナズマ線（要件 F-UI-GT-03）。オンのときは塗りで示す -->
             <ToggleButton
                 x:Name="InazumaToggle"
+                x:Uid="Project_InazumaToggle"
                 Click="OnInazumaToggled"
-                IsChecked="True"
-                ToolTipService.ToolTip="イナズマ線"
-                AutomationProperties.Name="イナズマ線を表示">
+                IsChecked="True">
                 <FontIcon FontSize="14" Glyph="&#xE945;" />
             </ToggleButton>
-            <!-- 親タスクを上端に残す（要件 F-UI-GT-11）。オンのときは塗りで示す -->
+            <!-- 親タスクを上端に固定（要件 F-UI-GT-11）。オンのときは塗りで示す -->
             <ToggleButton
                 x:Name="GanttStickyToggle"
+                x:Uid="Project_StickyToggle"
                 Click="OnGanttStickyToggled"
-                IsChecked="True"
-                ToolTipService.ToolTip="親タスクを上端に残す"
-                AutomationProperties.Name="親タスクを上端に残す">
+                IsChecked="True">
                 <FontIcon FontSize="14" Glyph="&#xE718;" />
             </ToggleButton>
             <!-- 共有ビュー（要件 F-UI-GT-10） -->
             <Button
-                Click="OnGanttShare"
-                ToolTipService.ToolTip="計画を他の人に説明するためのビューを大きく開きます。画像や Mermaid の図としても書き出せます"
-                AutomationProperties.Name="共有ビューを開く">
+                x:Uid="Project_Share"
+                Click="OnGanttShare">
                 <StackPanel Orientation="Horizontal" Spacing="{StaticResource Space.S}">
                     <FontIcon FontSize="14" Glyph="&#xE72D;" />
-                    <TextBlock Text="共有" />
+                    <TextBlock x:Uid="Project_ShareText" />
                 </StackPanel>
             </Button>
         </StackPanel>
@@ -242,7 +243,6 @@
             <controls:EmptyState
                 x:Name="PlanEmpty"
                 ActionInvoked="OnEmptyAction"
-                ActionText="タスクを追加"
                 Glyph="&#xE8FD;"
                 Visibility="Collapsed" />
         </Grid>
@@ -253,10 +253,7 @@
             <controls:EmptyState
                 x:Name="IssuesEmpty"
                 ActionInvoked="OnEmptyAction"
-                ActionText="課題を追加"
                 Glyph="&#xE7C1;"
-                Message="GitHub でこのプロジェクトに追加した Issue や、ここで追加した課題が並びます。計画へ入れるときは「計画に移す」を使います。"
-                Title="課題はありません"
                 Visibility="Collapsed" />
         </Grid>
 
@@ -272,11 +269,10 @@
         <!-- 空の状態（カンバン・ガント） -->
         <controls:EmptyState
             x:Name="OtherViewEmptyText"
+            x:Uid="Project_OtherEmpty"
             Grid.Row="3"
             ActionInvoked="OnEmptyAction"
-            ActionText="タスクを追加"
             Glyph="&#xE9D5;"
-            Title="タスクはまだありません"
             Visibility="Collapsed" />
     </Grid>
 </Page>

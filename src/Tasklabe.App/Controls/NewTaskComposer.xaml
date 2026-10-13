@@ -26,17 +26,17 @@
             <TextBox
                 x:Name="TitleBox"
                 FontSize="20"
-                PlaceholderText="タスク名"
+                x:Uid="Composer_Title"
                 Style="{StaticResource FlatTextBox}"
-                AutomationProperties.Name="タスク名" />
+                />
             <TextBox
                 x:Name="BodyBox"
                 MaxHeight="120"
                 AcceptsReturn="True"
-                PlaceholderText="説明を追加…"
+                x:Uid="Composer_Body"
                 Style="{StaticResource FlatTextBox}"
                 TextWrapping="Wrap"
-                AutomationProperties.Name="説明" />
+                />
         </StackPanel>
 
         <!-- 項目（Tab で順に移り、Alt + 文字で直接開く。UX 規約 UX-13） -->
@@ -48,10 +48,10 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button x:Name="DetailButton" Click="OnDetailClick" AutomationProperties.Name="詳細を入力">
+            <Button x:Name="DetailButton" Click="OnDetailClick" x:Uid="Composer_DetailButton">
                 <StackPanel Orientation="Horizontal" Spacing="6">
                     <FontIcon FontSize="12" Glyph="&#xE8A0;" />
-                    <TextBlock Text="詳細を入力…" />
+                    <TextBlock x:Uid="Composer_DetailText" />
                 </StackPanel>
             </Button>
             <TextBlock

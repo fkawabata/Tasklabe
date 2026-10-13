@@ -1,4 +1,5 @@
 using System.Text;
+using Tasklabe.Core.Resources;
 
 namespace Tasklabe.Core.Domain;
 
@@ -32,12 +33,12 @@ public static class BranchName
     {
         if (string.IsNullOrWhiteSpace(name))
         {
-            return "ブランチ名を入力してください。";
+            return Strings.BranchNameEmpty;
         }
 
         if (name.Any(c => char.IsWhiteSpace(c) || char.IsControl(c) || c is '~' or '^' or ':' or '?' or '*' or '[' or '\\'))
         {
-            return "空白と ~ ^ : ? * [ \\ はブランチ名に使えません。";
+            return Strings.BranchNameInvalidCharacters;
         }
 
         if (name.StartsWith('-') || name.StartsWith('/') || name.EndsWith('/') || name.EndsWith('.')
@@ -45,7 +46,7 @@ public static class BranchName
             || name.Contains("//", StringComparison.Ordinal) || name.Contains("@{", StringComparison.Ordinal) || name == "@"
             || name.Split('/').Any(part => part.StartsWith('.')))
         {
-            return "ブランチ名の形が正しくありません（- や / で始めない、.. や // を含めない、. や / や .lock で終えない）。";
+            return Strings.BranchNameInvalidForm;
         }
 
         return null;

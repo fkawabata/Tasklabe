@@ -1,4 +1,5 @@
 using System.Text;
+using Tasklabe.Core.Resources;
 
 namespace Tasklabe.Core.Domain;
 
@@ -34,10 +35,10 @@ public static class People
 
     /// <summary>名前だけのメンバーの名前に使えないものなら、理由を返す。</summary>
     public static string? GuestNameProblem(string name) =>
-        name.Length == 0 ? "名前を入力してください"
-        : name.Contains(',', StringComparison.Ordinal) ? "名前にカンマは使えません"
-        : name[0] is '@' or GuestMark ? $"名前の先頭に {name[0]} は使えません"
-        : name.Length > MaxGuestNameLength ? $"名前は {MaxGuestNameLength} 文字までです"
+        name.Length == 0 ? Strings.GuestNameEmpty
+        : name.Contains(',', StringComparison.Ordinal) ? Strings.GuestNameComma
+        : name[0] is '@' or GuestMark ? Strings.GuestNameLeadingMark(name[0])
+        : name.Length > MaxGuestNameLength ? Strings.GuestNameTooLong(MaxGuestNameLength)
         : null;
 
     /// <summary>担当者のうち名前だけのメンバーを、保存するテキスト（名前を昇順に並べてカンマで区切る）にする。いなければ null。</summary>
