@@ -28,8 +28,7 @@ Tasks are stored as GitHub Issues and projects as GitHub Projects, so you can vi
 - x64 or ARM64
 - A GitHub account (github.com)
 
-> [!NOTE]
-> The UI is currently available in Japanese only.
+The UI is available in English and Japanese. It follows your Windows display language, and you can change it under "Display language" in the settings.
 
 ## Installation
 
@@ -62,6 +61,8 @@ On your first sign-in, Tasklabe creates:
 Team projects are created as GitHub Projects owned by an organization. Give each member write access to both the Project and the repository that holds its tasks.
 
 On the authorization screen at sign-in, make sure to grant access to each organization you want to use. If the organization restricts OAuth App access, an owner must approve Tasklabe.
+
+You can also assign tasks to members who don't use GitHub. Add their names under "Members without GitHub" in the project settings, and they appear as assignee options.
 
 ## Uninstall
 
