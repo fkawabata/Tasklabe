@@ -822,6 +822,39 @@
   <data name="Gantt_Delay_Other" xml:space="preserve">
     <value>{0} days late</value>
   </data>
+  <data name="Gantt_DevApproved" xml:space="preserve">
+    <value>Approved</value>
+  </data>
+  <data name="Gantt_DevBranch" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Gantt_DevCommented" xml:space="preserve">
+    <value>Unresolved comments</value>
+  </data>
+  <data name="Gantt_DevDraft" xml:space="preserve">
+    <value>Draft</value>
+  </data>
+  <data name="Gantt_DevInReview" xml:space="preserve">
+    <value>Awaiting review</value>
+  </data>
+  <data name="Gantt_DevMerged" xml:space="preserve">
+    <value>Merged</value>
+  </data>
+  <data name="Gantt_DevPullRequest" xml:space="preserve">
+    <value>{0}: #{1} {2}</value>
+  </data>
+  <data name="Gantt_DevPullRequestUnresolved" xml:space="preserve">
+    <value>{0}: #{1} {2} ({3})</value>
+  </data>
+  <data name="Gantt_DevUnresolved_One" xml:space="preserve">
+    <value>{0} unresolved comment</value>
+  </data>
+  <data name="Gantt_DevUnresolved_Other" xml:space="preserve">
+    <value>{0} unresolved comments</value>
+  </data>
+  <data name="Gantt_DevWorking" xml:space="preserve">
+    <value>Working</value>
+  </data>
   <data name="Gantt_DragLabel_One" xml:space="preserve">
     <value>{1} – {2}  {0} working day</value>
   </data>
@@ -1655,6 +1688,12 @@
   </data>
   <data name="Project_BulkPlanText.Text" xml:space="preserve">
     <value>Bulk entry</value>
+  </data>
+  <data name="Project_DevelopmentToggle.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Development status</value>
+  </data>
+  <data name="Project_DevelopmentToggle.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Development status</value>
   </data>
   <data name="Project_FilterButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
     <value>Filter</value>

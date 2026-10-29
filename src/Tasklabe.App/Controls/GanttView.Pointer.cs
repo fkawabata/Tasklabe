@@ -248,6 +248,12 @@ public sealed partial class GanttView
             return;
         }
 
+        if (!IsOnSticky(position.Y - HeaderHeight) && DevelopmentAt(position) is { } development)
+        {
+            OpenDevelopment(development.Status);
+            return;
+        }
+
         int index = position.Y >= HeaderHeight ? RowAt(position.Y - HeaderHeight) : -1;
         if (index >= 0 && IsOnSticky(position.Y - HeaderHeight))
         {
@@ -373,6 +379,14 @@ public sealed partial class GanttView
         {
             _hoverRow = hover;
             RequestRender();
+        }
+
+        // 開発の段階のアイコンに重ねると、PR ごとの内容を示す
+        if (!IsOnSticky(position.Y - HeaderHeight) && DevelopmentAt(position) is { } development)
+        {
+            ProtectedCursor = InputSystemCursor.Create(InputSystemCursorShape.Hand);
+            ShowDevelopmentHover(development.Row, development.Status, position);
+            return;
         }
 
         var hit = HitTest(position);

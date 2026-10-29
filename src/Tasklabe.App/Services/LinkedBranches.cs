@@ -27,6 +27,9 @@ public static class LinkedBranches
         }
     }
 
+    /// <summary>ほかの取得（ガントの開発の段階）で取れたブランチを覚え直す。</summary>
+    public static void Store(string issueId, IReadOnlyList<LinkedBranch> branches) => s_byIssue[issueId] = branches;
+
     /// <summary>アプリで作ったブランチを足す。</summary>
     public static void Add(string issueId, LinkedBranch branch) =>
         s_byIssue[issueId] = [.. s_byIssue.GetValueOrDefault(issueId) ?? [], branch];
