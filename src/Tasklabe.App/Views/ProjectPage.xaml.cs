@@ -59,6 +59,9 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
 
         // プレビューのあいだは、プレビューの帯と同じことを知らせないよう隠す
         Gantt.PreviewStarted += (_, _) => ConflictChip.Hide();
+
+        DevelopmentToggleIcon.Data = (Microsoft.UI.Xaml.Media.Geometry)Microsoft.UI.Xaml.Markup.XamlBindingHelper.ConvertValue(
+            typeof(Microsoft.UI.Xaml.Media.Geometry), GanttView.PullRequestPath);
     }
 
     public ProjectViewModel ViewModel { get; }
@@ -88,6 +91,9 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
             } : null;
             Gantt.ShowInazuma = ViewState.Get($"gantt-inazuma:{project.Id}") != "0";
             InazumaToggle.IsChecked = Gantt.ShowInazuma;
+            Gantt.ShowDevelopment = ViewState.Get($"gantt-development:{project.Id}") != "0";
+            DevelopmentToggle.IsChecked = Gantt.ShowDevelopment;
+            _developmentFetched = DateTimeOffset.MinValue;
             Gantt.StickyParents = ViewState.Get($"gantt-sticky:{project.Id}") != "0";
             GanttStickyToggle.IsChecked = Gantt.StickyParents;
             Wbs.StickyParents = ViewState.Get($"wbs-sticky:{project.Id}") != "0";
@@ -435,6 +441,11 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         Gantt.Visibility = tag == "gantt" ? Visibility.Visible : Visibility.Collapsed;
         Status.Visibility = tag == "status" ? Visibility.Visible : Visibility.Collapsed;
         GanttTools.Visibility = Gantt.Visibility;
+        if (tag == "gantt")
+        {
+            // ガントを開いたときは、間を置かずに開発の段階を取り直す
+            _developmentFetched = DateTimeOffset.MinValue;
+        }
         PlanTools.Visibility = tag == "list" ? Visibility.Visible : Visibility.Collapsed;
         BulkPlanButton.Visibility = ViewModel.Project?.IsTeam == true ? Visibility.Visible : Visibility.Collapsed;
         KanbanTools.Visibility = Kanban.Visibility;
@@ -464,6 +475,7 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         else if (Gantt.Visibility == Visibility.Visible)
         {
             Gantt.Load(project, ViewModel.Tree, ViewModel.Visible);
+            _ = RefreshDevelopmentAsync();
         }
         else if (Status.Visibility == Visibility.Visible)
         {
@@ -541,6 +553,51 @@ public sealed partial class ProjectPage : Page, IKeyboardContent, ITaskSequence,
         {
             ViewState.Set($"gantt-inazuma:{_projectId}", Gantt.ShowInazuma ? null : "0");
         }
+    }
+
+    private void OnDevelopmentToggled(object sender, RoutedEventArgs e)
+    {
+        Gantt.ShowDevelopment = DevelopmentToggle.IsChecked == true;
+        if (_projectId is not null)
+        {
+            ViewState.Set($"gantt-development:{_projectId}", Gantt.ShowDevelopment ? null : "0");
+        }
+
+        _developmentFetched = DateTimeOffset.MinValue;
+        _ = RefreshDevelopmentAsync();
+    }
+
+    /// <summary>開発の段階を最後に取った時刻。ガントを開いたときと表示をオンにしたときは、待たずに取り直す。</summary>
+    private DateTimeOffset _developmentFetched = DateTimeOffset.MinValue;
+
+    private bool _developmentFetching;
+
+    /// <summary>
+    /// ガントに示す開発の段階を取り直す（技術設計書 3.2.3.2 節）。同期で読み込み直すたびに呼ばれるが、手元の編集でも読み込み直すため、
+    /// 同期の間隔（60 秒）より短い間には取り直さない。
+    /// </summary>
+    private async Task RefreshDevelopmentAsync()
+    {
+        if (!Gantt.ShowDevelopment || _developmentFetching || DateTimeOffset.Now - _developmentFetched < TimeSpan.FromSeconds(60))
+        {
+            return;
+        }
+
+        var tasks = ViewModel.Tree.All().Where(n => !n.HasChildren).Select(n => n.Task).ToList();
+        _developmentFetching = true;
+        try
+        {
+            if (await TaskDevelopment.FetchAsync(tasks))
+            {
+                _developmentFetched = DateTimeOffset.Now;
+            }
+        }
+        finally
+        {
+            _developmentFetching = false;
+        }
+
+        Gantt.RefreshDevelopment();
     }
 
     private void OnGanttStickyToggled(object sender, RoutedEventArgs e)

@@ -26,12 +26,12 @@ public sealed partial class GanttView
 
     private sealed class ChartColors
     {
-        public Color Progress, ProgressRemain, Delay, Today, Holiday, Grid, Plan, Done, Milestone, Accent, Text, TextSecondary, TextTertiary, Divider, Selection, Hover, OnAccent, SurfaceBase, SurfaceLayer;
+        public Color Progress, ProgressRemain, Delay, Today, Holiday, Grid, Plan, Done, Milestone, Accent, Text, TextSecondary, TextTertiary, Divider, Selection, Hover, OnAccent, SurfaceBase, SurfaceLayer, Caution;
 
         /// <summary>チャートの下地（不透明）。スワップチェーンは背景を自前で塗る。</summary>
         public Color Surface => Over(SurfaceLayer, SurfaceBase);
 
-        private static Color Over(Color top, Color under)
+        public static Color Over(Color top, Color under)
         {
             float a = top.A / 255f;
             return Color.FromArgb(255,
@@ -70,6 +70,7 @@ public sealed partial class GanttView
                 case "OnAccent": colors.OnAccent = c; break;
                 case "SurfaceBase": colors.SurfaceBase = c; break;
                 case "SurfaceLayer": colors.SurfaceLayer = c; break;
+                case "Caution": colors.Caution = c; break;
             }
         }
 
@@ -201,6 +202,7 @@ public sealed partial class GanttView
             }
 
             DrawDependencies(ds, c, firstRow, lastRow, selected);
+            DrawDevelopment(ds, device, c, firstRow, lastRow);
             if (ShowInazuma)
             {
                 DrawInazuma(ds, c, firstRow, lastRow, today);

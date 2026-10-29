@@ -129,6 +129,11 @@ public sealed partial class GanttView
         }
 
         parts.AddRange(PhaseLines(row));
+        if (DescribeDevelopment(row) is { } development)
+        {
+            parts.Add(development);
+        }
+
         return string.Join(Texts.Get("Common_ListSeparator"), parts);
     }
 

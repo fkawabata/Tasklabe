@@ -822,6 +822,39 @@
   <data name="Gantt_Delay_Other" xml:space="preserve">
     <value>遅れ {0} 日</value>
   </data>
+  <data name="Gantt_DevApproved" xml:space="preserve">
+    <value>承認済み</value>
+  </data>
+  <data name="Gantt_DevBranch" xml:space="preserve">
+    <value>{0}　{1}</value>
+  </data>
+  <data name="Gantt_DevCommented" xml:space="preserve">
+    <value>指摘あり</value>
+  </data>
+  <data name="Gantt_DevDraft" xml:space="preserve">
+    <value>下書き</value>
+  </data>
+  <data name="Gantt_DevInReview" xml:space="preserve">
+    <value>レビュー待ち</value>
+  </data>
+  <data name="Gantt_DevMerged" xml:space="preserve">
+    <value>マージ済み</value>
+  </data>
+  <data name="Gantt_DevPullRequest" xml:space="preserve">
+    <value>{0}　#{1} {2}</value>
+  </data>
+  <data name="Gantt_DevPullRequestUnresolved" xml:space="preserve">
+    <value>{0}　#{1} {2}（{3}）</value>
+  </data>
+  <data name="Gantt_DevUnresolved_One" xml:space="preserve">
+    <value>未解決の指摘 {0} 件</value>
+  </data>
+  <data name="Gantt_DevUnresolved_Other" xml:space="preserve">
+    <value>未解決の指摘 {0} 件</value>
+  </data>
+  <data name="Gantt_DevWorking" xml:space="preserve">
+    <value>作業中</value>
+  </data>
   <data name="Gantt_DragLabel_One" xml:space="preserve">
     <value>{1} 〜 {2}  {0} 稼働日</value>
   </data>
@@ -1655,6 +1688,12 @@
   </data>
   <data name="Project_BulkPlanText.Text" xml:space="preserve">
     <value>まとめて入力</value>
+  </data>
+  <data name="Project_DevelopmentToggle.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>開発の段階</value>
+  </data>
+  <data name="Project_DevelopmentToggle.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>開発の段階</value>
   </data>
   <data name="Project_FilterButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
     <value>絞り込み</value>

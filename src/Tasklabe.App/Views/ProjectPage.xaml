@@ -226,6 +226,16 @@
                 IsChecked="True">
                 <FontIcon FontSize="14" Glyph="&#xE718;" />
             </ToggleButton>
+            <!-- 開発の段階（要件 F-UI-GT-12）。バーの右のアイコンと同じ PR の形にする -->
+            <ToggleButton
+                x:Name="DevelopmentToggle"
+                x:Uid="Project_DevelopmentToggle"
+                Click="OnDevelopmentToggled"
+                IsChecked="True">
+                <Viewbox Width="14" Height="14">
+                    <PathIcon x:Name="DevelopmentToggleIcon" />
+                </Viewbox>
+            </ToggleButton>
             <!-- 共有ビュー（要件 F-UI-GT-10） -->
             <Button
                 x:Uid="Project_Share"

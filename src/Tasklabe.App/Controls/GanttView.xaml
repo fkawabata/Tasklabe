@@ -195,6 +195,7 @@
             <Border Tag="OnAccent" Background="{ThemeResource TextOnAccentFillColorPrimaryBrush}" />
             <Border Tag="SurfaceBase" Background="{ThemeResource SolidBackgroundFillColorBaseBrush}" />
             <Border Tag="SurfaceLayer" Background="{ThemeResource LayerFillColorDefaultBrush}" />
+            <Border Tag="Caution" Background="{ThemeResource SystemFillColorCautionBrush}" />
         </StackPanel>
     </Grid>
     </Grid>
